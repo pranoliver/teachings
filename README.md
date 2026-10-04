@@ -111,25 +111,26 @@ Then open `http://localhost:8000` in your browser.
 ## 🧭 Project Structure
 
 ```text
-te/
-├── index.html              # Root landing page with all tutorials
-├── glossary.html           # Shared glossary of common terms
-├── README.md               # Project documentation
-├── LICENSE                 # MIT License
-├── CONTRIBUTING.md         # Contribution guidelines
-├── assets/
-│   └── favicons/           # Icons used across all tutorials
-├── linux/
-├── html-css/
-├── javascript-basics/
-├── python-basics/
-├── nodejs-express/
-├── github/
-├── sql-databases/
-├── docker/
-├── react/
-├── typescript/
-└── devops-cicd/
+teachings/
+├── index.html              # 🏠 Root landing page
+├── glossary.html           # 📖 Shared glossary
+├── README.md               # 📄 Project documentation
+├── LICENSE                 # 📜 MIT License
+├── CONTRIBUTING.md         # 🤝 Contribution guidelines
+├── .gitignore              # 🚫 Ignored files
+└── assets/
+    └── favicons/           # 🎨 Icons used across tutorials
+└── linux/                  # 🐧 Linux Command Line
+└── html-css/               # 🌐 HTML & CSS Fundamentals
+└── javascript-basics/      # ⚡ JavaScript Basics
+└── python-basics/          # 🐍 Python Fundamentals
+└── nodejs-express/         # 🟢 Node.js & Express
+└── github/                 # 🐙 Git & GitHub
+└── sql-databases/          # 🐘 SQL & Databases
+└── docker/                 # 🐳 Docker
+└── react/                  # ⚛️ React: Modern Frontend
+└── typescript/             # 🔷 TypeScript
+└── devops-cicd/            # 🚀 DevOps CI/CD
 ```
 
 ## 🤝 Adding More Tutorials
