@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevOps CI/CD: Automate Software Delivery</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicons/devops.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .sr-only:focus { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 50; background: white; color: black; padding: 0.5rem 0.75rem; border-radius: 0.375rem; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
+    :root {
+      --brand-light: #2563eb;
+      --brand-dark: #60a5fa;
+      --ink: #1f2328;
+      --muted: #656d76;
+      --panel: #f6f8fa;
+      --border: #d0d7de;
+      --success: #1a7f37;
+      --danger: #cf222e;
+      --warn: #9a6700;
+    }
+    html.dark {
+      --ink: #e6edf3;
+      --muted: #848d97;
+      --panel: #161b22;
+      --border: #30363d;
+      --success: #3fb950;
+      --danger: #f85149;
+      --warn: #d29922;
+    }
+    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
+    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
+    .brand { color: var(--brand-light); }
+    html.dark .brand { color: var(--brand-dark); }
+    .toc-link.active { background: rgba(37,99,235,0.12); border-left: 3px solid var(--brand-light); color: var(--brand-light); }
+    html.dark .toc-link.active { background: rgba(96,165,250,0.15); border-left-color: var(--brand-dark); color: var(--brand-dark); }
+    .card { border: 1px solid var(--border); background: var(--panel); }
+    .code-block { position: relative; }
+    .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--panel); color: var(--muted); opacity: 0; transition: opacity 0.15s; }
+    .code-block:hover .copy-btn { opacity: 1; }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+    .diagram { width: 100%; max-width: 720px; }
+    .quiz-opt.selected { border-color: var(--brand-light); background: rgba(37,99,235,0.08); }
+    html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba(96,165,250,0.12); }
+    .quiz-opt.correct { border-color: var(--success); background: rgba(26,127,55,0.08); }
+    .quiz-opt.wrong { border-color: var(--danger); background: rgba(207,34,46,0.08); }
+    @media (max-width: 1024px) { #sidebar { transform: translateX(-100%); transition: transform .25s; } #sidebar.open { transform: translateX(0); } }
+    .kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:0.375rem; padding:0.125rem 0.375rem; font-family:ui-monospace,monospace; font-size:0.875rem; }
+  </style>
+</head>
+<body class="antialiased transition-colors duration-300">
+
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+  <div class="flex min-h-screen">
+
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6">
+      <div class="flex items-center gap-3 mb-8">
+        <img src="../assets/favicons/devops.svg" alt="DevOps" class="w-10 h-10">
+        <span class="text-xl font-bold">DevOps</span>
+      </div>
+      <nav id="toc" class="space-y-1 text-sm">
+        <a href="#intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">1. Introduction</a>
+        <a href="#devops" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">2. What is DevOps?</a>
+        <a href="#cicd" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">3. CI/CD Pipeline</a>
+        <a href="#git-workflow" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">4. Git Workflow</a>
+        <a href="#github-actions" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">5. GitHub Actions</a>
+        <a href="#testing" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">6. Automated Testing</a>
+        <a href="#docker-cicd" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">7. Docker in CI/CD</a>
+        <a href="#environments" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">8. Environments &amp; Secrets</a>
+        <a href="#deploy" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">9. Deployment Strategies</a>
+        <a href="#monitoring" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">10. Monitoring &amp; Rollbacks</a>
+        <a href="#iac" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">11. Infrastructure as Code</a>
+        <a href="#project" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">12. Capstone: Node.js CI/CD</a>
+      </nav>
+      <div class="mt-8 pt-6 border-t border-[var(--border)]">
+        <p class="text-xs text-[var(--muted)]">Open in any browser. No build step required.</p>
+      </div>
+    </aside>
+
+    <main id="main" class="flex-1 min-w-0">
+
+      <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()" aria-label="Open menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <h1 class="text-lg sm:text-xl font-bold tracking-tight">DevOps CI/CD: Automate Software Delivery</h1>
+        </div>
+        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
+          <svg id="moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+          <svg id="sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </header>
+
+      <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+
+        <section id="intro" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 1</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">DevOps is the practice of combining software development and IT operations. CI/CD (Continuous Integration / Continuous Deployment) is the automation engine that lets teams deliver code faster, safer, and more reliably.</p>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Before you start</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Git and GitHub basics (branches, commits, pull requests)</li>
+              <li>Docker fundamentals (images, containers, Dockerfile)</li>
+              <li>Node.js basics and a simple project to deploy</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">What you'll learn</h3>
+            <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> DevOps culture and principles</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Git branching for CI/CD</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> GitHub Actions workflows</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Docker build and push in CI</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Secrets, environments, and deployments</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Monitoring and rollbacks</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">More practice ideas</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Set up a GitHub Actions workflow that runs tests on every pull request.</li>
+              <li>Build and push a Docker image to Docker Hub or GitHub Container Registry.</li>
+              <li>Deploy a small Node.js app to a free cloud platform on every merge to main.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><span></span><a href="#devops" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: What is DevOps? →</a></nav>
+        </section>
+
+        <section id="devops" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 2</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">What is DevOps?</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">DevOps is a set of practices, tools, and a cultural philosophy that shortens the development lifecycle and provides continuous delivery with high software quality.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">The DevOps feedback loop</h3>
+            <svg class="diagram" viewBox="0 0 720 160" aria-label="DevOps infinity loop showing plan, code, build, test, release, deploy, operate, monitor">
+              <ellipse cx="360" cy="80" rx="340" ry="70" fill="none" stroke="var(--border)" stroke-width="2"/>
+
+              <!-- Top half -->
+              <text x="120" y="50" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-light)">PLAN</text>
+              <text x="250" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-light)">CODE</text>
+              <text x="360" y="35" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-light)">BUILD</text>
+              <text x="470" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-light)">TEST</text>
+              <text x="600" y="50" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-light)">RELEASE</text>
+
+              <!-- Bottom half -->
+              <text x="600" y="110" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-dark)">DEPLOY</text>
+              <text x="470" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-dark)">OPERATE</text>
+              <text x="360" y="125" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-dark)">MONITOR</text>
+              <text x="250" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-dark)">FEEDBACK</text>
+              <text x="120" y="110" text-anchor="middle" font-size="12" font-weight="700" fill="var(--brand-dark)">IMPROVE</text>
+
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="var(--border)"/></marker>
+              </defs>
+            </svg>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Core principles</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+              <li><strong>Collaboration:</strong> Break down silos between developers and operations.</li>
+              <li><strong>Automation:</strong> Automate builds, tests, deployments, and infrastructure.</li>
+              <li><strong>Feedback:</strong> Monitor production and feed insights back to development.</li>
+              <li><strong>Continuous improvement:</strong> Iterate on processes and tooling.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#cicd" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: CI/CD Pipeline →</a></nav>
+        </section>
+
+        <section id="cicd" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 3</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">CI/CD Pipeline</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">A CI/CD pipeline automates the steps from code commit to production deployment. Each stage must pass before the next one begins.</p>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Pipeline stages</h3>
+            <div class="space-y-4">
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-[var(--brand-light)]/20 flex items-center justify-center text-[var(--brand-light)] font-bold">1</div>
+                <div>
+                  <p class="font-semibold">Continuous Integration (CI)</p>
+                  <p class="text-sm text-[var(--muted)]">Build, lint, and run automated tests on every commit.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-[var(--brand-light)]/20 flex items-center justify-center text-[var(--brand-light)] font-bold">2</div>
+                <div>
+                  <p class="font-semibold">Continuous Delivery (CD)</p>
+                  <p class="text-sm text-[var(--muted)]">Package the application and make it ready for release.</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-full bg-[var(--brand-light)]/20 flex items-center justify-center text-[var(--brand-light)] font-bold">3</div>
+                <div>
+                  <p class="font-semibold">Continuous Deployment (CD)</p>
+                  <p class="text-sm text-[var(--muted)]">Automatically deploy every passing release to production.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Pipeline example</h3>
+            <p class="text-[var(--muted)] mb-2">Push to main → Run tests → Build Docker image → Push to registry → Deploy to staging → Deploy to production.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#devops" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#git-workflow" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Git Workflow →</a></nav>
+        </section>
+
+        <section id="git-workflow" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 4</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Git Workflow</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">A clean Git workflow is the foundation of CI/CD. Feature branches, pull requests, and protected main branches keep production stable.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Start a new feature
+git checkout -b feature/add-auth
+
+# Make changes and commit
+git add .
+git commit -m "feat: add JWT authentication"
+
+# Push to remote
+git push -u origin feature/add-auth
+
+# Open a pull request, get review, then merge
+# CI runs automatically on the PR</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Recommended branch rules</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><code class="kbd">main</code> is always deployable.</li>
+              <li>Require pull request reviews before merging.</li>
+              <li>Require CI checks to pass before merge.</li>
+              <li>Delete feature branches after merge.</li>
+              <li>Use semantic commit messages.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#cicd" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#github-actions" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: GitHub Actions →</a></nav>
+        </section>
+
+        <section id="github-actions" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 5</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">GitHub Actions</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">GitHub Actions is a CI/CD platform built into GitHub. Workflows are YAML files stored in <code class="kbd">.github/workflows</code>.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-yaml"># .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build project
+        run: npm run build</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Key concepts</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><strong>Workflow:</strong> A full automation process triggered by events.</li>
+              <li><strong>Job:</strong> A set of steps that run on the same runner.</li>
+              <li><strong>Step:</strong> A single command or reusable action.</li>
+              <li><strong>Runner:</strong> The machine that executes jobs (e.g. Ubuntu, Windows, macOS).</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#git-workflow" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#testing" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Testing →</a></nav>
+        </section>
+
+        <section id="testing" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 6</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Automated Testing</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Tests are the safety net of CI/CD. If tests fail, the pipeline stops and the code is not deployed.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-json">{
+  "scripts": {
+    "test": "jest",
+    "test:ci": "jest --ci --coverage",
+    "lint": "eslint src",
+    "build": "tsc"
+  }
+}</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-yaml"># Add to CI job
+      - name: Run tests with coverage
+        run: npm run test:ci
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="C">
+              <p class="mb-3">What happens when automated tests fail in a CI pipeline?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">The pipeline skips tests next time.</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">The code is deployed anyway.</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">The pipeline stops and nothing is deployed.</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#github-actions" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#docker-cicd" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Docker in CI/CD →</a></nav>
+        </section>
+
+        <section id="docker-cicd" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 7</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Docker in CI/CD</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Docker ensures the application runs the same way in CI, staging, and production. CI pipelines commonly build and push images to a container registry.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-dockerfile"># Dockerfile
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+EXPOSE 3000
+CMD ["node", "app.js"]</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-yaml"># .github/workflows/docker.yml
+name: Docker Build
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/myapp:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Create a Dockerfile for a Node.js app, then add a GitHub Actions workflow that builds and pushes the image on every push to main.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#testing" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#environments" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Environments →</a></nav>
+        </section>
+
+        <section id="environments" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 8</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Environments &amp; Secrets</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Different stages need different configurations. Secrets store sensitive values like API keys and database URLs outside of source code.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-yaml"># GitHub Actions environment example
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Deploy to staging
+        run: ./deploy.sh staging
+        env:
+          DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+          API_KEY: ${{ secrets.API_KEY }}
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment: production
+    steps:
+      - name: Deploy to production
+        run: ./deploy.sh production
+        env:
+          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+          API_KEY: ${{ secrets.API_KEY }}</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Common environments</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><strong>Development:</strong> Local coding and quick experiments.</li>
+              <li><strong>Staging:</strong> Pre-production validation.</li>
+              <li><strong>Production:</strong> Live user-facing environment.</li>
+              <li><strong>QA:</strong> Dedicated testing environment.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#docker-cicd" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#deploy" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Deployment →</a></nav>
+        </section>
+
+        <section id="deploy" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 9</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Deployment Strategies</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">There are many ways to release new versions. Choose a strategy based on risk tolerance, traffic size, and rollback needs.</p>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Strategy comparison</h3>
+            <table class="w-full text-sm text-left text-[var(--muted)]">
+              <thead class="text-[var(--ink)] border-b border-[var(--border)]">
+                <tr>
+                  <th class="pb-2">Strategy</th>
+                  <th class="pb-2">How it works</th>
+                  <th class="pb-2">Best for</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[var(--border)]">
+                <tr>
+                  <td class="py-3 font-medium">Rolling</td>
+                  <td class="py-3">Replace instances gradually.</td>
+                  <td class="py-3">Low-risk, zero-downtime updates.</td>
+                </tr>
+                <tr>
+                  <td class="py-3 font-medium">Blue/Green</td>
+                  <td class="py-3">Run old and new versions side by side, then switch traffic.</td>
+                  <td class="py-3">Instant cutover and easy rollback.</td>
+                </tr>
+                <tr>
+                  <td class="py-3 font-medium">Canary</td>
+                  <td class="py-3">Release to a small subset of users first.</td>
+                  <td class="py-3">High-risk changes and gradual validation.</td>
+                </tr>
+                <tr>
+                  <td class="py-3 font-medium">Recreate</td>
+                  <td class="py-3">Stop old version, start new version.</td>
+                  <td class="py-3">Simple apps that tolerate brief downtime.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#environments" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#monitoring" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Monitoring →</a></nav>
+        </section>
+
+        <section id="monitoring" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 10</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Monitoring &amp; Rollbacks</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Deployment is not the end. You need to observe application health and be ready to roll back when something breaks.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-yaml"># Health check endpoint example
+# GET /health
+# Response: { "status": "ok", "timestamp": "2026-10-03T12:00:00Z" }</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Monitoring checklist</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+              <li><strong>Logs:</strong> Aggregate logs with tools like Datadog, Splunk, or Grafana Loki.</li>
+              <li><strong>Metrics:</strong> Track CPU, memory, request latency, and error rates.</li>
+              <li><strong>Alerts:</strong> Notify the team when thresholds are breached.</li>
+              <li><strong>Rollbacks:</strong> Keep previous release artifacts so you can revert quickly.</li>
+            </ul>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Rollback to previous Docker image
+docker pull myuser/myapp:previous-tag
+docker stop myapp
+docker run -d --name myapp -p 3000:3000 myuser/myapp:previous-tag
+
+# Or via Kubernetes
+kubectl rollout undo deployment/myapp</code></pre>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#deploy" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#iac" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: IaC →</a></nav>
+        </section>
+
+        <section id="iac" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 11</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Infrastructure as Code</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Infrastructure as Code (IaC) lets you provision and manage servers, networks, and services through configuration files rather than manual clicks.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-yaml"># docker-compose.yml — simple IaC for local stacks
+version: "3.8"
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgres://db:5432/app
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: app</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Popular IaC tools</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><strong>Terraform:</strong> Multi-cloud resource provisioning.</li>
+              <li><strong>AWS CloudFormation / Azure Bicep:</strong> Native cloud templates.</li>
+              <li><strong>Ansible:</strong> Server configuration management.</li>
+              <li><strong>Pulumi:</strong> IaC using familiar programming languages.</li>
+              <li><strong>Docker Compose:</strong> Lightweight local and single-host orchestration.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#monitoring" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#project" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Capstone →</a></nav>
+        </section>
+
+        <section id="project" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 12</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Capstone: Node.js CI/CD</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Set up a complete CI/CD pipeline for a Node.js API. The pipeline runs tests, builds a Docker image, pushes it to Docker Hub, and deploys to a remote server.</p>
+
+          <h3 class="text-xl font-semibold mb-3">Requirements</h3>
+          <div class="card rounded-2xl p-6 mb-8">
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+              <li>Node.js API with tests.</li>
+              <li>Dockerfile that builds a production image.</li>
+              <li>GitHub Actions workflow that triggers on push to main.</li>
+              <li>Image tagged with the commit SHA.</li>
+              <li>Remote deployment via SSH using secrets.</li>
+              <li>Health check endpoint for monitoring.</li>
+            </ul>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Project files</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash">my-api/
+├── .github/
+│   └── workflows/
+│       └── cd.yml
+├── src/
+│   ├── app.js
+│   └── app.test.js
+├── Dockerfile
+├── package.json
+└── package-lock.json</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Dockerfile</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-dockerfile">FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+EXPOSE 3000
+HEALTHCHECK CMD curl -f http://localhost:3000/health || exit 1
+CMD ["node", "src/app.js"]</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Full CD workflow</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-yaml"># .github/workflows/cd.yml
+name: CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci
+      - run: npm test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/my-api:${{ github.sha }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/my-api:${{ github.sha }}
+            docker stop my-api || true
+            docker rm my-api || true
+            docker run -d --name my-api \
+              -p 3000:3000 \
+              --restart unless-stopped \
+              -e NODE_ENV=production \
+              -e DATABASE_URL=${{ secrets.DATABASE_URL }} \
+              ${{ secrets.DOCKER_USERNAME }}/my-api:${{ github.sha }}</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Required GitHub secrets</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-text">DOCKER_USERNAME
+DOCKER_PASSWORD
+SSH_HOST
+SSH_USER
+SSH_PRIVATE_KEY
+DATABASE_URL</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Run the capstone locally</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># 1. Install dependencies and run tests
+npm install
+npm test
+
+# 2. Build the Docker image
+DOCKER_USERNAME=myuser
+docker build -t $DOCKER_USERNAME/my-api:latest .
+
+# 3. Run locally
+docker run -d -p 3000:3000 --name my-api $DOCKER_USERNAME/my-api:latest
+
+# 4. Verify the deployment
+curl http://localhost:3000/health
+
+# 5. Simulate rollback
+docker pull $DOCKER_USERNAME/my-api:previous
+docker stop my-api
+docker run -d -p 3000:3000 --name my-api $DOCKER_USERNAME/my-api:previous</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Create the GitHub Actions workflow, add the required secrets, push to main, and confirm that the API is deployed and responding to the health check.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#iac" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><span></span></nav>
+        </section>
+
+      </div>
+
+      <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+        <p>Made for teaching DevOps and CI/CD. Open directly in any browser.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Theme handling
+    const html = document.documentElement;
+    const lightStylesheet = document.getElementById('hljs-light');
+    const darkStylesheet = document.getElementById('hljs-dark');
+    const moon = document.getElementById('moon');
+    const sun = document.getElementById('sun');
+
+    function applyTheme(theme) {
+      html.classList.remove('light', 'dark');
+      html.classList.add(theme);
+      if (theme === 'dark') {
+        lightStylesheet.disabled = true;
+        darkStylesheet.disabled = false;
+        moon.classList.add('hidden');
+        sun.classList.remove('hidden');
+      } else {
+        lightStylesheet.disabled = false;
+        darkStylesheet.disabled = true;
+        moon.classList.remove('hidden');
+        sun.classList.add('hidden');
+      }
+      localStorage.setItem('devops-theme', theme);
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    const saved = localStorage.getItem('devops-theme');
+    applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+    // Sidebar toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('menu-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('hidden');
+    }
+
+    // Copy code
+    function copyCode(btn) {
+      const code = btn.nextElementSibling.querySelector('code');
+      navigator.clipboard.writeText(code.innerText).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    }
+
+    // Active TOC link
+    const sections = document.querySelectorAll('section[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach((link) => link.classList.remove('active'));
+          const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+
+    sections.forEach((section) => observer.observe(section));
+
+    // Quiz logic
+    document.querySelectorAll('.quiz').forEach((quiz) => {
+      const correct = quiz.dataset.answer;
+      const feedback = quiz.nextElementSibling;
+      quiz.querySelectorAll('.quiz-opt').forEach((opt) => {
+        opt.addEventListener('click', () => {
+          quiz.querySelectorAll('.quiz-opt').forEach((o) => {
+            o.classList.remove('selected', 'correct', 'wrong');
+            o.disabled = true;
+          });
+          opt.classList.add('selected');
+          if (opt.dataset.val === correct) {
+            opt.classList.add('correct');
+            feedback.textContent = 'Correct! ✅';
+            feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]';
+          } else {
+            opt.classList.add('wrong');
+            feedback.textContent = `Not quite. The correct answer is ${correct}.`;
+            feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]';
+          }
+        });
+      });
+    });
+
+    // Syntax highlighting
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

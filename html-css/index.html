@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML & CSS Fundamentals for Beginners</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicons/html-css.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .sr-only:focus { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 50; background: white; color: black; padding: 0.5rem 0.75rem; border-radius: 0.375rem; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
+    :root {
+      --brand-light: #2f81f7;
+      --brand-dark: #58a6ff;
+      --ink: #1f2328;
+      --muted: #656d76;
+      --panel: #f6f8fa;
+      --border: #d0d7de;
+      --success: #1a7f37;
+      --danger: #cf222e;
+      --warn: #9a6700;
+      --preview-bg: #ffffff;
+    }
+    html.dark {
+      --ink: #e6edf3;
+      --muted: #848d97;
+      --panel: #161b22;
+      --border: #30363d;
+      --success: #3fb950;
+      --danger: #f85149;
+      --warn: #d29922;
+      --preview-bg: #0d1117;
+    }
+    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
+    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
+    .brand { color: var(--brand-light); }
+    html.dark .brand { color: var(--brand-dark); }
+    .toc-link.active { background: rgba(47,129,247,0.12); border-left: 3px solid var(--brand-light); color: var(--brand-light); }
+    html.dark .toc-link.active { background: rgba(88,166,255,0.15); border-left-color: var(--brand-dark); color: var(--brand-dark); }
+    .card { border: 1px solid var(--border); background: var(--panel); }
+    .code-block { position: relative; }
+    .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--panel); color: var(--muted); opacity: 0; transition: opacity 0.15s; }
+    .code-block:hover .copy-btn { opacity: 1; }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+    .diagram { width: 100%; max-width: 720px; }
+    .flow-line { stroke-dasharray: 10; animation: dash 1.2s linear infinite; }
+    @keyframes dash { to { stroke-dashoffset: -20; } }
+    .quiz-opt.selected { border-color: var(--brand-light); background: rgba(47,129,247,0.08); }
+    html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba(88,166,255,0.12); }
+    .quiz-opt.correct { border-color: var(--success); background: rgba(26,127,55,0.08); }
+    .quiz-opt.wrong { border-color: var(--danger); background: rgba(207,34,46,0.08); }
+    .scroll-smooth { scroll-behavior: smooth; }
+    @media (max-width: 1024px) { #sidebar { transform: translateX(-100%); transition: transform .25s; } #sidebar.open { transform: translateX(0); } }
+    .kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:0.375rem; padding:0.125rem 0.375rem; font-family:ui-monospace,monospace; font-size:0.875rem; }
+    .preview-frame { border: 1px solid var(--border); background: var(--preview-bg); min-height: 160px; }
+    .pulse { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    .anim-demo { transition: all 0.3s ease; }
+    .anim-demo:hover { transform: scale(1.05); }
+    .bounce-ball { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-light), #a371f7); animation: bounce 1.2s ease-in-out infinite; }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-40px); } }
+    .fade-box { width: 100px; height: 100px; border-radius: 12px; background: linear-gradient(135deg, #3fb950, #2f81f7); animation: fadeIn 2s ease-in-out infinite alternate; }
+    @keyframes fadeIn { 0% { opacity: 0.3; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+  </style>
+</head>
+<body class="antialiased transition-colors duration-300">
+
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6">
+      <div class="flex items-center gap-3 mb-8">
+        <img src="../assets/favicons/html-css.svg" alt="HTML & CSS" class="w-10 h-10">
+        <span class="text-xl font-bold">HTML & CSS</span>
+      </div>
+      <nav id="toc" class="space-y-1 text-sm">
+        <a href="#intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">1. Introduction</a>
+        <a href="#web" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">2. How the Web Works</a>
+        <a href="#first-page" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">3. Your First HTML Page</a>
+        <a href="#structure" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">4. HTML Document Structure</a>
+        <a href="#text" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">5. Text Elements & Headings</a>
+        <a href="#links" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">6. Links, Images & Lists</a>
+        <a href="#semantic" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">7. Semantic HTML5</a>
+        <a href="#forms" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">8. Forms & Input Types</a>
+        <a href="#a11y" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">9. Accessibility Basics</a>
+        <a href="#css-intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">10. Introduction to CSS</a>
+        <a href="#colors" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">11. Colors, Fonts & Units</a>
+        <a href="#box-model" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">12. The Box Model</a>
+        <a href="#display" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">13. Display, Position & Z-Index</a>
+        <a href="#variables" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">14. CSS Variables</a>
+        <a href="#flexbox" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">15. Flexbox</a>
+        <a href="#grid" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">16. CSS Grid</a>
+        <a href="#responsive" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">17. Responsive Design & Media Queries</a>
+        <a href="#animations" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">18. Transitions & Animations</a>
+        <a href="#frameworks" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">19. CSS Frameworks Intro</a>
+        <a href="#portfolio" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">20. Build a Portfolio Page</a>
+        <a href="#best-practices" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">21. Best Practices</a>
+      </nav>
+      <div class="mt-8 pt-6 border-t border-[var(--border)]">
+        <p class="text-xs text-[var(--muted)]">Open in any browser. No build step required.</p>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main id="main" class="flex-1 min-w-0">
+
+      <!-- Header -->
+      <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()" aria-label="Open menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <h1 class="text-lg sm:text-xl font-bold tracking-tight">HTML & CSS Fundamentals</h1>
+        </div>
+        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
+          <svg id="moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+          <svg id="sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </header>
+
+      <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+
+        <!-- 1. Introduction -->
+        <section id="intro" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 1</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Welcome! This guide teaches you how to build web pages with HTML and CSS. By the end, you'll understand the structure of every website and be able to create your own responsive, good-looking pages.</p>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Before you start</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>A text editor (VS Code, Sublime Text, or even Notepad)</li>
+              <li>A modern web browser</li>
+              <li>No coding experience required</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">What you'll learn</h3>
+            <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> How web pages are structured</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> HTML5 semantic elements</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Styling with CSS3</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Layouts with Flexbox and Grid</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Responsive design and media queries</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> A complete portfolio page project</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">What are HTML and CSS?</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+              <li><strong>HTML (HyperText Markup Language)</strong> defines the structure and meaning of content.</li>
+              <li><strong>CSS (Cascading Style Sheets)</strong> controls the visual presentation: colors, fonts, spacing, layout.</li>
+            </ul>
+            <p class="text-[var(--muted)] mt-4">Analogy: HTML is the skeleton of a website; CSS is the skin, clothes, and makeup.</p>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">More practice ideas</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Build a personal portfolio page with your bio, photo, and contact links.</li>
+              <li>Create a product landing page with a hero section, features list, and footer.</li>
+              <li>Style a simple recipe card with an image, ingredients list, and instructions.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><span></span><a href="#web" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: How the Web Works →</a></nav>
+        </section>
+
+        <!-- 2. How the Web Works -->
+        <section id="web" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 2</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">How the Web Works</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">When you visit a website, your browser asks a server for files. The server sends back HTML, CSS, images, and sometimes JavaScript.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">Request → Response cycle</h3>
+            <svg class="diagram" viewBox="0 0 720 200" aria-label="Diagram of browser requesting a web page from a server">
+              <!-- Background card -->
+              <rect x="15" y="15" width="690" height="170" rx="20" fill="rgba(47,129,247,0.04)" stroke="var(--border)" stroke-width="1"/>
+
+              <!-- Browser -->
+              <rect x="45" y="40" width="140" height="110" rx="14" fill="var(--panel)" stroke="var(--brand-light)" stroke-width="3"/>
+              <rect x="60" y="55" width="110" height="75" rx="6" fill="#ddf4ff" stroke="var(--brand-light)" stroke-width="2"/>
+              <line x1="70" y1="78" x2="160" y2="78" stroke="var(--brand-light)" stroke-width="2" stroke-linecap="round"/>
+              <line x1="70" y1="93" x2="140" y2="93" stroke="var(--brand-light)" stroke-width="2" stroke-linecap="round"/>
+              <line x1="70" y1="108" x2="120" y2="108" stroke="var(--brand-light)" stroke-width="2" stroke-linecap="round"/>
+              <text x="115" y="170" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">Browser</text>
+
+              <!-- Request arrow -->
+              <path d="M195 100 L 275 100" stroke="#3fb950" stroke-width="3" marker-end="url(#arrow)" class="flow-line"/>
+              <rect x="205" y="72" width="60" height="22" rx="11" fill="#dafbe1" stroke="#3fb950" stroke-width="1"/>
+              <text x="235" y="87" text-anchor="middle" font-size="11" font-weight="600" fill="#1a7f37">GET</text>
+
+              <!-- Server -->
+              <rect x="305" y="40" width="140" height="110" rx="14" fill="var(--panel)" stroke="#a371f7" stroke-width="3"/>
+              <rect x="325" y="55" width="100" height="75" rx="8" fill="#f5f0ff" stroke="#a371f7" stroke-width="2"/>
+              <circle cx="345" cy="75" r="5" fill="#a371f7"/>
+              <circle cx="345" cy="100" r="5" fill="#a371f7"/>
+              <line x1="360" y1="75" x2="415" y2="75" stroke="#a371f7" stroke-width="2" stroke-linecap="round"/>
+              <line x1="360" y1="100" x2="415" y2="100" stroke="#a371f7" stroke-width="2" stroke-linecap="round"/>
+              <text x="375" y="170" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">Server</text>
+
+              <!-- Response arrow -->
+              <path d="M455 120 L 535 120" stroke="#a371f7" stroke-width="3" marker-end="url(#arrow2)" class="flow-line"/>
+              <rect x="465" y="130" width="60" height="22" rx="11" fill="#f5f0ff" stroke="#a371f7" stroke-width="1"/>
+              <text x="495" y="145" text-anchor="middle" font-size="10" font-weight="600" fill="#8957e5">HTML/CSS</text>
+
+              <!-- Browser renders -->
+              <rect x="565" y="40" width="140" height="110" rx="14" fill="var(--panel)" stroke="var(--brand-light)" stroke-width="3"/>
+              <rect x="580" y="55" width="110" height="75" rx="6" fill="#ddf4ff" stroke="var(--brand-light)" stroke-width="2"/>
+              <rect x="595" y="70" width="80" height="45" rx="4" fill="white" stroke="var(--brand-light)" stroke-width="1"/>
+              <line x1="605" y1="83" x2="665" y2="83" stroke="var(--brand-light)" stroke-width="2" stroke-linecap="round"/>
+              <line x1="605" y1="96" x2="655" y2="96" stroke="var(--brand-light)" stroke-width="2" stroke-linecap="round"/>
+              <text x="635" y="170" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">Renders</text>
+
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#3fb950"/></marker>
+                <marker id="arrow2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#a371f7"/></marker>
+              </defs>
+            </svg>
+            <p class="text-sm text-[var(--muted)] mt-2">Browser asks → Server answers → Browser builds the page</p>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Key terms</h3>
+            <dl class="grid sm:grid-cols-2 gap-4 text-[var(--muted)]">
+              <div><dt class="font-semibold text-[var(--ink)]">URL</dt><dd>The address of a web page.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">HTTP/HTTPS</dt><dd>Protocols that transfer web data.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">Server</dt><dd>A computer that stores and serves files.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">Browser</dt><dd>Software that reads HTML/CSS and displays the page.</dd></div>
+            </dl>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mt-6">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="B">
+              <p class="mb-3">What does CSS mainly control?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">The structure of the page content</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">The visual style and layout</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">The server logic</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#first-page" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Your First HTML Page →</a></nav>
+        </section>
+
+        <!-- 3. Your First HTML Page -->
+        <section id="first-page" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 3</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Your First HTML Page</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">An HTML file is just a text file with the <code class="kbd">.html</code> extension. You can create one with any text editor.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello, World!&lt;/h1&gt;
+  &lt;p&gt;This is my first web page.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">How to view it</h3>
+            <ol class="text-[var(--muted)] list-decimal pl-5 space-y-2">
+              <li>Save the code above as <code class="kbd">index.html</code> on your computer.</li>
+              <li>Double-click the file, or right-click and choose "Open with browser".</li>
+              <li>You should see a heading and a paragraph.</li>
+            </ol>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Create your first <code class="kbd">index.html</code> file and open it in a browser. Did it display correctly?</p>
+            <button class="mt-3 px-4 py-2 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5" onclick="this.textContent='Great! Move on.'; this.disabled=true;">Mark as done</button>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#web" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#structure" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: HTML Document Structure →</a></nav>
+        </section>
+
+        <!-- 4. HTML Document Structure -->
+        <section id="structure" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 4</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">HTML Document Structure</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Every HTML page follows a standard structure. Think of it like the blueprint of a house.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">Document anatomy</h3>
+            <svg class="diagram" viewBox="0 0 720 300" aria-label="Diagram showing HTML document structure">
+              <!-- doctype -->
+              <rect x="80" y="20" width="560" height="40" rx="8" fill="#ddf4ff" stroke="var(--brand-light)" stroke-width="2"/>
+              <text x="360" y="46" text-anchor="middle" font-size="14" font-weight="700" fill="var(--brand-light)">&lt;!DOCTYPE html&gt;</text>
+
+              <!-- html wrapper -->
+              <rect x="80" y="70" width="560" height="210" rx="12" fill="rgba(163,113,247,0.08)" stroke="#a371f7" stroke-width="2"/>
+              <text x="360" y="96" text-anchor="middle" font-size="14" font-weight="700" fill="#a371f7">&lt;html&gt; wrapper &lt;/html&gt;</text>
+
+              <!-- head -->
+              <rect x="110" y="110" width="230" height="70" rx="10" fill="#f6f8fa" stroke="var(--border)" stroke-width="2"/>
+              <rect x="130" y="125" width="190" height="40" rx="6" fill="#dafbe1" stroke="#3fb950" stroke-width="2"/>
+              <text x="225" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#1a7f37">&lt;head&gt;</text>
+              <text x="225" y="198" text-anchor="middle" font-size="12" fill="var(--muted)">metadata &amp; links</text>
+
+              <!-- body -->
+              <rect x="360" y="110" width="250" height="150" rx="10" fill="#fff8c5" stroke="#d29922" stroke-width="2"/>
+              <text x="485" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#9a6700">&lt;body&gt;</text>
+
+              <rect x="380" y="155" width="210" height="30" rx="6" fill="white" stroke="var(--border)" stroke-width="1"/>
+              <text x="485" y="174" text-anchor="middle" font-size="12" fill="var(--muted)">headings &amp; paragraphs</text>
+
+              <rect x="380" y="190" width="210" height="30" rx="6" fill="white" stroke="var(--border)" stroke-width="1"/>
+              <text x="485" y="209" text-anchor="middle" font-size="12" fill="var(--muted)">images, links, forms</text>
+
+              <text x="485" y="245" text-anchor="middle" font-size="12" fill="#9a6700" font-weight="600">visible content</text>
+            </svg>
+            <p class="text-sm text-[var(--muted)] mt-2">The body holds everything the user sees; the head holds configuration.</p>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-html">&lt;!DOCTYPE html&gt;           &lt;!-- declares HTML5 --&gt;
+&lt;html lang="en"&gt;          &lt!-- root element --&gt;
+  &lt;head&gt;                  &lt!-- metadata, not visible --&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Page Title&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;                  &lt!-- visible content --&gt;
+    &lt;!-- everything the user sees goes here --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Update your <code class="kbd">index.html</code> to include the full document structure. Check the browser tab title changes.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#first-page" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#text" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Text & Headings →</a></nav>
+        </section>
+
+        <!-- 5. Text Elements & Headings -->
+        <section id="text" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 5</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Text Elements & Headings</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">HTML provides many elements to structure text. Headings create hierarchy; paragraphs and lists organize content.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-html">&lt;h1&gt;Main title&lt;/h1&gt;
+&lt;h2&gt;Section heading&lt;/h2&gt;
+&lt;h3&gt;Subheading&lt;/h3&gt;
+
+&lt;p&gt;This is a paragraph. Paragraphs are blocks of text.&lt;/p&gt;
+
+&lt;p&gt;You can make text &lt;strong&gt;bold&lt;/strong&gt; or &lt;em&gt;italic&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Line breaks are created with &lt;br&gt; like this.&lt;/p&gt;</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Heading levels</h3>
+            <p class="text-[var(--muted)] mb-3">There are six heading levels, from <code class="kbd">&lt;h1&gt;</code> (most important) to <code class="kbd">&lt;h6&gt;</code> (least important). Use them in order — don't skip levels just to make text bigger.</p>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)] mb-3">Create a page about yourself using <code class="kbd">&lt;h1&gt;</code>, <code class="kbd">&lt;h2&gt;</code>, and several <code class="kbd">&lt;p&gt;</code> elements.</p>
+            <div class="quiz" data-answer="C">
+              <p class="mb-2 font-medium">Which element is used for the main title of a page?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-2 rounded-lg border border-[var(--border)] mb-2" data-val="A">&lt;h6&gt;</button>
+              <button class="quiz-opt block w-full text-left px-4 py-2 rounded-lg border border-[var(--border)] mb-2" data-val="B">&lt;p&gt;</button>
+              <button class="quiz-opt block w-full text-left px-4 py-2 rounded-lg border border-[var(--border)]" data-val="C">&lt;h1&gt;</button>
+            </div>
+            <p class="quiz-feedback mt-2 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#structure" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#links" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Links, Images & Lists →</a></nav>
+        </section>
+
+        <!-- 6. Links, Images & Lists -->
+        <section id="links" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 6</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Links, Images & Lists</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">The web is built on links. Images and lists help organize and enrich your content.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-html">&lt;!-- Link to another page --&gt;
+&lt;a href="https://github.com"&gt;Visit GitHub&lt;/a&gt;
+
+&lt;!-- Open link in new tab --&gt;
+&lt;a href="https://github.com" target="_blank" rel="noopener"&gt;Visit GitHub&lt;/a&gt;
+
+&lt;!-- Image --&gt;
+&lt;img src="photo.jpg" alt="A scenic mountain view" width="400"&gt;
+
+&lt;!-- Unordered list --&gt;
+&lt;ul&gt;
+  &lt;li&gt;HTML&lt;/li&gt;
+  &lt;li&gt;CSS&lt;/li&gt;
+  &lt;li&gt;JavaScript&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!-- Ordered list --&gt;
+&lt;ol&gt;
+  &lt;li&gt;Learn HTML&lt;/li&gt;
+  &lt;li&gt;Learn CSS&lt;/li&gt;
+  &lt;li&gt;Build projects&lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Important: always write alt text</h3>
+            <p class="text-[var(--muted)]">The <code class="kbd">alt</code> attribute describes an image. It is shown if the image fails to load and is read by screen readers for visually impaired users.</p>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Add a list of your hobbies, a link to your favorite website, and an image to your page.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#text" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#semantic" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Semantic HTML5 →</a></nav>
+        </section>
+
+        <!-- 7. Semantic HTML5 -->
+        <section id="semantic" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 7</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Semantic HTML5 Elements</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Semantic elements describe their meaning to the browser and to developers. They improve accessibility and SEO.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-html">&lt;header&gt;
+  &lt;nav&gt;
+    &lt;a href="/"&gt;Home&lt;/a&gt;
+    &lt;a href="/about"&gt;About&lt;/a&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+  &lt;article&gt;
+    &lt;h1&gt;Blog Post Title&lt;/h1&gt;
+    &lt;p&gt;Article content goes here...&lt;/p&gt;
+  &lt;/article&gt;
+
+  &lt;aside&gt;
+    &lt;p&gt;Related links or author info.&lt;/p&gt;
+  &lt;/aside&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;
+  &lt;p&gt;&amp;copy; 2026 My Name&lt;/p&gt;
+&lt;/footer&gt;</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Common semantic elements</h3>
+            <dl class="grid sm:grid-cols-2 gap-4 text-[var(--muted)]">
+              <div><dt class="font-semibold text-[var(--ink)]">&lt;header&gt;</dt><dd>Introductory content or navigation.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">&lt;nav&gt;</dt><dd>Navigation links.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">&lt;main&gt;</dt><dd>The dominant content of the page.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">&lt;article&gt;</dt><dd>Self-contained piece of content.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">&lt;section&gt;</dt><dd>Thematic grouping of content.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">&lt;footer&gt;</dt><dd>Footer for a page or section.</dd></div>
+            </dl>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#links" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#forms" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Forms & Inputs →</a></nav>
+        </section>
+
+        <!-- 8. Forms & Inputs -->
+        <section id="forms" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 8</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Forms & Input Types</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Forms collect information from users: signups, searches, contact messages, and more.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-html">&lt;form action="/submit" method="POST"&gt;
+  &lt;label for="name"&gt;Name:&lt;/label&gt;
+  &lt;input type="text" id="name" name="name" required&gt;
+
+  &lt;label for="email"&gt;Email:&lt;/label&gt;
+  &lt;input type="email" id="email" name="email" required&gt;
+
+  &lt;label for="message"&gt;Message:&lt;/label&gt;
+  &lt;textarea id="message" name="message" rows="4"&gt;&lt;/textarea&gt;
+
+  &lt;button type="submit"&gt;Send&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Common input types</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><code class="kbd">text</code> — single-line text</li>
+              <li><code class="kbd">email</code> — validates email format</li>
+              <li><code class="kbd">password</code> — hides typed characters</li>
+              <li><code class="kbd">number</code> — numeric input</li>
+              <li><code class="kbd">date</code> — date picker</li>
+              <li><code class="kbd">checkbox</code> / <code class="kbd">radio</code> — choices</li>
+              <li><code class="kbd">file</code> — upload files</li>
+            </ul>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Build a simple contact form with name, email, and message fields. Add the <code class="kbd">required</code> attribute to make fields mandatory.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#semantic" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#a11y" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Accessibility Basics →</a></nav>
+        </section>
+
+        <!-- 9. Accessibility Basics -->
+        <section id="a11y" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 9</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Accessibility Basics</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Accessibility means making websites usable by everyone, including people with disabilities. It also improves SEO and usability for all users.</p>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Key practices</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+              <li>Use proper heading hierarchy (<code class="kbd">h1</code> → <code class="kbd">h2</code> → <code class="kbd">h3</code>).</li>
+              <li>Always include meaningful <code class="kbd">alt</code> text on images.</li>
+              <li>Associate every form input with a <code class="kbd">&lt;label&gt;</code>.</li>
+              <li>Ensure sufficient color contrast.</li>
+              <li>Make interactive elements keyboard-focusable.</li>
+              <li>Use semantic elements instead of generic <code class="kbd">&lt;div&gt;</code>s where possible.</li>
+            </ul>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-html">&lt;!-- Good: label linked to input --&gt;
+&lt;label for="username"&gt;Username&lt;/label&gt;
+&lt;input type="text" id="username" name="username"&gt;
+
+&lt;!-- Bad: no association --&gt;
+&lt;p&gt;Username&lt;/p&gt;
+&lt;input type="text" name="username"&gt;
+
+&lt;!-- Good: descriptive alt text --&gt;
+&lt;img src="cat.jpg" alt="A sleeping orange cat"&gt;</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Go back through your page so far and make sure every image has <code class="kbd">alt</code> text and every input has a linked label.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#forms" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#css-intro" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Introduction to CSS →</a></nav>
+        </section>
+
+        <!-- 10. Introduction to CSS -->
+        <section id="css-intro" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 10</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction to CSS</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">CSS describes how HTML elements should look. You can write CSS in three ways: inline, internally, or externally.</p>
+
+          <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Inline</h3>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+                <pre><code class="language-html">&lt;p style="color: red;"&gt;Red text&lt;/p&gt;</code></pre>
+              </div>
+              <p class="text-xs text-[var(--muted)] mt-2">Style directly on the element. Not recommended for most cases.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Internal</h3>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+                <pre><code class="language-html">&lt;head&gt;
+  &lt;style&gt;
+    p { color: red; }
+  &lt;/style&gt;
+&lt;/head&gt;</code></pre>
+              </div>
+              <p class="text-xs text-[var(--muted)] mt-2">Style inside a &lt;style&gt; tag. Good for small demos.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">External</h3>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+                <pre><code class="language-html">&lt;link rel="stylesheet" href="styles.css"&gt;</code></pre>
+              </div>
+              <p class="text-xs text-[var(--muted)] mt-2">Best for real projects. Separates content from design.</p>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">CSS syntax</h3>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+              <pre><code class="language-css">selector {
+  property: value;
+}
+
+/* Example */
+h1 {
+  color: blue;
+  font-size: 2rem;
+}</code></pre>
+            </div>
+            <p class="text-[var(--muted)] mt-3">A <strong>selector</strong> targets HTML elements. A <strong>declaration</strong> is a property-value pair.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#a11y" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#colors" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Colors, Fonts & Units →</a></nav>
+        </section>
+
+        <!-- 11. Colors, Fonts & Units -->
+        <section id="colors" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 11</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Colors, Fonts & Units</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Colors can be named, hex, RGB, or HSL. Fonts can be system defaults or loaded from services like Google Fonts. CSS units define sizes.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-css">/* Different ways to write colors */
+color: red;
+color: #ff0000;
+color: rgb(255, 0, 0);
+color: hsl(0, 100%, 50%);
+color: rgba(255, 0, 0, 0.5); /* with transparency */
+
+/* Font family */
+font-family: 'Outfit', sans-serif;
+font-size: 1.25rem;
+font-weight: 700;
+line-height: 1.6;
+
+/* Common units */
+width: 100%;        /* percentage of parent */
+margin: 16px;       /* pixels */
+padding: 1rem;      /* relative to root font size */
+font-size: 1.2em;   /* relative to parent font size */
+border-radius: 8px; /* fixed size */</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Adding a Google Font</h3>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+              <pre><code class="language-html">&lt;!-- In the head of your HTML --&gt;
+&lt;link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&amp;display=swap" rel="stylesheet"&gt;
+</code></pre>
+            </div>
+            <p class="text-[var(--muted)] mt-3">Then use it in CSS: <code class="kbd">font-family: 'Outfit', sans-serif;</code></p>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="B">
+              <p class="mb-3">Which unit is relative to the root font size?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">px</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">rem</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">em</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#css-intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#box-model" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: The Box Model →</a></nav>
+        </section>
+
+        <!-- 12. The Box Model -->
+        <section id="box-model" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 12</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">The Box Model</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Every HTML element is a rectangular box made of four layers: content, padding, border, and margin. Understanding this is essential for layout.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">Layers of the box</h3>
+            <svg class="diagram" viewBox="0 0 720 300" aria-label="Diagram of CSS box model layers">
+              <!-- Margin -->
+              <rect x="60" y="30" width="600" height="240" rx="16" fill="var(--panel)" stroke="#d0d7de" stroke-width="2" stroke-dasharray="6"/>
+              <text x="360" y="55" text-anchor="middle" font-size="14" font-weight="700" fill="#656d76">margin</text>
+
+              <!-- Border -->
+              <rect x="110" y="75" width="500" height="170" rx="12" fill="#fff8c5" stroke="#d29922" stroke-width="4"/>
+              <text x="360" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#9a6700">border</text>
+
+              <!-- Padding -->
+              <rect x="150" y="115" width="420" height="120" rx="8" fill="#dafbe1" stroke="#3fb950" stroke-width="2"/>
+              <text x="360" y="142" text-anchor="middle" font-size="14" font-weight="700" fill="#1a7f37">padding</text>
+
+              <!-- Content -->
+              <rect x="190" y="155" width="340" height="60" rx="6" fill="#ddf4ff" stroke="var(--brand-light)" stroke-width="2"/>
+              <text x="360" y="190" text-anchor="middle" font-size="14" font-weight="700" fill="var(--brand-light)">content</text>
+            </svg>
+            <p class="text-sm text-[var(--muted)] mt-2">From outside in: margin, border, padding, then content.</p>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-css">.box {
+  width: 200px;
+  height: 100px;
+  padding: 20px;
+  border: 2px solid black;
+  margin: 30px;
+  background-color: lightblue;
+}</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Box-sizing</h3>
+            <p class="text-[var(--muted)] mb-3">By default, <code class="kbd">width</code> only sets the content size. Use <code class="kbd">box-sizing: border-box</code> to make width include padding and border.</p>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+              <pre><code class="language-css">* {
+  box-sizing: border-box;
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Create a <code class="kbd">.box</code> class with padding, border, and margin. Observe how the space around it changes.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#colors" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#display" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Display, Position & Z-Index →</a></nav>
+        </section>
+
+        <!-- 13. Display, Position & Z-Index -->
+        <section id="display" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 13</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Display, Position & Z-Index</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">These properties control how elements appear in the document flow and how they overlap each other.</p>
+
+          <div class="grid md:grid-cols-2 gap-4 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Display values</h3>
+              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+                <li><code class="kbd">block</code> — takes full width, starts on new line.</li>
+                <li><code class="kbd">inline</code> — flows with text, no width/height.</li>
+                <li><code class="kbd">inline-block</code> — inline but accepts sizing.</li>
+                <li><code class="kbd">none</code> — removes the element from layout.</li>
+              </ul>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Position values</h3>
+              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+                <li><code class="kbd">static</code> — default position.</li>
+                <li><code class="kbd">relative</code> — offset from normal position.</li>
+                <li><code class="kbd">absolute</code> — positioned relative to nearest positioned ancestor.</li>
+                <li><code class="kbd">fixed</code> — positioned relative to viewport.</li>
+                <li><code class="kbd">sticky</code> — switches between relative and fixed.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-css">/* Make a sticky header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+}
+
+/* Overlap an element */
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Make a navigation bar that sticks to the top of the page when you scroll.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#box-model" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#variables" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: CSS Variables →</a></nav>
+        </section>
+
+        <!-- 14. CSS Variables -->
+        <section id="variables" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 14</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">CSS Variables (Custom Properties)</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">CSS variables let you store values like colors and spacing so you can reuse them across your stylesheet. They make themes and updates much easier.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-css">/* Define variables on the root element */
+:root {
+  --brand: #2f81f7;
+  --text: #1f2328;
+  --bg: #f6f8fa;
+  --radius: 8px;
+  --space: 1rem;
+}
+
+/* Use them anywhere */
+body {
+  color: var(--text);
+  background-color: var(--bg);
+}
+
+button {
+  background: var(--brand);
+  border-radius: var(--radius);
+  padding: var(--space);
+}</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Why use variables?</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Update a color once, see it everywhere.</li>
+              <li>Build light/dark themes by changing a few values.</li>
+              <li>Keep spacing and sizing consistent.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#display" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#flexbox" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Flexbox →</a></nav>
+        </section>
+
+        <!-- 15. Flexbox -->
+        <section id="flexbox" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 15</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Flexbox</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Flexbox is a one-dimensional layout system. It's perfect for aligning items in a row or column.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-css">.container {
+  display: flex;
+  justify-content: center; /* horizontal alignment */
+  align-items: center;     /* vertical alignment */
+  gap: 1rem;               /* space between items */
+  flex-wrap: wrap;         /* allow items to wrap */
+}
+
+.item {
+  flex: 1;               /* grow to fill space */
+  min-width: 200px;
+}</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Interactive Flexbox playground</h3>
+            <p class="text-[var(--muted)] mb-4">Click the buttons to change the flexbox properties of the box below.</p>
+            <div class="flex gap-3 mb-4 flex-wrap">
+              <button class="px-3 py-1.5 rounded-md border border-[var(--border)] text-sm" onclick="setFlex('justify','flex-start')">justify-start</button>
+              <button class="px-3 py-1.5 rounded-md border border-[var(--border)] text-sm" onclick="setFlex('justify','center')">justify-center</button>
+              <button class="px-3 py-1.5 rounded-md border border-[var(--border)] text-sm" onclick="setFlex('justify','space-between')">justify-between</button>
+              <button class="px-3 py-1.5 rounded-md border border-[var(--border)] text-sm" onclick="setFlex('align','flex-start')">align-start</button>
+              <button class="px-3 py-1.5 rounded-md border border-[var(--border)] text-sm" onclick="setFlex('align','center')">align-center</button>
+            </div>
+            <div id="flex-demo" class="preview-frame rounded-xl p-4 flex" style="min-height: 160px; gap: 1rem; justify-content: flex-start; align-items: flex-start;">
+              <div class="w-16 h-16 rounded-lg bg-[var(--brand-light)] flex items-center justify-center text-white font-bold">1</div>
+              <div class="w-16 h-20 rounded-lg bg-[#a371f7] flex items-center justify-center text-white font-bold">2</div>
+              <div class="w-16 h-12 rounded-lg bg-[#3fb950] flex items-center justify-center text-white font-bold">3</div>
+            </div>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Build a row of three cards and center them horizontally with Flexbox.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#variables" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#grid" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: CSS Grid →</a></nav>
+        </section>
+
+        <!-- 16. CSS Grid -->
+        <section id="grid" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 16</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">CSS Grid</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Grid is a two-dimensional layout system. It handles both rows and columns, making it ideal for page-level layouts.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-css">.page {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  gap: 1rem;
+}
+
+header { grid-column: 1 / -1; }
+main   { grid-column: 2; }
+aside  { grid-column: 1; grid-row: 2; }
+footer { grid-column: 1 / -1; }</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">Grid in action</h3>
+            <div class="preview-frame rounded-xl p-4 grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+              <div class="h-24 rounded-lg bg-[var(--brand-light)] flex items-center justify-center text-white font-bold">1</div>
+              <div class="h-24 rounded-lg bg-[#a371f7] flex items-center justify-center text-white font-bold">2</div>
+              <div class="h-24 rounded-lg bg-[#3fb950] flex items-center justify-center text-white font-bold">3</div>
+              <div class="h-24 rounded-lg bg-[#d29922] flex items-center justify-center text-white font-bold">4</div>
+            </div>
+            <p class="text-[var(--muted)] mt-4 text-sm">Resize the browser window to see the cards reflow automatically.</p>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="A">
+              <p class="mb-3">Which layout system is best for full-page 2D layouts?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">CSS Grid</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">Flexbox</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">Floats</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#flexbox" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#responsive" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Responsive Design →</a></nav>
+        </section>
+
+        <!-- 17. Responsive Design & Media Queries -->
+        <section id="responsive" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 17</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Responsive Design & Media Queries</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Responsive design means your page looks good on phones, tablets, and desktops. Media queries let you apply CSS only at certain screen sizes.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-css">/* Mobile-first approach: default styles first, then larger screens */
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* Tablets */
+@media (min-width: 640px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktops */
+@media (min-width: 1024px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Mobile-first thinking</h3>
+            <p class="text-[var(--muted)]">Start with the smallest screen layout, then use <code class="kbd">min-width</code> media queries to enhance the design for larger screens. This is the most common modern approach.</p>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Resize your browser window while viewing your page. Does the layout adapt? If not, add a media query.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#grid" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#animations" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Transitions & Animations →</a></nav>
+        </section>
+
+        <!-- 18. Transitions & Animations -->
+        <section id="animations" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 18</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Transitions & Animations</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">CSS can make changes smooth and create moving effects. Use transitions for simple hover effects and animations for more complex sequences.</p>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-3">Transitions</h3>
+              <p class="text-sm text-[var(--muted)] mb-4">Hover over the box below to see a smooth change.</p>
+              <div class="preview-frame rounded-xl p-6 flex items-center justify-center">
+                <div class="anim-demo w-32 h-32 rounded-2xl bg-gradient-to-br from-[var(--brand-light)] to-[#a371f7] shadow-lg flex items-center justify-center text-white font-bold cursor-pointer">
+                  Hover me
+                </div>
+              </div>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-3">Keyframe animations</h3>
+              <p class="text-sm text-[var(--muted)] mb-4">These boxes run forever without any user input.</p>
+              <div class="preview-frame rounded-xl p-6 flex items-center justify-around">
+                <div class="bounce-ball shadow-lg"></div>
+                <div class="fade-box shadow-lg"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-css">/* Smooth hover transition */
+.anim-demo {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.anim-demo:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* Continuous bounce */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-40px); }
+}
+.ball {
+  animation: bounce 1.2s ease-in-out infinite;
+}</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Add a hover effect to a button on your page. Make the background color change smoothly over 0.3 seconds.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#responsive" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#frameworks" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: CSS Frameworks →</a></nav>
+        </section>
+
+        <!-- 19. CSS Frameworks Intro -->
+        <section id="frameworks" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 19</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">CSS Frameworks Introduction</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">CSS frameworks provide pre-built components and utility classes so you can build faster. They are useful, but understanding plain HTML and CSS first is important.</p>
+
+          <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Tailwind CSS</h3>
+              <p class="text-sm text-[var(--muted)]">Utility-first framework. Compose designs by combining small classes directly in HTML.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Bootstrap</h3>
+              <p class="text-sm text-[var(--muted)]">Component-based framework with ready-made buttons, cards, navbars, and grids.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Bulma</h3>
+              <p class="text-sm text-[var(--muted)]">Modern CSS-only framework with clean class names and flexible columns.</p>
+            </div>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-html">&lt;!-- Example: a Tailwind-style button --&gt;
+&lt;button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"&gt;
+  Click me
+&lt;/button&gt;</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">When to use a framework</h4>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>You need to prototype quickly.</li>
+              <li>You want consistent design without writing every rule.</li>
+              <li>You are working on a team with shared conventions.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#animations" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#portfolio" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Portfolio Project →</a></nav>
+        </section>
+
+        <!-- 20. Portfolio Project -->
+        <section id="portfolio" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 20</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Build a Portfolio Page</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">This capstone project combines everything you've learned: semantic HTML, CSS variables, Flexbox, Grid, forms, responsiveness, and accessibility.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;My Portfolio&lt;/title&gt;
+  &lt;link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&amp;display=swap" rel="stylesheet"&gt;
+  &lt;style&gt;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f6f8fa;
+      --text: #1f2328;
+      --brand: #2f81f7;
+      --card: #ffffff;
+    }
+    body {
+      font-family: 'Outfit', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    header {
+      background: var(--card);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+    a { color: var(--brand); text-decoration: none; }
+    .hero {
+      text-align: center;
+      padding: 5rem 2rem;
+    }
+    .hero h1 { font-size: 3rem; margin-bottom: 1rem; }
+    .btn {
+      display: inline-block;
+      background: var(--brand);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    section {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .project-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+    }
+    form {
+      display: grid;
+      gap: 1rem;
+      max-width: 500px;
+    }
+    input, textarea {
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: var(--card);
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;nav&gt;
+      &lt;strong&gt;My Portfolio&lt;/strong&gt;
+      &lt;ul class="nav-links"&gt;
+        &lt;li&gt;&lt;a href="#about"&gt;About&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#projects"&gt;Projects&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;section class="hero"&gt;
+    &lt;h1&gt;Hi, I'm a Web Learner&lt;/h1&gt;
+    &lt;p&gt;I build responsive, accessible websites with HTML and CSS.&lt;/p&gt;
+    &lt;a href="#projects" class="btn"&gt;See my work&lt;/a&gt;
+  &lt;/section&gt;
+
+  &lt;section id="about"&gt;
+    &lt;h2&gt;About Me&lt;/h2&gt;
+    &lt;p&gt;I started learning web development to create useful, beautiful things on the internet. I care about clean code, accessibility, and user experience.&lt;/p&gt;
+  &lt;/section&gt;
+
+  &lt;section id="projects"&gt;
+    &lt;h2&gt;Projects&lt;/h2&gt;
+    &lt;div class="projects"&gt;
+      &lt;article class="project-card"&gt;
+        &lt;h3&gt;Project One&lt;/h3&gt;
+        &lt;p&gt;A responsive landing page built with semantic HTML and CSS Grid.&lt;/p&gt;
+      &lt;/article&gt;
+      &lt;article class="project-card"&gt;
+        &lt;h3&gt;Project Two&lt;/h3&gt;
+        &lt;p&gt;A contact form with validation and accessible labels.&lt;/p&gt;
+      &lt;/article&gt;
+      &lt;article class="project-card"&gt;
+        &lt;h3&gt;Project Three&lt;/h3&gt;
+        &lt;p&gt;A multi-column blog layout using Flexbox and media queries.&lt;/p&gt;
+      &lt;/article&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+
+  &lt;section id="contact"&gt;
+    &lt;h2&gt;Contact&lt;/h2&gt;
+    &lt;form action="#" method="POST"&gt;
+      &lt;label for="name"&gt;Name&lt;/label&gt;
+      &lt;input type="text" id="name" name="name" required&gt;
+
+      &lt;label for="email"&gt;Email&lt;/label&gt;
+      &lt;input type="email" id="email" name="email" required&gt;
+
+      &lt;label for="message"&gt;Message&lt;/label&gt;
+      &lt;textarea id="message" name="message" rows="4" required&gt;&lt;/textarea&gt;
+
+      &lt;button type="submit" class="btn"&gt;Send Message&lt;/button&gt;
+    &lt;/form&gt;
+  &lt;/section&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;&amp;copy; 2026 My Portfolio. Built with HTML &amp; CSS.&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Capstone challenge</h4>
+            <p class="text-[var(--muted)]">Customize the portfolio with your own name, colors, and projects. Add a dark mode toggle using CSS variables and a media query or a small JavaScript snippet.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#frameworks" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#best-practices" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Best Practices →</a></nav>
+        </section>
+
+        <!-- 21. Best Practices -->
+        <section id="best-practices" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 21</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Best Practices & Resources</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">You're now equipped to build real web pages. These habits will keep your code clean, accessible, and maintainable.</p>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-3">HTML habits</h3>
+              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+                <li>Use semantic elements.</li>
+                <li>Validate your HTML with the W3C validator.</li>
+                <li>Write meaningful alt text.</li>
+                <li>Keep accessibility in mind from the start.</li>
+              </ul>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-3">CSS habits</h3>
+              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+                <li>Use CSS variables for colors and spacing.</li>
+                <li>Prefer mobile-first media queries.</li>
+                <li>Avoid overly specific selectors.</li>
+                <li>Comment complex layout rules.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-10">
+            <h4 class="font-semibold mb-2">Final Quiz</h4>
+            <div class="quiz" data-answer="C">
+              <p class="mb-3">Which is the best reason to use semantic HTML?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">It makes the page load faster</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">It lets you skip CSS entirely</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">It improves accessibility and SEO</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <div class="card rounded-2xl p-8 text-center">
+            <h3 class="text-2xl font-bold mb-3">Congratulations! 🎉</h3>
+            <p class="text-[var(--muted)] mb-5">You've completed the HTML & CSS fundamentals tutorial. Keep building projects — that's the best way to learn.</p>
+            <div class="flex justify-center gap-4 flex-wrap">
+              <a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">Restart tutorial</a>
+              <a href="https://developer.mozilla.org" target="_blank" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">MDN Web Docs →</a>
+            </div>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#portfolio" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><span></span></nav>
+        </section>
+
+      </div>
+
+      <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+        <p>Made for teaching HTML & CSS. Open directly in any browser.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const html = document.documentElement;
+    const lightStylesheet = document.getElementById('hljs-light');
+    const darkStylesheet = document.getElementById('hljs-dark');
+    const moon = document.getElementById('moon');
+    const sun = document.getElementById('sun');
+
+    function applyTheme(theme) {
+      html.classList.remove('light', 'dark');
+      html.classList.add(theme);
+      if (theme === 'dark') {
+        lightStylesheet.disabled = true;
+        darkStylesheet.disabled = false;
+        moon.classList.add('hidden');
+        sun.classList.remove('hidden');
+      } else {
+        lightStylesheet.disabled = false;
+        darkStylesheet.disabled = true;
+        moon.classList.remove('hidden');
+        sun.classList.add('hidden');
+      }
+      localStorage.setItem('htmlcss-tutorial-theme', theme);
+      hljs.highlightAll();
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    const saved = localStorage.getItem('htmlcss-tutorial-theme');
+    applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('menu-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('hidden');
+    }
+
+    document.querySelectorAll('#toc a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) toggleSidebar();
+      });
+    });
+
+    const sections = document.querySelectorAll('section[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    function onScroll() {
+      let current = '';
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= 120) current = sec.getAttribute('id');
+      });
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    async function copyCode(btn) {
+      const code = btn.nextElementSibling.textContent;
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+      } catch (err) {
+        btn.textContent = 'Failed';
+        setTimeout(() => btn.textContent = 'Copy', 1500);
+      }
+    }
+
+    document.querySelectorAll('.quiz').forEach(quiz => {
+      const answer = quiz.dataset.answer;
+      const feedback = quiz.nextElementSibling && quiz.nextElementSibling.classList.contains('quiz-feedback') ? quiz.nextElementSibling : quiz.querySelector('.quiz-feedback');
+      const buttons = quiz.querySelectorAll('.quiz-opt');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('correct') || btn.classList.contains('wrong')) return;
+          buttons.forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          const chosen = btn.dataset.val;
+          if (chosen === answer) {
+            btn.classList.add('correct');
+            feedback.textContent = 'Correct! Well done.';
+            feedback.style.color = 'var(--success)';
+          } else {
+            btn.classList.add('wrong');
+            buttons.forEach(b => { if (b.dataset.val === answer) b.classList.add('correct'); });
+            feedback.textContent = 'Not quite. The correct answer is highlighted.';
+            feedback.style.color = 'var(--danger)';
+          }
+        });
+      });
+    });
+
+    function setFlex(prop, value) {
+      const demo = document.getElementById('flex-demo');
+      demo.style[prop === 'justify' ? 'justifyContent' : 'alignItems'] = value;
+    }
+
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

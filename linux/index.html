@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux Command Line for Beginners</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicons/linux.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .sr-only:focus { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 50; background: white; color: black; padding: 0.5rem 0.75rem; border-radius: 0.375rem; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
+    :root {
+      --brand-light: #FCC624;
+      --brand-dark: #FCC624;
+      --ink: #1f2328;
+      --muted: #656d76;
+      --panel: #f6f8fa;
+      --border: #d0d7de;
+      --success: #1a7f37;
+      --danger: #cf222e;
+      --warn: #9a6700;
+    }
+    html.dark {
+      --ink: #e6edf3;
+      --muted: #848d97;
+      --panel: #161b22;
+      --border: #30363d;
+      --success: #3fb950;
+      --danger: #f85149;
+      --warn: #d29922;
+    }
+    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
+    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
+    .brand { color: #333; }
+    html.dark .brand { color: var(--brand-dark); }
+    .toc-link.active { background: rgba(252,198,36,0.2); border-left: 3px solid var(--brand-light); color: var(--ink); }
+    html.dark .toc-link.active { background: rgba(252,198,36,0.15); border-left-color: var(--brand-dark); color: var(--brand-dark); }
+    .card { border: 1px solid var(--border); background: var(--panel); }
+    .code-block { position: relative; }
+    .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--panel); color: var(--muted); opacity: 0; transition: opacity 0.15s; }
+    .code-block:hover .copy-btn { opacity: 1; }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+    .diagram { width: 100%; max-width: 720px; }
+    .quiz-opt.selected { border-color: var(--brand-light); background: rgba(252,198,36,0.12); }
+    html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba(252,198,36,0.12); }
+    .quiz-opt.correct { border-color: var(--success); background: rgba(26,127,55,0.08); }
+    .quiz-opt.wrong { border-color: var(--danger); background: rgba(207,34,46,0.08); }
+    .scroll-smooth { scroll-behavior: smooth; }
+    @media (max-width: 1024px) { #sidebar { transform: translateX(-100%); transition: transform .25s; } #sidebar.open { transform: translateX(0); } }
+    .kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:0.375rem; padding:0.125rem 0.375rem; font-family:ui-monospace,monospace; font-size:0.875rem; }
+    .linux-badge { background: #333; color: #FCC624; }
+  </style>
+</head>
+<body class="antialiased transition-colors duration-300">
+
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+  <div class="flex min-h-screen">
+
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6">
+      <div class="flex items-center gap-3 mb-8">
+        <img src="../assets/favicons/linux.svg" alt="Linux" class="w-10 h-10">
+        <span class="text-xl font-bold">Linux CLI</span>
+      </div>
+      <nav id="toc" class="space-y-1 text-sm">
+        <a href="#intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">1. Introduction</a>
+        <a href="#terminal" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">2. The Terminal</a>
+        <a href="#files" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">3. Navigating Files</a>
+        <a href="#permissions" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">4. File Permissions</a>
+        <a href="#users" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">5. Users &amp; Groups</a>
+        <a href="#text" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">6. Working with Text</a>
+        <a href="#processes" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">7. Processes</a>
+        <a href="#package" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">8. Package Management</a>
+        <a href="#networking" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">9. Networking</a>
+        <a href="#ssh" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">10. SSH &amp; Remote Servers</a>
+        <a href="#scripting" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">11. Shell Scripting</a>
+        <a href="#services" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">12. Services &amp; Systemd</a>
+        <a href="#env" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">13. Environment Variables</a>
+        <a href="#cheatsheet" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">14. Cheat Sheet</a>
+      </nav>
+      <div class="mt-8 pt-6 border-t border-[var(--border)]">
+        <p class="text-xs text-[var(--muted)]">Open in any browser. No build step required.</p>
+      </div>
+    </aside>
+
+    <main id="main" class="flex-1 min-w-0">
+
+      <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()" aria-label="Open menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <h1 class="text-lg sm:text-xl font-bold tracking-tight">Linux Command Line for Beginners</h1>
+        </div>
+        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
+          <svg id="moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+          <svg id="sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </header>
+
+      <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+
+        <section id="intro" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 1</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">The Linux command line is one of the most powerful tools in software development. It is the standard interface for servers, containers, cloud instances, and embedded systems. Mastering it makes you faster and more confident in almost every technical role.</p>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Before you start</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>A terminal (Terminal.app on macOS, WSL or Git Bash on Windows, or any Linux terminal)</li>
+              <li>No prior programming or Linux experience is required</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">What you'll learn</h3>
+            <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Navigate the filesystem</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Manage users and permissions</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Work with text, pipes, and filters</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Control processes and services</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Install and manage packages</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Connect to remote servers with SSH</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">More practice ideas</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Write a script that backs up a folder every day with a timestamped archive.</li>
+              <li>Set up a small web server (like Nginx) and inspect its logs.</li>
+              <li>Create a cron job that reminds you to commit your code each evening.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><span></span><a href="#terminal" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: The Terminal →</a></nav>
+        </section>
+
+        <section id="terminal" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 2</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">The Terminal</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">A terminal is a text-based interface to the operating system. You type commands, and the shell — the command interpreter — translates those commands into instructions for the computer.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">How a command flows</h3>
+            <svg class="diagram" viewBox="0 0 720 100" aria-label="Diagram showing user to shell to kernel">
+              <rect x="30" y="25" width="140" height="50" rx="10" fill="#FCC624" opacity="0.3" stroke="#333" stroke-width="2"/>
+              <text x="100" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#333">You</text>
+
+              <path d="M170 50 L 260 50" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
+              <text x="215" y="40" text-anchor="middle" font-size="11" fill="var(--muted)">type</text>
+
+              <rect x="280" y="25" width="160" height="50" rx="10" fill="#FCC624" opacity="0.3" stroke="#333" stroke-width="2"/>
+              <text x="360" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Shell (bash/zsh)</text>
+
+              <path d="M440 50 L 530 50" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
+              <text x="485" y="40" text-anchor="middle" font-size="11" fill="var(--muted)">invokes</text>
+
+              <rect x="550" y="25" width="140" height="50" rx="10" fill="#FCC624" opacity="0.3" stroke="#333" stroke-width="2"/>
+              <text x="620" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Kernel</text>
+
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="var(--border)"/></marker>
+              </defs>
+            </svg>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Open a terminal
+# macOS:    Terminal.app or iTerm2
+# Windows:  WSL, Git Bash, or PowerShell
+# Linux:    Ctrl + Alt + T
+
+# See which shell you are running
+echo $SHELL
+
+# Print the current user and hostname
+whoami
+hostname</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Open your terminal, run <code class="kbd">echo $SHELL</code>, and note whether you are using Bash, Zsh, or another shell.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#files" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Files →</a></nav>
+        </section>
+
+        <section id="files" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 3</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Navigating Files</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Everything in Linux is a file. Directories are just special files that contain lists of other files. These commands let you move around and manipulate the filesystem.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Print working directory
+pwd
+
+# List files
+ls
+ls -la           # all files, long format
+ls -lh           # human-readable sizes
+
+# Change directory
+cd /home
+cd ~             # home directory
+cd ..            # parent directory
+cd -             # previous directory
+
+# Create files and directories
+touch notes.txt
+mkdir projects
+mkdir -p projects/web/app
+
+# Copy, move, delete
+cp notes.txt notes-backup.txt
+mv notes-backup.txt archive/
+rm notes.txt
+rm -r projects/old   # recursive delete
+
+# Find files
+find . -name "*.js"
+find /var/log -type f -mtime -7</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Path shortcuts</h3>
+            <dl class="grid sm:grid-cols-2 gap-4 text-[var(--muted)]">
+              <div><dt class="font-semibold text-[var(--ink)]">~</dt><dd>Your home directory.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">.</dt><dd>Current directory.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">..</dt><dd>Parent directory.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">-</dt><dd>Previous directory.</dd></div>
+            </dl>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="B">
+              <p class="mb-3">Which command shows the directory you are currently in?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">ls</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">pwd</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">cd</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#terminal" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#permissions" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Permissions →</a></nav>
+        </section>
+
+        <section id="permissions" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 4</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">File Permissions</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Linux is multi-user by design. Permissions control who can read, write, or execute a file. Understanding them is essential for security and troubleshooting.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># View permissions
+ls -l
+
+# Example output:
+# -rw-r--r-- 1 alex staff 1234 Oct  3 09:00 notes.txt
+# drwxr-xr-x 2 alex staff 4096 Oct  3 09:00 projects
+
+# Change permissions
+chmod 755 script.sh      # rwxr-xr-x
+chmod u+x script.sh      # add execute for owner
+chmod g-w file.txt       # remove write for group
+
+# Change ownership
+sudo chown root:root important.conf
+sudo chown -R $USER:$USER ~/projects</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Permission notation</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm text-left text-[var(--muted)]">
+                <thead class="border-b border-[var(--border)]">
+                  <tr>
+                    <th class="py-2">Symbol</th>
+                    <th class="py-2">Meaning</th>
+                    <th class="py-2">Numeric value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td class="py-2 font-mono">r</td><td class="py-2">Read</td><td class="py-2">4</td></tr>
+                  <tr><td class="py-2 font-mono">w</td><td class="py-2">Write</td><td class="py-2">2</td></tr>
+                  <tr><td class="py-2 font-mono">x</td><td class="py-2">Execute</td><td class="py-2">1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#files" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#users" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Users →</a></nav>
+        </section>
+
+        <section id="users" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 5</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Users &amp; Groups</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Linux separates users and groups so that multiple people can safely share the same system. Most daily work happens as a normal user, with <code class="kbd">sudo</code> used for administrative tasks.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Show current user
+whoami
+id
+
+# Switch to root (not recommended for daily use)
+sudo -i
+
+# Create a new user
+sudo adduser devuser
+sudo usermod -aG sudo devuser
+
+# Change your password
+passwd
+
+# Add user to a group
+sudo usermod -aG docker $USER
+newgrp docker</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Run <code class="kbd">id</code> and identify your username, user ID, and group memberships.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#permissions" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#text" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Text →</a></nav>
+        </section>
+
+        <section id="text" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 6</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Working with Text</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Linux treats text as a first-class citizen. Pipes let you chain small, focused tools into powerful workflows.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># View file contents
+cat file.txt
+less file.txt          # scrollable
+head -n 20 file.txt    # first 20 lines
+tail -n 20 file.txt    # last 20 lines
+tail -f /var/log/syslog  # follow live updates
+
+# Search text
+grep "error" logs.txt
+grep -i "warning" logs.txt
+grep -r "TODO" src/
+
+# Count words, lines, bytes
+wc -l file.txt
+
+# Sort and remove duplicates
+sort names.txt | uniq
+sort names.txt | uniq -c
+
+# Stream editor: replace text
+sed -i 's/old/new/g' file.txt
+
+# Extract columns
+awk '{print $1, $3}' file.txt
+
+# Chain tools with pipes
+cat access.log | grep "404" | awk '{print $1}' | sort | uniq -c | sort -nr | head -10</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">The Unix philosophy</h3>
+            <p class="text-[var(--muted)]">Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is the universal interface.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#users" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#processes" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Processes →</a></nav>
+        </section>
+
+        <section id="processes" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 7</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Processes</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Every running program is a process. Linux gives you tools to list, inspect, control, and terminate them.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># List processes
+ps aux
+ps aux | grep nginx
+
+# Interactive process viewer (install with: sudo apt install htop)
+htop
+
+# Find process by name
+pgrep -a node
+
+# Kill a process by PID
+kill 1234
+kill -9 1234      # force kill
+killall node      # kill all processes named node
+
+# Run a process in the background
+sleep 60 &
+
+# Bring a background job to foreground
+fg %1
+
+# Send a running foreground job to background
+# Press Ctrl+Z, then type:
+bg %1</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="C">
+              <p class="mb-3">Which command is commonly used to forcefully terminate a process?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">stop</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">exit</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">kill -9</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#text" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#package" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Packages →</a></nav>
+        </section>
+
+        <section id="package" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 8</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Package Management</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Package managers install, update, and remove software. The exact command depends on your Linux distribution.</p>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Debian / Ubuntu (apt)</h3>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+                <pre><code class="language-bash">sudo apt update
+sudo apt upgrade
+sudo apt install nginx
+sudo apt remove nginx
+sudo apt autoremove</code></pre>
+              </div>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">RHEL / CentOS / Fedora (dnf/yum)</h3>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+                <pre><code class="language-bash">sudo dnf update
+sudo dnf install nginx
+sudo dnf remove nginx</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Search for a package
+apt search python3
+
+# Show package details
+apt show nginx
+
+# List installed packages
+apt list --installed</code></pre>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#processes" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#networking" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Networking →</a></nav>
+        </section>
+
+        <section id="networking" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 9</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Networking</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Linux servers are usually headless and remote. Networking commands help you diagnose connectivity, inspect interfaces, and debug services.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Network interfaces and IP addresses
+ip addr
+ip link
+
+# Routing table
+ip route
+
+# Test connectivity
+ping google.com
+curl -I https://example.com
+
+# DNS lookup
+nslookup example.com
+dig example.com
+
+# Show open ports and listening services
+ss -tlnp
+netstat -tlnp   # older systems
+
+# Download files
+curl -O https://example.com/file.zip
+wget https://example.com/file.zip</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Run <code class="kbd">ip addr</code> to see your network interfaces, then <code class="kbd">ping google.com</code> to verify internet connectivity.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#package" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#ssh" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: SSH →</a></nav>
+        </section>
+
+        <section id="ssh" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 10</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">SSH &amp; Remote Servers</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">SSH (Secure Shell) is how you log into remote Linux machines securely. It is the standard for managing servers, containers, and cloud instances.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Generate an SSH key pair
+ssh-keygen -t ed25519 -C "your_email@example.com"
+
+# Copy your public key to a server
+ssh-copy-id user@server.example.com
+
+# Log into a remote server
+ssh user@server.example.com
+
+# Run a single command remotely
+ssh user@server.example.com "uptime"
+
+# Copy files to/from a server
+scp file.txt user@server.example.com:/home/user/
+scp -r user@server.example.com:/var/log ./logs-backup
+
+# Use rsync for efficient sync
+rsync -avz ./local-folder/ user@server:/remote/folder/</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">SSH best practices</h3e>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Use key-based authentication, not passwords.</li>
+              <li>Disable root login over SSH on servers.</li>
+              <li>Use a non-standard port or fail2ban to reduce brute-force attempts.</li>
+              <li>Keep your private keys private and never share them.</li>
+            </ul>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="A">
+              <p class="mb-3">Which command securely copies files to a remote server?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">scp</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">cp-remote</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">send</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#networking" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#scripting" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Scripting →</a></nav>
+        </section>
+
+        <section id="scripting" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 11</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Shell Scripting</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">A shell script is a text file containing multiple commands that can be executed together. Scripts are perfect for automation, backups, deployment, and system maintenance.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash">#!/bin/bash
+
+# backup.sh - backs up the home directory
+
+SOURCE_DIR="$HOME/projects"
+BACKUP_DIR="$HOME/backups"
+DATE=$(date +%Y-%m-%d-%H%M%S)
+ARCHIVE="$BACKUP_DIR/backup-$DATE.tar.gz"
+
+mkdir -p "$BACKUP_DIR"
+
+echo "Starting backup of $SOURCE_DIR..."
+if tar -czf "$ARCHIVE" "$SOURCE_DIR"; then
+  echo "Backup created: $ARCHIVE"
+else
+  echo "Backup failed" && exit 1
+fi</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Make the script executable
+chmod +x backup.sh
+
+# Run it
+./backup.sh
+
+# Or run with bash directly
+bash backup.sh</code></pre>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#ssh" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#services" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Services →</a></nav>
+        </section>
+
+        <section id="services" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 12</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Services &amp; Systemd</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Long-running background processes are called services. On most modern Linux distributions, <code class="kbd">systemd</code> manages services, timers, and system startup.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Check service status
+sudo systemctl status ssh
+
+# Start, stop, restart, enable a service
+sudo systemctl start nginx
+sudo systemctl stop nginx
+sudo systemctl restart nginx
+sudo systemctl enable nginx    # start on boot
+sudo systemctl disable nginx   # do not start on boot
+
+# View logs
+sudo journalctl -u nginx
+sudo journalctl -u nginx -f    # follow logs
+
+# Reboot or shutdown
+sudo reboot
+sudo shutdown now</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Check the status of the SSH service with <code class="kbd">sudo systemctl status ssh</code> (or <code class="kbd">sshd</code> on some systems). Inspect its recent logs with <code class="kbd">journalctl</code>.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#scripting" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#env" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Environment →</a></nav>
+        </section>
+
+        <section id="env" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 13</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Environment Variables</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Environment variables store configuration that programs can read at runtime. They are used for secrets, paths, locale settings, and application config.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># View all environment variables
+env
+
+# View a specific variable
+echo $HOME
+echo $PATH
+
+# Set a variable for the current session
+export API_KEY="abc123"
+
+# Add a directory to PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Make variables persistent by adding them to ~/.bashrc or ~/.zshrc
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Common variables</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><code class="kbd">HOME</code> — your home directory.</li>
+              <li><code class="kbd">PATH</code> — directories searched for executable commands.</li>
+              <li><code class="kbd">USER</code> — current username.</li>
+              <li><code class="kbd">SHELL</code> — path to your login shell.</li>
+              <li><code class="kbd">EDITOR</code> — default text editor.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#services" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#cheatsheet" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Cheat Sheet →</a></nav>
+        </section>
+
+        <section id="cheatsheet" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 14</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Command Cheat Sheet</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">A quick reference of the most useful Linux commands covered in this tutorial.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Files and navigation
+pwd, ls, cd, touch, mkdir, cp, mv, rm, find
+
+# Viewing and editing
+cat, less, head, tail, nano, vim
+
+# Text processing
+grep, awk, sed, sort, uniq, wc
+
+# Permissions and ownership
+chmod, chown, sudo
+
+# Users and groups
+whoami, id, adduser, usermod, passwd
+
+# Processes
+ps, htop, kill, killall, pgrep
+
+# Networking
+ip, ping, curl, wget, ss, nslookup, dig
+
+# Remote access
+ssh, scp, rsync
+
+# Package management
+apt, dnf, snap, flatpak
+
+# Services and logs
+systemctl, journalctl, service
+
+# System info
+uname -a, df -h, free -h, uptime, lscpu</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-10">
+            <h4 class="font-semibold mb-2">Final Quiz</h4>
+            <div class="quiz" data-answer="B">
+              <p class="mb-3">Which command lists active listening network ports on a modern Linux system?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">fdisk</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">ss -tlnp</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">mount</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <div class="card rounded-2xl p-8 text-center">
+            <h3 class="text-2xl font-bold mb-3">Congratulations! 🎉</h3>
+            <p class="text-[var(--muted)] mb-5">You now have a solid foundation in the Linux command line. Keep practicing on real systems — that's the best way to build fluency.</p>
+            <div class="flex justify-center gap-4 flex-wrap">
+              <a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">Restart tutorial</a>
+              <a href="https://linux.die.net/" target="_blank" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Linux Man Pages →</a>
+            </div>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#env" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><span></span></nav>
+        </section>
+
+      </div>
+
+      <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+        <p>Made for teaching Linux. Open directly in any browser.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Theme handling
+    const html = document.documentElement;
+    const lightStylesheet = document.getElementById('hljs-light');
+    const darkStylesheet = document.getElementById('hljs-dark');
+    const moon = document.getElementById('moon');
+    const sun = document.getElementById('sun');
+
+    function applyTheme(theme) {
+      html.classList.remove('light', 'dark');
+      html.classList.add(theme);
+      if (theme === 'dark') {
+        lightStylesheet.disabled = true;
+        darkStylesheet.disabled = false;
+        moon.classList.add('hidden');
+        sun.classList.remove('hidden');
+      } else {
+        lightStylesheet.disabled = false;
+        darkStylesheet.disabled = true;
+        moon.classList.remove('hidden');
+        sun.classList.add('hidden');
+      }
+      localStorage.setItem('linux-theme', theme);
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    const saved = localStorage.getItem('linux-theme');
+    applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+    // Sidebar toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('menu-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('hidden');
+    }
+
+    // Copy code
+    function copyCode(btn) {
+      const code = btn.nextElementSibling.querySelector('code');
+      navigator.clipboard.writeText(code.innerText).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    }
+
+    // Active TOC link
+    const sections = document.querySelectorAll('section[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach((link) => link.classList.remove('active'));
+          const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+
+    sections.forEach((section) => observer.observe(section));
+
+    // Quiz logic
+    document.querySelectorAll('.quiz').forEach((quiz) => {
+      const correct = quiz.dataset.answer;
+      const feedback = quiz.nextElementSibling;
+      quiz.querySelectorAll('.quiz-opt').forEach((opt) => {
+        opt.addEventListener('click', () => {
+          quiz.querySelectorAll('.quiz-opt').forEach((o) => {
+            o.classList.remove('selected', 'correct', 'wrong');
+            o.disabled = true;
+          });
+          opt.classList.add('selected');
+          if (opt.dataset.val === correct) {
+            opt.classList.add('correct');
+            feedback.textContent = 'Correct! ✅';
+            feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]';
+          } else {
+            opt.classList.add('wrong');
+            feedback.textContent = `Not quite. The correct answer is ${correct}.`;
+            feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]';
+          }
+        });
+      });
+    });
+
+    // Syntax highlighting
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

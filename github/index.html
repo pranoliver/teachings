@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete Git & GitHub Tutorial for Beginners</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicons/github.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ini.min.js"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .sr-only:focus { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 50; background: white; color: black; padding: 0.5rem 0.75rem; border-radius: 0.375rem; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
+    :root {
+      --brand-light: #2f81f7;
+      --brand-dark: #58a6ff;
+      --ink: #1f2328;
+      --muted: #656d76;
+      --panel: #f6f8fa;
+      --border: #d0d7de;
+      --success: #1a7f37;
+      --danger: #cf222e;
+      --warn: #9a6700;
+    }
+    html.dark {
+      --ink: #e6edf3;
+      --muted: #848d97;
+      --panel: #161b22;
+      --border: #30363d;
+      --success: #3fb950;
+      --danger: #f85149;
+      --warn: #d29922;
+    }
+    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
+    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
+    .brand { color: var(--brand-light); }
+    html.dark .brand { color: var(--brand-dark); }
+    .toc-link.active { background: rgba(47,129,247,0.12); border-left: 3px solid var(--brand-light); color: var(--brand-light); }
+    html.dark .toc-link.active { background: rgba(88,166,255,0.15); border-left-color: var(--brand-dark); color: var(--brand-dark); }
+    .card { border: 1px solid var(--border); background: var(--panel); }
+    .code-block { position: relative; }
+    .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--panel); color: var(--muted); opacity: 0; transition: opacity 0.15s; }
+    .code-block:hover .copy-btn { opacity: 1; }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+    .diagram { width: 100%; max-width: 640px; }
+    .pulse { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    .flow-line { stroke-dasharray: 8; animation: dash 1.2s linear infinite; }
+    @keyframes dash { to { stroke-dashoffset: -16; } }
+    .quiz-opt.selected { border-color: var(--brand-light); background: rgba(47,129,247,0.08); }
+    html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba(88,166,255,0.12); }
+    .quiz-opt.correct { border-color: var(--success); background: rgba(26,127,55,0.08); }
+    .quiz-opt.wrong { border-color: var(--danger); background: rgba(207,34,46,0.08); }
+    .scroll-smooth { scroll-behavior: smooth; }
+    @media (max-width: 1024px) { #sidebar { transform: translateX(-100%); transition: transform .25s; } #sidebar.open { transform: translateX(0); } }
+    .kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:0.375rem; padding:0.125rem 0.375rem; font-family:ui-monospace,monospace; font-size:0.875rem; }
+    .check-hidden { display: none; }
+    .check-hidden.visible { display: block; }
+  </style>
+</head>
+<body class="antialiased transition-colors duration-300">
+
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <!-- Mobile menu overlay -->
+  <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6">
+      <div class="flex items-center gap-3 mb-8">
+        <img src="../assets/favicons/github.svg" alt="Git" class="w-8 h-8">
+        <span class="text-xl font-bold">Git &amp; GitHub</span>
+      </div>
+      <nav id="toc" class="space-y-1 text-sm">
+        <a href="#intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">1. Introduction</a>
+        <a href="#version-control" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">2. What is Version Control?</a>
+        <a href="#install" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">3. Installing Git</a>
+        <a href="#config" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">4. Configuring Git</a>
+        <a href="#first-repo" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">5. Your First Repository</a>
+        <a href="#staging" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">6. Staging & Committing</a>
+        <a href="#history" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">7. Viewing History</a>
+        <a href="#branching" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">8. Branching</a>
+        <a href="#merging" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">9. Merging</a>
+        <a href="#conflicts" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">10. Resolving Conflicts</a>
+        <a href="#github-setup" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">11. GitHub Setup</a>
+        <a href="#connect" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">12. Connecting to GitHub</a>
+        <a href="#push-pull" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">13. Push & Pull</a>
+        <a href="#fork-clone" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">14. Forking & Cloning</a>
+        <a href="#pull-requests" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">15. Pull Requests</a>
+        <a href="#collab" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">16. Collaboration Workflows</a>
+        <a href="#issues" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">17. Issues, Labels & Milestones</a>
+        <a href="#pages" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">18. GitHub Pages</a>
+        <a href="#actions" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">19. GitHub Actions</a>
+        <a href="#copilot" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">20. GitHub Copilot</a>
+        <a href="#security" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">21. Security Features</a>
+        <a href="#projects" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">22. Projects, Wiki & Discussions</a>
+        <a href="#best-practices" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">23. Best Practices</a>
+      </nav>
+      <div class="mt-8 pt-6 border-t border-[var(--border)]">
+        <p class="text-xs text-[var(--muted)]">Open in any browser. No build step required.</p>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main id="main" class="flex-1 min-w-0">
+      <!-- Header -->
+      <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()" aria-label="Open menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <h1 class="text-lg sm:text-xl font-bold tracking-tight">Complete Git & GitHub Tutorial</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
+            <svg id="moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+            <svg id="sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+
+        <!-- 1. Introduction -->
+        <section id="intro" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 1</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Welcome! This guide teaches Git and GitHub from the ground up. By the end, you'll be able to track code changes, collaborate with others, automate workflows, and publish projects online.</p>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Before you start</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>A computer with a terminal or command prompt</li>
+              <li>A free GitHub account</li>
+              <li>No coding or command-line experience required</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">What you'll learn</h3>
+            <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> What version control is and why it matters</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> How to install and configure Git</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Creating repositories, committing, and branching</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Connecting local code to GitHub</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Pull requests, forks, and collaboration</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> GitHub Pages, Actions, Copilot, and security tools</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Real-world analogy</h3>
+            <p class="text-[var(--muted)] leading-relaxed">Imagine writing a novel in a word processor with no "Undo" and no saved drafts. Git is like an unlimited save-history system for code. GitHub is like Dropbox or Google Drive, but built especially for code and teamwork.</p>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">More practice ideas</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Track a personal notes folder with Git and push it to a private GitHub repo.</li>
+              <li>Create a simple static website and publish it with GitHub Pages.</li>
+              <li>Collaborate on a repo with a friend using branches and pull requests.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><span></span><a href="#version-control" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: What is Version Control? →</a></nav>
+        </section>
+
+        <!-- 2. What is Version Control? -->
+        <section id="version-control" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 2</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">What is Version Control?</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Version control is a system that records changes to a file or set of files over time so you can recall specific versions later. Git is the most popular version control system in the world.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">Without vs. With Git</h3>
+            <svg class="diagram" viewBox="0 0 640 220" aria-label="Diagram comparing manual file saving with Git version control">
+              <!-- Without Git -->
+              <text x="120" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">Without Git</text>
+              <rect x="30" y="50" width="180" height="48" rx="8" fill="#ff7b72" opacity="0.2" stroke="#ff7b72" stroke-width="2"/>
+              <text x="120" y="80" text-anchor="middle" font-size="14" fill="var(--ink)">final_v1.js</text>
+              <rect x="30" y="110" width="180" height="48" rx="8" fill="#ff7b72" opacity="0.2" stroke="#ff7b72" stroke-width="2"/>
+              <text x="120" y="140" text-anchor="middle" font-size="14" fill="var(--ink)">final_v2_REALLY.js</text>
+              <rect x="30" y="170" width="180" height="48" rx="8" fill="#ff7b72" opacity="0.2" stroke="#ff7b72" stroke-width="2"/>
+              <text x="120" y="200" text-anchor="middle" font-size="14" fill="var(--ink)">final_v3_FINAL.js</text>
+
+              <!-- Arrow -->
+              <path d="M240 130 L280 130" stroke="var(--muted)" stroke-width="2" marker-end="url(#arrow)"/>
+
+              <!-- With Git -->
+              <text x="480" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">With Git</text>
+              <circle cx="480" cy="80" r="28" fill="#3fb950" opacity="0.2" stroke="#3fb950" stroke-width="2"/>
+              <text x="480" y="86" text-anchor="middle" font-size="13" fill="var(--ink)">v1</text>
+              <line x1="508" y1="80" x2="548" y2="80" stroke="#3fb950" stroke-width="2"/>
+              <circle cx="576" cy="80" r="28" fill="#3fb950" opacity="0.2" stroke="#3fb950" stroke-width="2"/>
+              <text x="576" y="86" text-anchor="middle" font-size="13" fill="var(--ink)">v2</text>
+              <line x1="480" y1="108" x2="480" y2="148" stroke="#3fb950" stroke-width="2"/>
+              <circle cx="480" cy="176" r="28" fill="#3fb950" opacity="0.2" stroke="#3fb950" stroke-width="2"/>
+              <text x="480" y="182" text-anchor="middle" font-size="13" fill="var(--ink)">v3</text>
+              <line x1="508" y1="176" x2="548" y2="176" stroke="#3fb950" stroke-width="2"/>
+              <circle cx="576" cy="176" r="28" fill="#3fb950" opacity="0.2" stroke="#3fb950" stroke-width="2"/>
+              <text x="576" y="182" text-anchor="middle" font-size="13" fill="var(--ink)">v4</text>
+
+              <defs>
+                <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="var(--muted)"/>
+                </marker>
+              </defs>
+            </svg>
+            <p class="text-sm text-[var(--muted)] mt-4">Git keeps a clean timeline of every saved version instead of a mess of duplicate files.</p>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Key terms</h3>
+            <dl class="grid sm:grid-cols-2 gap-4 text-[var(--muted)]">
+              <div><dt class="font-semibold text-[var(--ink)]">Repository (repo)</dt><dd>A folder tracked by Git.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">Commit</dt><dd>A snapshot of your files at a point in time.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">Branch</dt><dd>An independent line of development.</dd></div>
+              <div><dt class="font-semibold text-[var(--ink)]">Remote</dt><dd>A version of your repo hosted on another machine (like GitHub).</dd></div>
+            </dl>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="A">
+              <p class="mb-3">What is a <strong>commit</strong> in Git?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">A snapshot of your project at a specific moment</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">A request to merge code</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">A server that stores your code</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><span></span><a href="#install" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Installing Git →</a></nav>
+        </section>
+
+        <!-- 3. Installing Git -->
+        <section id="install" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 3</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Installing Git</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Git runs on your computer. Installing it gives you the <code class="kbd">git</code> command in your terminal. The steps depend on your operating system.</p>
+
+          <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Windows</h3>
+              <p class="text-sm text-[var(--muted)] mb-3">Download the official installer and follow the prompts.</p>
+              <a href="https://git-scm.com/download/win" target="_blank" class="text-sm brand font-medium hover:underline">Download Git for Windows</a>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">macOS</h3>
+              <p class="text-sm text-[var(--muted)] mb-3">Install via Homebrew, or download the installer.</p>
+              <code class="kbd">brew install git</code>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Linux</h3>
+              <p class="text-sm text-[var(--muted)] mb-3">Use your package manager. Examples below.</p>
+              <code class="kbd">sudo apt install git</code>
+            </div>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Check whether Git is installed
+git --version
+
+# Expected output (version numbers will vary):
+# git version 2.42.0</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Open your terminal and run <code class="kbd">git --version</code>. Did it print a version number?</p>
+            <button class="mt-3 px-4 py-2 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5" onclick="this.textContent='Great! Move on to the next chapter.'; this.disabled=true;">Mark as done</button>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#version-control" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#config" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Configuring Git →</a></nav>
+        </section>
+
+        <!-- 4. Configuring Git -->
+        <section id="config" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 4</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Configuring Git</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Before you start saving work, tell Git who you are. This information is attached to every commit you make.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Set your name and email (use the same email as your GitHub account)
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+
+# Choose your default branch name
+git config --global init.defaultBranch main
+
+# Check your settings
+git config --list</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">What does <code class="kbd">--global</code> mean?</h3>
+            <p class="text-[var(--muted)] leading-relaxed">It means the setting applies to all repositories on your computer. You can also use <code class="kbd">--local</code> inside a specific repo if you need a different identity for work and personal projects.</p>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)] mb-3">Run the three configuration commands above, then verify with <code class="kbd">git config user.name</code> and <code class="kbd">git config user.email</code>.</p>
+            <button class="mt-1 px-4 py-2 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5" onclick="this.textContent='Configured! Onward!'; this.disabled=true;">Done configuring</button>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#install" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#first-repo" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Your First Repository →</a></nav>
+        </section>
+
+        <!-- 5. Your First Repository -->
+        <section id="first-repo" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 5</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Your First Repository</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">A repository is just a folder that Git watches. You can create one from scratch, or turn an existing folder into a repo.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">Creating a local repository</h3>
+            <svg class="diagram" viewBox="0 0 640 160" aria-label="Diagram showing a folder becoming a Git repository">
+              <rect x="40" y="40" width="160" height="100" rx="12" fill="var(--panel)" stroke="var(--border)" stroke-width="2"/>
+              <text x="120" y="85" text-anchor="middle" font-size="15" fill="var(--ink)">my-project</text>
+              <text x="120" y="110" text-anchor="middle" font-size="12" fill="var(--muted)">ordinary folder</text>
+
+              <rect x="260" y="30" width="120" height="50" rx="8" fill="#2f81f7" opacity="0.9"/>
+              <text x="320" y="60" text-anchor="middle" font-size="14" fill="white" font-weight="600">git init</text>
+              <path d="M220 90 L255 90" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow2)"/>
+
+              <rect x="420" y="40" width="180" height="100" rx="12" fill="rgba(47,129,247,0.08)" stroke="var(--brand-light)" stroke-width="2"/>
+              <text x="510" y="85" text-anchor="middle" font-size="15" fill="var(--ink)">my-project</text>
+              <text x="510" y="110" text-anchor="middle" font-size="12" fill="var(--muted)">.git folder added</text>
+
+              <defs>
+                <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="var(--border)"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Create a new project folder and enter it
+mkdir my-first-repo
+cd my-first-repo
+
+# Turn this folder into a Git repository
+git init
+
+# Git creates a hidden .git directory that stores history
+ls -la  # (or dir on Windows)</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Create a folder called <code class="kbd">my-first-repo</code>, run <code class="kbd">git init</code>, and confirm you see a <code class="kbd">.git</code> folder.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#config" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#staging" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Staging & Committing →</a></nav>
+        </section>
+
+        <!-- 6. Staging & Committing -->
+        <section id="staging" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 6</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Staging & Committing</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Git saves changes in two steps: <strong>staging</strong> (selecting what to save) and <strong>committing</strong> (taking the snapshot).</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">The Git workflow</h3>
+            <svg class="diagram" viewBox="0 0 640 160" aria-label="Diagram showing modified, staged, committed workflow">
+              <rect x="20" y="50" width="150" height="70" rx="10" fill="#fff" stroke="var(--border)" stroke-width="2"/>
+              <text x="95" y="80" text-anchor="middle" font-size="14" fill="var(--ink)">Working</text>
+              <text x="95" y="100" text-anchor="middle" font-size="12" fill="var(--muted)">Modified files</text>
+
+              <line x1="170" y1="85" x2="220" y2="85" stroke="#ff7b72" stroke-width="2" marker-end="url(#arrow3)"/>
+              <text x="195" y="75" text-anchor="middle" font-size="11" fill="var(--muted)">git add</text>
+
+              <rect x="230" y="50" width="150" height="70" rx="10" fill="#fff" stroke="var(--border)" stroke-width="2"/>
+              <text x="305" y="80" text-anchor="middle" font-size="14" fill="var(--ink)">Staging</text>
+              <text x="305" y="100" text-anchor="middle" font-size="12" fill="var(--muted)">Ready to save</text>
+
+              <line x1="380" y1="85" x2="430" y2="85" stroke="#ff7b72" stroke-width="2" marker-end="url(#arrow3)"/>
+              <text x="405" y="75" text-anchor="middle" font-size="11" fill="var(--muted)">git commit</text>
+
+              <rect x="440" y="50" width="170" height="70" rx="10" fill="#dafbe1" stroke="#3fb950" stroke-width="2"/>
+              <text x="525" y="80" text-anchor="middle" font-size="14" fill="var(--ink)">Repository</text>
+              <text x="525" y="100" text-anchor="middle" font-size="12" fill="var(--muted)">Saved forever</text>
+
+              <defs>
+                <marker id="arrow3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#ff7b72"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Create a file
+echo "Hello, Git!" > readme.txt
+
+# Check the status of your repo
+git status
+
+# Stage the file (add it to the next commit)
+git add readme.txt
+
+# Commit the file with a descriptive message
+git commit -m "Add initial readme file"
+
+# Stage all changes in the current directory and commit at once
+git add .
+git commit -m "Describe the changes here"</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Writing good commit messages</h3>
+            <p class="text-[var(--muted)] mb-3">A commit message should explain <em>why</em> the change exists. Future you (and your teammates) will thank you.</p>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Use the present tense: "Add login form" not "Added login form"</li>
+              <li>Keep the first line under 50 characters</li>
+              <li>Add a blank line and more details if needed</li>
+            </ul>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)] mb-3">Create a file, stage it, commit it, then run <code class="kbd">git status</code> again. It should say "nothing to commit, working tree clean".</p>
+            <div class="quiz" data-answer="B">
+              <p class="mb-2 font-medium">Which command stages a file?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-2 rounded-lg border border-[var(--border)] mb-2" data-val="A">git commit</button>
+              <button class="quiz-opt block w-full text-left px-4 py-2 rounded-lg border border-[var(--border)] mb-2" data-val="B">git add</button>
+              <button class="quiz-opt block w-full text-left px-4 py-2 rounded-lg border border-[var(--border)]" data-val="C">git push</button>
+            </div>
+            <p class="quiz-feedback mt-2 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#first-repo" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#history" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Viewing History →</a></nav>
+        </section>
+
+        <!-- 7. Viewing History -->
+        <section id="history" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 7</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Viewing History</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Git remembers every commit. You can inspect the past, compare versions, and find exactly when a change was introduced.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Show commit history
+git log
+
+# Compact one-line history
+git log --oneline
+
+# Show what changed in the last commit
+git show
+
+# See which files changed between commits
+git diff HEAD~1 HEAD</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">What is <code class="kbd">HEAD</code>?</h3>
+            <p class="text-[var(--muted)] leading-relaxed"><code class="kbd">HEAD</code> is a pointer to the current commit you're looking at. <code class="kbd">HEAD~1</code> means "one commit before the current one". This is useful for comparing recent versions.</p>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Make two or three commits, then run <code class="kbd">git log --oneline</code>. Can you read the short history?</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#staging" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#branching" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Branching →</a></nav>
+        </section>
+
+        <!-- 8. Branching -->
+        <section id="branching" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 8</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Branching</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Branches let you work on separate features or experiments without affecting the main project. Think of them as parallel timelines.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">Main branch vs. feature branch</h3>
+            <svg class="diagram" viewBox="0 0 640 220" aria-label="Diagram showing a main branch and a feature branch splitting and rejoining">
+              <text x="80" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">main</text>
+              <circle cx="80" cy="80" r="18" fill="#58a6ff" opacity="0.2" stroke="#58a6ff" stroke-width="2"/>
+              <circle cx="180" cy="80" r="18" fill="#58a6ff" opacity="0.2" stroke="#58a6ff" stroke-width="2"/>
+              <line x1="98" y1="80" x2="162" y2="80" stroke="#58a6ff" stroke-width="2"/>
+
+              <path d="M180 80 C 240 80, 240 140, 300 140" stroke="#a371f7" stroke-width="2" fill="none"/>
+              <text x="360" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">feature/login</text>
+              <circle cx="320" cy="140" r="18" fill="#a371f7" opacity="0.2" stroke="#a371f7" stroke-width="2"/>
+              <line x1="338" y1="140" x2="400" y2="140" stroke="#a371f7" stroke-width="2"/>
+              <circle cx="420" cy="140" r="18" fill="#a371f7" opacity="0.2" stroke="#a371f7" stroke-width="2"/>
+
+              <path d="M420 140 C 480 140, 480 80, 520 80" stroke="#a371f7" stroke-width="2" fill="none" marker-end="url(#arrow4)"/>
+              <circle cx="540" cy="80" r="18" fill="#58a6ff" opacity="0.2" stroke="#58a6ff" stroke-width="2"/>
+              <line x1="198" y1="80" x2="520" y2="80" stroke="#58a6ff" stroke-width="2" stroke-dasharray="4"/>
+
+              <defs>
+                <marker id="arrow4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#a371f7"/>
+                </marker>
+              </defs>
+            </svg>
+            <p class="text-sm text-[var(--muted)] mt-4">Branches split off to isolate work, then merge back when ready.</p>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># List branches
+git branch
+
+# Create and switch to a new branch
+git checkout -b feature/login
+# (newer Git versions can use: git switch -c feature/login)
+
+# Switch back to main
+git checkout main
+# (or: git switch main)
+
+# Rename a branch
+git branch -m old-name new-name</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Create a branch named <code class="kbd">feature/hello</code>, add a file, commit it, then switch back to <code class="kbd">main</code>. Notice the new file disappears (it's only on the branch).</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#history" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#merging" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Merging →</a></nav>
+        </section>
+
+        <!-- 9. Merging -->
+        <section id="merging" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 9</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Merging</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Merging combines the work from one branch into another. Usually you'll merge a feature branch back into <code class="kbd">main</code>.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">A fast-forward merge</h3>
+            <svg class="diagram" viewBox="0 0 640 160" aria-label="Diagram showing fast-forward merge">
+              <text x="80" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">main</text>
+              <circle cx="60" cy="80" r="18" fill="#58a6ff" opacity="0.2" stroke="#58a6ff" stroke-width="2"/>
+              <circle cx="140" cy="80" r="18" fill="#58a6ff" opacity="0.2" stroke="#58a6ff" stroke-width="2"/>
+              <line x1="78" y1="80" x2="122" y2="80" stroke="#58a6ff" stroke-width="2"/>
+
+              <path d="M140 80 C 190 80, 190 120, 240 120" stroke="#a371f7" stroke-width="2" fill="none"/>
+              <text x="300" y="110" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">feature</text>
+              <circle cx="260" cy="120" r="18" fill="#a371f7" opacity="0.2" stroke="#a371f7" stroke-width="2"/>
+              <circle cx="340" cy="120" r="18" fill="#a371f7" opacity="0.2" stroke="#a371f7" stroke-width="2"/>
+              <line x1="278" y1="120" x2="322" y2="120" stroke="#a371f7" stroke-width="2"/>
+
+              <path d="M358 120 C 410 120, 410 80, 460 80" stroke="#a371f7" stroke-width="2" fill="none" marker-end="url(#arrow5)"/>
+              <circle cx="480" cy="80" r="18" fill="#58a6ff" opacity="0.2" stroke="#58a6ff" stroke-width="2"/>
+
+              <defs>
+                <marker id="arrow5" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#a371f7"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Switch to the branch that should receive the changes
+git checkout main
+
+# Merge the feature branch in
+git merge feature/login
+
+# If no conflicts, Git combines the histories automatically</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Merge strategies</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><strong>Fast-forward</strong>: main hasn't changed since the branch was created, so Git simply moves the pointer forward.</li>
+              <li><strong>Three-way merge</strong>: main has new commits too, so Git creates a new merge commit combining both histories.</li>
+            </ul>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Merge your <code class="kbd">feature/hello</code> branch into <code class="kbd">main</code>, then run <code class="kbd">git log --oneline --graph --all</code> to see the history graph.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#branching" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#conflicts" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Resolving Conflicts →</a></nav>
+        </section>
+
+        <!-- 10. Resolving Conflicts -->
+        <section id="conflicts" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 10</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Resolving Merge Conflicts</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">A conflict happens when Git can't automatically combine changes. This is normal and easy to fix once you know what to look for.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># When a conflict appears, Git marks the file like this:
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+This is the version on your current branch.
+=======
+This is the version from the branch you're merging.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/login</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">How to resolve</h3>
+            <ol class="text-[var(--muted)] list-decimal pl-5 space-y-2">
+              <li>Open the conflicting file in your editor.</li>
+              <li>Search for <code class="kbd">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> markers.</li>
+              <li>Choose which changes to keep, or combine them manually.</li>
+              <li>Delete the conflict markers.</li>
+              <li>Stage the resolved file: <code class="kbd">git add filename</code></li>
+              <li>Finish the merge: <code class="kbd">git commit</code></li>
+            </ol>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Create two branches that both edit the same line of the same file. Merge one, then merge the other to trigger a conflict. Resolve it manually and complete the merge.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#merging" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#github-setup" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: GitHub Setup →</a></nav>
+        </section>
+
+        <!-- 11. GitHub Setup -->
+        <section id="github-setup" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 11</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">GitHub Setup</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">GitHub is a web platform for hosting Git repositories and collaborating with others. If you don't have an account yet, now is the time.</p>
+
+          <div class="grid md:grid-cols-2 gap-4 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">1. Create an account</h3>
+              <p class="text-sm text-[var(--muted)] mb-3">Go to github.com and sign up with your email. Use the same email you configured in Git.</p>
+              <a href="https://github.com/signup" target="_blank" class="text-sm brand font-medium hover:underline">Sign up on GitHub →</a>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">2. Create a repository</h3>
+              <p class="text-sm text-[var(--muted)] mb-3">Click the + icon → New repository. Give it a name, optional description, and choose public or private.</p>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Repository settings explained</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><strong>Public</strong>: anyone can see your code.</li>
+              <li><strong>Private</strong>: only you and invited collaborators can see it.</li>
+              <li><strong>README</strong>: a markdown file that describes the project. Check this box.</li>
+              <li><strong>.gitignore</strong>: tells Git which files to ignore (e.g., build artifacts, secrets).</li>
+              <li><strong>License</strong>: tells others how they can use your code.</li>
+            </ul>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Create a GitHub account and a public repository named <code class="kbd">learning-github</code> with a README.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#conflicts" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#connect" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Connecting to GitHub →</a></nav>
+        </section>
+
+        <!-- 12. Connecting to GitHub -->
+        <section id="connect" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 12</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Connecting to GitHub</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">You can connect to GitHub using HTTPS (password or token) or SSH (cryptographic key pair). SSH is the most convenient once set up.</p>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">HTTPS</h3>
+              <p class="text-sm text-[var(--muted)] mb-3">Easier to start, but GitHub requires a Personal Access Token instead of your password.</p>
+              <a href="https://github.com/settings/tokens" target="_blank" class="text-sm brand font-medium hover:underline">Create a token →</a>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">SSH</h3>
+              <p class="text-sm text-[var(--muted)] mb-3">More secure and no token needed after setup. Recommended for regular use.</p>
+            </div>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Setting up SSH</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Generate an SSH key (use the email from your GitHub account)
+ssh-keygen -t ed25519 -C "you@example.com"
+
+# Start the SSH agent and add the key
+ eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+
+# Copy the public key to your clipboard
+# macOS:
+pbcopy &lt; ~/.ssh/id_ed25519.pub
+# Linux:
+cat ~/.ssh/id_ed25519.pub
+# Windows (Git Bash):
+clip &lt; ~/.ssh/id_ed25519.pub
+
+# Then paste it into GitHub → Settings → SSH and GPG keys → New SSH key</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Test your connection</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash">ssh -T git@github.com
+# Expected: Hi username! You've successfully authenticated...</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Set up SSH and run <code class="kbd">ssh -T git@github.com</code>. You should see a greeting with your GitHub username.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#github-setup" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#push-pull" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Push & Pull →</a></nav>
+        </section>
+
+        <!-- 13. Push & Pull -->
+        <section id="push-pull" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 13</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Push & Pull</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Now we connect your local repo to GitHub. <strong>Push</strong> sends your commits to GitHub. <strong>Pull</strong> downloads the latest changes from GitHub.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">Local ↔ Remote workflow</h3>
+            <svg class="diagram" viewBox="0 0 640 200" aria-label="Diagram showing push and pull between local and remote">
+              <rect x="40" y="40" width="160" height="120" rx="12" fill="rgba(47,129,247,0.08)" stroke="var(--brand-light)" stroke-width="2"/>
+              <text x="120" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">Your Laptop</text>
+              <circle cx="120" cy="120" r="18" fill="#58a6ff" opacity="0.2" stroke="#58a6ff" stroke-width="2"/>
+
+              <rect x="440" y="40" width="160" height="120" rx="12" fill="rgba(47,129,247,0.08)" stroke="var(--brand-light)" stroke-width="2"/>
+              <text x="520" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">GitHub</text>
+              <circle cx="520" cy="120" r="18" fill="#58a6ff" opacity="0.2" stroke="#58a6ff" stroke-width="2"/>
+
+              <path d="M300 70 C 340 70, 340 70, 380 70" stroke="#3fb950" stroke-width="2" marker-end="url(#arrow6)" class="flow-line"/>
+              <text x="340" y="60" text-anchor="middle" font-size="12" fill="var(--muted)">git push</text>
+
+              <path d="M380 140 C 340 140, 340 140, 300 140" stroke="#a371f7" stroke-width="2" marker-end="url(#arrow7)" class="flow-line"/>
+              <text x="340" y="165" text-anchor="middle" font-size="12" fill="var(--muted)">git pull</text>
+
+              <defs>
+                <marker id="arrow6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#3fb950"/>
+                </marker>
+                <marker id="arrow7" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#a371f7"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Linking and pushing</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Add a remote named "origin" pointing to your GitHub repo
+git remote add origin git@github.com:your-username/learning-github.git
+
+# Verify the remote
+git remote -v
+
+# Push your main branch to GitHub
+git push -u origin main
+
+# Later, when you have new local commits, just run
+git push
+
+# Download the latest changes from GitHub
+git pull</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)] mb-3">Push your local <code class="kbd">my-first-repo</code> to GitHub. Then edit the README on GitHub, commit the change, and pull it back to your computer.</p>
+            <div class="quiz" data-answer="A">
+              <p class="mb-2 font-medium">Which command uploads your local commits to GitHub?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-2 rounded-lg border border-[var(--border)] mb-2" data-val="A">git push</button>
+              <button class="quiz-opt block w-full text-left px-4 py-2 rounded-lg border border-[var(--border)] mb-2" data-val="B">git pull</button>
+              <button class="quiz-opt block w-full text-left px-4 py-2 rounded-lg border border-[var(--border)]" data-val="C">git clone</button>
+            </div>
+            <p class="quiz-feedback mt-2 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#connect" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#fork-clone" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Forking & Cloning →</a></nav>
+        </section>
+
+        <!-- 14. Forking & Cloning -->
+        <section id="fork-clone" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 14</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Forking & Cloning</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Cloning copies a remote repository to your computer. Forking makes your own copy of someone else's repository on GitHub.</p>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Clone</h3>
+              <p class="text-sm text-[var(--muted)] mb-3">Use this when you have access to a repo and want to work on it locally.</p>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+                <pre><code class="language-bash">git clone git@github.com:your-username/learning-github.git</code></pre>
+              </div>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Fork</h3>
+              <p class="text-sm text-[var(--muted)] mb-3">Use this when you want to contribute to a repo you don't own. Click "Fork" on GitHub, then clone your fork.</p>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">When to fork vs. clone</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><strong>Clone</strong>: you are the owner or a direct collaborator.</li>
+              <li><strong>Fork</strong>: you want to suggest changes to someone else's project.</li>
+              <li><strong>Fork + clone</strong>: the standard workflow for open-source contributions.</li>
+            </ul>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Find a small open-source project on GitHub. Fork it, clone your fork, and open it in your code editor.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#push-pull" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#pull-requests" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Pull Requests →</a></nav>
+        </section>
+
+        <!-- 15. Pull Requests -->
+        <section id="pull-requests" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 15</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Pull Requests</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">A Pull Request (PR) is a proposal to merge your branch into another. It lets teammates review, discuss, and approve changes before merging.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">Pull Request lifecycle</h3>
+            <svg class="diagram" viewBox="0 0 640 120" aria-label="Diagram showing pull request lifecycle">
+              <circle cx="60" cy="60" r="24" fill="rgba(47,129,247,0.15)" stroke="var(--brand-light)" stroke-width="2"/>
+              <text x="60" y="66" text-anchor="middle" font-size="12" fill="var(--ink)">Branch</text>
+
+              <line x1="84" y1="60" x2="156" y2="60" stroke="var(--border)" stroke-width="2"/>
+              <rect x="160" y="36" width="120" height="48" rx="8" fill="rgba(47,129,247,0.15)" stroke="var(--brand-light)" stroke-width="2"/>
+              <text x="220" y="65" text-anchor="middle" font-size="12" fill="var(--ink)">Open PR</text>
+
+              <line x1="280" y1="60" x2="340" y2="60" stroke="var(--border)" stroke-width="2"/>
+              <rect x="344" y="36" width="120" height="48" rx="8" fill="rgba(157,113,247,0.15)" stroke="#a371f7" stroke-width="2"/>
+              <text x="404" y="65" text-anchor="middle" font-size="12" fill="var(--ink)">Review</text>
+
+              <line x1="464" y1="60" x2="524" y2="60" stroke="var(--border)" stroke-width="2"/>
+              <circle cx="576" cy="60" r="24" fill="rgba(63,185,80,0.15)" stroke="#3fb950" stroke-width="2"/>
+              <text x="576" y="66" text-anchor="middle" font-size="12" fill="var(--ink)">Merge</text>
+            </svg>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Opening a PR</h3>
+          <ol class="text-[var(--muted)] list-decimal pl-5 space-y-2 mb-6">
+            <li>Push your branch to GitHub: <code class="kbd">git push -u origin feature/login</code></li>
+            <li>Visit the repository on GitHub.</li>
+            <li>Click <strong>Compare & pull request</strong>.</li>
+            <li>Write a clear title and description.</li>
+            <li>Request reviewers if working with a team.</li>
+            <li>Click <strong>Create pull request</strong>.</li>
+          </ol>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Good PR habits</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Keep PRs small and focused on one thing.</li>
+              <li>Explain <em>why</em> the change is needed, not just what changed.</li>
+              <li>Add screenshots for UI changes.</li>
+              <li>Link related issues with phrases like "Fixes #12".</li>
+            </ul>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Create a branch, make a small change, push it, and open a Pull Request in your own repository. Then merge it.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#fork-clone" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#collab" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Collaboration Workflows →</a></nav>
+        </section>
+
+        <!-- 16. Collaboration Workflows -->
+        <section id="collab" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 16</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Collaboration Workflows</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Teams follow workflows to keep the main branch stable and make reviews predictable. Here are the two most common patterns.</p>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Feature branch workflow</h3>
+              <p class="text-sm text-[var(--muted)]">Every new feature gets its own branch. When complete, open a PR to merge into <code class="kbd">main</code>.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Fork & pull workflow</h3>
+              <p class="text-sm text-[var(--muted)]">External contributors fork the repo, clone their fork, push branches there, and open PRs against the original repo.</p>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Typical team flow</h3>
+            <ol class="text-[var(--muted)] list-decimal pl-5 space-y-2">
+              <li>Pull the latest <code class="kbd">main</code>: <code class="kbd">git pull origin main</code></li>
+              <li>Create a feature branch: <code class="kbd">git checkout -b feature/xyz</code></li>
+              <li>Commit your work regularly.</li>
+              <li>Push the branch and open a PR.</li>
+              <li>After approval, merge into <code class="kbd">main</code>.</li>
+              <li>Delete the old branch locally and remotely.</li>
+            </ol>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Delete a branch after merging
+git branch -d feature/login       # local
+git push origin --delete feature/login  # remote</code></pre>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#pull-requests" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#issues" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Issues, Labels & Milestones →</a></nav>
+        </section>
+
+        <!-- 17. Issues, Labels & Milestones -->
+        <section id="issues" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 17</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Issues, Labels & Milestones</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">GitHub Issues are lightweight tickets for bugs, ideas, and tasks. Labels and milestones help you organize them.</p>
+
+          <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Issues</h3>
+              <p class="text-sm text-[var(--muted)]">Track bugs, feature requests, and discussions. Each issue has a number, title, description, and comments.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Labels</h3>
+              <p class="text-sm text-[var(--muted)]">Color-coded tags like <code class="kbd">bug</code>, <code class="kbd">enhancement</code>, <code class="kbd">help wanted</code>. Use them to filter and prioritize.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Milestones</h3>
+              <p class="text-sm text-[var(--muted)]">Group issues by deadline or release, e.g., "v1.0" or "October sprint".</p>
+            </div>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Link a commit to an issue using a keyword
+ git commit -m "Fix navigation bug. Closes #7"</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Open your GitHub repo, create an issue titled "Add a welcome section", add the <code class="kbd">enhancement</code> label, and assign it to yourself.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#collab" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#pages" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: GitHub Pages →</a></nav>
+        </section>
+
+        <!-- 18. GitHub Pages -->
+        <section id="pages" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 18</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">GitHub Pages</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">GitHub Pages lets you host a static website directly from a repository — perfect for portfolios, documentation, and project homepages.</p>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">How to enable Pages</h3>
+            <ol class="text-[var(--muted)] list-decimal pl-5 space-y-2">
+              <li>Go to your repository on GitHub.</li>
+              <li>Click <strong>Settings</strong> → <strong>Pages</strong>.</li>
+              <li>Under "Build and deployment", select <strong>Deploy from a branch</strong>.</li>
+              <li>Choose <code class="kbd">main</code> and folder <code class="kbd">/(root)</code> or <code class="kbd">/docs</code>.</li>
+              <li>Save. Your site will be available at <code class="kbd">https://your-username.github.io/repo-name/</code>.</li>
+            </ol>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Example: create a simple homepage
+# In your repo root, create index.html and commit it
+echo "&lt;h1&gt;Hello, GitHub Pages!&lt;/h1&gt;" &gt; index.html
+git add index.html
+git commit -m "Add GitHub Pages homepage"
+git push</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Add an <code class="kbd">index.html</code> to your repository, enable GitHub Pages, and visit your live site.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#issues" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#actions" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: GitHub Actions →</a></nav>
+        </section>
+
+        <!-- 19. GitHub Actions -->
+        <section id="actions" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 19</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">GitHub Actions (CI/CD Basics)</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">GitHub Actions automates tasks like testing, building, and deploying your code whenever something changes.</p>
+
+          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 w-full">Automation trigger → job → result</h3>
+            <svg class="diagram" viewBox="0 0 640 120" aria-label="Diagram showing GitHub Actions workflow">
+              <rect x="20" y="30" width="140" height="60" rx="8" fill="rgba(47,129,247,0.15)" stroke="var(--brand-light)" stroke-width="2"/>
+              <text x="90" y="65" text-anchor="middle" font-size="13" fill="var(--ink)">Push / PR</text>
+
+              <line x1="160" y1="60" x2="230" y2="60" stroke="var(--border)" stroke-width="2" class="flow-line"/>
+
+              <rect x="240" y="30" width="160" height="60" rx="8" fill="rgba(157,113,247,0.15)" stroke="#a371f7" stroke-width="2"/>
+              <text x="320" y="65" text-anchor="middle" font-size="13" fill="var(--ink)">Run tests</text>
+
+              <line x1="400" y1="60" x2="470" y2="60" stroke="var(--border)" stroke-width="2" class="flow-line"/>
+
+              <rect x="480" y="30" width="140" height="60" rx="8" fill="rgba(63,185,80,0.15)" stroke="#3fb950" stroke-width="2"/>
+              <text x="550" y="65" text-anchor="middle" font-size="13" fill="var(--ink)">Pass / fail</text>
+            </svg>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Example workflow file</h3>
+          <p class="text-[var(--muted)] mb-3">Create <code class="kbd">.github/workflows/demo.yml</code> in your repo:</p>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-yaml">name: Demo Workflow
+on: [push, pull_request]
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Say hello
+        run: echo "GitHub Actions is running!"</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">Add the workflow file above, commit and push, then visit the <strong>Actions</strong> tab on GitHub to watch it run.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#pages" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#copilot" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: GitHub Copilot →</a></nav>
+        </section>
+
+        <!-- 20. GitHub Copilot -->
+        <section id="copilot" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 20</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">GitHub Copilot</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">GitHub Copilot is an AI-powered coding assistant. It suggests code completions, entire functions, and explanations inside your editor.</p>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">How to use it</h3>
+              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+                <li>Install the Copilot extension in VS Code, JetBrains, or Neovim.</li>
+                <li>Sign in with your GitHub account.</li>
+                <li>Start typing and accept suggestions with <span class="kbd">Tab</span>.</li>
+              </ul>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Good practices</h3>
+              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+                <li>Review every suggestion before accepting.</li>
+                <li>Don't paste secrets or private data.</li>
+                <li>Use it to learn, not to skip understanding.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">If you have access to Copilot, open your code editor and type a function comment. See what suggestion appears.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#actions" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#security" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Security Features →</a></nav>
+        </section>
+
+        <!-- 21. Security -->
+        <section id="security" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 21</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Security Features</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">GitHub provides tools to keep your code and dependencies secure.</p>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Dependabot</h3>
+              <p class="text-sm text-[var(--muted)]">Automatically scans your dependencies and opens PRs to update vulnerable or outdated packages.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Code scanning</h3>
+              <p class="text-sm text-[var(--muted)]">Uses CodeQL to find security vulnerabilities and bugs in your code. Enable it under Security → Code scanning.</p>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-3">Protect sensitive data</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Never commit passwords, API keys, or private tokens.</li>
+              <li>Use <code class="kbd">.gitignore</code> for files like <code class="kbd">.env</code>.</li>
+              <li>Use GitHub Secrets for Actions workflows instead of hardcoding values.</li>
+              <li>Enable two-factor authentication on your GitHub account.</li>
+            </ul>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Check that your GitHub account has two-factor authentication enabled. Visit Settings → Password and authentication.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#copilot" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#projects" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Projects, Wiki & Discussions →</a></nav>
+        </section>
+
+        <!-- 22. Projects, Wiki & Discussions -->
+        <section id="projects" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 22</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Projects, Wiki & Discussions</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Beyond code, GitHub offers tools to plan, document, and discuss your work.</p>
+
+          <div class="grid md:grid-cols-3 gap-4 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">GitHub Projects</h3>
+              <p class="text-sm text-[var(--muted)]">Kanban-style boards that connect issues and PRs. Great for sprint planning.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Wiki</h3>
+              <p class="text-sm text-[var(--muted)]">A built-in documentation space for each repository. Enable it in Settings.</p>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-2">Discussions</h3>
+              <p class="text-sm text-[var(--muted)]">A forum for Q&A, announcements, and general conversation. Lighter than issues.</p>
+            </div>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Try it yourself</h4>
+            <p class="text-[var(--muted)]">In your repository, enable the Wiki and create a page titled "Getting Started". Then start a Discussion to ask a question.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#security" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#best-practices" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Best Practices →</a></nav>
+        </section>
+
+        <!-- 23. Best Practices -->
+        <section id="best-practices" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 23</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Best Practices & Resources</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">You're almost at the finish line. These habits will help you use Git and GitHub confidently in real projects.</p>
+
+          <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-3">Git habits</h3>
+              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+                <li>Commit often with clear messages.</li>
+                <li>Use branches for every new feature or fix.</li>
+                <li>Pull before you push to avoid surprises.</li>
+                <li>Review diffs before committing.</li>
+              </ul>
+            </div>
+            <div class="card rounded-xl p-5">
+              <h3 class="font-semibold mb-3">GitHub habits</h3>
+              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+                <li>Write helpful README files.</li>
+                <li>Use issues and PRs for communication.</li>
+                <li>Keep main deployable at all times.</li>
+                <li>Protect your main branch with review rules.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Handy cheat sheet</h3>
+            <div class="code-block">
+              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+              <pre><code class="language-bash">git status              # See what changed
+git add .               # Stage all changes
+git commit -m "msg"     # Save a snapshot
+git push                # Upload commits
+git pull                # Download commits
+git log --oneline       # View short history
+git checkout -b name    # Create and switch branch
+git merge name          # Merge branch into current
+git clone url           # Copy a remote repo</code></pre>
+            </div>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-10">
+            <h4 class="font-semibold mb-2">Final Quiz</h4>
+            <div class="quiz" data-answer="C">
+              <p class="mb-3">Which statement is true about Git and GitHub?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">GitHub is the same as Git</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">Git is only for teams, not individuals</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">Git is version control; GitHub hosts Git repositories</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <div class="card rounded-2xl p-8 text-center">
+            <h3 class="text-2xl font-bold mb-3">You're ready! 🎉</h3>
+            <p class="text-[var(--muted)] mb-5">You've learned Git and GitHub from scratch. Keep practicing by building real projects and collaborating with others.</p>
+            <div class="flex justify-center gap-4 flex-wrap">
+              <a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">Restart tutorial</a>
+              <a href="https://docs.github.com" target="_blank" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Official GitHub Docs →</a>
+            </div>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#projects" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><span></span></nav>
+        </section>
+
+      </div>
+
+      <!-- Footer -->
+      <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+        <p>Made for teaching Git & GitHub. Open directly in any browser.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Theme handling
+    const html = document.documentElement;
+    const lightStylesheet = document.getElementById('hljs-light');
+    const darkStylesheet = document.getElementById('hljs-dark');
+    const moon = document.getElementById('moon');
+    const sun = document.getElementById('sun');
+
+    function applyTheme(theme) {
+      html.classList.remove('light', 'dark');
+      html.classList.add(theme);
+      if (theme === 'dark') {
+        lightStylesheet.disabled = true;
+        darkStylesheet.disabled = false;
+        moon.classList.add('hidden');
+        sun.classList.remove('hidden');
+      } else {
+        lightStylesheet.disabled = false;
+        darkStylesheet.disabled = true;
+        moon.classList.remove('hidden');
+        sun.classList.add('hidden');
+      }
+      localStorage.setItem('gh-tutorial-theme', theme);
+      hljs.highlightAll();
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    const saved = localStorage.getItem('gh-tutorial-theme');
+    applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+    // Sidebar toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('menu-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('hidden');
+    }
+
+    // Close sidebar when a TOC link is clicked on mobile
+    document.querySelectorAll('#toc a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) toggleSidebar();
+      });
+    });
+
+    // Active TOC highlight on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+
+    function onScroll() {
+      let current = '';
+      sections.forEach(sec => {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= 120) current = sec.getAttribute('id');
+      });
+      tocLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Copy code buttons
+    async function copyCode(btn) {
+      const code = btn.nextElementSibling.textContent;
+      try {
+        await navigator.clipboard.writeText(code);
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+      } catch (err) {
+        btn.textContent = 'Failed';
+        setTimeout(() => btn.textContent = 'Copy', 1500);
+      }
+    }
+
+    // Quiz logic
+    document.querySelectorAll('.quiz').forEach(quiz => {
+      const answer = quiz.dataset.answer;
+      const feedback = quiz.nextElementSibling && quiz.nextElementSibling.classList.contains('quiz-feedback') ? quiz.nextElementSibling : quiz.querySelector('.quiz-feedback');
+      const buttons = quiz.querySelectorAll('.quiz-opt');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('correct') || btn.classList.contains('wrong')) return;
+          buttons.forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          const chosen = btn.dataset.val;
+          if (chosen === answer) {
+            btn.classList.add('correct');
+            feedback.textContent = 'Correct! Well done.';
+            feedback.style.color = 'var(--success)';
+          } else {
+            btn.classList.add('wrong');
+            buttons.forEach(b => { if (b.dataset.val === answer) b.classList.add('correct'); });
+            feedback.textContent = 'Not quite. The correct answer is highlighted.';
+            feedback.style.color = 'var(--danger)';
+          }
+        });
+      });
+    });
+
+    // Syntax highlighting
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

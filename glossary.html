@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossary — Technology Tutorials</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicons/root.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    :root {
+      --brand-light: #2f81f7;
+      --brand-dark: #58a6ff;
+      --ink: #1f2328;
+      --muted: #656d76;
+      --panel: #f6f8fa;
+      --card: #ffffff;
+      --border: #d0d7de;
+    }
+    html.dark {
+      --ink: #e6edf3;
+      --muted: #848d97;
+      --panel: #0d1117;
+      --card: #161b22;
+      --border: #30363d;
+    }
+    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
+    .brand { color: var(--brand-light); }
+    html.dark .brand { color: var(--brand-dark); }
+    .card { border: 1px solid var(--border); background: var(--card); }
+    .term:target { background: rgba(47,129,247,0.12); border-left: 3px solid var(--brand-light); }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
+  </style>
+</head>
+<body class="antialiased transition-colors duration-300 min-h-screen">
+
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded">Skip to content</a>
+
+  <header class="border-b border-[var(--border)] bg-[var(--card)] px-6 py-6">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div>
+          <h1 class="text-2xl font-extrabold">Glossary</h1>
+          <p class="text-sm text-[var(--muted)]">Common terms across the tutorials</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="text-sm font-medium text-[var(--muted)] hover:text-[var(--brand-light)] transition">← Back to tutorials</a>
+        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
+          <svg id="moon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+          <svg id="sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="max-w-4xl mx-auto px-6 py-12">
+
+    <div class="mb-10">
+      <label for="search" class="sr-only">Search terms</label>
+      <input id="search" type="text" placeholder="Search for a term..." class="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-light)]">
+    </div>
+
+    <div class="card rounded-2xl p-6 mb-8">
+      <h2 class="text-xl font-bold mb-4">Jump to topic</h2>
+      <div class="flex flex-wrap gap-2">
+        <a href="#general" class="px-3 py-1 rounded-full text-sm border border-[var(--border)] hover:bg-[var(--panel)] transition">General</a>
+        <a href="#programming" class="px-3 py-1 rounded-full text-sm border border-[var(--border)] hover:bg-[var(--panel)] transition">Programming</a>
+        <a href="#web" class="px-3 py-1 rounded-full text-sm border border-[var(--border)] hover:bg-[var(--panel)] transition">Web</a>
+        <a href="#databases" class="px-3 py-1 rounded-full text-sm border border-[var(--border)] hover:bg-[var(--panel)] transition">Databases</a>
+        <a href="#devops" class="px-3 py-1 rounded-full text-sm border border-[var(--border)] hover:bg-[var(--panel)] transition">DevOps</a>
+      </div>
+    </div>
+
+    <section id="general" class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">General</h2>
+      <div class="space-y-4">
+        <article id="term-cli" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">CLI</h3>
+          <p class="text-[var(--muted)]">Command Line Interface. A text-based way to interact with a computer by typing commands instead of using a graphical interface.</p>
+        </article>
+        <article id="term-ide" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">IDE / Code Editor</h3>
+          <p class="text-[var(--muted)]">Integrated Development Environment or a simpler code editor used to write and manage code. Examples: VS Code, JetBrains, Vim.</p>
+        </article>
+        <article id="term-syntax" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Syntax</h3>
+          <p class="text-[var(--muted)]">The rules that define the structure of a programming language. Syntax errors happen when code is written incorrectly.</p>
+        </article>
+        <article id="term-runtime" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Runtime</h3>
+          <p class="text-[var(--muted)]">The environment in which a program executes. Node.js is the runtime for JavaScript on the server.</p>
+        </article>
+        <article id="term-library" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Library / Framework</h3>
+          <p class="text-[var(--muted)]">A library is reusable code you call. A framework is a larger structure that calls your code and defines how an application is organized.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="programming" class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Programming</h2>
+      <div class="space-y-4">
+        <article id="term-variable" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Variable</h3>
+          <p class="text-[var(--muted)]">A named container for storing data that can be referenced and changed during program execution.</p>
+        </article>
+        <article id="term-function" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Function</h3>
+          <p class="text-[var(--muted)]">A reusable block of code that performs a specific task and may accept inputs and return outputs.</p>
+        </article>
+        <article id="term-type" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Data Type</h3>
+          <p class="text-[var(--muted)]">A classification of data such as string, number, boolean, object, or array. TypeScript adds static type checking.</p>
+        </article>
+        <article id="term-async" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Asynchronous Programming</h3>
+          <p class="text-[var(--muted)]">A way to run operations without blocking the main thread. Common patterns include callbacks, promises, and async/await.</p>
+        </article>
+        <article id="term-generic" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Generic</h3>
+          <p class="text-[var(--muted)]">A type or function that works with multiple data types while preserving type safety, such as <code>Array<T></code> in TypeScript.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="web" class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Web</h2>
+      <div class="space-y-4">
+        <article id="term-api" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">API</h3>
+          <p class="text-[var(--muted)]">Application Programming Interface. A contract that lets different software systems communicate, often over HTTP.</p>
+        </article>
+        <article id="term-rest" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">REST API</h3>
+          <p class="text-[var(--muted)]">A style of API design that uses HTTP methods like GET, POST, PUT, and DELETE to interact with resources.</p>
+        </article>
+        <article id="term-middleware" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Middleware</h3>
+          <p class="text-[var(--muted)]">Functions that run between a request and a response in a web server, often used for logging, authentication, or parsing.</p>
+        </article>
+        <article id="term-jwt" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">JWT</h3>
+          <p class="text-[var(--muted)]">JSON Web Token. A compact, self-contained way to securely transmit user identity and claims between parties.</p>
+        </article>
+        <article id="term-component" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Component</h3>
+          <p class="text-[var(--muted)]">A reusable, self-contained piece of a user interface. React applications are built from components.</p>
+        </article>
+        <article id="term-hook" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Hook</h3>
+          <p class="text-[var(--muted)]">A React function that lets components use state and other React features. Examples: <code>useState</code> and <code>useEffect</code>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="databases" class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Databases</h2>
+      <div class="space-y-4">
+        <article id="term-sql" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">SQL</h3>
+          <p class="text-[var(--muted)]">Structured Query Language. A standard language for storing, manipulating, and querying data in relational databases.</p>
+        </article>
+        <article id="term-join" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">JOIN</h3>
+          <p class="text-[var(--muted)]">An SQL operation that combines rows from two or more tables based on a related column.</p>
+        </article>
+        <article id="term-index" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Index</h3>
+          <p class="text-[var(--muted)]">A database structure that speeds up queries by making lookups faster, similar to a book index.</p>
+        </article>
+        <article id="term-transaction" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Transaction</h3>
+          <p class="text-[var(--muted)]">A sequence of database operations that must succeed or fail as a single unit, following ACID properties.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="devops" class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">DevOps</h2>
+      <div class="space-y-4">
+        <article id="term-cicd" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">CI/CD</h3>
+          <p class="text-[var(--muted)]">Continuous Integration and Continuous Delivery/Deployment. The practice of automatically building, testing, and releasing software.</p>
+        </article>
+        <article id="term-container" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Container</h3>
+          <p class="text-[var(--muted)]">A lightweight, standalone package of software that includes everything needed to run an application. Docker is the most common container tool.</p>
+        </article>
+        <article id="term-image" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Docker Image</h3>
+          <p class="text-[var(--muted)]">A read-only template used to create containers. It includes code, runtime, libraries, and configuration.</p>
+        </article>
+        <article id="term-registry" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Container Registry</h3>
+          <p class="text-[var(--muted)]">A service that stores and distributes Docker images. Examples: Docker Hub, GitHub Container Registry, AWS ECR.</p>
+        </article>
+        <article id="term-iac" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Infrastructure as Code (IaC)</h3>
+          <p class="text-[var(--muted)]">Managing infrastructure through configuration files rather than manual setup. Examples: Terraform, Ansible, CloudFormation, Docker Compose.</p>
+        </article>
+        <article id="term-environment" class="term card rounded-2xl p-5">
+          <h3 class="font-bold text-lg mb-1">Environment</h3>
+          <p class="text-[var(--muted)]">A distinct deployment target such as development, staging, or production, each with its own configuration and secrets.</p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+    <p>Open directly in any browser. No build step required.</p>
+  </footer>
+
+  <script>
+    const html = document.documentElement;
+    const moon = document.getElementById('moon');
+    const sun = document.getElementById('sun');
+
+    function applyTheme(theme) {
+      html.classList.remove('light', 'dark');
+      html.classList.add(theme);
+      if (theme === 'dark') {
+        moon.classList.add('hidden');
+        sun.classList.remove('hidden');
+      } else {
+        moon.classList.remove('hidden');
+        sun.classList.add('hidden');
+      }
+      localStorage.setItem('tutorials-theme', theme);
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    const saved = localStorage.getItem('tutorials-theme');
+    applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+    // Search filter
+    const search = document.getElementById('search');
+    search.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.term').forEach((term) => {
+        const text = term.innerText.toLowerCase();
+        term.style.display = text.includes(query) ? '' : 'none';
+      });
+      document.querySelectorAll('section[id]').forEach((section) => {
+        const visible = section.querySelectorAll('.term').length > 0 && Array.from(section.querySelectorAll('.term')).some((t) => t.style.display !== 'none');
+        section.style.display = visible ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

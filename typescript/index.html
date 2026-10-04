@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypeScript: Typed JavaScript at Scale</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicons/typescript.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .sr-only:focus { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 50; background: white; color: black; padding: 0.5rem 0.75rem; border-radius: 0.375rem; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
+    :root {
+      --brand-light: #3178c6;
+      --brand-dark: #4f8cd1;
+      --ink: #1f2328;
+      --muted: #656d76;
+      --panel: #f6f8fa;
+      --border: #d0d7de;
+      --success: #1a7f37;
+      --danger: #cf222e;
+      --warn: #9a6700;
+    }
+    html.dark {
+      --ink: #e6edf3;
+      --muted: #848d97;
+      --panel: #161b22;
+      --border: #30363d;
+      --success: #3fb950;
+      --danger: #f85149;
+      --warn: #d29922;
+    }
+    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
+    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
+    .brand { color: var(--brand-light); }
+    html.dark .brand { color: var(--brand-dark); }
+    .toc-link.active { background: rgba(49,120,198,0.12); border-left: 3px solid var(--brand-light); color: var(--brand-light); }
+    html.dark .toc-link.active { background: rgba(79,140,209,0.15); border-left-color: var(--brand-dark); color: var(--brand-dark); }
+    .card { border: 1px solid var(--border); background: var(--panel); }
+    .code-block { position: relative; }
+    .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--panel); color: var(--muted); opacity: 0; transition: opacity 0.15s; }
+    .code-block:hover .copy-btn { opacity: 1; }
+    .copy-btn.copied { color: var(--success); border-color: var(--success); }
+    .diagram { width: 100%; max-width: 720px; }
+    .quiz-opt.selected { border-color: var(--brand-light); background: rgba(49,120,198,0.08); }
+    html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba(79,140,209,0.12); }
+    .quiz-opt.correct { border-color: var(--success); background: rgba(26,127,55,0.08); }
+    .quiz-opt.wrong { border-color: var(--danger); background: rgba(207,34,46,0.08); }
+    @media (max-width: 1024px) { #sidebar { transform: translateX(-100%); transition: transform .25s; } #sidebar.open { transform: translateX(0); } }
+    .kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:0.375rem; padding:0.125rem 0.375rem; font-family:ui-monospace,monospace; font-size:0.875rem; }
+  </style>
+</head>
+<body class="antialiased transition-colors duration-300">
+
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+  <div class="flex min-h-screen">
+
+    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6">
+      <div class="flex items-center gap-3 mb-8">
+        <img src="../assets/favicons/typescript.svg" alt="TypeScript" class="w-10 h-10">
+        <span class="text-xl font-bold">TypeScript</span>
+      </div>
+      <nav id="toc" class="space-y-1 text-sm">
+        <a href="#intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">1. Introduction</a>
+        <a href="#why-ts" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">2. Why TypeScript?</a>
+        <a href="#setup" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">3. Setup &amp; First Script</a>
+        <a href="#types" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">4. Basic Types</a>
+        <a href="#functions" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">5. Functions</a>
+        <a href="#objects" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">6. Objects &amp; Interfaces</a>
+        <a href="#classes" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">7. Classes &amp; OOP</a>
+        <a href="#arrays" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">8. Arrays, Tuples &amp; Enums</a>
+        <a href="#generics" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">9. Generics</a>
+        <a href="#union-intersection" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">10. Unions &amp; Intersections</a>
+        <a href="#utility" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">11. Utility Types</a>
+        <a href="#modules" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">12. Modules &amp; Configuration</a>
+        <a href="#react" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">13. TypeScript with React</a>
+        <a href="#node" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">14. TypeScript with Node.js</a>
+        <a href="#project" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">15. Capstone: E-Commerce Cart</a>
+      </nav>
+      <div class="mt-8 pt-6 border-t border-[var(--border)]">
+        <p class="text-xs text-[var(--muted)]">Open in any browser. No build step required.</p>
+      </div>
+    </aside>
+
+    <main id="main" class="flex-1 min-w-0">
+
+      <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <button class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()" aria-label="Open menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <h1 class="text-lg sm:text-xl font-bold tracking-tight">TypeScript: Typed JavaScript at Scale</h1>
+        </div>
+        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
+          <svg id="moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+          <svg id="sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+      </header>
+
+      <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+
+        <section id="intro" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 1</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">TypeScript is a strongly typed programming language that builds on JavaScript. It adds optional static typing, better tooling, and self-documenting code, making it the standard for large applications.</p>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">Before you start</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>JavaScript fundamentals are required</li>
+              <li>Node.js basics are helpful</li>
+              <li>React or Node.js experience will help you follow the applied chapters</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">What you'll learn</h3>
+            <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Static types and type inference</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Interfaces, classes, and generics</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Real-world React and Node.js patterns</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Utility types and narrowing</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Configuration and module resolution</li>
+              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Capstone: typed e-commerce cart</li>
+            </ul>
+          </div>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-3">More practice ideas</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Type a small CLI tool that reads and validates JSON configuration files.</li>
+              <li>Add TypeScript types to a plain JavaScript project you already built.</li>
+              <li>Build a typed to-do API with TypeScript and Express.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><span></span><a href="#why-ts" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Why TypeScript? →</a></nav>
+        </section>
+
+        <section id="why-ts" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 2</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Why TypeScript?</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">JavaScript is flexible but that flexibility can lead to runtime bugs. TypeScript catches many of those errors before your code runs.</p>
+
+          <div class="card rounded-2xl p-6 mb-8">
+            <h3 class="text-xl font-semibold mb-4">JavaScript vs TypeScript example</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+                <pre><code class="language-javascript">// JavaScript
+function add(a, b) {
+  return a + b;
+}
+
+add(2, "2"); // "22" — silent bug</code></pre>
+              </div>
+              <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+                <pre><code class="language-typescript">// TypeScript
+function add(a: number, b: number): number {
+  return a + b;
+}
+
+add(2, "2"); // ❌ Error at compile time</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Real-world benefits</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+              <li>Catch bugs before deployment.</li>
+              <li>Autocomplete and inline documentation in VS Code.</li>
+              <li>Safer refactoring across large codebases.</li>
+              <li>Self-documenting function contracts.</li>
+              <li>Widely used in React, Node.js, and full-stack frameworks.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#setup" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Setup →</a></nav>
+        </section>
+
+        <section id="setup" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 3</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Setup &amp; First Script</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">TypeScript is installed as an npm package and compiled to JavaScript with the <code class="kbd">tsc</code> command.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Install TypeScript globally or in a project
+npm install -g typescript
+
+# Or as a dev dependency
+npm install --save-dev typescript
+
+# Check version
+tsc --version
+
+# Initialize a project
+tsc --init</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-json">// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "strict": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
+}</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// src/index.ts
+function greet(name: string): string {
+  return `Hello, ${name}`;
+}
+
+console.log(greet("TypeScript"));</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># Compile and run
+tsc
+node dist/index.js
+
+# Or run directly with ts-node
+npx ts-node src/index.ts</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Create a TypeScript file, compile it with <code class="kbd">tsc</code>, and run the generated JavaScript.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#why-ts" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#types" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Types →</a></nav>
+        </section>
+
+        <section id="types" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 4</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Basic Types</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">TypeScript provides types for the most common JavaScript values. Many types can be inferred automatically.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// Primitives
+const firstName: string = "Ada";
+const age: number = 28;
+const isActive: boolean = true;
+
+// Type inference
+const lastName = "Lovelace"; // inferred as string
+
+// Any and unknown
+let notSure: any = 4;
+notSure = "maybe";
+
+let safeValue: unknown = 4;
+if (typeof safeValue === "number") {
+  console.log(safeValue + 1); // safe narrowing
+}
+
+// Void and never
+function logMessage(message: string): void {
+  console.log(message);
+}
+
+function throwError(message: string): never {
+  throw new Error(message);
+}</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Real-world tip</h3>
+            <p class="text-[var(--muted)]">Avoid <code class="kbd">any</code> whenever possible. Use <code class="kbd">unknown</code> when you do not know the type yet, then narrow it with checks.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#setup" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#functions" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Functions →</a></nav>
+        </section>
+
+        <section id="functions" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 5</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Functions</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Annotate function parameters and return values to make contracts explicit. Type inference also works for simple return expressions.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// Named parameters and return type
+function calculateTotal(price: number, quantity: number): number {
+  return price * quantity;
+}
+
+// Optional parameter
+function greetUser(name: string, greeting?: string): string {
+  return `${greeting ?? "Hello"}, ${name}`;
+}
+
+// Default value
+function createUser(name: string, role: string = "user") {
+  return { name, role };
+}
+
+// Arrow function
+const isPositive = (n: number): boolean => n > 0;
+
+// Rest parameters
+function sum(...numbers: number[]): number {
+  return numbers.reduce((total, n) => total + n, 0);
+}</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="B">
+              <p class="mb-3">Which syntax marks a parameter as optional?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">(name: string)</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">(name?: string)</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">(name!: string)</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#types" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#objects" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Objects →</a></nav>
+        </section>
+
+        <section id="objects" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 6</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Objects &amp; Interfaces</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Interfaces describe the shape of objects. They are one of TypeScript's most powerful features for modeling domain data.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">interface Product {
+  id: number;
+  name: string;
+  price: number;
+  inStock: boolean;
+}
+
+function formatProduct(product: Product): string {
+  return `${product.name} — $${product.price}`;
+}
+
+const laptop: Product = {
+  id: 1,
+  name: "MacBook Air",
+  price: 1199,
+  inStock: true,
+};
+
+console.log(formatProduct(laptop));
+
+// Optional and readonly properties
+interface User {
+  readonly id: number;
+  email: string;
+  nickname?: string;
+}</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// Extending interfaces
+interface Animal {
+  name: string;
+}
+
+interface Dog extends Animal {
+  breed: string;
+}
+
+const myDog: Dog = { name: "Rex", breed: "Labrador" };</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">When to use interfaces vs types</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Use <code class="kbd">interface</code> for object shapes and public APIs.</li>
+              <li>Use <code class="kbd">type</code> for unions, aliases, and complex mapped types.</li>
+              <li>Interfaces can be extended and merged; type aliases cannot.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#functions" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#classes" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Classes →</a></nav>
+        </section>
+
+        <section id="classes" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 7</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Classes &amp; OOP</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">TypeScript brings classic OOP features like access modifiers, abstract classes, and interfaces to JavaScript classes.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">class Account {
+  private balance: number;
+
+  constructor(public owner: string, initialBalance: number) {
+    this.balance = initialBalance;
+  }
+
+  deposit(amount: number): void {
+    if (amount <= 0) throw new Error("Amount must be positive");
+    this.balance += amount;
+  }
+
+  getBalance(): number {
+    return this.balance;
+  }
+}
+
+const myAccount = new Account("Alice", 100);
+myAccount.deposit(50);
+console.log(myAccount.getBalance()); // 150
+// myAccount.balance is private — access denied</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">abstract class Shape {
+  abstract area(): number;
+}
+
+class Circle extends Shape {
+  constructor(private radius: number) {
+    super();
+  }
+
+  area(): number {
+    return Math.PI * this.radius ** 2;
+  }
+}</code></pre>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#objects" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#arrays" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Arrays →</a></nav>
+        </section>
+
+        <section id="arrays" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 8</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Arrays, Tuples &amp; Enums</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Typed arrays prevent mixed data mistakes. Tuples enforce fixed lengths, and enums group related constants.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// Arrays
+const scores: number[] = [85, 92, 78];
+const names: Array<string> = ["Ada", "Grace", "Linus"];
+
+// Tuples (fixed length, fixed types)
+const point: [number, number] = [10, 20];
+const userTuple: [number, string, boolean] = [1, "Ada", true];
+
+// Enums
+enum OrderStatus {
+  Pending = "pending",
+  Shipped = "shipped",
+  Delivered = "delivered",
+}
+
+function updateStatus(status: OrderStatus) {
+  console.log(`Order is now ${status}`);
+}
+
+updateStatus(OrderStatus.Shipped);</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Real-world note</h3>
+            <p class="text-[var(--muted)]">Modern code often prefers string literal unions over enums because they compile to simpler JavaScript and work better with narrowing.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#classes" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#generics" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Generics →</a></nav>
+        </section>
+
+        <section id="generics" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 9</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Generics</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Generics let you write reusable code that works with multiple types while preserving type safety.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// Generic function
+function identity<T>(value: T): T {
+  return value;
+}
+
+const num = identity<number>(42);
+const str = identity("hello"); // inferred
+
+// Generic with constraints
+function logLength<T extends { length: number }>(item: T): void {
+  console.log(item.length);
+}
+
+logLength("hello");
+logLength([1, 2, 3]);
+
+// Generic interface
+interface ApiResponse<T> {
+  data: T;
+  success: boolean;
+  message?: string;
+}
+
+const productResponse: ApiResponse<Product> = {
+  data: laptop,
+  success: true,
+};</code></pre>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#arrays" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#union-intersection" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Unions →</a></nav>
+        </section>
+
+        <section id="union-intersection" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 10</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Unions &amp; Intersections</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Union types let a value be one of several types. Intersections combine types into one.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">type Status = "loading" | "success" | "error";
+
+function getMessage(status: Status): string {
+  switch (status) {
+    case "loading": return "Loading...";
+    case "success": return "Done!";
+    case "error": return "Something went wrong.";
+  }
+}
+
+// Discriminated union
+interface PayPalPayment {
+  type: "paypal";
+  email: string;
+}
+
+interface CardPayment {
+  type: "card";
+  cardNumber: string;
+  expiry: string;
+}
+
+type PaymentMethod = PayPalPayment | CardPayment;
+
+function processPayment(method: PaymentMethod) {
+  if (method.type === "paypal") {
+    console.log(method.email);
+  } else {
+    console.log(method.cardNumber);
+  }
+}
+
+// Intersection
+interface Named { name: string; }
+interface Dated { createdAt: Date; }
+type DocumentItem = Named &amp; Dated;</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Quick Quiz</h4>
+            <div class="quiz" data-answer="A">
+              <p class="mb-3">Which operator combines multiple types into one?</p>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">&amp;</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">|</button>
+              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">extends</button>
+            </div>
+            <p class="quiz-feedback mt-3 font-medium"></p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#generics" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#utility" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Utility Types →</a></nav>
+        </section>
+
+        <section id="utility" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 11</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Utility Types</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">TypeScript includes built-in utility types that transform existing types. They are extremely useful for forms, APIs, and data shaping.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">interface User {
+  id: number;
+  email: string;
+  name: string;
+  isAdmin: boolean;
+}
+
+// Make all properties optional
+type PartialUser = Partial<User>;
+
+// Make all properties required
+type RequiredUser = Required<User>;
+
+// Pick only specific keys
+type UserPreview = Pick<User, "id" | "name">;
+
+// Exclude a key
+type UserPublic = Omit<User, "isAdmin">;
+
+// Readonly wrapper
+type ReadonlyUser = Readonly<User>;
+
+// Record for mapped objects
+const roles: Record<string, string[]> = {
+  admin: ["read", "write", "delete"],
+  user: ["read"],
+};</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Common use cases</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li><code class="kbd">Partial<T></code> for update forms and PATCH requests.</li>
+              <li><code class="kbd">Pick<T, K></code> for DTOs returned from an API.</li>
+              <li><code class="kbd">Omit<T, K></code> to hide internal fields in public responses.</li>
+              <li><code class="kbd">Record<K, T></code> for dictionaries and lookup maps.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#union-intersection" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#modules" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Modules →</a></nav>
+        </section>
+
+        <section id="modules" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 12</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Modules &amp; Configuration</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">TypeScript supports ES modules and CommonJS. A well-configured <code class="kbd">tsconfig.json</code> is key to a smooth workflow.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// math.ts
+export function add(a: number, b: number): number {
+  return a + b;
+}
+
+export const PI = 3.14159;
+
+// app.ts
+import { add, PI } from "./math";
+console.log(add(2, 3), PI);</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-json">{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "resolveJsonModule": true,
+    "declaration": true
+  },
+  "include": ["src/**/*"]
+}</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Create two modules, import functions between them, and configure <code class="kbd">tsconfig.json</code> to compile to <code class="kbd">dist/</code>.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#utility" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#react" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: TS + React →</a></nav>
+        </section>
+
+        <section id="react" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 13</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">TypeScript with React</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">TypeScript makes React components more reliable by typing props, state, event handlers, and refs.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">interface ProductCardProps {
+  id: number;
+  name: string;
+  price: number;
+  onAddToCart: (id: number) => void;
+}
+
+function ProductCard({ name, price, onAddToCart }: ProductCardProps) {
+  return (
+    <div className="card">
+      <h3>{name}</h3>
+      <p>${price}</p>
+      <button onClick={() => onAddToCart(id)}>Add to cart</button>
+    </div>
+  );
+}
+
+// Typed state hook
+import { useState } from "react";
+
+function Counter() {
+  const [count, setCount] = useState<number>(0);
+  return <button onClick={() => setCount((c) => c + 1)}>{count}</button>;
+}
+
+// Event handler
+function SearchInput() {
+  const [query, setQuery] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value);
+  };
+
+  return <input value={query} onChange={handleChange} />;
+}</code></pre>
+          </div>
+
+          <div class="card rounded-2xl p-6">
+            <h3 class="text-xl font-semibold mb-3">Why TS + React matters</h3>
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+              <li>Props are validated at build time.</li>
+              <li>No more guessing event types.</li>
+              <li>Refactoring is safer across many components.</li>
+            </ul>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#modules" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#node" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: TS + Node →</a></nav>
+        </section>
+
+        <section id="node" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 14</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">TypeScript with Node.js</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Node.js projects benefit from TypeScript when building APIs, services, and libraries. Use <code class="kbd">ts-node-dev</code> or <code class="kbd">tsx</code> for fast local development.</p>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash">npm install express
+cnpm install --save-dev typescript @types/node @types/express ts-node-dev</code></pre>
+          </div>
+
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// src/index.ts
+import express, { Request, Response, NextFunction } from "express";
+
+interface Task {
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+const tasks: Task[] = [
+  { id: 1, title: "Learn TypeScript", completed: false },
+];
+
+const app = express();
+app.use(express.json());
+
+app.get("/tasks", (req: Request, res: Response) => {
+  res.json(tasks);
+});
+
+app.post("/tasks", (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { title } = req.body;
+    if (!title) throw new Error("Title is required");
+    const task: Task = { id: Date.now(), title, completed: false };
+    tasks.push(task);
+    res.status(201).json(task);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Set up an Express server with typed request and response objects, then run it with <code class="kbd">ts-node-dev src/index.ts</code>.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#react" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#project" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Capstone →</a></nav>
+        </section>
+
+        <section id="project" class="scroll-mt-24">
+          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 15</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Capstone: E-Commerce Cart</h2>
+          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Build a fully typed shopping cart module. This capstone combines interfaces, generics, utility types, and type narrowing into a realistic e-commerce example.</p>
+
+          <h3 class="text-xl font-semibold mb-3">Requirements</h3>
+          <div class="card rounded-2xl p-6 mb-8">
+            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+              <li>Define <code class="kbd">Product</code> and <code class="kbd">CartItem</code> interfaces.</li>
+              <li>Implement add, remove, update quantity, and clear methods.</li>
+              <li>Calculate totals with discounts and tax.</li>
+              <li>Use generics for a reusable storage layer.</li>
+              <li>Write at least one test or script that exercises the cart.</li>
+            </ul>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Data models</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// src/types.ts
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  category: "electronics" | "clothing" | "food";
+}
+
+export interface CartItem {
+  product: Product;
+  quantity: number;
+}
+
+export type CartSummary = {
+  items: CartItem[];
+  subtotal: number;
+  discount: number;
+  tax: number;
+  total: number;
+};</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Cart implementation</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// src/cart.ts
+import { Product, CartItem, CartSummary } from "./types";
+
+export class ShoppingCart {
+  private items: CartItem[] = [];
+
+  add(product: Product, quantity: number = 1): void {
+    if (quantity <= 0) throw new Error("Quantity must be positive");
+    const existing = this.items.find((i) => i.product.id === product.id);
+    if (existing) {
+      existing.quantity += quantity;
+    } else {
+      this.items.push({ product, quantity });
+    }
+  }
+
+  remove(productId: string): void {
+    this.items = this.items.filter((i) => i.product.id !== productId);
+  }
+
+  updateQuantity(productId: string, quantity: number): void {
+    if (quantity <= 0) {
+      this.remove(productId);
+      return;
+    }
+    const item = this.items.find((i) => i.product.id === productId);
+    if (item) item.quantity = quantity;
+  }
+
+  clear(): void {
+    this.items = [];
+  }
+
+  getSummary(taxRate: number = 0.08, discountRate: number = 0): CartSummary {
+    const subtotal = this.items.reduce(
+      (sum, item) => sum + item.product.price * item.quantity,
+      0
+    );
+    const discount = subtotal * discountRate;
+    const taxable = subtotal - discount;
+    const tax = taxable * taxRate;
+    const total = taxable + tax;
+
+    return {
+      items: [...this.items],
+      subtotal: Number(subtotal.toFixed(2)),
+      discount: Number(discount.toFixed(2)),
+      tax: Number(tax.toFixed(2)),
+      total: Number(total.toFixed(2)),
+    };
+  }
+}</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Generic storage layer</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// src/storage.ts
+export interface Repository<T extends { id: string }> {
+  findById(id: string): T | undefined;
+  findAll(): T[];
+  save(item: T): void;
+  delete(id: string): void;
+}
+
+export class MemoryRepository<T extends { id: string }> implements Repository<T> {
+  private data: Map<string, T> = new Map();
+
+  findById(id: string): T | undefined {
+    return this.data.get(id);
+  }
+
+  findAll(): T[] {
+    return Array.from(this.data.values());
+  }
+
+  save(item: T): void {
+    this.data.set(item.id, item);
+  }
+
+  delete(id: string): void {
+    this.data.delete(id);
+  }
+}</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Run the capstone</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-bash"># 1. Initialize the project
+npm init -y
+npm install --save-dev typescript ts-node
+
+# 2. Create tsconfig.json
+tsc --init
+
+# 3. Run the cart script
+npx ts-node src/demo.ts
+
+# 4. Compile for production
+tsc
+node dist/demo.js</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Demo script</h3>
+          <div class="code-block mb-6">
+            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
+            <pre><code class="language-typescript">// src/demo.ts
+import { ShoppingCart } from "./cart";
+import { MemoryRepository } from "./storage";
+import { Product } from "./types";
+
+const productRepo = new MemoryRepository<Product>();
+
+const laptop: Product = { id: "p1", name: "Laptop", price: 999, category: "electronics" };
+const mouse: Product = { id: "p2", name: "Mouse", price: 29, category: "electronics" };
+
+productRepo.save(laptop);
+productRepo.save(mouse);
+
+const cart = new ShoppingCart();
+cart.add(laptop, 1);
+cart.add(mouse, 2);
+
+console.log(cart.getSummary(0.08, 0.1));
+// { items: [...], subtotal: 1057, discount: 105.7, tax: 76.1, total: 1027.4 }</code></pre>
+          </div>
+
+          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+            <h4 class="font-semibold mb-2">Checkpoint</h4>
+            <p class="text-[var(--muted)]">Create the cart and storage modules, run the demo script, then add a method to apply a category-specific discount. Ensure TypeScript catches any invalid product data.</p>
+          </div>
+
+          <nav class="flex justify-between mt-10"><a href="#node" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><span></span></nav>
+        </section>
+
+      </div>
+
+      <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+        <p>Made for teaching TypeScript. Open directly in any browser.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Theme handling
+    const html = document.documentElement;
+    const lightStylesheet = document.getElementById('hljs-light');
+    const darkStylesheet = document.getElementById('hljs-dark');
+    const moon = document.getElementById('moon');
+    const sun = document.getElementById('sun');
+
+    function applyTheme(theme) {
+      html.classList.remove('light', 'dark');
+      html.classList.add(theme);
+      if (theme === 'dark') {
+        lightStylesheet.disabled = true;
+        darkStylesheet.disabled = false;
+        moon.classList.add('hidden');
+        sun.classList.remove('hidden');
+      } else {
+        lightStylesheet.disabled = false;
+        darkStylesheet.disabled = true;
+        moon.classList.remove('hidden');
+        sun.classList.add('hidden');
+      }
+      localStorage.setItem('ts-theme', theme);
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    const saved = localStorage.getItem('ts-theme');
+    applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+    // Sidebar toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('menu-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('hidden');
+    }
+
+    // Copy code
+    function copyCode(btn) {
+      const code = btn.nextElementSibling.querySelector('code');
+      navigator.clipboard.writeText(code.innerText).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    }
+
+    // Active TOC link
+    const sections = document.querySelectorAll('section[id]');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach((link) => link.classList.remove('active'));
+          const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -60% 0px' });
+
+    sections.forEach((section) => observer.observe(section));
+
+    // Quiz logic
+    document.querySelectorAll('.quiz').forEach((quiz) => {
+      const correct = quiz.dataset.answer;
+      const feedback = quiz.nextElementSibling;
+      quiz.querySelectorAll('.quiz-opt').forEach((opt) => {
+        opt.addEventListener('click', () => {
+          quiz.querySelectorAll('.quiz-opt').forEach((o) => {
+            o.classList.remove('selected', 'correct', 'wrong');
+            o.disabled = true;
+          });
+          opt.classList.add('selected');
+          if (opt.dataset.val === correct) {
+            opt.classList.add('correct');
+            feedback.textContent = 'Correct! ✅';
+            feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]';
+          } else {
+            opt.classList.add('wrong');
+            feedback.textContent = `Not quite. The correct answer is ${correct}.`;
+            feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]';
+          }
+        });
+      });
+    });
+
+    // Syntax highlighting
+    hljs.highlightAll();
+  </script>
+</body>
+</html>
