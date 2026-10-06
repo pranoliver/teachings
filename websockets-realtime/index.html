@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   WebSockets &amp; Real-Time Apps: Live Dashboards &amp; Chat
+  </title>
+  <link href="../assets/favicons/socketio.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-websockets-realtime">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Socket.io" class="w-10 h-10" src="../assets/favicons/socketio.svg"/>
+     <span class="text-xl font-bold">
+      WebSockets
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#polling-vs-sockets">
+      2. Polling vs WebSockets
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      3. Setup &amp; First Socket
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#events">
+      4. Events &amp; Rooms
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#chat">
+      5. Real-World Chat
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dashboard">
+      6. Live Dashboard
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#presence">
+      7. Presence &amp; Scaling
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#security">
+      8. Security &amp; Production
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      9. Capstone: Live Support Chat
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       WebSockets &amp; Real-Time Apps
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       WebSockets let servers push data to browsers instantly. They power live chat, dashboards, notifications, multiplayer games, and collaborative editors. This tutorial focuses on Socket.io, the most popular library for real-time web apps.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with Node.js and Express.
+        </li>
+        <li>
+         Basic JavaScript (events, callbacks, async/await).
+        </li>
+        <li>
+         HTML/CSS for the client examples.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         WebSocket handshake and lifecycle
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Socket.io events and rooms
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Building a group chat app
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Live dashboard with broadcast updates
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Presence and typing indicators
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Scaling with Redis adapter
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        More practice ideas
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Build a real-time collaborative whiteboard.
+        </li>
+        <li>
+         Add live comments to a blog post.
+        </li>
+        <li>
+         Create a stock-price ticker with historical chart updates.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#polling-vs-sockets">
+        Next: Polling vs Sockets &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="polling-vs-sockets">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Polling vs WebSockets
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Before WebSockets, the only way to get fresh data was the client repeatedly asking the server. This is called polling. It is simple but wasteful.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        HTTP polling vs WebSocket push
+       </h3>
+       <img alt="Diagram comparing HTTP polling requests to a persistent WebSocket connection" class="diagram" loading="lazy" src="../assets/diagrams/websockets-realtime/polling-vs-websocket.svg"/>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         HTTP polling
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Client asks
+          <code class="kbd">
+           GET /updates
+          </code>
+          every few seconds.
+         </li>
+         <li>
+          Server responds even when nothing changed.
+         </li>
+         <li>
+          High battery and bandwidth use on mobile.
+         </li>
+         <li>
+          Good for simple dashboards with low freshness needs.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         WebSockets
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          One persistent, full-duplex connection.
+         </li>
+         <li>
+          Server pushes data only when it changes.
+         </li>
+         <li>
+          Lower latency and less overhead.
+         </li>
+         <li>
+          Ideal for chat, live games, and collaboration.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        When to use what
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Polling/SSE
+         </strong>
+         : one-way updates, simple infrastructure, serverless functions.
+        </li>
+        <li>
+         <strong>
+          WebSockets
+         </strong>
+         : two-way, low-latency, stateful conversations.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#setup">
+        Next: Setup &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="setup">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Setup &amp; First Socket
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Socket.io wraps WebSockets and adds fallbacks for older browsers or restrictive networks. The API on both server and client is event-based.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Server 
+mkdir realtime-chat cd realtime-chat 
+npm init -y 
+npm install 
+express socket.io 
+# Client (served by Express static files) 
+# Socket.io client is also available via CDN: 
+#</code></pre>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-javascript">// server.js
+const express = require("express");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+app.use(express.static("public"));
+io.on("connection", (socket) =&gt; {
+  console.log("a user connected", socket.id);
+  socket.on("message", (msg) =&gt; {
+    io.emit("message", msg);
+  });
+  socket.on("disconnect", () =&gt; {
+    console.log("user disconnected");
+  });
+});
+httpServer.listen(3000, () =&gt; {
+  console.log("Server on http://localhost:3000");
+});</code></pre>
+       </div>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-html">const socket = io(); socket.on('message', (msg) =&gt; { const item =
+document.createElement('li'); item.textContent = msg;
+document.getElementById('messages').appendChild(item); }); function send() {
+const input = document.getElementById('input'); socket.emit('message',
+input.value); input.value = ''; } Send</code></pre>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create the server and client, open two browser tabs, and confirm messages sent from one tab appear in the other.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#polling-vs-sockets">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#events">
+        Next: Events &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="events">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Events &amp; Rooms
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Socket.io communication is organized around events. Rooms let you broadcast to subsets of clients without managing lists yourself.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Rooms isolate broadcast groups
+       </h3>
+       <img alt="Diagram showing clients in different rooms receiving targeted broadcasts" class="diagram" loading="lazy" src="../assets/diagrams/websockets-realtime/rooms-broadcast.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Join
+a room socket.on('join-room', (room) =&gt; { socket.join(room);
+socket.to(room).emit('notification', `${socket.id}
+joined ${room}`);
+}
+);
+// Broadcast
+to everyone in the room except sender socket.on('room-message', ({ room,
+text }
+) =&gt; { socket.to(room).emit('room-message',
+{ sender: socket.id,
+text }
+);
+}
+);
+// Broadcast
+to everyone in the room including sender io.to(room).emit('system', 'The room settings changed');
+// Namespace
+example: separate API and chat traffic const chatNamespace = io.of('/chat');
+chatNamespace.on('connection', (socket) =&gt; { console.log('connected to /chat');
+}
+);
+// Client
+joins a namespace const chatSocket = io('/chat');</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Use cases for rooms
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Group chat channels.
+        </li>
+        <li>
+         Document editing sessions.
+        </li>
+        <li>
+         Multiplayer game lobbies.
+        </li>
+        <li>
+         Tenant-isolated notifications.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#chat">
+        Next: Chat &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="chat">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Real-World Chat
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A chat app is the classic WebSockets example, but it is also genuinely useful. We will add usernames, timestamps, and a typing indicator.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Server
+io.on("connection", (socket) =&gt; {
+  let currentUser = null;
+  socket.on("join", (username) =&gt; {
+    currentUser = username;
+    socket.broadcast.emit(
+      "user joined",
+      `${username}
+joined the chat`,
+    );
+  });
+  socket.on("chat message", ({ username, text }) =&gt; {
+    const message = { username, text, timestamp: new Date().toISOString() };
+    io.emit("chat message", message);
+  });
+  socket.on("typing", (username) =&gt; {
+    socket.broadcast.emit("typing", username);
+  });
+  socket.on("disconnect", () =&gt; {
+    if (currentUser) {
+      io.emit(
+        "user left",
+        `${currentUser}
+left the chat`,
+      );
+    }
+  });
+});</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Client
+const socket = io();
+let typingTimeout;
+function join() {
+  const username = document.getElementById("username").value;
+  socket.emit("join", username);
+  document.getElementById("login").style.display = "none";
+  document.getElementById("chat").style.display = "block";
+}
+function sendMessage() {
+  const input = document.getElementById("message");
+  socket.emit("chat message", {
+    username: document.getElementById("username").value,
+    text: input.value,
+  });
+  input.value = "";
+}
+const input = document.getElementById("message");
+input.addEventListener("input", () =&gt; {
+  socket.emit("typing", document.getElementById("username").value);
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() =&gt; {
+    document.getElementById("typing").textContent = "";
+  }, 1000);
+});
+socket.on("chat message", (msg) =&gt; {
+  const li = document.createElement("li");
+  const time = new Date(msg.timestamp).toLocaleTimeString();
+  li.textContent = `[${time}
+] ${msg.username}: ${msg.text}`;
+  document.getElementById("messages").appendChild(li);
+});
+socket.on("typing", (username) =&gt; {
+  document.getElementById("typing").textContent = `${username}
+is typing...`;
+});</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Add a username prompt, display join/leave notifications, and show a typing indicator that disappears after one second of inactivity.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#events">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#dashboard">
+        Next: Dashboard &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="dashboard">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Live Dashboard
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Dashboards often display metrics that change continuously: active users, order volume, server health. WebSockets push these updates without refreshing the page.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Metrics flow from source to dashboard
+       </h3>
+       <img alt="Diagram showing data sources feeding a server that pushes live metrics to dashboards" class="diagram" loading="lazy" src="../assets/diagrams/websockets-realtime/live-dashboard-flow.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Simulate
+a data source function startMetricsEmitter(io)
+{ setInterval(() =&gt; { const metrics = { activeUsers: Math.floor(Math.random() * 500) + 100,
+ordersPerMinute: Math.floor(Math.random() * 30),
+cpuPercent: Math.floor(Math.random() * 40) + 20,
+timestamp: Date.now() }
+;
+io.emit('metrics',
+metrics);
+},
+2000);
+}
+startMetricsEmitter(io);
+// Client
+renders live metrics socket.on('metrics', (metrics) =&gt; { document.getElementById('active-users').textContent = metrics.activeUsers;
+document.getElementById('orders').textContent = metrics.ordersPerMinute;
+document.getElementById('cpu').textContent = metrics.cpuPercent + '%';
+}
+);</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Real-world data sources
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Application logs aggregated into live error rates.
+        </li>
+        <li>
+         IoT sensors reporting temperature, pressure, or location.
+        </li>
+        <li>
+         E-commerce transactions feeding a real-time revenue chart.
+        </li>
+        <li>
+         CI/CD pipelines broadcasting build status.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#chat">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#presence">
+        Next: Presence &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="presence">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Presence &amp; Scaling
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       When you run multiple servers, a client might be connected to a different process than the one emitting an event. A Redis adapter lets all servers share the same Socket.io room state.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Redis adapter synchronizes multiple servers
+       </h3>
+       <img alt="Diagram showing multiple Socket.io servers sharing state through a Redis adapter" class="diagram" loading="lazy" src="../assets/diagrams/websockets-realtime/redis-adapter-scaling.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const { Server } = require("socket.io");
+const { createAdapter } = require("@socket.io/redis-adapter");
+const { createClient } = require("redis");
+const io = new Server(httpServer);
+const pubClient = createClient({ url: "redis://localhost:6379" });
+const subClient = pubClient.duplicate();
+io.adapter(createAdapter(pubClient, subClient)); // Track online users in a room io.on('connection', async (socket) =&gt; { const room = 'support-room-1'; await socket.join(room); const sockets = await io.in(room).fetchSockets(); io.to(room).emit('presence', { count: sockets.length, users: sockets.map((s) =&gt; s.data.username).filter(Boolean) }); socket.on('disconnecting', async () =&gt; { const sockets = await io.in(room).fetchSockets(); io.to(room).emit('presence', { count: sockets.length - 1, users: sockets .filter((s) =&gt; s.id !== socket.id) .map((s) =&gt; s.data.username) .filter(Boolean) }); }); });</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Why scale WebSockets?
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Single Node.js processes can handle thousands of concurrent sockets.
+        </li>
+        <li>
+         Beyond that, load balancers spread clients across many servers.
+        </li>
+        <li>
+         Redis or another pub/sub adapter keeps broadcasts consistent.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dashboard">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#security">
+        Next: Security &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="security">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Security &amp; Production
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Real-time apps face the same threats as REST APIs, plus a few unique ones. Plan for authentication, rate limiting, and denial-of-service protection from day one.
+      </p>
+      <div class="space-y-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Authenticate sockets
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-4">
+         Use middleware to validate JWT tokens sent during the handshake.
+        </p>
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-javascript">const jwt = require("jsonwebtoken");
+io.use((socket, next) =&gt; {
+  const token = socket.handshake.auth.token;
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    socket.userId = payload.userId;
+    next();
+  } catch (err) {
+    next(new Error("Authentication error"));
+  }
+});</code></pre>
+        </div>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Rate limit events
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-4">
+         Limit how often a single socket can emit events to prevent spam.
+        </p>
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-javascript">const limits = new Map();
+io.on("connection", (socket) =&gt; {
+  limits.set(socket.id, { count: 0, lastReset: Date.now() });
+  socket.on("chat message", (msg) =&gt; {
+    const limit = limits.get(socket.id);
+    if (Date.now() - limit.lastReset &gt; 60000) {
+      limit.count = 0;
+      limit.lastReset = Date.now();
+    }
+    if (limit.count &gt;= 30) return;
+    limit.count++;
+    io.emit("chat message", msg);
+  });
+  socket.on("disconnect", () =&gt; limits.delete(socket.id));
+});</code></pre>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Production checklist
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Run behind HTTPS in production and use
+         <code class="kbd">
+          transports: ['websocket']
+         </code>
+         only if you control the network.
+        </li>
+        <li>
+         Set a connection timeout and heartbeat interval.
+        </li>
+        <li>
+         Validate and sanitize every incoming event payload.
+        </li>
+        <li>
+         Limit room size and message history stored in memory.
+        </li>
+        <li>
+         Use Redis adapter when scaling beyond one process.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#presence">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Live Support Chat
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       This capstone combines every Socket.io concept from this tutorial into one application: a customer support chat room.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       1. What is this project?
+      </h3>
+      <p class="text-[var(--muted)] mb-4">
+       A real-time support chat where visitors join a room, choose a display name, and exchange messages. Agents and customers see who is currently online, and new joiners can view recent chat history.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       2. What it covers?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Express server with Socket.io and a static
+         <code class="kbd">
+          public/
+         </code>
+         folder.
+        </li>
+        <li>
+         Users pick a display name before joining.
+        </li>
+        <li>
+         Messages are scoped to a support room ID.
+        </li>
+        <li>
+         Show a list of users currently in the room.
+        </li>
+        <li>
+         Typing indicator and join/leave system messages.
+        </li>
+        <li>
+         Optional: store recent messages in Redis so new joiners see context.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       3. How it is done?
+      </h3>
+      <p class="text-[var(--muted)] mb-4">
+       The server uses Socket.io rooms and Redis to share state across tabs and refreshes. The core logic is shown below, followed by commands to run the capstone.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const express = require("express");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const Redis = require("ioredis");
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+const redis = new Redis({ host: "localhost", port: 6379 });
+app.use(express.static("public"));
+io.on("connection", (socket) =&gt; {
+  let roomId = null;
+  let username = null;
+  socket.on("join-room", async ({ room, user }) =&gt; {
+    roomId = room;
+    username = user;
+    await socket.join(room);
+    const history = await redis.lrange(`room:${room}`, 0, 49);
+    socket.emit("history", history.map(JSON.parse));
+    updatePresence(room);
+    socket.to(room).emit("system", `${user} joined the room`);
+  });
+  socket.on("chat message", async (text) =&gt; {
+    if (!roomId || !username) return;
+    const message = { username, text, timestamp: Date.now() };
+    await redis.lpush(`room:${roomId}`, JSON.stringify(message));
+    await redis.ltrim(`room:${roomId}`, 0, 99);
+    io.to(roomId).emit("chat message", message);
+  });
+  socket.on("typing", () =&gt; {
+    if (roomId) socket.to(roomId).emit("typing", username);
+  });
+  socket.on("disconnect", async () =&gt; {
+    if (roomId) {
+      socket.to(roomId).emit("system", `${username} left the room`);
+      await updatePresence(roomId);
+    }
+  });
+  async function updatePresence(room) {
+    const sockets = await io.in(room).fetchSockets();
+    const users = sockets
+      .map((s) =&gt; s.data.username || "guest")
+      .filter(Boolean);
+    io.to(room).emit("presence", { count: sockets.length, users });
+  }
+});
+httpServer.listen(3000, () =&gt;
+  console.log("Support chat on http://localhost:3000"),
+);</code></pre>
+      </div>
+      <h4 class="font-semibold mb-2">
+       Run the capstone
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># 1. Start Redis 
+docker run -d --name 
+redis -p 6379:6379 
+redis:latest 
+# 2. Run the server 
+node support-chat.js 
+# 3. Open two browser tabs to the same room open http://localhost:3000?room=room-42 
+# 4. Send messages and watch presence, typing, and history update in real time</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       4. What did we learn from this capstone project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         How to use Socket.io rooms to scope messages to a specific group.
+        </li>
+        <li>
+         How to track and broadcast presence data in real time.
+        </li>
+        <li>
+         How to use Redis to store message history across reconnections.
+        </li>
+        <li>
+         How to emit and handle join, leave, and typing events.
+        </li>
+        <li>
+         How to combine Express, Socket.io, and Redis into one deployable app.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       5. How can I enhance this project in the future?
+      </h3>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-6">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Add JWT authentication to separate agents from customers.
+        </li>
+        <li>
+         Store all chat history in a real database like PostgreSQL instead of Redis.
+        </li>
+        <li>
+         Add private direct messages between users.
+        </li>
+        <li>
+         Build a React or Vue frontend with a polished UI.
+        </li>
+        <li>
+         Scale across multiple servers with the Socket.io Redis adapter.
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Open two tabs with the same room ID, send messages, observe the user list update, and reload one tab to see recent history restored from Redis.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#security">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+    <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+     <p>
+      Made for teaching real-time apps. Open directly in any browser.
+     </p>
+    </footer>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement; const lightStylesheet = document.getElementById('hljs-light'); const darkStylesheet = document.getElementById('hljs-dark'); const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { lightStylesheet.disabled = true; darkStylesheet.disabled = false; moon.classList.add('hidden'); sun.classList.remove('hidden'); } else { lightStylesheet.disabled = false; darkStylesheet.disabled = true; moon.classList.remove('hidden'); sun.classList.add('hidden'); } localStorage.setItem('websockets-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('websockets-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menu-overlay'); sidebar.classList.toggle('open'); overlay.classList.toggle('hidden'); } function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code'); navigator.clipboard.writeText(code.innerText).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); } const sections = document.querySelectorAll('section[id]'); const tocLinks = document.querySelectorAll('.toc-link'); const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { tocLinks.forEach((link) => link.classList.remove('active')); const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (active) active.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach((section) => observer.observe(section)); document.querySelectorAll('.quiz').forEach((quiz) => { const correct = quiz.dataset.answer; const feedback = quiz.nextElementSibling; quiz.querySelectorAll('.quiz-opt').forEach((opt) => { opt.addEventListener('click', () => { quiz.querySelectorAll('.quiz-opt').forEach((o) => { o.classList.remove('selected', 'correct', 'wrong'); o.disabled = true; }); opt.classList.add('selected'); if (opt.dataset.val === correct) { opt.classList.add('correct'); feedback.textContent = 'Correct! ✅'; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]'; } else { opt.classList.add('wrong'); feedback.textContent = `Not quite. The correct answer is ${correct}.`; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]'; } }); }); }); hljs.highlightAll();
+  </script>
+ </body>
+</html>

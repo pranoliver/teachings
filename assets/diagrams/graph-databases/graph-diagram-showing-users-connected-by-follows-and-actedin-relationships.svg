@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" aria-label="Graph diagram showing users connected by FOLLOWS and ACTED_IN relationships" role="img"><title>Graph diagram showing users connected by FOLLOWS and ACTED_IN relationships</title>
+              <circle cx="80" cy="100" r="35" fill="#008cc1" fill-opacity="0.15" stroke="#008cc1" stroke-width="2"/>
+              <text x="80" y="95" text-anchor="middle" font-size="11" font-weight="700" fill="#008cc1">Alice</text>
+              <text x="80" y="110" text-anchor="middle" font-size="9" fill="#656d76">User</text>
+
+              <circle cx="280" cy="60" r="35" fill="#008cc1" fill-opacity="0.15" stroke="#008cc1" stroke-width="2"/>
+              <text x="280" y="55" text-anchor="middle" font-size="11" font-weight="700" fill="#008cc1">Bob</text>
+              <text x="280" y="70" text-anchor="middle" font-size="9" fill="#656d76">User</text>
+
+              <circle cx="280" cy="140" r="35" fill="#e11d48" fill-opacity="0.15" stroke="#e11d48" stroke-width="2"/>
+              <text x="280" y="135" text-anchor="middle" font-size="11" font-weight="700" fill="#e11d48">Inception</text>
+              <text x="280" y="150" text-anchor="middle" font-size="9" fill="#656d76">Movie</text>
+
+              <circle cx="480" cy="100" r="35" fill="#008cc1" fill-opacity="0.15" stroke="#008cc1" stroke-width="2"/>
+              <text x="480" y="95" text-anchor="middle" font-size="11" font-weight="700" fill="#008cc1">Carol</text>
+              <text x="480" y="110" text-anchor="middle" font-size="9" fill="#656d76">User</text>
+
+              <circle cx="640" cy="100" r="35" fill="#008cc1" fill-opacity="0.15" stroke="#008cc1" stroke-width="2"/>
+              <text x="640" y="95" text-anchor="middle" font-size="11" font-weight="700" fill="#008cc1">Dave</text>
+              <text x="640" y="110" text-anchor="middle" font-size="9" fill="#656d76">User</text>
+
+              <line x1="115" y1="80" x2="245" y2="55" stroke="#d0d7de" stroke-width="2"/>
+              <text x="180" y="55" text-anchor="middle" font-size="9" fill="#656d76">FOLLOWS</text>
+
+              <line x1="115" y1="120" x2="245" y2="125" stroke="#d0d7de" stroke-width="2"/>
+              <text x="180" y="135" text-anchor="middle" font-size="9" fill="#656d76">RATED</text>
+
+              <line x1="315" y1="80" x2="445" y2="95" stroke="#d0d7de" stroke-width="2"/>
+              <text x="380" y="80" text-anchor="middle" font-size="9" fill="#656d76">FOLLOWS</text>
+
+              <line x1="515" y1="100" x2="605" y2="100" stroke="#d0d7de" stroke-width="2"/>
+              <text x="560" y="90" text-anchor="middle" font-size="9" fill="#656d76">FOLLOWS</text>
+            </svg>

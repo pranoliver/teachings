@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" aria-label="Diagram showing a main branch and a feature branch splitting and rejoining" role="img"><title>Diagram showing a main branch and a feature branch splitting and rejoining</title><rect x="0.0" y="0.0" width="640.0" height="220.0" fill="#ffffff"/>
+              <text x="80" y="35" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2328">main</text>
+              <circle cx="80" cy="80" r="18" fill="#58a6ff" fill-opacity="0.15" stroke="#58a6ff" stroke-width="2"/>
+              <circle cx="180" cy="80" r="18" fill="#58a6ff" fill-opacity="0.15" stroke="#58a6ff" stroke-width="2"/>
+              <line x1="98" y1="80" x2="162" y2="80" stroke="#58a6ff" stroke-width="2"/>
+
+              <path d="M180 80 C 240 80, 240 140, 300 140" stroke="#a371f7" stroke-width="2" fill="none"/>
+              <text x="360" y="125" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2328">feature/login</text>
+              <circle cx="320" cy="140" r="18" fill="#a371f7" fill-opacity="0.15" stroke="#a371f7" stroke-width="2"/>
+              <line x1="338" y1="140" x2="400" y2="140" stroke="#a371f7" stroke-width="2"/>
+              <circle cx="420" cy="140" r="18" fill="#a371f7" fill-opacity="0.15" stroke="#a371f7" stroke-width="2"/>
+
+              <path d="M420 140 C 480 140, 480 80, 520 80" stroke="#a371f7" stroke-width="2" fill="none" marker-end="url(#github-arrow4)"/>
+              <circle cx="540" cy="80" r="18" fill="#58a6ff" fill-opacity="0.15" stroke="#58a6ff" stroke-width="2"/>
+              <line x1="198" y1="80" x2="520" y2="80" stroke="#58a6ff" stroke-width="2" stroke-dasharray="4"/>
+
+              <defs>
+                <marker id="github-arrow4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#a371f7"/>
+                </marker>
+              </defs>
+            </svg>

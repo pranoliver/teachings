@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Terraform: Infrastructure as Code
+  </title>
+  <link href="../assets/favicons/terraform.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/hcl.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-terraform">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Terraform" class="w-10 h-10" src="../assets/favicons/terraform.svg"/>
+     <span class="text-xl font-bold">
+      Terraform
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#iac">
+      2. Infrastructure as Code
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#install">
+      3. Installing Terraform
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#providers">
+      4. Providers
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#resources">
+      5. Resources &amp; State
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#modules">
+      6. Modules
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#variables">
+      7. Variables &amp; Outputs
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#workspaces">
+      8. Workspaces &amp; Backends
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#loops">
+      9. Loops, Conditionals &amp; Dynamic Blocks
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#real-world">
+      10. Real-World Systems
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      11. Capstone: Multi-Tier AWS Stack
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Terraform: Infrastructure as Code
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Terraform is an open-source infrastructure-as-code (IaC) tool from HashiCorp. It lets you define cloud resources, networks, databases, load balancers, and more using a declarative language. Terraform then figures out the difference between your desired state and reality, and proposes a plan to get there.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with the command line and basic cloud concepts.
+        </li>
+        <li>
+         A free AWS, Azure, or GCP account (optional, for the capstone).
+        </li>
+        <li>
+         Docker Desktop is enough for local-only experiments.
+        </li>
+       </ul>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6" data-quiz="intro">
+       <p class="font-semibold mb-4">
+        What is the main job of Terraform?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         Describe desired infrastructure and apply changes automatically
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Compile container images into binaries
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Run application performance tests
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="iac">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Infrastructure as Code
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Instead of clicking through cloud consoles, you commit your infrastructure to version control. That means pull requests, code reviews, rollback plans, and automated testing. The two big ideas are
+       <strong>
+        declarative
+       </strong>
+       configuration (say
+       <em>
+        what
+       </em>
+       you want) and
+       <strong>
+        idempotent
+       </strong>
+       execution (re-running the same code does not create duplicates).
+      </p>
+      <div class="grid md:grid-cols-2 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h3 class="font-bold mb-2">
+         Declarative
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         You specify the end state. Terraform decides which API calls to make to reach it.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h3 class="font-bold mb-2">
+         Imperative
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         You write exact steps. Ansible scripts or shell scripts often work this way.
+        </p>
+       </div>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-hcl">terraform
+{ required_version = "&gt;= 1.5.0" }
+resource "local_file" "readme" { filename = "${path.module}/readme.txt" content = "This infrastructure is managed by Terraform." }</code></pre>
+      </div>
+      <p class="text-[var(--muted)]">
+       Run
+       <code class="px-1.5 py-0.5 rounded bg-[var(--panel)] border border-[var(--border)] font-mono text-sm">
+        terraform init
+       </code>
+       , then
+       <code class="px-1.5 py-0.5 rounded bg-[var(--panel)] border border-[var(--border)] font-mono text-sm">
+        terraform plan
+       </code>
+       , then
+       <code class="px-1.5 py-0.5 rounded bg-[var(--panel)] border border-[var(--border)] font-mono text-sm">
+        terraform apply
+       </code>
+       . The first run creates the file; subsequent runs do nothing unless you change the code.
+      </p>
+     </section>
+     <section class="scroll-mt-24" id="install">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Installing Terraform
+      </h2>
+      <div class="space-y-6 mb-8">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-bash"># macOS (Homebrew) brew tap hashicorp/tap brew install hashicorp/tap/
+terraform 
+terraform -version</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-bash"># Ubuntu/Debian 
+wget -O- https://
+apt.releases.hashicorp.com/gpg | gpg --dearmor | 
+sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg 
+sudo 
+apt update 
+sudo 
+apt install 
+terraform</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-bash"># Windows (WinGet) winget install HashiCorp.Terraform 
+# Or 
+use chocolatey choco install 
+terraform</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="font-bold mb-2">
+        Verify the install
+       </h3>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-bash">terraform version 
+# Terraform v1.9.x on darwin_arm64</code></pre>
+       </div>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="providers">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Providers
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A provider is a Terraform plugin that translates your configuration into API calls for a platform. Providers exist for AWS, Azure, GCP, Kubernetes, GitHub, Datadog, Snowflake, Cloudflare, and hundreds more.
+      </p>
+      <img alt="Terraform provider lifecycle" class="diagram rounded-xl border border-[var(--border)] mb-8" loading="lazy" src="../assets/diagrams/terraform/provider-lifecycle.svg"/>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-hcl">terraform
+{ required_providers
+{ aws = { source = "hashicorp/aws" version = "~&gt; 5.0" }
+} }
+provider "aws" { region = "us-east-1" default_tags
+{ tags = { Project = "student-demo" Environment = "dev" }
+} }</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="font-bold mb-2">
+        Provider alias example
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        You can configure the same provider multiple times with different settings.
+       </p>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-hcl">provider "aws" { alias = "europe" region = "eu-west-1" }
+resource "aws_s3_bucket" "eu_bucket" { provider = aws.europe bucket = "my-eu-data" }</code></pre>
+       </div>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="resources">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Resources &amp; State
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A
+       <code class="px-1.5 py-0.5 rounded bg-[var(--panel)] border border-[var(--border)] font-mono text-sm">
+        resource
+       </code>
+       is the smallest managed unit in Terraform. Terraform stores the IDs and attributes of every resource in a
+       <strong>
+        state file
+       </strong>
+       so it can track changes over time. State can be stored locally or remotely (S3, Terraform Cloud, Azure Blob, GCS).
+      </p>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-hcl">resource "aws_instance" "web" { ami = "ami-0c55b159cbfafe1f0" instance_type = "t3.micro" tags = { Name = "web-server" }
+} resource "aws_s3_bucket" "logs" { bucket = "my-app-logs-12345" }</code></pre>
+      </div>
+      <img alt="Terraform state flow" class="diagram rounded-xl border border-[var(--border)] mb-6" loading="lazy" src="../assets/diagrams/terraform/state-flow.svg"/>
+      <div class="card rounded-2xl p-6">
+       <h3 class="font-bold mb-2">
+        Common commands
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1 text-sm">
+        <li>
+         <code class="font-mono">
+          terraform plan
+         </code>
+         &mdash; show the change set without applying it.
+        </li>
+        <li>
+         <code class="font-mono">
+          terraform apply
+         </code>
+         &mdash; execute the plan.
+        </li>
+        <li>
+         <code class="font-mono">
+          terraform destroy
+         </code>
+         &mdash; remove every managed resource.
+        </li>
+        <li>
+         <code class="font-mono">
+          terraform fmt
+         </code>
+         &mdash; format code consistently.
+        </li>
+        <li>
+         <code class="font-mono">
+          terraform validate
+         </code>
+         &mdash; check syntax and provider schemas.
+        </li>
+       </ul>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6 mt-8" data-quiz="state">
+       <p class="font-semibold mb-4">
+        Why does Terraform keep a state file?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         To store database passwords in plain text
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         To map code resources to real cloud IDs
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         To download provider binaries faster
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="modules">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Modules
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Modules let you package reusable infrastructure. A module is just a folder with Terraform files, input variables, and outputs. Teams often publish modules to private registries or the Terraform Registry.
+      </p>
+      <img alt="Terraform module composition" class="diagram rounded-xl border border-[var(--border)] mb-6" loading="lazy" src="../assets/diagrams/terraform/module-composition.svg"/>
+      <div class="space-y-6 mb-6">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-hcl"># modules/network/main.tf resource "aws_vpc" "this" { cidr_block = var.vpc_cidr tags = { Name = var.name }
+} resource "aws_subnet" "public" { count = length(var.azs) vpc_id = aws_vpc.this.id cidr_block = cidrsubnet(var.vpc_cidr,
+8,
+count.index) availability_zone = var.azs
+[count.index]
+}</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-hcl"># modules/network/variables.tf variable "vpc_cidr" { type = string default = "10.0.0.0/16" }
+variable "azs" { type = list(string) default = ["us-east-1a",
+"us-east-1b"]
+}
+variable "name" { type = string }</code></pre>
+       </div>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-hcl">module "network" { source = "./modules/network" name = "student-vpc" vpc_cidr = "10.1.0.0/16" }</code></pre>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="variables">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Variables &amp; Outputs
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Variables make your code configurable. Outputs let you expose useful values to other modules, to the CLI, or to a CI/CD system. You can supply variables with
+       <code class="px-1.5 py-0.5 rounded bg-[var(--panel)] border border-[var(--border)] font-mono text-sm">
+        .tfvars
+       </code>
+       files, environment variables, or command-line flags.
+      </p>
+      <div class="space-y-6 mb-6">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-hcl">variable "instance_count" { description = "Number of web instances" type = number default = 2 }
+variable "environment" { type = string default = "dev" }
+variable "enable_monitoring" { type = bool default = true }</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-hcl">output "web_urls" { description = "Public DNS of web servers" value = aws_instance.web
+[*].public_dns }
+output "bucket_name" { value = aws_s3_bucket.logs.bucket }</code></pre>
+       </div>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-bash">terraform apply -var="environment=prod" -var="instance_count=4" 
+# Or 
+use a variables file 
+terraform apply -var-file="prod.tfvars"</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="font-bold mb-2">
+        Validation rules
+       </h3>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-hcl">variable "environment" { type = string validation
+{ condition = contains(["dev",
+"staging",
+"prod"],
+var.environment) error_message = "Environment must be dev,
+staging,
+or prod." }
+}</code></pre>
+       </div>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="workspaces">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Workspaces &amp; Backends
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A Terraform backend decides where state is stored. Local state is fine for learning, but teams use remote backends for collaboration, locking, and encryption. Workspaces let you manage separate environments (dev/staging/prod) from the same code.
+      </p>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-hcl">terraform
+{ backend "s3" { bucket = "my-tf-state" key = "terraform.tfstate" region = "us-east-1" dynamodb_table = "terraform-locks" encrypt = true }
+} # Then use the workspace name to name resources locals
+{ env = terraform.workspace }</code></pre>
+      </div>
+      <img alt="Terraform backend and workspaces" class="diagram rounded-xl border border-[var(--border)] mb-6" loading="lazy" src="../assets/diagrams/terraform/backend-workspace.svg"/>
+      <div class="card rounded-2xl p-6">
+       <h3 class="font-bold mb-2">
+        Workspace commands
+       </h3>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-bash">terraform workspace new staging 
+terraform workspace select staging 
+terraform workspace list 
+terraform apply</code></pre>
+       </div>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="loops">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Loops, Conditionals &amp; Dynamic Blocks
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Real infrastructure is repetitive. Terraform gives you
+       <code class="px-1.5 py-0.5 rounded bg-[var(--panel)] border border-[var(--border)] font-mono text-sm">
+        count
+       </code>
+       ,
+       <code class="px-1.5 py-0.5 rounded bg-[var(--panel)] border border-[var(--border)] font-mono text-sm">
+        for_each
+       </code>
+       , and
+       <code class="px-1.5 py-0.5 rounded bg-[var(--panel)] border border-[var(--border)] font-mono text-sm">
+        dynamic
+       </code>
+       blocks to keep configurations DRY and type-safe.
+      </p>
+      <div class="space-y-6 mb-6">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-hcl">resource "aws_iam_user" "devs" { for_each = toset(["alice",
+"bob",
+"carol"]
+) name = each.value }</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-hcl">dynamic "ingress" { for_each = var.allowed_ports content
+{ from_port = ingress.value to_port = ingress.value protocol = "tcp" cidr_blocks = ["0.0.0.0/0"]
+}
+}</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="font-bold mb-2">
+        Conditional resources
+       </h3>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-hcl">resource "aws_cloudwatch_dashboard" "main" {
+ var.enable_monitoring ? 1 : 0
+ "${local.env}-overview"
+ file("dashboard.json") }</code></pre>
+       </div>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="real-world">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Real-World Systems
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Terraform is the glue behind many platform engineering and DevOps teams. Here is how several well-known companies use it in production.
+      </p>
+      <div class="grid md:grid-cols-2 gap-6">
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center text-lg">
+          🛒
+         </div>
+         <h3 class="text-xl font-bold">
+          Slack
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Slack uses Terraform to manage AWS infrastructure across many accounts and regions. They rely on remote state, modules, and automated plans in CI to keep thousands of resources consistent.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         remote state + module ownership scales better than flat configuration.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-lg">
+          🎬
+         </div>
+         <h3 class="text-xl font-bold">
+          Netflix
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Netflix combines Terraform with their own Spinnaker delivery platform. Terraform provisions immutable infrastructure, while Spinnaker handles deployment pipelines across AWS, GCP, and Azure.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         keep provisioning and deployment responsibilities separate.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/40 flex items-center justify-center text-lg">
+          🏦
+         </div>
+         <h3 class="text-xl font-bold">
+          Robinhood
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Robinhood runs a multi-account AWS setup. They use Terraform modules to enforce security baselines, tagging policies, and least-privilege IAM across every environment.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         modules are a great place to enforce guardrails and compliance.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center text-lg">
+          🚗
+         </div>
+         <h3 class="text-xl font-bold">
+          Lyft
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Lyft&rsquo;s platform team built internal tooling around Terraform to let service owners self-provision databases, caches, and queues through a catalog of approved modules.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         a module catalog turns Terraform into an internal developer platform.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-lg">
+          ☁️
+         </div>
+         <h3 class="text-xl font-bold">
+          GitHub
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         GitHub uses Terraform to manage their own GitHub organizations, repositories, teams, and access controls. The GitHub provider lets them version-control their platform configuration.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         Terraform is not only for cloud compute; it also manages SaaS platforms.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center text-lg">
+          🛡️
+         </div>
+         <h3 class="text-xl font-bold">
+          Cloudflare
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Cloudflare manages DNS records, load balancers, firewall rules, and Zero Trust policies through Terraform. Changes to public DNS are reviewed, planned, and applied just like application code.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         DNS and security policy are infrastructure too.
+        </p>
+       </div>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 11
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Multi-Tier AWS Stack
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a reusable, workspace-aware AWS deployment for a web application. The stack includes a VPC with public and private subnets, an Application Load Balancer, an EC2 autoscaling group, an RDS PostgreSQL database, and an S3 bucket for assets.
+      </p>
+      <div class="space-y-10">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         1. What is this project?
+        </h3>
+        <p class="text-[var(--muted)] leading-relaxed">
+         You will create a complete three-tier AWS architecture using Terraform modules. The project demonstrates networking, compute, storage, database, and load balancing resources working together in a single workspace-driven codebase. It is the kind of stack a platform engineer would hand to a product team as a starter template.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         2. What it covers?
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Remote S3 backend with DynamoDB state locking.
+         </li>
+         <li>
+          Workspace-based naming for dev/staging/prod.
+         </li>
+         <li>
+          Reusable network, compute, database, and storage modules.
+         </li>
+         <li>
+          Input variables, validation, and outputs.
+         </li>
+         <li>
+          Security groups and least-privilege IAM.
+         </li>
+         <li>
+          Application Load Balancer and autoscaling group.
+         </li>
+         <li>
+          RDS PostgreSQL in private subnets.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         3. How it is done?
+        </h3>
+        <div class="space-y-6">
+         <div>
+          <p class="font-semibold mb-2">
+           Step 1 &mdash; Project layout
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-bash">terraform-
+aws-stack/ &boxvr;&boxh;&boxh; backend.tf &boxvr;&boxh;&boxh; main.tf &boxvr;&boxh;&boxh; variables.tf &boxvr;&boxh;&boxh; outputs.tf &boxvr;&boxh;&boxh; 
+terraform.tfvars &boxur;&boxh;&boxh; modules/ &boxvr;&boxh;&boxh; network/ &boxvr;&boxh;&boxh; compute/ &boxvr;&boxh;&boxh; database/ &boxur;&boxh;&boxh; storage/</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 2 &mdash; Remote backend
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-hcl">terraform
+{ backend "s3" { bucket = "student-terraform-state" key = "aws-stack/terraform.tfstate" region = "us-east-1" dynamodb_table = "terraform-locks" encrypt = true }
+}</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 3 &mdash; Network module
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-hcl">resource "aws_vpc" "main" { cidr_block = var.vpc_cidr tags = { Name = "${var.name}-${var.env}" }
+} resource "aws_subnet" "public" { count = length(var.azs) vpc_id = aws_vpc.main.id cidr_block = cidrsubnet(var.vpc_cidr,
+8,
+count.index) availability_zone = var.azs
+[count.index]
+map_public_ip_on_launch = true tags = { Name = "${var.name}-public-${count.index}" }
+} resource "aws_internet_gateway" "main" { vpc_id = aws_vpc.main.id }</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 4 &mdash; Compute module with ALB + ASG
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-hcl">resource "aws_lb" "main" { name = "${var.name}-${var.env}" internal = false load_balancer_type = "application" security_groups = [aws_security_group.alb.id]
+subnets = var.public_subnet_ids }
+resource "aws_autoscaling_group" "web" { name = "${var.name}-${var.env}-web" vpc_zone_identifier = var.private_subnet_ids target_group_arns = [aws_lb_target_group.web.arn]
+min_size = var.min_size max_size = var.max_size desired_capacity = var.desired_capacity launch_template
+{ id = aws_launch_template.web.id version = "$Latest" }
+}</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 5 &mdash; Database module
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-hcl">resource "aws_db_subnet_group" "main" { name = "${var.name}-${var.env}" subnet_ids = var.private_subnet_ids }
+resource "aws_db_instance" "main" { identifier = "${var.name}-${var.env}" engine = "postgres" instance_class = var.db_instance_class allocated_storage = 20 db_name = var.db_name username = var.db_username password = var.db_password db_subnet_group_name = aws_db_subnet_group.main.name vpc_security_group_ids = [aws_security_group.db.id]
+skip_final_snapshot = true }</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 6 &mdash; Storage module
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-hcl">resource "aws_s3_bucket" "assets" { bucket = "${var.name}-assets-${var.env}-${random_id.bucket_suffix.hex}" }
+resource "aws_s3_bucket_public_access_block" "assets" { bucket = aws_s3_bucket.assets.id block_public_acls = true block_public_policy = true ignore_public_acls = true restrict_public_buckets = true }</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 7 &mdash; Wire it together
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-hcl">module "network" { source = "./modules/network" name = var.name env = terraform.workspace vpc_cidr = var.vpc_cidr azs = var.azs }
+module "compute" { source = "./modules/compute" name = var.name env = terraform.workspace vpc_id = module.network.vpc_id public_subnet_ids = module.network.public_subnet_ids private_subnet_ids = module.network.private_subnet_ids }
+module "database" { source = "./modules/database" name = var.name env = terraform.workspace private_subnet_ids = module.network.private_subnet_ids db_password = var.db_password }
+module "storage" { source = "./modules/storage" name = var.name env = terraform.workspace }</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 8 &mdash; Apply by workspace
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-bash">terraform workspace new dev 
+terraform init 
+terraform plan 
+terraform apply 
+terraform workspace new prod 
+terraform apply -var-file="prod.tfvars"</code></pre>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         4. What did we learn from this capstone project?
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Modules keep large stacks readable and reusable across environments.
+         </li>
+         <li>
+          Remote state and locking prevent teammates from overwriting each other.
+         </li>
+         <li>
+          Workspaces are a simple way to isolate dev, staging, and prod without copying code.
+         </li>
+         <li>
+          Outputs connect modules together in a dependency graph Terraform resolves automatically.
+         </li>
+         <li>
+          Private subnets and security groups are essential for a secure multi-tier design.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         5. How can I enhance this project in the future?
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Replace EC2 autoscaling with an AWS ECS Fargate service module.
+         </li>
+         <li>
+          Add CloudWatch alarms and SNS notifications for the ALB and database.
+         </li>
+         <li>
+          Use AWS Secrets Manager to generate and rotate the database password.
+         </li>
+         <li>
+          Add a CI/CD pipeline with GitHub Actions that runs
+          <code class="font-mono">
+           terraform plan
+          </code>
+          on pull requests and
+          <code class="font-mono">
+           terraform apply
+          </code>
+          on main.
+         </li>
+         <li>
+          Publish the modules to a private Terraform Registry or GitHub-backed module source.
+         </li>
+         <li>
+          Import an existing manually-created resource with
+          <code class="font-mono">
+           terraform import
+          </code>
+          to practice brown-field adoption.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6 mt-10" data-quiz="capstone">
+       <p class="font-semibold mb-4">
+        Which Terraform feature lets you run the same code for dev and prod without renaming resources by hand?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         terraform destroy
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         Workspaces
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Providers
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24">
+      <div class="card rounded-2xl p-6 text-center">
+       <p class="text-[var(--muted)] mb-3">
+        Great work! Next, put this infrastructure into a CI/CD pipeline.
+       </p>
+       <a class="inline-flex items-center px-5 py-2.5 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition" href="../devops-cicd/index.html" target="_blank">
+        Continue to DevOps CI/CD &rarr;
+       </a>
+      </div>
+     </section>
+    </div>
+   </main>
+  </div>
+  <script>
+   function toggleSidebar() { const s = document.getElementById('sidebar'); const o = document.getElementById('menu-overlay'); s.classList.toggle('open'); o.classList.toggle('hidden'); } const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { moon.classList.add('hidden'); sun.classList.remove('hidden'); document.getElementById('hljs-light').disabled = true; document.getElementById('hljs-dark').disabled = false; } else { moon.classList.remove('hidden'); sun.classList.add('hidden'); document.getElementById('hljs-light').disabled = false; document.getElementById('hljs-dark').disabled = true; } localStorage.setItem('tutorials-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('tutorials-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); document.querySelectorAll('.copy-btn').forEach(btn => { btn.addEventListener('click', () => { const code = btn.parentElement.querySelector('code').textContent; navigator.clipboard.writeText(code).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); }); }); document.querySelectorAll('[data-quiz]').forEach(q => { const opts = q.querySelectorAll('.quiz-opt'); const fb = q.querySelector('.quiz-feedback'); opts.forEach(opt => { opt.addEventListener('click', () => { if (q.dataset.locked) return; q.dataset.locked = 'true'; opts.forEach(o => o.classList.remove('selected')); opt.classList.add('selected'); const correct = opt.dataset.correct === 'true'; if (correct) { opt.classList.add('correct'); fb.textContent = 'Correct!'; fb.classList.add('text-[var(--success)]'); } else { opt.classList.add('wrong'); q.querySelector('[data-correct="true"]').classList.add('correct'); fb.textContent = 'Not quite. The correct answer is highlighted.'; fb.classList.add('text-[var(--danger)]'); } fb.classList.remove('hidden'); }); }); }); const tocLinks = document.querySelectorAll('.toc-link'); const sections = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean); const obs = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { tocLinks.forEach(l => l.classList.remove('active')); const link = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (link) link.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach(s => obs.observe(s));
+  </script>
+ </body>
+</html>

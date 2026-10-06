@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Large Language Models (LLMs): Prompt Engineering, APIs &amp; Tokenization
+  </title>
+  <link href="../assets/favicons/svg/OpenAI.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-llms">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <span class="text-2xl">🤖</span>
+     <span class="text-xl font-bold">
+      LLMs
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      2. Environment Setup
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#how-llms-work">
+      3. How LLMs Work
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#tokenization">
+      4. Tokenization &amp; Context Windows
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#prompt-engineering">
+      5. Prompt Engineering
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#api-integration">
+      6. API Integration
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#model-selection">
+      7. Model Selection
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#open-source">
+      8. Open-Source Models
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#agents">
+      9. LLM Agents &amp; Tools
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#safety">
+      10. Safety, Bias &amp; Guardrails
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#production">
+      11. Production Considerations
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone">
+      12. Capstone Project
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#quiz">
+      13. Knowledge Check
+     </a>
+    </nav>
+   </aside>
+   <main class="flex-1 min-w-0 lg:ml-0">
+    <header class="sticky top-0 z-20 bg-[var(--card)]/80 backdrop-blur border-b border-[var(--border)] px-6 py-3 flex items-center justify-between gap-4">
+     <div class="flex items-center gap-3">
+      <button aria-label="Toggle menu" class="lg:hidden p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <span class="text-xl font-bold hidden sm:block">
+       LLMs
+      </span>
+     </div>
+     <div class="flex items-center gap-3">
+      <button aria-label="Toggle theme" class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+       <svg class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       <svg class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5" stroke-linecap="round" stroke-linejoin="round">
+        </circle>
+        <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <a class="text-sm font-semibold hover:opacity-80 transition" href="../index.html">
+       ← Home
+      </a>
+      <div class="hidden sm:flex items-center gap-2 text-xs">
+       <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--brand-light)] hover:text-white hover:border-[var(--brand-light)] transition" id="btn-start">
+        Start
+       </button>
+       <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--success)] hover:text-white hover:border-[var(--success)] transition" id="btn-complete">
+        Mark Complete
+       </button>
+       <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--warn)] hover:text-white hover:border-[var(--warn)] transition" id="btn-reset">
+        Reset
+       </button>
+      </div>
+     </div>
+    </header>
+    <div class="max-w-5xl mx-auto px-6 py-10" id="main">
+     <section class="mb-12 text-center scroll-mt-28" id="intro">
+      <div class="inline-flex items-center gap-3 mb-4">
+       <span class="text-4xl">🤖</span>
+       <span class="text-sm font-semibold px-3 py-1 rounded-full bg-[var(--brand-light)] text-white">
+        AI / ML / LLM
+       </span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">
+       Large Language Models (LLMs)
+      </h1>
+      <p class="text-lg text-[var(--muted)] max-w-2xl mx-auto leading-relaxed mb-8">
+       Learn how models like GPT-4, Claude, Llama, and Mistral work in practice. Master prompt engineering, tokenization, context windows, model selection, and real-world API integration.
+      </p>
+      <div class="flex flex-wrap justify-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        Prompt Engineering
+       </span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        Tokenization
+       </span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        OpenAI / Anthropic APIs
+       </span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        Open-Source Models
+       </span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        Agents
+       </span>
+      </div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="setup">
+      <h2 class="text-2xl font-bold mb-4">
+       2. Environment Setup
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What you need:</strong>
+        A Python project with
+        <code>uv</code>
+        (recommended), API keys for at least one provider, and basic familiarity with Python and REST APIs.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Why these tools?</strong>
+        You will call real APIs, count tokens, and run small local models. The setup keeps keys out of source code and dependencies isolated.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Create a new project, install the OpenAI SDK (also works for compatible endpoints), and set up your API keys securely.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-install" type="button">
+        Copy
+       </button>
+       <pre><code class="language-bash" id="code-install"># Create project
+mkdir llm-course
+cd llm-course
+uv init
+uv python pin 3.11
+
+# Install SDKs
+uv add openai anthropic tiktoken python-dotenv requests
+
+# Optional: local open-source inference
+uv add transformers torch accelerate</code></pre>
+      </div>
+      <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+       <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+       </svg>
+       <p class="text-sm font-medium text-[var(--ai)]">
+        Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">setup.sh</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">bash setup.sh</code>
+       </p>
+      </div>
+      <h3 class="text-lg font-semibold mb-2 mt-6">
+       Store API keys safely
+      </h3>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-env" type="button">
+        Copy
+       </button>
+       <pre><code class="language-bash" id="code-env"># .env file (never commit this to git)
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+
+# .gitignore
+.env
+__pycache__/
+*.pyc
+.venv/venv/</code></pre>
+      </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">.env.example</code> and rename to <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">.env</code> with real keys.
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Install and run Ollama
+       </h3>
+       <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+        <p class="text-sm text-[var(--muted)]">
+         <strong>What is Ollama?</strong>
+         Ollama lets you download and run open-source LLMs locally through a simple CLI and an OpenAI-compatible HTTP API. We will use the
+         <code>kimi-k2.7-code:cloud</code>
+         model as a consistent local endpoint for every example.
+        </p>
+       </div>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-install" type="button">
+         Copy
+        </button>
+        <pre><code class="language-bash" id="code-ollama-install"># macOS
+brew install ollama
+
+# Linux
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Windows: download installer from https://ollama.com/download
+
+# Verify
+ollama --version
+
+# Pull the model we use throughout this tutorial
+ollama pull kimi-k2.7-code:cloud
+
+# Start the local API server (keeps running in a terminal tab)
+ollama serve</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Run the install commands, then keep <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">ollama serve</code> running in its own terminal.
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Test the Ollama endpoint
+       </h3>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-test" type="button">
+         Copy
+        </button>
+        <pre><code class="language-python" id="code-ollama-test">from openai import OpenAI
+
+# Ollama exposes an OpenAI-compatible endpoint
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+
+response = client.chat.completions.create(
+    model="kimi-k2.7-code:cloud",
+    messages=[
+        {"role": "system", "content": "You are a concise coding assistant."},
+        {"role": "user", "content": "Explain what a token is in one sentence."},
+    ],
+    temperature=0.3,
+)
+print(response.choices[0].message.content)
+print("Tokens used:", response.usage.total_tokens if response.usage else "unknown")</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">ollama_test.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run ollama_test.py</code>
+        </p>
+       </div>
+      </section>
+      <section class="mb-12 scroll-mt-28" id="how-llms-work">
+      <h2 class="text-2xl font-bold mb-4">
+       3. How LLMs Work
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is an LLM?</strong>
+        A Large Language Model is a neural network trained to predict the next token (word fragment) in a sequence. By doing this on billions of examples, it learns grammar, facts, reasoning patterns, and many human tasks.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        When you type "Write a Python function to reverse a string" into ChatGPT, the model does not search the internet. It generates one token at a time based on patterns learned during training, producing code that statistically matches the request.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       LLMs have three core behaviors you should understand before writing applications.
+      </p>
+      <ul class="list-disc pl-6 space-y-2 text-[var(--muted)] mb-6">
+       <li>
+        <strong>Next-token prediction:</strong>
+        The model outputs a probability distribution over possible next tokens and samples from it. This is why the same prompt can give slightly different answers.
+       </li>
+       <li>
+        <strong>Pre-training:</strong>
+        The model is trained on vast public text to learn language and world knowledge.
+       </li>
+       <li>
+        <strong>Fine-tuning / RLHF:</strong>
+        After pre-training, models are aligned to be helpful, harmless, and honest through human feedback.
+       </li>
+      </ul>
+      <div class="overflow-x-auto mb-4">
+       <table class="w-full text-sm border border-[var(--border)] rounded-xl">
+        <thead class="bg-[var(--panel)]">
+         <tr>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">
+           Concept
+          </th>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">
+           Simple analogy
+          </th>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">
+           Practical impact
+          </th>
+         </tr>
+        </thead>
+        <tbody class="text-[var(--muted)]">
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Parameters
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Knobs the model can tune
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           More parameters usually mean more knowledge and reasoning, but also higher cost.
+          </td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Temperature
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Creativity dial
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Lower values = more deterministic; higher = more random.
+          </td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Context window
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Working memory
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Maximum tokens the model can see at once; long docs must be chunked.
+          </td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2">
+           Hallucination
+          </td>
+          <td class="px-4 py-2">
+           Confident guess
+          </td>
+          <td class="px-4 py-2">
+           The model may invent facts; verify outputs for high-stakes tasks.
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="tokenization">
+      <h2 class="text-2xl font-bold mb-4">
+       4. Tokenization &amp; Context Windows
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is tokenization?</strong>
+        Tokenization splits text into sub-word pieces called tokens. LLMs do not read words directly; they read tokens. Some words are one token, others are split into several.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        "ChatGPT" might become [
+        <code>Chat</code>
+        ,
+        <code>G</code>
+        ,
+        <code>PT</code>
+        ]. Knowing token count matters because APIs charge per token and models have a context limit.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Use
+       <code>tiktoken</code>
+       to count tokens locally before sending requests.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-tokens" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-tokens">import tiktoken
+
+# GPT-4o uses the o200k_base tokenizer
+encoder = tiktoken.get_encoding("o200k_base")
+
+text = "Large language models learn patterns from massive text datasets."
+tokens = encoder.encode(text)
+
+print(f"Text length: {len(text)} characters")
+print(f"Token count: {len(tokens)}")
+print(f"Tokens: {tokens[:20]}")
+print(f"Decoded back: {encoder.decode(tokens)}")
+
+# Estimate cost for a chat session
+input_price_per_1m = 2.50  # USD for GPT-4o
+output_price_per_1m = 10.00
+input_tokens = 1000
+output_tokens = 300
+cost = (input_tokens / 1e6 * input_price_per_1m +
+        output_tokens / 1e6 * output_price_per_1m)
+print(f"Estimated cost: ${cost:.4f}")</code></pre>
+      </div>
+      <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+       <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+       </svg>
+       <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">count_tokens.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run count_tokens.py</code>
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Ollama tokenization
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Ollama does not return usage metadata by default, but its OpenAI-compatible endpoint does. You can also count tokens via the native Ollama API when evaluating local models.
+       </p>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-tokens" type="button">
+         Copy
+        </button>
+        <pre><code class="language-python" id="code-ollama-tokens">import requests
+
+text = "Large language models learn patterns from massive text datasets."
+
+# Count tokens with the local Ollama endpoint
+r = requests.post(
+    "http://localhost:11434/api/tokenize",
+    json={"model": "kimi-k2.7-code:cloud", "prompt": text},
+)
+r.raise_for_status()
+ollama_tokens = r.json()["tokens"]
+
+print(f"Text length: {len(text)} characters")
+print(f"Ollama token count: {len(ollama_tokens)}")
+
+# Chat with Ollama and read usage from the OpenAI-compatible path
+from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+response = client.chat.completions.create(
+    model="kimi-k2.7-code:cloud",
+    messages=[{"role": "user", "content": text}],
+    temperature=0.2,
+)
+print("Ollama completion:", response.choices[0].message.content)
+print("Usage:", response.usage)</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">ollama_tokens.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run ollama_tokens.py</code>
+        </p>
+       </div>
+       <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mt-4 mb-4">
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Context window tip:</strong>
+        If your document exceeds the model's limit, split it into chunks, summarize each chunk, and send only the relevant chunks with the question. This pattern is called
+        <em>map-reduce</em>
+        or
+        <em>retrieval-augmented generation (RAG)</em>
+        and is covered in the next tutorial.
+       </p>
+      </div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="prompt-engineering">
+      <h2 class="text-2xl font-bold mb-4">
+       5. Prompt Engineering
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is prompt engineering?</strong>
+        It is the craft of writing instructions so the model produces the output you want. A better prompt often beats a bigger model.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A support chatbot given "Answer the question" will be vague. Given a detailed system prompt with tone, format, fallback rules, and example answers, it becomes reliable enough for customers.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Apply these proven patterns.
+      </p>
+      <ul class="list-disc pl-6 space-y-2 text-[var(--muted)] mb-6">
+       <li>
+        <strong>Be specific:</strong>
+        "Summarize this for a non-technical executive in three bullets" beats "Summarize this."
+       </li>
+       <li>
+        <strong>Use system prompts:</strong>
+        Set role, constraints, and output format in the system message.
+       </li>
+       <li>
+        <strong>Show, don't just tell:</strong>
+        Include one-shot or few-shot examples of input → output pairs.
+       </li>
+       <li>
+        <strong>Chain of thought:</strong>
+        Ask the model to explain its reasoning before giving the final answer.
+       </li>
+       <li>
+        <strong>Structured output:</strong>
+        Request JSON, XML, or markdown tables when downstream code needs to parse the result.
+       </li>
+      </ul>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-prompt" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-prompt">import os
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+system_prompt = """You are a polite customer-support assistant for an electronics store.
+Rules:
+- Answer only from the provided knowledge base.
+- If the answer is unknown, say "I don't have that information" and offer to connect a human.
+- Keep responses under 80 words.
+- Format the final answer as a JSON object with keys: "answer", "needs_human" (boolean)."""
+
+few_shot_examples = [
+    {"role": "user", "content": "My order #12345 has not arrived."},
+    {"role": "assistant", "content": '{"answer": "I see order #12345 is out for delivery and should arrive today.", "needs_human": false}'},
+]
+
+user_question = "Does the XPhone 15 support wireless charging?"
+messages = [{"role": "system", "content": system_prompt}]
+messages.extend(few_shot_examples)
+messages.append({"role": "user", "content": user_question})
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages,
+    temperature=0.2,
+    response_format={"type": "json_object"},
+)
+
+print(response.choices[0].message.content)
+print("Tokens used:", response.usage.total_tokens)</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">prompt_support_bot.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run prompt_support_bot.py</code>
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Ollama prompt engineering
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        The same system prompt and few-shot pattern work against the local Ollama endpoint. This is a fast way to iterate without spending API credits.
+       </p>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-prompt" type="button">
+         Copy
+        </button>
+        <pre><code class="language-python" id="code-ollama-prompt">from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+
+system_prompt = """You are a polite customer-support assistant for an electronics store.
+Rules:
+- Answer only from the provided knowledge base.
+- If the answer is unknown, say "I don't have that information" and offer to connect a human.
+- Keep responses under 80 words.
+- Format the final answer as a JSON object with keys: "answer", "needs_human" (boolean)."""
+
+few_shot_examples = [
+    {"role": "user", "content": "My order #12345 has not arrived."},
+    {"role": "assistant", "content": '{"answer": "I see order #12345 is out for delivery and should arrive today.", "needs_human": false}'},
+]
+
+messages = [{"role": "system", "content": system_prompt}]
+messages.extend(few_shot_examples)
+messages.append({"role": "user", "content": "Does the XPhone 15 support wireless charging?"})
+
+response = client.chat.completions.create(
+    model="kimi-k2.7-code:cloud",
+    messages=messages,
+    temperature=0.2,
+)
+
+print(response.choices[0].message.content)
+print("Usage:", response.usage)</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">ollama_prompt_support.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run ollama_prompt_support.py</code>
+        </p>
+       </div>
+      </section>
+     <section class="mb-12 scroll-mt-28" id="api-integration">
+      <h2 class="text-2xl font-bold mb-4">
+       6. API Integration
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is an LLM API?</strong>
+        Providers expose models over HTTPS with a chat-completions endpoint. You send messages, the model replies, and you pay for input plus output tokens.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A travel app sends the user's query "Find me a 4-day itinerary for Tokyo" to the OpenAI API, then parses the returned JSON to render cards for flights, hotels, and activities.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       The same request pattern works for OpenAI, Anthropic, and most OpenAI-compatible endpoints. Only the client class and model name change.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-api" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-api">import os
+from anthropic import Anthropic
+from dotenv import load_dotenv
+
+load_dotenv()
+client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+
+message = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    temperature=0.5,
+    system="You are a concise coding tutor. Explain code in two sentences.",
+    messages=[
+        {"role": "user", "content": "What does list comprehension do in Python?"}
+    ],
+)
+
+print(message.content[0].text)
+print("Input tokens:", message.usage.input_tokens)
+print("Output tokens:", message.usage.output_tokens)</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">claude_example.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run claude_example.py</code>
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Ollama API call
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Treat Ollama as another OpenAI-compatible provider. The same `chat.completions.create()` call works once you set the base URL.
+       </p>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-api" type="button">
+         Copy
+        </button>
+        <pre><code class="language-python" id="code-ollama-api">from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+
+message = client.chat.completions.create(
+    model="kimi-k2.7-code:cloud",
+    max_tokens=1024,
+    temperature=0.5,
+    messages=[
+        {"role": "system", "content": "You are a concise coding tutor. Explain code in two sentences."},
+        {"role": "user", "content": "What does list comprehension do in Python?"},
+    ],
+)
+
+print(message.choices[0].message.content)
+print("Usage:", message.usage)</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">ollama_api_example.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run ollama_api_example.py</code>
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Streaming responses
+       </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       For chat UIs, stream tokens as they arrive instead of waiting for the full response.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-stream" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-stream">from openai import OpenAI
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+stream = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Write a haiku about debugging."}],
+    stream=True,
+)
+
+for chunk in stream:
+    token = chunk.choices[0].delta.content
+    if token:
+        print(token, end="", flush=True)
+print()</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">stream_chat.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run stream_chat.py</code>
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Streaming with Ollama
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Streaming works the same way with the local Ollama endpoint.
+       </p>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-stream" type="button">
+         Copy
+        </button>
+        <pre><code class="language-python" id="code-ollama-stream">from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+
+stream = client.chat.completions.create(
+    model="kimi-k2.7-code:cloud",
+    messages=[{"role": "user", "content": "Write a haiku about debugging."}],
+    stream=True,
+)
+
+for chunk in stream:
+    token = chunk.choices[0].delta.content
+    if token:
+        print(token, end="", flush=True)
+print()</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">ollama_stream.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run ollama_stream.py</code>
+        </p>
+       </div>
+      </section>
+      <section class="mb-12 scroll-mt-28" id="model-selection">
+      <h2 class="text-2xl font-bold mb-4">
+       7. Model Selection
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>How do you pick a model?</strong>
+        Balance capability, speed, cost, and privacy. The most powerful model is rarely the best choice for every task.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A code assistant might use GPT-4o for complex refactoring but GPT-4o-mini or Llama 3.1 for simple autocomplete, cutting API spend by 90% while keeping latency low.
+       </p>
+      </div>
+      <div class="overflow-x-auto mb-4">
+       <table class="w-full text-sm border border-[var(--border)] rounded-xl">
+        <thead class="bg-[var(--panel)]">
+         <tr>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">
+           Model family
+          </th>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">
+           Strengths
+          </th>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">
+           Best for
+          </th>
+         </tr>
+        </thead>
+        <tbody class="text-[var(--muted)]">
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           GPT-4o / GPT-4o-mini
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Versatile, fast, great tool use
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           General apps, agents, JSON output
+          </td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Claude 3.5 Sonnet
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Long context, coding, reasoning
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Analysis, code review, long docs
+          </td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Llama 3 / Mistral
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Open weights, self-hostable
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           On-premise, privacy, cost control
+          </td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2">
+           Fine-tuned small models
+          </td>
+          <td class="px-4 py-2">
+           Specialized, cheap, fast
+          </td>
+          <td class="px-4 py-2">
+           Classification, extraction, narrow tasks
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="open-source">
+      <h2 class="text-2xl font-bold mb-4">
+       8. Open-Source Models
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What are open-source LLMs?</strong>
+        Models like Llama, Mistral, and Qwen have publicly released weights. You can run them locally, fine-tune them, or deploy them on your own infrastructure.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A European healthcare provider cannot send patient data to US-hosted APIs. They run Mistral 7B locally so all inference stays inside their network.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Run a small model locally with
+       <code>transformers</code>
+       for prototyping or offline use.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-local" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-local">from transformers import pipeline
+
+# This downloads a small model (~1.3 GB) on first run
+# Use a GPU by passing device=0 if available
+chatbot = pipeline(
+    "text-generation",
+    model="microsoft/DialoGPT-medium",
+    torch_dtype="auto",
+    device=-1,  # CPU; set to 0 for GPU
+)
+
+prompt = "User: What is a large language model?\nAssistant:"
+output = chatbot(prompt, max_new_tokens=80, do_sample=True, temperature=0.7)
+print(output[0]["generated_text"])</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">local_model.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run local_model.py</code>
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Running local models with Ollama
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Ollama is usually the fastest path to run open-source models. You pull the model once, then interact with it through the OpenAI-compatible endpoint.
+       </p>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-local" type="button">
+         Copy
+        </button>
+        <pre><code class="language-bash" id="code-ollama-local"># Pull a small open-source model if you haven't already
+ollama pull llama3.2
+
+# Or pull the tutorial model
+ollama pull kimi-k2.7-code:cloud
+
+# Chat via CLI
+ollama run kimi-k2.7-code:cloud "Explain what a local LLM is in one sentence."</code></pre>
+       </div>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-local-py" type="button">
+         Copy
+        </button>
+        <pre><code class="language-python" id="code-ollama-local-py">from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+
+response = client.chat.completions.create(
+    model="kimi-k2.7-code:cloud",
+    messages=[{"role": "user", "content": "Explain what a local LLM is in one sentence."}],
+    temperature=0.5,
+    max_tokens=120,
+)
+print(response.choices[0].message.content)
+print("Usage:", response.usage)</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save the Python file as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">ollama_local_chat.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run ollama_local_chat.py</code>
+        </p>
+       </div>
+      </section>
+     <section class="mb-12 scroll-mt-28" id="agents">
+      <h2 class="text-2xl font-bold mb-4">
+       9. LLM Agents &amp; Tools
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is an LLM agent?</strong>
+        An agent is an LLM looped with tools. The model decides which tool to call, observes the result, and either calls another tool or answers the user.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A coding agent receives "Fix the login bug". It uses a file-search tool, reads the relevant code, writes a patch, runs tests with a shell tool, and returns the final diff.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Below is a minimal agent with two tools: a calculator and a date lookup.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-agent" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-agent">import os
+import json
+import math
+from datetime import datetime
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+def calculator(expression: str) -> str:
+    try:
+        return str(eval(expression, {"__builtins__": {}}, {"math": math}))
+    except Exception as e:
+        return f"Error: {e}"
+
+def today() -> str:
+    return datetime.now().isoformat()
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "calculator",
+            "description": "Evaluate a safe math expression.",
+            "parameters": {
+                "type": "object",
+                "properties": {"expression": {"type": "string"}},
+                "required": ["expression"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "today",
+            "description": "Return the current ISO date and time.",
+            "parameters": {"type": "object", "properties": {}},
+        },
+    },
+]
+
+messages = [{"role": "user", "content": "What is 128 times 17 plus today's date?"}]
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages,
+    tools=tools,
+    tool_choice="auto",
+)
+
+message = response.choices[0].message
+messages.append(message)
+
+if message.tool_calls:
+    for call in message.tool_calls:
+        fn_name = call.function.name
+        args = json.loads(call.function.arguments)
+        result = globals()[fn_name](**args)
+        messages.append({
+            "tool_call_id": call.id,
+            "role": "tool",
+            "name": fn_name,
+            "content": result,
+        })
+
+final = client.chat.completions.create(model="gpt-4o-mini", messages=messages)
+print(final.choices[0].message.content)</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">agent_tools.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run agent_tools.py</code>
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Ollama-powered agent
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Swap the OpenAI client for the Ollama base URL to run the same tool-calling agent entirely offline.
+       </p>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-agent" type="button">
+         Copy
+        </button>
+        <pre><code class="language-python" id="code-ollama-agent">import json
+import math
+from datetime import datetime
+from openai import OpenAI
+
+client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+
+def calculator(expression: str) -> str:
+    try:
+        return str(eval(expression, {"__builtins__": {}}, {"math": math}))
+    except Exception as e:
+        return f"Error: {e}"
+
+def today() -> str:
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "calculator",
+            "description": "Evaluate a math expression safely.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "expression": {"type": "string", "description": "Math expression to evaluate"},
+                },
+                "required": ["expression"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "today",
+            "description": "Return the current ISO date and time.",
+            "parameters": {"type": "object", "properties": {}},
+        },
+    },
+]
+
+messages = [{"role": "user", "content": "What is 128 times 17 plus today's date?"}]
+response = client.chat.completions.create(
+    model="kimi-k2.7-code:cloud",
+    messages=messages,
+    tools=tools,
+    tool_choice="auto",
+)
+
+message = response.choices[0].message
+messages.append(message)
+
+if message.tool_calls:
+    for call in message.tool_calls:
+        fn_name = call.function.name
+        args = json.loads(call.function.arguments)
+        result = globals()[fn_name](**args)
+        messages.append({
+            "tool_call_id": call.id,
+            "role": "tool",
+            "name": fn_name,
+            "content": result,
+        })
+
+final = client.chat.completions.create(model="kimi-k2.7-code:cloud", messages=messages)
+print(final.choices[0].message.content)</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">ollama_agent.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run ollama_agent.py</code>
+        </p>
+       </div>
+      </section>
+     <section class="mb-12 scroll-mt-28" id="safety">
+      <h2 class="text-2xl font-bold mb-4">
+       10. Safety, Bias &amp; Guardrails
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>Why do guardrails matter?</strong>
+        LLMs can produce harmful, biased, or factually wrong outputs. Production systems need layers of defense: system prompts, output filtering, human review, and monitoring.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A public-facing customer bot is instructed never to provide medical advice. If the user asks about symptoms, the model responds with a prepared disclaimer and suggests contacting a professional.
+       </p>
+      </div>
+      <ul class="list-disc pl-6 space-y-2 text-[var(--muted)] mb-6">
+       <li>
+        <strong>System prompt guardrails:</strong>
+        Explicitly forbid disallowed topics and define escalation behavior.
+       </li>
+       <li>
+        <strong>Output moderation:</strong>
+        Use classifiers or keyword checks before displaying generated content.
+       </li>
+       <li>
+        <strong>Input sanitization:</strong>
+        Detect prompt injection attempts such as "ignore previous instructions".
+       </li>
+       <li>
+        <strong>Rate limiting:</strong>
+        Prevent abuse and control cost spikes.
+       </li>
+       <li>
+        <strong>Human-in-the-loop:</strong>
+        Require approval for high-stakes actions like refunds or data deletions.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="production">
+      <h2 class="text-2xl font-bold mb-4">
+       11. Production Considerations
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What changes when you go to production?</strong>
+        Prototypes are fun; production systems must be reliable, observable, cost-controlled, and fast. You need retries, caching, logging, and fallbacks.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A startup's AI writing tool caches common outlines so it does not pay for the same generation twice. It also falls back to GPT-4o-mini if GPT-4o is rate-limited, keeping the app responsive.
+       </p>
+      </div>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-production" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-production">import hashlib
+import time
+from functools import lru_cache
+
+# Simple cache for deterministic prompts
+@lru_cache(maxsize=1000)
+def cached_summary(prompt: str, model: str = "gpt-4o-mini") -> str:
+    # In real code, call the LLM API here
+    time.sleep(0.2)
+    return f"Summary of: {prompt[:40]}..."
+
+def robust_call(prompt: str, max_retries: int = 3) -> str:
+    for attempt in range(max_retries):
+        try:
+            return cached_summary(prompt)
+        except Exception as e:
+            if attempt == max_retries - 1:
+                return "Sorry, the service is temporarily unavailable."
+            time.sleep(2 ** attempt)
+
+print(robust_call("Explain neural networks in one paragraph."))
+print(robust_call("Explain neural networks in one paragraph."))  # cached
+</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">production_utils.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run production_utils.py</code>
+        </p>
+       </div>
+       <h3 class="text-lg font-semibold mb-2 mt-6">
+        Ollama in production-like code
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Add an Ollama fallback so the app keeps working during an upstream API outage or when you are prototyping without spending credits.
+       </p>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-ollama-production" type="button">
+         Copy
+        </button>
+        <pre><code class="language-python" id="code-ollama-production">from openai import OpenAI
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+cloud_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+local_client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+
+def generate_text(prompt: str, use_local: bool = False) -> str:
+    client = local_client if use_local else cloud_client
+    model = "kimi-k2.7-code:cloud" if use_local else "gpt-4o-mini"
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.5,
+        max_tokens=512,
+    )
+    return response.choices[0].message.content
+
+print(generate_text("Summarize the benefits of local LLMs.", use_local=True))
+</code></pre>
+       </div>
+       <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+        <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+         <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p class="text-sm font-medium text-[var(--ai)]">
+         Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">ollama_production.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run ollama_production.py</code>
+        </p>
+       </div>
+      </section>
+            <section class="mb-12 scroll-mt-28" id="capstone">
+       <h2 class="text-2xl font-bold mb-4">
+        12. Capstone Project: Build an AI Writing Assistant
+       </h2>
+       <p class="text-[var(--muted)] leading-relaxed mb-6">
+        You are building
+        <strong>DraftSmith</strong>
+        , an AI writing assistant for a content marketing team. The tool must generate blog outlines, expand them into sections, and let the team review before publishing.
+       </p>
+
+       <div class="card rounded-2xl p-5 border border-[var(--border)] mb-5">
+        <h3 class="text-lg font-bold mb-2">
+         1. What is this project?
+        </h3>
+        <p class="text-[var(--muted)]">
+         DraftSmith is an end-to-end LLM application that turns a one-line topic into a structured blog outline, expands each section into prose, and supports a human review loop. It demonstrates everything you have learned about prompting, model selection, structured output, streaming, local inference, and production-like robustness.
+        </p>
+       </div>
+
+       <div class="card rounded-2xl p-5 border border-[var(--border)] mb-5">
+        <h3 class="text-lg font-bold mb-2">
+         2. What it covers?
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>System prompts, few-shot examples, and JSON response formatting.</li>
+         <li>Calling OpenAI, Anthropic, and Ollama models through one flexible client.</li>
+         <li>Streaming output so writers see drafts appear in real time.</li>
+         <li>A self-review loop where the model critiques and revises its own draft.</li>
+         <li>A Streamlit UI that non-technical teammates can use in the browser.</li>
+         <li>Export to Markdown for publishing workflows.</li>
+        </ul>
+       </div>
+
+       <div class="card rounded-2xl p-5 border border-[var(--border)] mb-5">
+        <h3 class="text-lg font-bold mb-2">
+         3. How it is done?
+        </h3>
+
+        <h4 class="text-base font-semibold mb-2 mt-4">Step A: Install Streamlit</h4>
+        <p class="text-[var(--muted)] text-sm mb-3">
+         Streamlit is a Python framework that turns scripts into shareable web apps. You will use it for the interactive demo.
+        </p>
+        <div class="code-block mb-4">
+         <button class="copy-btn" data-clipboard-target="#cap-streamlit-install" type="button">
+          Copy
+         </button>
+         <pre><code class="language-bash" id="cap-streamlit-install">uv add streamlit
+streamlit --version</code></pre>
+        </div>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Run after installing the project dependencies from Section 2.
+         </p>
+        </div>
+
+        <h4 class="text-base font-semibold mb-2 mt-6">Step B: Core library code</h4>
+        <p class="text-[var(--muted)] text-sm mb-3">
+         Put the shared outline generator, section expander, and review loop in a module so both the CLI and the UI can reuse them.
+        </p>
+        <div class="code-block mb-4">
+         <button class="copy-btn" data-clipboard-target="#cap-core" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="cap-core">import os
+import json
+from typing import Iterable
+from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
+
+cloud_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+local_client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+
+def get_client(use_local: bool = False):
+    if use_local:
+        return local_client, "kimi-k2.7-code:cloud"
+    return cloud_client, "gpt-4o-mini"
+
+def generate_outline(topic: str, use_local: bool = False) -> dict:
+    client, model = get_client(use_local)
+    system = """You are a content strategist. Return JSON only.
+Format: {"title": "...", "sections": [{"heading": "...", "bullet_points": [...]}], "key_takeaways": [...]}"""
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": f"Create a detailed blog outline for: {topic}"},
+        ],
+        response_format={"type": "json_object"},
+        temperature=0.4,
+    )
+    return json.loads(response.choices[0].message.content)
+
+def expand_section(heading: str, bullet_points: list[str], topic: str, use_local: bool = False) -> str:
+    client, model = get_client(use_local)
+    system = """You are a technical blog writer. Write 200-250 words for the given section.
+Start with a strong opening sentence and include one practical example.
+Do not use subheadings inside the section."""
+    prompt = f"Topic: {topic}\nSection: {heading}\nBullet points: {bullet_points}"
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0.5,
+        max_tokens=600,
+    )
+    return response.choices[0].message.content
+
+def review_draft(draft: str, use_local: bool = False) -> str:
+    client, model = get_client(use_local)
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": "You are a strict editor. List 3 concrete improvements for the draft below."},
+            {"role": "user", "content": draft},
+        ],
+        temperature=0.3,
+        max_tokens=400,
+    )
+    return response.choices[0].message.content
+
+def revise_draft(draft: str, critique: str, use_local: bool = False) -> str:
+    client, model = get_client(use_local)
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": "Revise the draft using the critique. Keep the same length and tone."},
+            {"role": "user", "content": f"Draft:\n{draft}\n\nCritique:\n{critique}"},
+        ],
+        temperature=0.4,
+        max_tokens=800,
+    )
+    return response.choices[0].message.content
+
+def stream_draft(heading: str, bullets: list[str], topic: str, use_local: bool = False) -> Iterable[str]:
+    client, model = get_client(use_local)
+    system = """You are a technical blog writer. Write 200-250 words for the given section.
+Start with a strong opening sentence and include one practical example."""
+    prompt = f"Topic: {topic}\nSection: {heading}\nBullet points: {bullets}"
+    stream = client.chat.completions.create(
+        model=model,
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": prompt},
+        ],
+        temperature=0.5,
+        max_tokens=600,
+        stream=True,
+    )
+    for chunk in stream:
+        token = chunk.choices[0].delta.content
+        if token:
+            yield token</code></pre>
+        </div>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">draftsmith_core.py</code>.
+         </p>
+        </div>
+
+        <h4 class="text-base font-semibold mb-2 mt-6">Step C: CLI wrapper</h4>
+        <p class="text-[var(--muted)] text-sm mb-3">
+         Build a command-line entry point that accepts a topic, picks the model, saves the outline, and prints the expanded article.
+        </p>
+        <div class="code-block mb-4">
+         <button class="copy-btn" data-clipboard-target="#cap-cli" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="cap-cli">import json
+import argparse
+from pathlib import Path
+from draftsmith_core import generate_outline, expand_section, review_draft, revise_draft
+
+parser = argparse.ArgumentParser(description="DraftSmith CLI")
+parser.add_argument("topic", help="Blog topic")
+parser.add_argument("--local", action="store_true", help="Use local Ollama model")
+parser.add_argument("--output", default="article.md", help="Output Markdown file")
+args = parser.parse_args()
+
+outline = generate_outline(args.topic, use_local=args.local)
+print(f"Title: {outline['title']}\n")
+
+full_article = [f"# {outline['title']}\n"]
+for section in outline["sections"][:3]:
+    draft = expand_section(section["heading"], section["bullet_points"], args.topic, use_local=args.local)
+    critique = review_draft(draft, use_local=args.local)
+    final = revise_draft(draft, critique, use_local=args.local)
+    full_article.append(f"## {section['heading']}\n{final}\n")
+
+full_article.append("\n## Key Takeaways\n")
+for point in outline["key_takeaways"]:
+    full_article.append(f"- {point}")
+
+Path(args.output).write_text("\n".join(full_article), encoding="utf-8")
+print(f"Saved article to {args.output}")
+print(f"Model used: {'Ollama (kimi-k2.7-code:cloud)' if args.local else 'OpenAI (gpt-4o-mini)'}")</code></pre>
+        </div>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">draftsmith_cli.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run draftsmith_cli.py "How LLMs are changing customer support" --local</code>
+         </p>
+        </div>
+
+        <h4 class="text-base font-semibold mb-2 mt-6">Step D: Streamlit UI demo</h4>
+        <p class="text-[var(--muted)] text-sm mb-3">
+         Create a browser-based demo so the marketing team can enter a topic, choose a model, watch the section stream in, and export the result.
+        </p>
+        <div class="code-block mb-4">
+         <button class="copy-btn" data-clipboard-target="#cap-ui" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="cap-ui">import streamlit as st
+from draftsmith_core import generate_outline, stream_draft
+
+st.set_page_config(page_title="DraftSmith", page_icon="✍️")
+st.title("DraftSmith: AI Writing Assistant")
+
+with st.sidebar:
+    use_local = st.toggle("Use local Ollama (kimi-k2.7-code:cloud)", value=True)
+    if not use_local:
+        st.info("Requires OPENAI_API_KEY in .env")
+
+topic = st.text_input("Enter blog topic", "How LLMs are changing customer support")
+
+if st.button("Generate outline"):
+    with st.spinner("Planning..."):
+        outline = generate_outline(topic, use_local=use_local)
+        st.session_state.outline = outline
+        st.success("Outline ready!")
+
+if "outline" in st.session_state:
+    outline = st.session_state.outline
+    st.header(outline["title"])
+
+    for i, section in enumerate(outline["sections"]):
+        with st.expander(section["heading"], expanded=(i == 0)):
+            if st.button(f"Write section: {section['heading']}", key=f"btn-{i}"):
+                placeholder = st.empty()
+                placeholder.write("Drafting...")
+                streamed_text = ""
+                for token in stream_draft(section["heading"], section["bullet_points"], topic, use_local=use_local):
+                    streamed_text += token
+                    placeholder.markdown(streamed_text)
+
+    if st.button("Export to Markdown"):
+        md = f"# {outline['title']}\n\n"
+        for s in outline["sections"]:
+            md += f"## {s['heading']}\n- " + "\n- ".join(s["bullet_points"]) + "\n\n"
+        st.download_button("Download article.md", md, "article.md", "text/markdown")</code></pre>
+        </div>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">draftsmith_app.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run streamlit run draftsmith_app.py</code>. Open the URL printed in the terminal.
+         </p>
+        </div>
+       </div>
+
+       <div class="card rounded-2xl p-5 border border-[var(--border)] mb-5">
+        <h3 class="text-lg font-bold mb-2">
+         4. What did we learn from this capstone project?
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>A clear system prompt plus a JSON schema is enough to get structured, parseable outlines from any model.</li>
+         <li>Streaming improves perceived speed and makes interactive UIs feel alive.</li>
+         <li>The same core logic can power both a CLI and a web UI when separated into a module.</li>
+         <li>Local models (via Ollama) let you prototype without API costs or leaving your machine.</li>
+         <li>A critique-and-revise loop meaningfully improves drafts and mirrors real editorial workflows.</li>
+        </ul>
+       </div>
+
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         5. How can I enhance this project in the future?
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>Add retrieval-augmented generation (RAG) so drafts cite company style guides and prior blog posts.</li>
+         <li>Integrate image generation (DALL·E / Stable Diffusion) to auto-create featured images.</li>
+         <li>Add user accounts and a persistence layer (SQLite or PostgreSQL) to save projects.</li>
+         <li>Implement A/B testing: compare headline variants and measure click-through rates.</li>
+         <li>Deploy the Streamlit app to Streamlit Cloud, Hugging Face Spaces, or a container on your own server.</li>
+        </ul>
+       </div>
+      </section>
+           <section class="mb-12 scroll-mt-28" id="quiz">
+       <h2 class="text-2xl font-bold mb-4">
+        13. Knowledge Check
+       </h2>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Test your understanding of LLMs, prompting, APIs, local inference, and production guardrails.
+       </p>
+       <form class="space-y-4" id="quiz-form">
+        <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+         <p class="font-semibold mb-3">
+          1. What is the default host:port for the Ollama local API server?
+         </p>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q1" type="radio" value="a"/>
+          <span class="text-[var(--muted)]">http://localhost:8080/v1</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q1" type="radio" value="b"/>
+          <span class="text-[var(--muted)]">http://localhost:11434/v1</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q1" type="radio" value="c"/>
+          <span class="text-[var(--muted)]">http://127.0.0.1:3000</span>
+         </label>
+         <label class="flex items-start gap-2">
+          <input class="mt-1" name="q1" type="radio" value="d"/>
+          <span class="text-[var(--muted)]">http://localhost:5000/api</span>
+         </label>
+        </div>
+        <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+         <p class="font-semibold mb-3">
+          2. What does an LLM fundamentally predict?
+         </p>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q2" type="radio" value="a"/>
+          <span class="text-[var(--muted)]">The user's next click</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q2" type="radio" value="b"/>
+          <span class="text-[var(--muted)]">The next token in a sequence</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q2" type="radio" value="c"/>
+          <span class="text-[var(--muted)]">The current stock price</span>
+         </label>
+         <label class="flex items-start gap-2">
+          <input class="mt-1" name="q2" type="radio" value="d"/>
+          <span class="text-[var(--muted)]">The best database query</span>
+         </label>
+        </div>
+        <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+         <p class="font-semibold mb-3">
+          3. Which library is commonly used to count tokens for OpenAI models?
+         </p>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q3" type="radio" value="a"/>
+          <span class="text-[var(--muted)]">pytorch</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q3" type="radio" value="b"/>
+          <span class="text-[var(--muted)]">requests</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q3" type="radio" value="c"/>
+          <span class="text-[var(--muted)]">tiktoken</span>
+         </label>
+         <label class="flex items-start gap-2">
+          <input class="mt-1" name="q3" type="radio" value="d"/>
+          <span class="text-[var(--muted)]">pandas</span>
+         </label>
+        </div>
+        <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+         <p class="font-semibold mb-3">
+          4. What is prompt engineering?
+         </p>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q4" type="radio" value="a"/>
+          <span class="text-[var(--muted)]">Writing better instructions to get better model outputs</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q4" type="radio" value="b"/>
+          <span class="text-[var(--muted)]">Training a model from scratch</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q4" type="radio" value="c"/>
+          <span class="text-[var(--muted)]">Building hardware for AI</span>
+         </label>
+         <label class="flex items-start gap-2">
+          <input class="mt-1" name="q4" type="radio" value="d"/>
+          <span class="text-[var(--muted)]">Compressing model weights</span>
+         </label>
+        </div>
+        <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="d">
+         <p class="font-semibold mb-3">
+          5. What does a higher temperature value generally do?
+         </p>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q5" type="radio" value="a"/>
+          <span class="text-[var(--muted)]">Makes output faster</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q5" type="radio" value="b"/>
+          <span class="text-[var(--muted)]">Reduces cost</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q5" type="radio" value="c"/>
+          <span class="text-[var(--muted)]">Increases context window</span>
+         </label>
+         <label class="flex items-start gap-2">
+          <input class="mt-1" name="q5" type="radio" value="d"/>
+          <span class="text-[var(--muted)]">Makes output more random and creative</span>
+         </label>
+        </div>
+        <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+         <p class="font-semibold mb-3">
+          6. Which of these is a real-world use case for open-source LLMs?
+         </p>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q6" type="radio" value="a"/>
+          <span class="text-[var(--muted)]">Training on live internet data automatically</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q6" type="radio" value="b"/>
+          <span class="text-[var(--muted)]">On-premise deployment for data privacy</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q6" type="radio" value="c"/>
+          <span class="text-[var(--muted)]">Guaranteeing zero hallucinations</span>
+         </label>
+         <label class="flex items-start gap-2">
+          <input class="mt-1" name="q6" type="radio" value="d"/>
+          <span class="text-[var(--muted)]">Removing the need for GPUs</span>
+         </label>
+        </div>
+        <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+         <p class="font-semibold mb-3">
+          7. What is an LLM agent?
+         </p>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q7" type="radio" value="a"/>
+          <span class="text-[var(--muted)]">A human AI reviewer</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q7" type="radio" value="b"/>
+          <span class="text-[var(--muted)]">A pretrained tokenizer</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q7" type="radio" value="c"/>
+          <span class="text-[var(--muted)]">An LLM looped with tools to take actions</span>
+         </label>
+         <label class="flex items-start gap-2">
+          <input class="mt-1" name="q7" type="radio" value="d"/>
+          <span class="text-[var(--muted)]">A marketing chatbot</span>
+         </label>
+        </div>
+        <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+         <p class="font-semibold mb-3">
+          8. What is the best first defense against harmful outputs?
+         </p>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q8" type="radio" value="a"/>
+          <span class="text-[var(--muted)]">Use the largest possible model</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q8" type="radio" value="b"/>
+          <span class="text-[var(--muted)]">A clear system prompt and output review</span>
+         </label>
+         <label class="flex items-start gap-2 mb-2">
+          <input class="mt-1" name="q8" type="radio" value="c"/>
+          <span class="text-[var(--muted)]">Always set temperature to 2.0</span>
+         </label>
+         <label class="flex items-start gap-2">
+          <input class="mt-1" name="q8" type="radio" value="d"/>
+          <span class="text-[var(--muted)]">Disable streaming</span>
+         </label>
+        </div>
+        <button class="px-6 py-3 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition" type="submit">
+         Check Answers
+        </button>
+        <div class="hidden mt-4 p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)]" id="quiz-result">
+        </div>
+       </form>
+      </section>
+     <footer class="border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--muted)]">
+      <p class="mb-2">
+       Open directly in any browser. No build step required.
+      </p>
+     </footer>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement;
+   const moon = document.getElementById('moon');
+   const sun = document.getElementById('sun');
+   function applyTheme(theme) {
+     html.classList.remove('light', 'dark');
+     html.classList.add(theme);
+     const lightLink = document.getElementById('hljs-light');
+     const darkLink = document.getElementById('hljs-dark');
+     if (theme === 'dark') {
+       moon.classList.add('hidden');
+       sun.classList.remove('hidden');
+       if (lightLink) lightLink.disabled = true;
+       if (darkLink) darkLink.disabled = false;
+     } else {
+       moon.classList.remove('hidden');
+       sun.classList.add('hidden');
+       if (lightLink) lightLink.disabled = false;
+       if (darkLink) darkLink.disabled = true;
+     }
+     localStorage.setItem('tutorials-theme', theme);
+   }
+   document.getElementById('theme-toggle').addEventListener('click', () => {
+     applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+   });
+   const saved = localStorage.getItem('tutorials-theme');
+   applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+   function toggleSidebar() {
+     const sidebar = document.getElementById('sidebar');
+     const overlay = document.getElementById('menu-overlay');
+     const isOpen = sidebar.classList.toggle('-translate-x-0');
+     sidebar.classList.toggle('-translate-x-full', !isOpen);
+     overlay.classList.toggle('hidden', !isOpen);
+   }
+   document.getElementById('sidebar').classList.add('-translate-x-full', 'lg:translate-x-0');
+
+   function setStatus(status) {
+     localStorage.setItem('tutorial-llms-status', status);
+     updateButtons();
+   }
+   function updateButtons() {
+     const status = localStorage.getItem('tutorial-llms-status') || 'not-started';
+     document.getElementById('btn-start').textContent = status === 'in-progress' ? 'In Progress' : 'Start';
+     document.getElementById('btn-complete').textContent = status === 'completed' ? 'Completed' : 'Mark Complete';
+   }
+   document.getElementById('btn-start').addEventListener('click', () => setStatus('in-progress'));
+   document.getElementById('btn-complete').addEventListener('click', () => setStatus('completed'));
+   document.getElementById('btn-reset').addEventListener('click', () => {
+     localStorage.removeItem('tutorial-llms-status');
+     updateButtons();
+   });
+   updateButtons();
+
+   document.querySelectorAll('.copy-btn').forEach((btn) => {
+     btn.addEventListener('click', async () => {
+       const target = document.getElementById(btn.dataset.clipboardTarget.substring(1));
+       if (target) {
+         await navigator.clipboard.writeText(target.textContent);
+         const original = btn.textContent;
+         btn.textContent = 'Copied!';
+         setTimeout(() => btn.textContent = original, 1500);
+       }
+     });
+   });
+
+   document.getElementById('quiz-form').addEventListener('submit', (e) => {
+     e.preventDefault();
+     let correct = 0;
+     const total = document.querySelectorAll('.quiz-item').length;
+     document.querySelectorAll('.quiz-item').forEach((item) => {
+       const answer = item.querySelector('input:checked')?.value;
+       const right = item.dataset.correct;
+       item.classList.remove('border-[var(--success)]', 'border-[var(--warn)]');
+       if (answer === right) {
+         correct++;
+         item.classList.add('border-[var(--success)]');
+       } else {
+         item.classList.add('border-[var(--warn)]');
+       }
+     });
+     const result = document.getElementById('quiz-result');
+     result.classList.remove('hidden');
+     result.innerHTML = `<strong>${correct}/${total}</strong> correct. ${correct === total ? 'Excellent work!' : 'Review the highlighted questions and try again.'}`;
+     if (correct === total) {
+       setStatus('completed');
+     }
+   });
+
+   const tocLinks = document.querySelectorAll('.toc-link');
+   const sections = Array.from(tocLinks).map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+   const observer = new IntersectionObserver((entries) => {
+     entries.forEach((entry) => {
+       if (entry.isIntersecting) {
+         const id = entry.target.id;
+         tocLinks.forEach((link) => {
+           link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+         });
+       }
+     });
+   }, { rootMargin: '-20% 0px -60% 0px' });
+   sections.forEach((s) => observer.observe(s));
+
+   hljs.highlightAll();
+  </script>
+ </body>
+</html>

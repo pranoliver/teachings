@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" aria-label="DevOps infinity loop showing plan, code, build, test, release, deploy, operate, monitor" role="img"><title>DevOps infinity loop showing plan, code, build, test, release, deploy, operate, monitor</title><rect x="0.0" y="0.0" width="720.0" height="160.0" fill="#ffffff"/>
+              <ellipse cx="360" cy="80" rx="340" ry="70" fill="none" stroke="#d0d7de" stroke-width="2"/>
+
+              <!-- Top half -->
+              <text x="120" y="50" text-anchor="middle" font-size="12" font-weight="700" fill="#ea580c">PLAN</text>
+              <text x="250" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#ea580c">CODE</text>
+              <text x="360" y="35" text-anchor="middle" font-size="12" font-weight="700" fill="#ea580c">BUILD</text>
+              <text x="470" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#ea580c">TEST</text>
+              <text x="600" y="50" text-anchor="middle" font-size="12" font-weight="700" fill="#ea580c">RELEASE</text>
+
+              <!-- Bottom half -->
+              <text x="600" y="110" text-anchor="middle" font-size="12" font-weight="700" fill="#ff6b35">DEPLOY</text>
+              <text x="470" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="#ff6b35">OPERATE</text>
+              <text x="360" y="125" text-anchor="middle" font-size="12" font-weight="700" fill="#ff6b35">MONITOR</text>
+              <text x="250" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="#ff6b35">FEEDBACK</text>
+              <text x="120" y="110" text-anchor="middle" font-size="12" font-weight="700" fill="#ff6b35">IMPROVE</text>
+
+              <defs>
+                <marker id="devopscicd-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#d0d7de"/></marker>
+              </defs>
+            </svg>

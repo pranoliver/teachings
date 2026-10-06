@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" aria-label="Diagram showing GitHub Actions workflow" role="img"><title>Diagram showing GitHub Actions workflow</title>
+              <rect x="20" y="30" width="140" height="60" rx="8" fill="rgba(47,129,247,0.15)" stroke="#6e40c9" stroke-width="2"/>
+              <text x="90" y="65" text-anchor="middle" font-size="13" fill="#1f2328">Push / PR</text>
+
+              <line x1="160" y1="60" x2="230" y2="60" stroke="#d0d7de" stroke-width="2" class="flow-line"/>
+
+              <rect x="240" y="30" width="160" height="60" rx="8" fill="rgba(157,113,247,0.15)" stroke="#a371f7" stroke-width="2"/>
+              <text x="320" y="65" text-anchor="middle" font-size="13" fill="#1f2328">Run tests</text>
+
+              <line x1="400" y1="60" x2="470" y2="60" stroke="#d0d7de" stroke-width="2" class="flow-line"/>
+
+              <rect x="480" y="30" width="140" height="60" rx="8" fill="rgba(63,185,80,0.15)" stroke="#3fb950" stroke-width="2"/>
+              <text x="550" y="65" text-anchor="middle" font-size="13" fill="#1f2328">Pass / fail</text>
+            </svg>

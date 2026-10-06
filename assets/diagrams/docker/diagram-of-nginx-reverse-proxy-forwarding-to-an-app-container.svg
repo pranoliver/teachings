@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 160" aria-label="Diagram of Nginx reverse proxy forwarding to an app container" role="img"><title>Diagram of Nginx reverse proxy forwarding to an app container</title>
+              <rect x="30" y="40" width="140" height="80" rx="12" fill="#2496ED" fill-opacity="0.15" stroke="#2496ED" stroke-width="2"/>
+              <text x="100" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#2496ED">Browser</text>
+              <text x="100" y="100" text-anchor="middle" font-size="11" fill="#656d76">localhost:8080</text>
+
+              <path d="M170 80 L 260 80" stroke="#d0d7de" stroke-width="2" marker-end="url(#docker-arrow)"/>
+              <text x="215" y="70" text-anchor="middle" font-size="11" fill="#656d76">request</text>
+
+              <rect x="280" y="40" width="140" height="80" rx="12" fill="#2496ED" fill-opacity="0.2" stroke="#2496ED" stroke-width="2"/>
+              <text x="350" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#0B1F3A">Nginx</text>
+              <text x="350" y="100" text-anchor="middle" font-size="11" fill="#656d76">reverse proxy</text>
+
+              <path d="M420 80 L 510 80" stroke="#d0d7de" stroke-width="2" marker-end="url(#docker-arrow)"/>
+              <text x="465" y="70" text-anchor="middle" font-size="11" fill="#656d76">proxy</text>
+
+              <rect x="530" y="40" width="140" height="80" rx="12" fill="#306998" fill-opacity="0.15" stroke="#306998" stroke-width="2"/>
+              <text x="600" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#306998">App Container</text>
+              <text x="600" y="100" text-anchor="middle" font-size="11" fill="#656d76">python/node/go</text>
+
+              <defs>
+                <marker id="docker-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#d0d7de"/></marker>
+              </defs>
+            </svg>

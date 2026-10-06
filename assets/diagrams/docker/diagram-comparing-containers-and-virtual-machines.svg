@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" aria-label="Diagram comparing containers and virtual machines" role="img"><title>Diagram comparing containers and virtual machines</title>
+              <text x="180" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2328">Virtual Machine</text>
+              <rect x="40" y="45" width="280" height="160" rx="12" fill="#9a6700" fill-opacity="0.15" stroke="#9a6700" stroke-width="2"/>
+              <text x="180" y="70" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2328">Hypervisor</text>
+              <rect x="70" y="85" width="90" height="100" rx="8" fill="#ffd43b" fill-opacity="0.2" stroke="#d29922" stroke-width="2"/>
+              <text x="115" y="125" text-anchor="middle" font-size="11" font-weight="600" fill="#323330">Guest OS + App</text>
+              <rect x="180" y="85" width="90" height="100" rx="8" fill="#306998" fill-opacity="0.15" stroke="#306998" stroke-width="2"/>
+              <text x="225" y="125" text-anchor="middle" font-size="11" font-weight="600" fill="#306998">Guest OS + App</text>
+
+              <text x="540" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2328">Docker Container</text>
+              <rect x="400" y="45" width="280" height="160" rx="12" fill="#2496ED" fill-opacity="0.15" stroke="#2496ED" stroke-width="2"/>
+              <text x="540" y="70" text-anchor="middle" font-size="12" font-weight="600" fill="#1f2328">Host OS Kernel</text>
+              <rect x="430" y="95" width="60" height="90" rx="8" fill="#2496ED" fill-opacity="0.2" stroke="#2496ED" stroke-width="2"/>
+              <text x="460" y="145" text-anchor="middle" font-size="10" font-weight="600" fill="#0B1F3A">App A</text>
+              <rect x="505" y="95" width="60" height="90" rx="8" fill="#2496ED" fill-opacity="0.2" stroke="#2496ED" stroke-width="2"/>
+              <text x="535" y="145" text-anchor="middle" font-size="10" font-weight="600" fill="#0B1F3A">App B</text>
+              <rect x="580" y="95" width="60" height="90" rx="8" fill="#2496ED" fill-opacity="0.2" stroke="#2496ED" stroke-width="2"/>
+              <text x="610" y="145" text-anchor="middle" font-size="10" font-weight="600" fill="#0B1F3A">App C</text>
+            </svg>

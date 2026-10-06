@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Next.js Full-Stack: SSR, SSG, API Routes, Deployment
+  </title>
+  <link href="../assets/favicons/nextjs.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-nextjs-fullstack" classname="bg-white text-gray-900">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Next.js" class="w-10 h-10" src="../assets/favicons/nextjs.svg"/>
+     <span class="text-xl font-bold">
+      Next.js
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      2. Setup &amp; First App
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#routing">
+      3. File-Based Routing
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#rendering">
+      4. Rendering Modes
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#data">
+      5. Fetching Data
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#api">
+      6. API Routes
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dynamic">
+      7. Dynamic Routes
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#deployment">
+      8. Deployment
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      9. Capstone: E-Commerce Store
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Next.js Full-Stack: SSR, SSG, API Routes, Deployment
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Next.js is a React framework that adds server rendering, file-based routing, API endpoints, and optimized production builds. It is the default choice for production React apps because it solves performance and SEO problems that client-only React cannot.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with React, hooks, and JSX.
+        </li>
+        <li>
+         Basic Node.js and npm knowledge.
+        </li>
+        <li>
+         Understand HTTP, JSON, and REST.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         App Router vs Pages Router
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         SSR, SSG, and ISR rendering
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Server and client data fetching
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         API routes with Route Handlers
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Dynamic routes and layouts
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Deploy to Vercel
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Real-world systems using Next.js
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          TikTok
+         </strong>
+         uses Next.js for fast, SEO-friendly marketing pages at scale.
+        </li>
+        <li>
+         <strong>
+          Netflix
+         </strong>
+         uses Next.js for its content studio and several consumer surfaces.
+        </li>
+        <li>
+         <strong>
+          GitHub Copilot
+         </strong>
+         docs and marketing run on Next.js for performance and search indexing.
+        </li>
+        <li>
+         <strong>
+          Stripe
+         </strong>
+         uses Next.js for its documentation and customer-facing pages.
+        </li>
+        <li>
+         <strong>
+          Hulu, Twitch, Nike
+         </strong>
+         all use Next.js for production storefronts and landing pages.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#setup">
+        Next: Setup &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="setup">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Setup &amp; First App
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Next.js is initialized with a single command. It sets up React, TypeScript support, ESLint, Tailwind, and the App Router automatically.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Create a new Next.js app (App Router enabled) npx create-
+next-app@latest my-shop 
+# Recommended options: 
+# TypeScript: Yes 
+# ESLint: Yes 
+# Tailwind CSS: Yes 
+# src directory: No 
+# App Router: Yes 
+# import alias: @/* cd my-shop 
+npm run dev 
+# Open http://localhost:3000</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/page.tsx &mdash;
+the homepage export default function Home()
+{ return (  My Shop Welcome to the store.  );
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create the app, start the dev server, and confirm the default page loads at
+        <code class="kbd">
+         http://localhost:3000
+        </code>
+        .
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#routing">
+        Next: Routing &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="routing">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       File-Based Routing
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       In Next.js, files and folders become URLs. There is no separate routing config. The App Router uses
+       <code class="kbd">
+        page.tsx
+       </code>
+       files and nested layouts.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Folders become URLs
+       </h3>
+       <img alt="Diagram showing Next.js file structure mapping to URL routes" class="diagram" loading="lazy" src="../assets/diagrams/nextjs-fullstack/file-routing.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">app/ &boxvr;&boxh;&boxh; page.tsx 
+# / &boxvr;&boxh;&boxh; layout.tsx 
+# root layout &boxvr;&boxh;&boxh; about/ &boxv; &boxur;&boxh;&boxh; page.tsx 
+# /about &boxvr;&boxh;&boxh; products/ &boxv; &boxur;&boxh;&boxh; page.tsx 
+# /products &boxur;&boxh;&boxh; products/[id]/ &boxur;&boxh;&boxh; page.tsx 
+# /products/123</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/layout.tsx &mdash;
+wraps every page export const metadata = { title: 'My Shop',
+description: 'A modern e-commerce store', }
+;
+export default function RootLayout({ children }: { children: React.ReactNode }
+)
+{ return (   My Shop
+{children}
+);
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Key rule
+       </h4>
+       <p class="text-[var(--muted)]">
+        A route is only public when it contains a
+        <code class="kbd">
+         page.tsx
+        </code>
+        (or
+        <code class="kbd">
+         page.js
+        </code>
+        ). Private components live in the same folder but are not routed unless they are in
+        <code class="kbd">
+         page.tsx
+        </code>
+        .
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#rendering">
+        Next: Rendering &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="rendering">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Rendering Modes
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Next.js can render pages on the server at request time (SSR), at build time (SSG), or with a cache revalidation strategy (ISR). Picking the right mode for each page is the core optimization skill.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        SSR, SSG, and ISR
+       </h3>
+       <img alt="Diagram comparing server-side rendering, static site generation, and incremental static regeneration" class="diagram" loading="lazy" src="../assets/diagrams/nextjs-fullstack/rendering-modes.svg"/>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         SSR
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Fresh data on every request.
+         </li>
+         <li>
+          Good for dashboards, search results, personalized pages.
+         </li>
+         <li>
+          Default for Server Components in the App Router.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         SSG
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          HTML generated at build time.
+         </li>
+         <li>
+          Fastest response and best for SEO.
+         </li>
+         <li>
+          Use for blogs, docs, marketing pages.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         ISR
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Static first, then revalidate in background.
+         </li>
+         <li>
+          Great for product catalogs and large listings.
+         </li>
+         <li>
+          Balanced speed and freshness.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/products/page.tsx &mdash;
+default Server Component (SSR) export default async function ProductsPage()
+{ const products = await fetch('https://api.example.com/products',
+{ cache: 'no-store' }
+);
+const list = await products.json();
+return (  {list.map((p: any) =&gt; {p.name}
+)}
+);
+} // ISR:
+revalidate every 60 seconds export const revalidate = 60;
+// SSG-like
+with fetch caching const data = await fetch('https://api.example.com/categories',
+{ next: { revalidate: 3600 }
+});</code></pre>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#routing">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#data">
+        Next: Data &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="data">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Fetching Data
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Server Components can fetch data directly during render, which keeps API secrets off the client and reduces JavaScript shipped to the browser. Client Components handle interactivity and browser APIs.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Server renders first, then React hydrates
+       </h3>
+       <img alt="Diagram showing browser, Next.js server, and database data flow" class="diagram" loading="lazy" src="../assets/diagrams/nextjs-fullstack/data-flow.svg"/>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-typescript">// Server
+Component &mdash; async,
+no useEffect export default async function ProductPage({ params }: { params: { id: string }
+})
+{ const res = await fetch(`https://api.example.com/products/${params.id}`,
+{ next: { revalidate: 60 }
+});
+const product = await res.json();
+return (  {product.name} ${product.price}
+);
+}</code></pre>
+       </div>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-typescript">"use client";
+// Client
+Component &mdash; interactivity in browser import
+{ useState }
+from 'react';
+export default function AddToCart({ productId }: { productId: string }
+)
+{ const
+[qty,
+setQty] = useState(1);
+return (   setQty(q =&gt; q + 1)}&gt;+ {qty}
+setQty(q =&gt; Math.max(1,
+q - 1))}&gt;- Add to cart  );
+}</code></pre>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        When to use each
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Server Component
+         </strong>
+         : fetch data, access databases, keep secrets private, render static parts.
+        </li>
+        <li>
+         <strong>
+          Client Component
+         </strong>
+         : event handlers, browser APIs, local state, animations.
+        </li>
+        <li>
+         A good page mixes both: Server Component fetches, Client Component handles the cart button.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#rendering">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#api">
+        Next: API &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="api">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       API Routes
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Next.js can be a full-stack framework. Route handlers let you build backend endpoints without a separate server. They run on the same deployment as your frontend, making integration trivial.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/api/products/route.ts
+import { NextResponse } from "next/server";
+const products = [
+  { id: "1", name: "Wireless Headphones", price: 199 },
+  { id: "2", name: "Mechanical Keyboard", price: 149 },
+];
+export async function GET() {
+  return NextResponse.json(products);
+}
+export async function POST(request: Request) {
+  const body = await request.json();
+  const newProduct = { id: String(products.length + 1), ...body };
+  products.push(newProduct);
+  return NextResponse.json(newProduct, { status: 201 });
+}</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// Fetch
+from the same-origin API in a Server Component export default async function ProductList()
+{ const res = await fetch('http://localhost:3000/api/products',
+{ cache: 'no-store' }
+);
+const products = await res.json();
+return (  {products.map((p: any) =&gt; ( {p.name} &mdash; ${p.price}
+))}
+);
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world pattern
+       </h4>
+       <p class="text-[var(--muted)]">
+        A Next.js app can talk to PostgreSQL, Redis, or Stripe inside route handlers. The client only sees the Next.js URL, never the database password or API keys.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#data">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#dynamic">
+        Next: Dynamic &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="dynamic">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Dynamic Routes
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Dynamic routes let you create one page template for thousands of URLs. A folder named
+       <code class="kbd">
+        [id]
+       </code>
+       captures the segment from the URL, and you can use it to fetch the right data.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/products/[id]/page.tsx
+export default async function ProductPage({ params }: { params: { id: string }
+})
+{ const
+{ id } = params;
+const res = await fetch(`https://api.example.com/products/${id}`,
+{ next: { revalidate: 60 }
+});
+if (!res.ok)
+{ return Product not found;
+}
+const product = await res.json();
+return (  {product.name} ${product.price} {product.description}
+);
+} // Generate
+static paths at build time for the 100 top products export async function generateStaticParams()
+{ const res = await fetch('https://api.example.com/products?limit=100');
+const products = await res.json();
+return products.map((p: any) =&gt; ({ id: String(p.id) }
+));
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Static + dynamic fallback
+       </h4>
+       <p class="text-[var(--muted)]">
+        Use
+        <code class="kbd">
+         generateStaticParams
+        </code>
+        for the most popular pages, and let Next.js render the rest on demand. This is how large e-commerce sites serve millions of product pages fast.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#api">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#deployment">
+        Next: Deployment &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="deployment">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Deployment
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Vercel is the company behind Next.js and the easiest place to deploy. Every push to GitHub gets a preview URL. Merging to main deploys to production.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Git push &rarr; preview &rarr; production
+       </h3>
+       <img alt="Diagram showing Next.js deployment pipeline to Vercel" class="diagram" loading="lazy" src="../assets/diagrams/nextjs-fullstack/deployment.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Push to GitHub and import the repo in Vercel 
+# No manual build config needed 
+git init 
+git add . 
+git commit -m "init" 
+git remote add origin https://github.com/yourname/my-shop.
+git 
+git push -u origin main 
+# Then: 
+# 1. Go to vercel.com/new 
+# 2. Import the repository 
+# 3. Vercel auto-detects Next.js and builds it 
+# 4. Every PR gets a unique preview URL</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Production checklist
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Set environment variables (database URLs, API keys) in the Vercel dashboard.
+        </li>
+        <li>
+         Use
+         <code class="kbd">
+          next/image
+         </code>
+         for optimized images.
+        </li>
+        <li>
+         Enable analytics and speed insights to measure real user performance.
+        </li>
+        <li>
+         Configure a custom domain and SSL.
+        </li>
+        <li>
+         Test preview URLs before merging to main.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dynamic">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: E-Commerce Store
+      </h2>
+      <h3 class="text-xl font-semibold mb-3">
+       1. What is this project?
+      </h3>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a production-grade online store with Next.js. This capstone ties together routing, rendering modes, data fetching, API routes, caching, error handling, and deployment. You will create multiple pages, a persistent cart, a checkout flow, and an admin-style order API.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       2. What it covers?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Homepage
+         </strong>
+         (
+         <code class="kbd">
+          /
+         </code>
+         ): hero section, featured products, category links. Fetches products with ISR.
+        </li>
+        <li>
+         <strong>
+          Product listing
+         </strong>
+         (
+         <code class="kbd">
+          /products
+         </code>
+         ): grid with filtering by category and price sorting. Pagination ready.
+        </li>
+        <li>
+         <strong>
+          Product detail
+         </strong>
+         (
+         <code class="kbd">
+          /products/[id]
+         </code>
+         ): dynamic route, reviews, related products, add-to-cart. Static generation for top 20, ISR fallback.
+        </li>
+        <li>
+         <strong>
+          Cart
+         </strong>
+         (
+         <code class="kbd">
+          /cart
+         </code>
+         ): Client Component with localStorage persistence, quantity updates, remove items, price summary.
+        </li>
+        <li>
+         <strong>
+          Checkout
+         </strong>
+         (
+         <code class="kbd">
+          /checkout
+         </code>
+         ): form with server-side validation, calls order API, shows confirmation.
+        </li>
+        <li>
+         <strong>
+          Order API
+         </strong>
+         (
+         <code class="kbd">
+          /api/orders
+         </code>
+         ): creates orders, validates stock, calculates totals, stores in memory or database.
+        </li>
+        <li>
+         <strong>
+          Search
+         </strong>
+         (
+         <code class="kbd">
+          /search?q=...
+         </code>
+         ): query parameter-based search page, server-rendered results.
+        </li>
+        <li>
+         <strong>
+          Shared layout
+         </strong>
+         : responsive navigation, cart count badge, footer.
+        </li>
+        <li>
+         <strong>
+          Deployment
+         </strong>
+         : Vercel with environment variables and preview deployments.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       3. How it is done?
+      </h3>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The project is built in 11 steps: shared data layer, homepage with ISR, reusable components, dynamic product pages, cart context and persistence, checkout validation, a server-side order API, search, and a shared navbar. Follow the code below from Step 1 through Step 11.
+      </p>
+      <h4 class="text-lg font-semibold mb-3">
+       Folder structure
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">app/ &boxvr;&boxh;&boxh; layout.tsx 
+# root layout with cart provider &boxvr;&boxh;&boxh; page.tsx 
+# homepage &boxvr;&boxh;&boxh; products/ &boxv; &boxvr;&boxh;&boxh; page.tsx 
+# product listing &boxv; &boxur;&boxh;&boxh; [id]/ &boxv; &boxur;&boxh;&boxh; page.tsx 
+# product detail &boxvr;&boxh;&boxh; cart/ &boxv; &boxur;&boxh;&boxh; page.tsx 
+# cart page &boxvr;&boxh;&boxh; checkout/ &boxv; &boxur;&boxh;&boxh; page.tsx 
+# checkout page &boxvr;&boxh;&boxh; search/ &boxv; &boxur;&boxh;&boxh; page.tsx 
+# search results &boxvr;&boxh;&boxh; api/ &boxv; &boxvr;&boxh;&boxh; products/ &boxv; &boxv; &boxur;&boxh;&boxh; route.ts 
+# GET /api/products &boxv; &boxur;&boxh;&boxh; orders/ &boxv; &boxur;&boxh;&boxh; route.ts 
+# POST /api/orders components/ &boxvr;&boxh;&boxh; Navbar.tsx 
+# navigation + cart count &boxvr;&boxh;&boxh; ProductCard.tsx 
+# reusable card &boxvr;&boxh;&boxh; CartProvider.tsx 
+# context + localStorage &boxvr;&boxh;&boxh; AddToCartButton.tsx 
+# client interactivity &boxur;&boxh;&boxh; CheckoutForm.tsx 
+# form + validation lib/ &boxvr;&boxh;&boxh; products.ts 
+# product data helpers &boxur;&boxh;&boxh; validation.ts 
+# Zod schemas public/ &boxur;&boxh;&boxh; images/ 
+# product images</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 1: Shared data layer
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// lib/products.ts
+export interface Product
+{ id: string;
+name: string;
+price: number;
+category: string;
+description: string;
+image: string;
+rating: number;
+stock: number;
+} // Real-world:
+replace with a database call export async function getProducts(): Promise&lt;Product
+[]&gt; { const res = await fetch('https://fakestoreapi.com/products',
+{ next: { revalidate: 3600 }
+});
+const data = await res.json();
+return data.map((p: any) =&gt; ({ id: String(p.id),
+name: p.title,
+price: p.price,
+category: p.category,
+description: p.description,
+image: p.image,
+rating: p.rating.rate,
+stock: Math.floor(Math.random() * 50) + 10 }
+));
+}
+export async function getProductById(id: string): Promise&lt;Product | null&gt; { const res = await fetch(`https://fakestoreapi.com/products/${id}`,
+{ next: { revalidate: 60 }
+});
+if (!res.ok) return null;
+const p = await res.json();
+return
+{ id: String(p.id),
+name: p.title,
+price: p.price,
+category: p.category,
+description: p.description,
+image: p.image,
+rating: p.rating.rate,
+stock: Math.floor(Math.random() * 50) + 10 }
+;
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 2: Homepage with ISR
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/page.tsx
+import Link from "next/link";
+import { getProducts } from "@/lib/products";
+import ProductCard from "@/components/ProductCard";
+export const revalidate = 3600;
+export default async function Home() {
+  const products = await getProducts();
+  const featured = products.slice(0, 4);
+  return (
+    &lt;main className="max-w-6xl mx-auto p-6"&gt;
+      {" "}
+      &lt;section className="bg-gray-100 rounded-2xl p-10 mb-10 text-center"&gt;
+        {" "}
+        &lt;h1 className="text-4xl font-bold mb-4"&gt;Modern Mart&lt;/h1&gt;{" "}
+        &lt;p className="text-lg text-gray-600 mb-6"&gt;
+          Fast, SEO-friendly e-commerce built with Next.js.
+        &lt;/p&gt;{" "}
+        &lt;Link
+          href="/products"
+          className="px-6 py-3 bg-black text-white rounded-lg"
+        &gt;
+          {" "}
+          Shop now{" "}
+        &lt;/Link&gt;{" "}
+      &lt;/section&gt;{" "}
+      &lt;h2 className="text-2xl font-bold mb-4"&gt;Featured Products&lt;/h2&gt;{" "}
+      &lt;div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"&gt;
+        {" "}
+        {featured.map((p) =&gt; (
+          &lt;ProductCard key={p.id} product={p} /&gt;
+        ))}{" "}
+      &lt;/div&gt;{" "}
+    &lt;/main&gt;
+  );
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 3: Reusable ProductCard
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// components/ProductCard.tsx
+import Link from "next/link";
+import Image from "next/image";
+import { Product } from "@/lib/products";
+export default function ProductCard({ product }: { product: Product }) {
+  return (
+    &lt;Link
+      href={`/products/${product.id}`}
+      className="block border rounded-xl p-4 hover:shadow-lg transition"
+    &gt;
+      {" "}
+      &lt;div className="relative w-full h-48 mb-3"&gt;
+        {" "}
+        &lt;Image
+          src={product.image}
+          alt={product.name}
+          fill
+          className="object-contain"
+        /&gt;{" "}
+      &lt;/div&gt;{" "}
+      &lt;h3 className="font-semibold truncate"&gt;{product.name}&lt;/h3&gt;{" "}
+      &lt;p className="text-sm text-gray-500 capitalize"&gt;{product.category}&lt;/p&gt;{" "}
+      &lt;p className="font-bold mt-1"&gt;${product.price.toFixed(2)}&lt;/p&gt;{" "}
+    &lt;/Link&gt;
+  );
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 4: Dynamic product detail with SSG + ISR
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/products/[id]/page.tsx
+import Image from "next/image";
+import { getProducts, getProductById } from "@/lib/products";
+import AddToCartButton from "@/components/AddToCartButton";
+export const revalidate = 3600;
+export async function generateStaticParams() {
+  const products = await getProducts();
+  return products.slice(0, 20).map((p) =&gt; ({ id: p.id }));
+}
+export default async function ProductPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const product = await getProductById(params.id);
+  if (!product) return &lt;p&gt;Product not found&lt;/p&gt;;
+  return (
+    &lt;main className="max-w-4xl mx-auto p-6"&gt;
+      {" "}
+      &lt;div className="grid md:grid-cols-2 gap-8"&gt;
+        {" "}
+        &lt;div className="relative h-80"&gt;
+          {" "}
+          &lt;Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-contain"
+          /&gt;{" "}
+        &lt;/div&gt;{" "}
+        &lt;div&gt;
+          {" "}
+          &lt;h1 className="text-3xl font-bold mb-2"&gt;{product.name}&lt;/h1&gt;{" "}
+          &lt;p className="text-gray-500 capitalize mb-4"&gt;{product.category}&lt;/p&gt;{" "}
+          &lt;p className="text-2xl font-bold mb-4"&gt;${product.price.toFixed(2)}&lt;/p&gt;{" "}
+          &lt;p className="text-gray-600 mb-6"&gt;{product.description}&lt;/p&gt;{" "}
+          &lt;p className="text-sm text-gray-500 mb-4"&gt;
+            {product.stock}
+            in stock
+          &lt;/p&gt;{" "}
+          &lt;AddToCartButton product={product} /&gt;{" "}
+        &lt;/div&gt;{" "}
+      &lt;/div&gt;{" "}
+    &lt;/main&gt;
+  );
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 5: Cart context with localStorage
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// components/CartProvider.tsx 'use
+client';
+import
+{ createContext,
+useContext,
+useEffect,
+useState }
+from 'react';
+import
+{ Product }
+from '@/lib/products';
+interface CartItem extends Product
+{ qty: number;
+}
+const CartContext = createContext({ items: []
+as CartItem
+[],
+addItem: (product: Product) =&gt; {},
+removeItem: (id: string) =&gt; {},
+updateQty: (id: string,
+qty: number) =&gt; {},
+count: 0,
+total: 0 }
+);
+export function CartProvider({ children }: { children: React.ReactNode }
+)
+{ const
+[items,
+setItems] = useState&lt;CartItem
+[]&gt;([]
+);
+useEffect(() =&gt; { const saved = localStorage.getItem('cart');
+if (saved) setItems(JSON.parse(saved));
+}, []
+);
+useEffect(() =&gt; { localStorage.setItem('cart',
+JSON.stringify(items));
+}, [items]
+);
+const addItem = (product: Product) =&gt; { setItems((prev) =&gt; { const existing = prev.find((i) =&gt; i.id === product.id);
+if (existing)
+{ return prev.map((i) =&gt; i.id === product.id ? { ...i,
+qty: i.qty + 1 } : i);
+}
+return
+[...prev,
+{ ...product,
+qty: 1 }
+]
+;
+}
+);
+}
+;
+const removeItem = (id: string) =&gt; setItems((prev) =&gt; prev.filter((i) =&gt; i.id !== id));
+const updateQty = (id: string,
+qty: number) =&gt; { if (qty &lt; 1) return removeItem(id);
+setItems((prev) =&gt; prev.map((i) =&gt; i.id === id ? { ...i,
+qty } : i));
+}
+;
+const count = items.reduce((sum,
+i) =&gt; sum + i.qty,
+0);
+const total = items.reduce((sum,
+i) =&gt; sum + i.price * i.qty,
+0);
+return ( &lt;CartContext.Provider value={{ items,
+addItem,
+removeItem,
+updateQty,
+count,
+total }
+}&gt; {children} &lt;/CartContext.Provider&gt; );
+}
+export const useCart = () =&gt; useContext(CartContext);</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 6: Add-to-cart button
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// components/AddToCartButton.tsx 'use
+client';
+import
+{ useCart }
+from './CartProvider';
+import
+{ Product }
+from '@/lib/products';
+export default function AddToCartButton({ product }: { product: Product }
+)
+{ const
+{ addItem } = useCart();
+return ( &lt;button onClick={() =&gt; addItem(product)}
+className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition" &gt; Add to Cart &lt;/button&gt; );
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 7: Cart page
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/cart/page.tsx 'use
+client';
+import Link from 'next/link';
+import
+{ useCart }
+from '@/components/CartProvider';
+export default function CartPage()
+{ const
+{ items,
+updateQty,
+removeItem,
+total } = useCart();
+if (items.length === 0)
+{ return &lt;p className="p-6 text-center"&gt;Your cart is empty. &lt;Link href="/products" className="underline"&gt;Shop now&lt;/Link&gt;.&lt;/p&gt;;
+}
+return ( &lt;main className="max-w-3xl mx-auto p-6"&gt; &lt;h1 className="text-2xl font-bold mb-6"&gt;Shopping Cart&lt;/h1&gt; {items.map((item) =&gt; ( &lt;div key={item.id}
+className="flex items-center justify-between border-b py-4"&gt; &lt;div&gt; &lt;h3 className="font-semibold"&gt;{item.name}&lt;/h3&gt; &lt;p className="text-sm text-gray-500"&gt;${item.price.toFixed(2)}
+each&lt;/p&gt; &lt;/div&gt; &lt;div className="flex items-center gap-3"&gt; &lt;button onClick={() =&gt; updateQty(item.id,
+item.qty - 1)}
+className="px-2 border rounded"&gt;-&lt;/button&gt; &lt;span&gt;{item.qty}&lt;/span&gt; &lt;button onClick={() =&gt; updateQty(item.id,
+item.qty + 1)}
+className="px-2 border rounded"&gt;+&lt;/button&gt; &lt;button onClick={() =&gt; removeItem(item.id)}
+className="text-red-500 text-sm ml-4"&gt;Remove&lt;/button&gt; &lt;/div&gt; &lt;/div&gt; ))} &lt;div className="flex justify-between items-center mt-6"&gt; &lt;p className="text-xl font-bold"&gt;Total: ${total.toFixed(2)}&lt;/p&gt; &lt;Link href="/checkout" className="px-6 py-3 bg-black text-white rounded-lg"&gt;Checkout&lt;/Link&gt; &lt;/div&gt; &lt;/main&gt; );
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 8: Checkout form + Zod validation
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// lib/validation.ts
+import
+{ z }
+from 'zod';
+export const checkoutSchema = z.object({ email: z.string().email(),
+name: z.string().min(2),
+address: z.string().min(5),
+city: z.string().min(2),
+postalCode: z.string().min(4) }
+);
+// app/checkout/page.tsx 'use
+client';
+import
+{ useState }
+from 'react';
+import
+{ useCart }
+from '@/components/CartProvider';
+import
+{ checkoutSchema }
+from '@/lib/validation';
+export default function CheckoutPage()
+{ const
+{ items,
+total,
+removeItem } = useCart();
+const
+[errors,
+setErrors] = useState&lt;Record&lt;string,
+string&gt;&gt;({}
+);
+const
+[orderId,
+setOrderId] = useState&lt;string | null&gt;(null);
+async function submit(formData: FormData)
+{ setErrors({}
+);
+const data = Object.fromEntries(formData);
+const parsed = checkoutSchema.safeParse(data);
+if (!parsed.success)
+{ const fieldErrors: Record&lt;string,
+string&gt; = {}
+;
+parsed.error.errors.forEach((e) =&gt; fieldErrors
+[e.path
+[0]
+] = e.message);
+setErrors(fieldErrors);
+return;
+}
+const res = await fetch('/api/orders',
+{ method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ customer: parsed.data,
+items: items.map((i) =&gt; ({ id: i.id,
+qty: i.qty,
+price: i.price }
+)),
+total }
+) }
+);
+if (res.ok)
+{ const order = await res.json();
+setOrderId(order.orderId);
+items.forEach((i) =&gt; removeItem(i.id));
+}
+} if (orderId)
+{ return &lt;p className="p-6 text-center text-xl"&gt;🎉 Order placed! ID: {orderId}&lt;/p&gt;;
+}
+return ( &lt;main className="max-w-xl mx-auto p-6"&gt; &lt;h1 className="text-2xl font-bold mb-6"&gt;Checkout&lt;/h1&gt; &lt;form action={submit}
+className="space-y-4"&gt; {['name', 'email', 'address', 'city', 'postalCode'].map((field) =&gt; ( &lt;div key={field}&gt; &lt;label className="block text-sm font-medium capitalize"&gt;{field.replace(/([A-Z]
+)/g, ' $1')}&lt;/label&gt; &lt;input name={field}
+className="w-full border rounded-lg p-2" /&gt; {errors
+[field] &amp;&amp; &lt;p className="text-red-500 text-sm"&gt;{errors
+[field]
+}&lt;/p&gt;} &lt;/div&gt; ))} &lt;button className="w-full py-3 bg-black text-white rounded-lg"&gt;Place Order &mdash; ${total.toFixed(2)}&lt;/button&gt; &lt;/form&gt; &lt;/main&gt; );
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 9: Order API route
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/api/orders/route.ts
+import
+{ NextResponse }
+from 'next/server';
+import
+{ getProductById }
+from '@/lib/products';
+import
+{ checkoutSchema }
+from '@/lib/validation';
+// In-memory
+order store;
+replace with database in production const orders: any
+[] = []
+;
+export async function POST(request: Request)
+{ const body = await request.json();
+const customerValid = checkoutSchema.safeParse(body.customer);
+if (!customerValid.success)
+{ return NextResponse.json({ error: 'Invalid customer data' },
+{ status: 400 }
+);
+} // Validate
+stock and calculate total server-side let total = 0;
+for (const item of body.items)
+{ const product = await getProductById(item.id);
+if (!product)
+{ return NextResponse.json({ error: `Product ${item.id}
+not found` },
+{ status: 400 }
+);
+}
+if (item.qty &gt; product.stock)
+{ return NextResponse.json({ error: `${product.name}
+is out of stock` },
+{ status: 400 }
+);
+}
+total += item.price * item.qty;
+} // Guard
+against client tampering with total if (Math.abs(total - body.total) &gt; 0.01)
+{ return NextResponse.json({ error: 'Total mismatch' },
+{ status: 400 }
+);
+}
+const order = { orderId: crypto.randomUUID(),
+customer: customerValid.data,
+items: body.items,
+total,
+status: 'received',
+createdAt: new Date().toISOString() }
+;
+orders.push(order);
+return NextResponse.json(order,
+{ status: 201 }
+);
+}
+export async function GET()
+{ return NextResponse.json(orders);
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 10: Search page
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// app/search/page.tsx
+import { getProducts } from "@/lib/products";
+import ProductCard from "@/components/ProductCard";
+export default async function SearchPage({
+  searchParams,
+}: {
+  searchParams: { q?: string };
+}) {
+  const query = searchParams.q?.toLowerCase() || "";
+  const products = await getProducts();
+  const results = products.filter(
+    (p) =&gt;
+      p.name.toLowerCase().includes(query) ||
+      p.category.toLowerCase().includes(query),
+  );
+  return (
+    &lt;main className="max-w-6xl mx-auto p-6"&gt;
+      {" "}
+      &lt;h1 className="text-2xl font-bold mb-4"&gt;Search: {query || "all"}&lt;/h1&gt;{" "}
+      &lt;p className="text-gray-500 mb-6"&gt;
+        {results.length}
+        results found
+      &lt;/p&gt;{" "}
+      &lt;div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"&gt;
+        {" "}
+        {results.map((p) =&gt; (
+          &lt;ProductCard key={p.id} product={p} /&gt;
+        ))}{" "}
+      &lt;/div&gt;{" "}
+    &lt;/main&gt;
+  );
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 11: Navbar with cart count
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// components/Navbar.tsx 'use
+client';
+import Link from 'next/link';
+import
+{ useCart }
+from './CartProvider';
+export default function Navbar()
+{ const
+{ count } = useCart();
+return ( &lt;nav className="border-b p-4"&gt; &lt;div className="max-w-6xl mx-auto flex items-center justify-between"&gt; &lt;Link href="/" className="text-xl font-bold"&gt;Modern Mart&lt;/Link&gt; &lt;div className="flex gap-6"&gt; &lt;Link href="/products"&gt;Products&lt;/Link&gt; &lt;Link href="/search"&gt;Search&lt;/Link&gt; &lt;Link href="/cart" className="relative"&gt; Cart
+{count &gt; 0 &amp;&amp; ( &lt;span className="absolute -top-2 -right-3 bg-red-500 text-white text-xs px-1.5 rounded-full"&gt; {count} &lt;/span&gt; )} &lt;/Link&gt; &lt;/div&gt; &lt;/div&gt; &lt;/nav&gt; );
+}</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       4. What did we learn from this capstone project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Next.js Server Components fetch data safely on the server while Client Components handle interactivity.
+        </li>
+        <li>
+         ISR and
+         <code class="kbd">
+          generateStaticParams
+         </code>
+         let product pages stay fast even with thousands of SKUs.
+        </li>
+        <li>
+         A context provider plus
+         <code class="kbd">
+          localStorage
+         </code>
+         gives users a persistent cart without a backend session.
+        </li>
+        <li>
+         Server-side validation and total recalculation protect the order API from client tampering.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       5. How can I enhance this project in the future?
+      </h3>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Replace FakeStoreAPI with a real database (PostgreSQL, MongoDB, or PlanetScale).
+        </li>
+        <li>
+         Add NextAuth.js or Clerk for user accounts and saved addresses.
+        </li>
+        <li>
+         Use Stripe Checkout for real payments.
+        </li>
+        <li>
+         Add image optimization with
+         <code class="kbd">
+          next/image
+         </code>
+         and remote image domains.
+        </li>
+        <li>
+         Add loading and error UI with
+         <code class="kbd">
+          loading.tsx
+         </code>
+         and
+         <code class="kbd">
+          error.tsx
+         </code>
+         files.
+        </li>
+        <li>
+         Set up Vercel Analytics and Speed Insights.
+        </li>
+        <li>
+         Write end-to-end tests with Playwright.
+        </li>
+        <li>
+         Add user reviews on product pages and a wishlist with optimistic UI updates.
+        </li>
+        <li>
+         Add an admin dashboard at
+         <code class="kbd">
+          /admin/orders
+         </code>
+         using the GET /api/orders endpoint.
+        </li>
+        <li>
+         Cache product list in Redis to survive API outages.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#deployment">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); const lightStylesheet = document.getElementById('hljs-light'); const darkStylesheet = document.getElementById('hljs-dark'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { lightStylesheet.disabled = true; darkStylesheet.disabled = false; moon.classList.add('hidden'); sun.classList.remove('hidden'); } else { lightStylesheet.disabled = false; darkStylesheet.disabled = true; moon.classList.remove('hidden'); sun.classList.add('hidden'); } localStorage.setItem('nextjs-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('nextjs-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menu-overlay'); sidebar.classList.toggle('open'); overlay.classList.toggle('hidden'); } function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code'); navigator.clipboard.writeText(code.innerText).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); } const sections = document.querySelectorAll('section[id]'); const tocLinks = document.querySelectorAll('.toc-link'); const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { tocLinks.forEach((link) => link.classList.remove('active')); const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (active) active.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach((section) => observer.observe(section)); hljs.highlightAll();
+  </script>
+ </body>
+</html>

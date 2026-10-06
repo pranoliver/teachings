@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Machine Learning with Python: scikit-learn &amp; PyTorch
+  </title>
+  <link href="../assets/favicons/svg/PyTorch.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-machine-learning-python">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="PyTorch" class="w-10 h-10" src="../assets/favicons/svg/PyTorch.svg"/>
+     <span class="text-xl font-bold">
+      ML with Python
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      2. Environment Setup
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#numpy-pandas">
+      3. NumPy &amp; pandas Refresher
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#ml-lifecycle">
+      4. The ML Lifecycle
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#sklearn-classification">
+      5. Classification with scikit-learn
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#sklearn-regression">
+      6. Regression with scikit-learn
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#sklearn-unsupervised">
+      7. Unsupervised Learning
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#sklearn-pipelines">
+      8. Pipelines &amp; Model Persistence
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pytorch-tensors">
+      9. PyTorch Tensors &amp; Autograd
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pytorch-neural">
+      10. Neural Networks with PyTorch
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pytorch-cnn">
+      11. Convolutional Neural Networks
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#evaluation">
+      12. Evaluation, Tuning &amp; Ethics
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#deployment">
+      13. Deployment &amp; MLOps Basics
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone">
+      14. Capstone 1: Predictive Maintenance
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone-nlp">
+      15. Capstone 2: Sentiment Analysis with PyTorch
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#quiz">
+      16. Knowledge Check
+     </a>
+    </nav>
+   </aside>
+   <main class="flex-1 min-w-0 lg:ml-0">
+    <header class="sticky top-0 z-20 bg-[var(--card)]/80 backdrop-blur border-b border-[var(--border)] px-6 py-3 flex items-center justify-between gap-4">
+     <div class="flex items-center gap-3">
+      <button aria-label="Toggle menu" class="lg:hidden p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <img alt="PyTorch" class="w-8 h-8" src="../assets/favicons/svg/PyTorch.svg"/>
+      <h1 class="font-bold text-lg hidden sm:block">
+       ML with Python
+      </h1>
+     </div>
+     <div class="flex items-center gap-3">
+      <button aria-label="Toggle theme" class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+       <svg class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       <svg class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5" stroke-linecap="round" stroke-linejoin="round">
+        </circle>
+        <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <a class="text-sm font-semibold hover:opacity-80 transition" href="../index.html">
+       ← Home
+      </a>
+      <div class="hidden sm:flex items-center gap-2 text-xs">
+       <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--brand-light)] hover:text-white hover:border-[var(--brand-light)] transition" id="btn-start">
+        Start
+       </button>
+       <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--success)] hover:text-white hover:border-[var(--success)] transition" id="btn-complete">
+        Mark Complete
+       </button>
+       <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--warn)] hover:text-white hover:border-[var(--warn)] transition" id="btn-reset">
+        Reset
+       </button>
+      </div>
+     </div>
+    </header>
+    <div class="max-w-5xl mx-auto px-6 py-10" id="main">
+     <section class="mb-12 text-center scroll-mt-28" id="intro">
+      <div class="inline-flex items-center gap-3 mb-4">
+       <img alt="PyTorch" class="w-14 h-14" src="../assets/favicons/svg/PyTorch.svg"/>
+       <span class="text-sm font-semibold px-3 py-1 rounded-full bg-[var(--brand-light)] text-white">
+        AI / ML / LLM
+       </span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">
+       Machine Learning with Python
+      </h1>
+      <p class="text-lg text-[var(--muted)] max-w-2xl mx-auto leading-relaxed mb-8">
+       A rigorous, hands-on journey through classical machine learning with scikit-learn and deep learning with PyTorch. Build real models on generated data, evaluate them properly, and complete an end-to-end production-grade capstone.
+      </p>
+      <div class="flex flex-wrap justify-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        scikit-learn
+       </span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        PyTorch
+       </span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        Classification
+       </span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        Neural Networks
+       </span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">
+        MLOps
+       </span>
+      </div>
+     </section>
+      <section class="mb-12 scroll-mt-28" id="setup">
+       <h2 class="text-2xl font-bold mb-4">
+        2. Environment Setup
+       </h2>
+       <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+        <p class="text-sm text-[var(--muted)] mb-2">
+         <strong>What is uv?</strong>
+         uv is an extremely fast Python package manager and project tool written in Rust. It replaces
+         <code>pip</code>
+         and
+         <code>venv</code>
+         with simpler, faster commands and can install Python versions too.
+        </p>
+        <p class="text-sm text-[var(--muted)]">
+         <strong>Why use it here?</strong>
+         It resolves ML dependencies in seconds, creates isolated environments automatically, and keeps a lockfile so your project is reproducible across machines.
+        </p>
+       </div>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        You need Python 3.10 or newer. We will use
+        <code>uv</code>
+        to install Python, create a virtual environment, and install all packages.
+       </p>
+       <h3 class="text-lg font-semibold mb-2">
+        Install uv
+       </h3>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-install-uv" type="button">
+         Copy
+        </button>
+        <pre><code class="language-bash" id="code-install-uv"># macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows PowerShell
+powershell -c "irm https://astral.sh/uv/install.ps1 | more"
+
+# Verify
+uv --version
+uv self update  # optional: keep uv current</code></pre>
+       </div>
+       <h3 class="text-lg font-semibold mb-2">
+        Create a project with uv
+       </h3>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-uv-init" type="button">
+         Copy
+        </button>
+        <pre><code class="language-bash" id="code-uv-init"># Create project folder and enter it
+mkdir ml-course
+cd ml-course
+
+# Initialize a uv-managed Python project
+uv init
+
+# Pin a Python version (uv can download it for you)
+uv python pin 3.11</code></pre>
+       </div>
+       <h3 class="text-lg font-semibold mb-2">
+        Install packages
+       </h3>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-install" type="button">
+         Copy
+        </button>
+        <pre><code class="language-bash" id="code-install"># Core ML stack (uv will create and use the venv automatically)
+uv add numpy pandas scikit-learn matplotlib seaborn jupyter
+
+# PyTorch CPU wheel
+uv add torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+
+# Experiment tracking and tuning
+uv add mlflow optuna
+
+# Optional API serving dependencies
+uv add fastapi uvicorn pydantic</code></pre>
+       </div>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        For GPU training, replace the PyTorch command with the CUDA wheel listed on
+        <a class="text-[var(--brand-light)] hover:underline" href="https://pytorch.org/get-started/locally/" target="_blank">
+         pytorch.org/get-started/locally
+        </a>
+        .
+       </p>
+       <h3 class="text-lg font-semibold mb-2">
+        Run commands and notebooks inside the project
+       </h3>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-uv-run" type="button">
+         Copy
+        </button>
+        <pre><code class="language-bash" id="code-uv-run"># Run a Python script using the project environment
+uv run train.py
+
+# Start JupyterLab with all installed packages
+uv run jupyter lab
+
+# Enter an interactive shell with the environment activated
+uv run python</code></pre>
+       </div>
+       <h3 class="text-lg font-semibold mb-2">
+        Verify installation
+       </h3>
+       <div class="code-block mb-4">
+        <button class="copy-btn" data-clipboard-target="#code-verify" type="button">
+         Copy
+        </button>
+        <pre><code class="language-python" id="code-verify">import sklearn, torch, numpy, pandas
+
+print("scikit-learn", sklearn.__version__)
+print("PyTorch", torch.__version__)
+print("NumPy", numpy.__version__)
+print("pandas", pandas.__version__)
+print("MPS available:", torch.backends.mps.is_available())
+print("CUDA available:", torch.cuda.is_available())</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">check_env.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run check_env.py</code>
+         </p>
+        </div></div>
+      </section>
+     <section class="mb-12 scroll-mt-28" id="numpy-pandas">
+      <h2 class="text-2xl font-bold mb-4">
+       3. NumPy &amp; pandas Refresher
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What are NumPy and pandas?</strong>
+        NumPy provides fast, efficient arrays for numerical computing. pandas adds DataFrames, which are like Excel sheets you can program, making it easy to clean, filter, and analyze tabular data.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A sales analyst loads daily transactions in pandas to calculate monthly revenue, then uses NumPy to compute average order values and percentiles in milliseconds.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Machine learning is built on linear algebra and tabular data manipulation. This section is a quick refresher, not a full course.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-numpy" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-numpy">import numpy as np
+import pandas as pd
+
+# Create a reproducible synthetic dataset
+np.random.seed(42)
+n = 1000
+X = np.random.rand(n, 3)  # 3 numeric features
+coef = np.array([2.5, -1.2, 0.8])
+y = X @ coef + np.random.normal(scale=0.3, size=n)
+
+# Wrap in a DataFrame
+df = pd.DataFrame(X, columns=["feature_1", "feature_2", "feature_3"])
+df["target"] = y
+
+# Train/validation split by index
+split = int(0.8 * n)
+train_df = df.iloc[:split]
+val_df = df.iloc[split:]
+
+print(train_df.head())
+print(train_df.describe())</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">numpy_pandas.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run numpy_pandas.py</code>
+         </p>
+        </div></div>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Key idea:</strong>
+        Always split data before any transformation or model fitting. Otherwise leakage makes your metrics unrealistic.
+       </p>
+      </div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="ml-lifecycle">
+      <h2 class="text-2xl font-bold mb-4">
+       4. The ML Lifecycle
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is the ML lifecycle?</strong>
+        It is the end-to-end workflow every machine-learning project follows, from understanding the problem to deploying and maintaining a model in production.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A streaming service first defines the problem ("predict which show a user will watch"), collects viewing history, engineers features, trains several models, evaluates them on a hidden test set, deploys the winner, and monitors whether recommendations stay relevant over time.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A production ML project follows a repeatable loop. Skipping steps is the main cause of failed models.
+      </p>
+      <ol class="list-decimal pl-6 space-y-2 text-[var(--muted)] mb-6">
+       <li>
+        <strong>Problem definition</strong>
+        — What business question are you answering?
+       </li>
+       <li>
+        <strong>Data collection &amp; exploration</strong>
+        — Understand distributions, missing values, and biases.
+       </li>
+       <li>
+        <strong>Feature engineering</strong>
+        — Create useful inputs from raw data.
+       </li>
+       <li>
+        <strong>Model selection</strong>
+        — Pick algorithms matching the data size and task.
+       </li>
+       <li>
+        <strong>Training &amp; validation</strong>
+        — Fit on training data, choose hyperparameters on validation data.
+       </li>
+       <li>
+        <strong>Evaluation</strong>
+        — Test on held-out data the model never saw.
+       </li>
+       <li>
+        <strong>Deployment &amp; monitoring</strong>
+        — Serve the model and watch for drift.
+       </li>
+      </ol>
+      <div class="overflow-x-auto mb-4">
+       <table class="w-full text-sm border border-[var(--border)] rounded-xl">
+        <thead class="bg-[var(--panel)]">
+         <tr>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">
+           Task type
+          </th>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">
+           Target
+          </th>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">
+           Example metric
+          </th>
+         </tr>
+        </thead>
+        <tbody class="text-[var(--muted)]">
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Classification
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Discrete label
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           F1-score, ROC-AUC
+          </td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Regression
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Continuous value
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           RMSE, MAE, R²
+          </td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Clustering
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           No labels
+          </td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">
+           Silhouette score
+          </td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2">
+           Dimensionality reduction
+          </td>
+          <td class="px-4 py-2">
+           Latent representation
+          </td>
+          <td class="px-4 py-2">
+           Reconstruction error
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </section>
+      <section class="mb-12 scroll-mt-28" id="sklearn-classification">
+       <h2 class="text-2xl font-bold mb-4">
+        5. Classification with scikit-learn
+       </h2>
+       <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+        <p class="text-sm text-[var(--muted)] mb-2">
+         <strong>What is classification?</strong>
+         Classification means predicting a category or label. The model learns patterns from labeled examples and then assigns new, unseen examples to one of those predefined categories.
+        </p>
+        <p class="text-sm text-[var(--muted)]">
+         <strong>Real-world example:</strong>
+         A hospital might classify chest X-rays as "pneumonia" or "normal". A bank might classify a transaction as "fraud" or "not fraud". In the example below, we classify customers as "will churn" or "will stay".
+        </p>
+       </div>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        We build a customer churn classifier on fully generated tabular data. The workflow includes preprocessing, model fitting, cross-validation, and threshold tuning.
+       </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-classification" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-classification">import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, roc_auc_score
+
+# Generate synthetic churn data
+np.random.seed(2024)
+n = 5000
+df = pd.DataFrame({
+    "tenure_months": np.random.exponential(24, n).clip(1, 72).astype(int),
+    "monthly_charges": np.random.normal(70, 25, n).clip(20, 150).round(2),
+    "support_calls": np.random.poisson(2, n),
+    "contract_months": np.random.choice([1, 12, 24], n, p=[0.4, 0.35, 0.25]),
+    "has_premium_support": np.random.binomial(1, 0.3, n),
+})
+
+# Synthetic churn signal
+df["churn"] = (
+    (df["tenure_months"] < 12).astype(int) * 0.4 +
+    (df["support_calls"] > 4).astype(int) * 0.35 +
+    (df["contract_months"] == 1).astype(int) * 0.25 +
+    np.random.normal(0, 0.1, n)
+) > 0.45
+
+df["churn"] = df["churn"].astype(int)
+
+X = df.drop(columns=["churn"])
+y = df["churn"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+scaler = StandardScaler()
+X_train_s = scaler.fit_transform(X_train)
+X_test_s = scaler.transform(X_test)
+
+models = {
+    "Logistic Regression": LogisticRegression(max_iter=1000),
+    "Random Forest": RandomForestClassifier(n_estimators=200, random_state=42),
+}
+
+for name, model in models.items():
+    model.fit(X_train_s, y_train)
+    preds = model.predict(X_test_s)
+    probs = model.predict_proba(X_test_s)[:, 1]
+    print(f"\n{name}")
+    print(classification_report(y_test, preds))
+    print("ROC-AUC:", roc_auc_score(y_test, probs).round(3))</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">churn_classifier.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run churn_classifier.py</code>
+         </p>
+        </div></div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       <strong>Stratified splitting</strong>
+       preserves the churn rate in train and test sets. For imbalanced targets, use
+       <code>class_weight="balanced"</code>
+       or resampling techniques.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-threshold" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-threshold">from sklearn.metrics import precision_recall_curve
+import numpy as np
+
+# Tune decision threshold to maximize F1
+probs = models["Random Forest"].predict_proba(X_test_s)[:, 1]
+precision, recall, thresholds = precision_recall_curve(y_test, probs)
+f1_scores = 2 * (precision * recall) / (precision + recall + 1e-9)
+best_idx = np.argmax(f1_scores[:-1])
+best_threshold = thresholds[best_idx]
+print(f"Best threshold: {best_threshold:.3f}, F1: {f1_scores[best_idx]:.3f}")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">threshold_tuning.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run threshold_tuning.py</code>
+         </p>
+        </div></div>
+     </section>
+      <section class="mb-12 scroll-mt-28" id="sklearn-regression">
+       <h2 class="text-2xl font-bold mb-4">
+        6. Regression with scikit-learn
+       </h2>
+       <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+        <p class="text-sm text-[var(--muted)] mb-2">
+         <strong>What is regression?</strong>
+         Regression means predicting a continuous number rather than a category. The model learns how input variables relate to a numeric target and then estimates that target for new data.
+        </p>
+        <p class="text-sm text-[var(--muted)]">
+         <strong>Real-world example:</strong>
+         A real-estate company might predict the sale price of a house from its square footage, number of bedrooms, and location. A logistics company might predict delivery time from distance and traffic. Below, we predict house prices from generated features.
+        </p>
+       </div>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Predict house prices from generated features. We compare linear and tree-based models and use cross-validation for robust estimates.
+       </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-regression" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-regression">import numpy as np
+import pandas as pd
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import Ridge
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error, r2_score
+
+np.random.seed(7)
+n = 3000
+df = pd.DataFrame({
+    "sqft": np.random.lognormal(7.5, 0.5, n),
+    "bedrooms": np.random.poisson(3, n).clip(1, 6),
+    "age_years": np.random.exponential(15, n).clip(0, 100),
+    "distance_to_center": np.random.exponential(8, n),
+    "has_garage": np.random.binomial(1, 0.4, n),
+})
+df["price"] = (
+    50_000
+    + 180 * df["sqft"]
+    + 12_000 * df["bedrooms"]
+    - 700 * df["age_years"]
+    - 4_000 * df["distance_to_center"]
+    + 18_000 * df["has_garage"]
+    + np.random.normal(0, 25_000, n)
+).round(2)
+
+X = df.drop(columns=["price"])
+y = df["price"]
+
+for name, model in [("Ridge", Ridge()), ("Gradient Boosting", GradientBoostingRegressor(random_state=42))]:
+    rmse = cross_val_score(model, X, y, scoring="neg_root_mean_squared_error", cv=5)
+    r2 = cross_val_score(model, X, y, scoring="r2", cv=5)
+    print(f"{name}: RMSE={-rmse.mean():,.0f}, R²={r2.mean():.3f}")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">house_prices.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run house_prices.py</code>
+         </p>
+        </div></div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="sklearn-unsupervised">
+      <h2 class="text-2xl font-bold mb-4">
+       7. Unsupervised Learning
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is unsupervised learning?</strong>
+        It is learning from data that has no labels. The algorithm finds hidden structure, such as groups or patterns, without being told the correct answer.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A retailer clusters customers by purchase behavior to discover segments like "budget shoppers" and "high-value regulars", then tailors marketing to each group.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Segment customers using K-Means and reduce dimensionality with PCA for visualization.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-unsupervised" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-unsupervised">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+np.random.seed(11)
+n = 2000
+customers = pd.DataFrame({
+    "annual_spend": np.random.exponential(800, n),
+    "orders_per_year": np.random.poisson(6, n),
+    "avg_order_value": np.random.lognormal(4.5, 0.6, n),
+    "support_tickets": np.random.poisson(1, n),
+})
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(customers)
+
+# Elbow method to choose k
+inertias = []
+for k in range(1, 10):
+    inertias.append(KMeans(n_clusters=k, random_state=42, n_init="auto").fit(X_scaled).inertia_)
+
+# Use k=4 and reduce to 2D for plotting
+kmeans = KMeans(n_clusters=4, random_state=42, n_init="auto")
+customers["cluster"] = kmeans.fit_predict(X_scaled)
+
+pca = PCA(n_components=2)
+components = pca.fit_transform(X_scaled)
+
+plt.figure(figsize=(8, 6))
+plt.scatter(components[:, 0], components[:, 1], c=customers["cluster"], cmap="tab10", alpha=0.5)
+plt.title("Customer Segments (PCA projection)")
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+plt.colorbar(label="Cluster")
+plt.tight_layout()
+plt.show()
+
+print(customers.groupby("cluster").mean().round(2))</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">customer_segments.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run customer_segments.py</code>
+         </p>
+        </div></div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="sklearn-pipelines">
+      <h2 class="text-2xl font-bold mb-4">
+       8. Pipelines &amp; Model Persistence
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is a pipeline?</strong>
+        A pipeline chains preprocessing steps and a model into a single object. It guarantees that the same transformations applied during training are applied when the model makes real predictions.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A credit scoring pipeline first encodes categorical features (job type, home ownership), scales numeric features, then feeds them into a classifier. Saving the entire pipeline means the production API cannot accidentally forget a step.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Pipelines bundle preprocessing and modeling so the same transformations are applied at training and inference time. This prevents leakage and simplifies deployment.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-pipeline" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-pipeline">from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+import joblib
+
+numeric_features = ["tenure_months", "monthly_charges", "support_calls"]
+categorical_features = ["contract_months"]
+
+preprocessor = ColumnTransformer([
+    ("num", StandardScaler(), numeric_features),
+    ("cat", OneHotEncoder(), categorical_features),
+])
+
+pipeline = Pipeline([
+    ("prep", preprocessor),
+    ("model", RandomForestClassifier(n_estimators=200, random_state=42)),
+])
+
+# Re-create churn data with a categorical column
+np.random.seed(2024)
+df = pd.DataFrame({
+    "tenure_months": np.random.exponential(24, n).clip(1, 72).astype(int),
+    "monthly_charges": np.random.normal(70, 25, n).clip(20, 150).round(2),
+    "support_calls": np.random.poisson(2, n),
+    "contract_months": np.random.choice(["monthly", "annual", "biannual"], n),
+})
+df["churn"] = (
+    (df["tenure_months"] < 12).astype(int) * 0.4 +
+    (df["support_calls"] > 4).astype(int) * 0.35 +
+    (df["contract_months"] == "monthly").astype(int) * 0.25 +
+    np.random.normal(0, 0.1, n)
+) > 0.45
+df["churn"] = df["churn"].astype(int)
+
+X = df.drop(columns=["churn"])
+y = df["churn"]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+pipeline.fit(X_train, y_train)
+print("Test accuracy:", pipeline.score(X_test, y_test).round(3))
+
+# Save and reload
+joblib.dump(pipeline, "churn_pipeline.pkl")
+loaded = joblib.load("churn_pipeline.pkl")
+print("Reloaded accuracy:", loaded.score(X_test, y_test).round(3))</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">churn_pipeline.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run churn_pipeline.py</code>
+         </p>
+        </div></div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="pytorch-tensors">
+      <h2 class="text-2xl font-bold mb-4">
+       9. PyTorch Tensors &amp; Autograd
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What are tensors and autograd?</strong>
+        Tensors are multi-dimensional arrays that can live on a CPU or GPU. Autograd is PyTorch's ability to automatically compute how much each parameter contributed to an error, so the model can improve itself.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        Imagine fitting a line through noisy temperature readings. Tensors hold the data and the line's slope. Autograd tells you exactly how to adjust the slope to reduce prediction error, step by step.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       PyTorch represents data and computation as tensors. Autograd automatically computes gradients, which is the foundation of neural network training.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-tensors" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-tensors">import torch
+
+# Device selection: MPS on Apple Silicon, CUDA on NVIDIA, else CPU
+device = (
+    "cuda" if torch.cuda.is_available()
+    else "mps" if torch.backends.mps.is_available()
+    else "cpu"
+)
+print("Device:", device)
+
+# Create tensors
+x = torch.linspace(-3, 3, 100, device=device)
+y_true = 2.0 * x - 1.0 + 0.5 * torch.randn_like(x)
+
+# Learnable parameters
+w = torch.randn(1, requires_grad=True, device=device)
+b = torch.randn(1, requires_grad=True, device=device)
+
+lr = 0.01
+for epoch in range(200):
+    y_pred = w * x + b
+    loss = torch.mean((y_pred - y_true) ** 2)
+    loss.backward()
+    with torch.no_grad():
+        w -= lr * w.grad
+        b -= lr * b.grad
+        w.grad.zero_()
+        b.grad.zero_()
+
+print(f"Learned: y = {w.item():.3f} x + {b.item():.3f}")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">pytorch_tensors.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run pytorch_tensors.py</code>
+         </p>
+        </div></div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="pytorch-neural">
+      <h2 class="text-2xl font-bold mb-4">
+       10. Neural Networks with PyTorch
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is a neural network?</strong>
+        A neural network is a stack of layers that learns complex patterns from data. Each layer transforms its inputs and passes the result forward, with adjustable weights that training updates to minimize error.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A spam filter neural network learns which combinations of words and sender patterns indicate spam, becoming more accurate as it sees more labeled emails.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Build a fully connected classifier for the same churn task, this time using PyTorch. We define a model, a loss function, an optimizer, and a training loop explicitly.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-nn" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-nn">import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Use the churn dataset from section 5
+np.random.seed(2024)
+n = 5000
+df = pd.DataFrame({
+    "tenure_months": np.random.exponential(24, n).clip(1, 72).astype(int),
+    "monthly_charges": np.random.normal(70, 25, n).clip(20, 150).round(2),
+    "support_calls": np.random.poisson(2, n),
+    "contract_months": np.random.choice([1, 12, 24], n, p=[0.4, 0.35, 0.25]),
+    "has_premium_support": np.random.binomial(1, 0.3, n),
+})
+df["churn"] = (
+    (df["tenure_months"] < 12).astype(int) * 0.4 +
+    (df["support_calls"] > 4).astype(int) * 0.35 +
+    (df["contract_months"] == 1).astype(int) * 0.25 +
+    np.random.normal(0, 0.1, n)
+) > 0.45
+df["churn"] = df["churn"].astype(int)
+
+X = df.drop(columns=["churn"]).values.astype(np.float32)
+y = df["churn"].values.astype(np.float32)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+
+# Convert to tensors
+train_ds = TensorDataset(
+    torch.tensor(X_train, dtype=torch.float32),
+    torch.tensor(y_train, dtype=torch.float32).unsqueeze(1),
+)
+test_ds = TensorDataset(
+    torch.tensor(X_test, dtype=torch.float32),
+    torch.tensor(y_test, dtype=torch.float32).unsqueeze(1),
+)
+
+train_loader = DataLoader(train_ds, batch_size=64, shuffle=True)
+
+class ChurnNet(nn.Module):
+    def __init__(self, in_features):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(in_features, 64),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(64, 32),
+            nn.ReLU(),
+            nn.Linear(32, 1),
+        )
+    def forward(self, x):
+        return self.net(x)
+
+model = ChurnNet(X_train.shape[1]).to(device)
+criterion = nn.BCEWithLogitsLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+
+for epoch in range(30):
+    model.train()
+    total_loss = 0.0
+    for xb, yb in train_loader:
+        xb, yb = xb.to(device), yb.to(device)
+        optimizer.zero_grad()
+        logits = model(xb)
+        loss = criterion(logits, yb)
+        loss.backward()
+        optimizer.step()
+        total_loss += loss.item()
+    print(f"Epoch {epoch+1:02d}, loss: {total_loss / len(train_loader):.4f}")
+
+# Evaluation
+model.eval()
+with torch.no_grad():
+    test_logits = model(torch.tensor(X_test, dtype=torch.float32).to(device))
+    probs = torch.sigmoid(test_logits).cpu().numpy()
+
+from sklearn.metrics import roc_auc_score
+print("ROC-AUC:", roc_auc_score(y_test, probs).round(3))</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">pytorch_churn_nn.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run pytorch_churn_nn.py</code>
+         </p>
+        </div></div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="pytorch-cnn">
+      <h2 class="text-2xl font-bold mb-4">
+       11. Convolutional Neural Networks
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is a CNN?</strong>
+        A Convolutional Neural Network is designed for grid-like data, especially images. It scans small filters across the image to detect edges, textures, and shapes, then combines them into higher-level features.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A medical imaging CNN first detects simple edges in an X-ray, then combines them into patterns that radiologists recognize as signs of disease.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       CNNs excel at image tasks. Since we do not bundle image files, we generate synthetic 28×28 grayscale images and classify them into ten classes.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-cnn" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-cnn">import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from torch.utils.data import TensorDataset, DataLoader
+import numpy as np
+
+np.random.seed(99)
+n_classes = 10
+n_train = 8000
+n_test = 2000
+
+# Synthetic images: random blobs + class-specific bias
+X_train = np.random.rand(n_train, 1, 28, 28).astype(np.float32)
+y_train = np.random.randint(0, n_classes, n_train)
+for i in range(n_train):
+    # Add a localized bright spot based on class
+    c = y_train[i]
+    row, col = (c * 2 + 7), (c * 2 + 7)
+    X_train[i, 0, row:row+4, col:col+4] += 1.5
+
+X_test = np.random.rand(n_test, 1, 28, 28).astype(np.float32)
+y_test = np.random.randint(0, n_classes, n_test)
+for i in range(n_test):
+    c = y_test[i]
+    row, col = (c * 2 + 7), (c * 2 + 7)
+    X_test[i, 0, row:row+4, col:col+4] += 1.5
+
+train_loader = DataLoader(
+    TensorDataset(torch.tensor(X_train), torch.tensor(y_train).long()),
+    batch_size=128, shuffle=True,
+)
+
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(1, 16, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, kernel_size=3, padding=1)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(32 * 7 * 7, 64)
+        self.fc2 = nn.Linear(64, n_classes)
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(x.size(0), -1)
+        x = F.relu(self.fc1(x))
+        return self.fc2(x)
+
+model = SimpleCNN()
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+
+for epoch in range(10):
+    model.train()
+    running_loss = 0.0
+    for xb, yb in train_loader:
+        optimizer.zero_grad()
+        out = model(xb)
+        loss = criterion(out, yb)
+        loss.backward()
+        optimizer.step()
+        running_loss += loss.item()
+    print(f"Epoch {epoch+1}, loss: {running_loss / len(train_loader):.4f}")
+
+# Test accuracy
+model.eval()
+with torch.no_grad():
+    logits = model(torch.tensor(X_test))
+    preds = logits.argmax(dim=1)
+    acc = (preds == torch.tensor(y_test)).float().mean().item()
+print("Test accuracy:", round(acc, 3))</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">pytorch_cnn.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run pytorch_cnn.py</code>
+         </p>
+        </div></div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="evaluation">
+      <h2 class="text-2xl font-bold mb-4">
+       12. Evaluation, Tuning &amp; Ethics
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>Why do evaluation and ethics matter?</strong>
+        A model can look accurate on paper but fail in production or harm certain groups. Rigorous evaluation and ethical review ensure the model is both useful and fair.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A hiring model might achieve high accuracy overall but systematically under-score candidates from one region. Evaluating fairness across groups catches this before deployment.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A high accuracy is not enough. You must measure calibration, fairness, and robustness, and tune hyperparameters systematically.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-optuna" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-optuna">import optuna
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
+
+def objective(trial):
+    n_estimators = trial.suggest_int("n_estimators", 50, 400)
+    max_depth = trial.suggest_int("max_depth", 3, 20)
+    min_samples_split = trial.suggest_int("min_samples_split", 2, 20)
+    model = RandomForestClassifier(
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        min_samples_split=min_samples_split,
+        random_state=42,
+    )
+    score = cross_val_score(model, X_train_s, y_train, cv=3, scoring="roc_auc").mean()
+    return score
+
+study = optuna.create_study(direction="maximize")
+study.optimize(objective, n_trials=20, show_progress_bar=True)
+
+print("Best ROC-AUC:", study.best_value.round(3))
+print("Best params:", study.best_params)</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">hyperparameter_tuning.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run hyperparameter_tuning.py</code>
+         </p>
+        </div></div>
+      <ul class="list-disc pl-6 space-y-2 text-[var(--muted)] mb-4">
+       <li>
+        <strong>Calibration:</strong>
+        predicted probabilities should match true frequencies. Use
+        <code>sklearn.calibration.CalibratedClassifierCV</code>
+        or reliability diagrams.
+       </li>
+       <li>
+        <strong>Fairness:</strong>
+        compare metrics across demographic groups. A model that performs well overall can harm subgroups.
+       </li>
+       <li>
+        <strong>Interpretability:</strong>
+        use SHAP or feature importances to explain predictions before deploying.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="deployment">
+      <h2 class="text-2xl font-bold mb-4">
+       13. Deployment &amp; MLOps Basics
+      </h2>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-5">
+       <p class="text-sm text-[var(--muted)] mb-2">
+        <strong>What is MLOps?</strong>
+        MLOps is the practice of reliably deploying, monitoring, and maintaining machine-learning models in production, similar to DevOps but specialized for ML artifacts.
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Real-world example:</strong>
+        A fraud-detection model is wrapped in an API, versioned, and monitored. When transaction patterns change, alerts trigger retraining with fresh data.
+       </p>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A trained model only creates value when it is served. We log experiments with MLflow, save artifacts, and show how to wrap a model in a simple API.
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-mlflow" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-mlflow">import mlflow
+import mlflow.sklearn
+from sklearn.ensemble import RandomForestClassifier
+
+mlflow.set_experiment("churn-classifier")
+
+with mlflow.start_run():
+    model = RandomForestClassifier(n_estimators=200, max_depth=12, random_state=42)
+    model.fit(X_train_s, y_train)
+    auc = roc_auc_score(y_test, model.predict_proba(X_test_s)[:, 1])
+
+    mlflow.log_param("n_estimators", 200)
+    mlflow.log_param("max_depth", 12)
+    mlflow.log_metric("roc_auc", auc)
+    mlflow.sklearn.log_model(model, "model")
+
+print("Run logged to MLflow. Launch UI with: mlflow ui")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">mlflow_logging.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run mlflow_logging.py</code>
+         </p>
+        </div></div>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-api" type="button">
+        Copy
+       </button>
+       <pre><code class="language-python" id="code-api"># Example FastAPI inference wrapper (install with: pip install fastapi uvicorn)
+from fastapi import FastAPI
+from pydantic import BaseModel
+import joblib
+import numpy as np
+
+app = FastAPI()
+pipeline = joblib.load("churn_pipeline.pkl")
+
+class Customer(BaseModel):
+    tenure_months: int
+    monthly_charges: float
+    support_calls: int
+    contract_months: str
+
+@app.post("/predict")
+def predict(customer: Customer):
+    x = np.array([[customer.tenure_months, customer.monthly_charges,
+                   customer.support_calls, customer.contract_months]])
+    prob = pipeline.predict_proba(x)[0, 1]
+    return {"churn_probability": round(float(prob), 4)}</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">churn_api.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run uvicorn churn_api:app --reload</code>
+         </p>
+        </div></div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="capstone">
+      <h2 class="text-2xl font-bold mb-6">
+       14. Capstone Project: End-to-End Predictive Maintenance System
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-6">
+       You are the lead ML engineer at an industrial IoT company. Sensors on pumps record vibration, temperature, pressure, and RPM. Build a system that predicts failures before they happen and is deployable to production.
+      </p>
+      <div class="space-y-6">
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 1: Generate realistic sensor data
+        </h3>
+        <p class="text-[var(--muted)] text-sm mb-2">
+         Create a synthetic multivariate time series with gradual degradation and random failures.
+        </p>
+        <div class="code-block mb-2">
+         <button class="copy-btn" data-clipboard-target="#cap-data" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="cap-data">import numpy as np
+import pandas as pd
+
+np.random.seed(2026)
+n_machines = 50
+hours = 2000
+records = []
+
+for machine_id in range(n_machines):
+    base_vib = np.random.uniform(0.3, 0.7)
+    base_temp = np.random.uniform(50, 70)
+    base_pres = np.random.uniform(90, 110)
+    base_rpm = np.random.uniform(1400, 1600)
+
+    # Healthy period then degradation after random start
+    fail_hour = np.random.randint(1200, 1800)
+    health = np.ones(hours)
+    for h in range(fail_hour, hours):
+        health[h] = max(0, 1 - (h - fail_hour) / (hours - fail_hour) * 0.9)
+
+    vib = base_vib + (1 - health) * 1.2 + np.random.normal(0, 0.05, hours)
+    temp = base_temp + (1 - health) * 30 + np.random.normal(0, 1.0, hours)
+    pres = base_pres + (1 - health) * (-15) + np.random.normal(0, 2.0, hours)
+    rpm = base_rpm + (1 - health) * (-200) + np.random.normal(0, 15, hours)
+
+    failed = np.zeros(hours, dtype=int)
+    failed[max(fail_hour + 100, hours - 1):] = 1
+
+    dfm = pd.DataFrame({
+        "machine_id": machine_id,
+        "hour": np.arange(hours),
+        "vibration": np.clip(vib, 0, 3),
+        "temperature": temp,
+        "pressure": pres,
+        "rpm": rpm,
+        "health": health,
+        "will_fail_next_48h": np.convolve(np.concatenate([[0]*47, failed]),
+                                          np.ones(48), mode="same") >= 1,
+    })
+    records.append(dfm)
+
+data = pd.concat(records, ignore_index=True)
+data["will_fail_next_48h"] = data["will_fail_next_48h"].astype(int)
+print(data.head())
+print("Failure rate:", data["will_fail_next_48h"].mean().round(4))</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">capstone_maintenance_data.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run capstone_maintenance_data.py</code>
+         </p>
+        </div></div>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 2: Feature engineering
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>
+          Compute rolling mean, standard deviation, and trend over the last 24 and 168 hours for each sensor.
+         </li>
+         <li>
+          Add lag features: values from 1, 6, and 24 hours ago.
+         </li>
+         <li>
+          Encode machine_id as a categorical feature or leave it out to force generalization.
+         </li>
+        </ul>
+        <div class="code-block mt-2 mb-2">
+         <button class="copy-btn" data-clipboard-target="#cap-features" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="cap-features">features = ["vibration", "temperature", "pressure", "rpm"]
+for f in features:
+    data[f"{f}_rolling_mean_24"] = data.groupby("machine_id")[f].transform(
+        lambda s: s.rolling(24, min_periods=1).mean()
+    )
+    data[f"{f}_rolling_std_168"] = data.groupby("machine_id")[f].transform(
+        lambda s: s.rolling(168, min_periods=1).std()
+    )
+    data[f"{f}_lag_1"] = data.groupby("machine_id")[f].shift(1)
+    data[f"{f}_lag_24"] = data.groupby("machine_id")[f].shift(24)
+
+data = data.dropna()
+print(data.columns.tolist())</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">capstone_maintenance_features.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run capstone_maintenance_features.py</code>
+         </p>
+        </div></div>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 3: Build and compare models
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>
+          Train a scikit-learn classifier (Random Forest or Gradient Boosting).
+         </li>
+         <li>
+          Train a PyTorch neural classifier.
+         </li>
+         <li>
+          Evaluate both with precision, recall, F1, and ROC-AUC on a time-based holdout set.
+         </li>
+        </ul>
+        <p class="text-[var(--muted)] text-sm mt-2">
+         Use the last 20% of hours as test data, not a random split, to respect temporal order.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 4: Imbalanced learning and threshold tuning
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>
+          Apply
+          <code>class_weight="balanced"</code>
+          or SMOTE to address the rare positive class.
+         </li>
+         <li>
+          Choose a threshold that maximizes recall at a precision floor of 0.6.
+         </li>
+         <li>
+          Report expected cost savings: compare the cost of a false alarm versus a missed failure.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 5: Experiment tracking and model packaging
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>
+          Log every experiment in MLflow: hyperparameters, metrics, and the final model artifact.
+         </li>
+         <li>
+          Save the best preprocessing pipeline and model with
+          <code>joblib</code>
+          .
+         </li>
+         <li>
+          Write a short deployment plan: API endpoint, input schema, monitoring metrics, and retraining trigger.
+         </li>
+        </ul>
+        <div class="code-block mt-2 mb-2">
+         <button class="copy-btn" data-clipboard-target="#cap-deploy" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="cap-deploy"># Save final artifacts
+import joblib
+
+joblib.dump({
+    "model": best_model,
+    "scaler": scaler,
+    "threshold": best_threshold,
+    "features": feature_columns,
+}, "predictive_maintenance_artifacts.pkl")
+
+print("Artifacts saved. Deployment plan:")
+print("- Endpoint: POST /predict with last 168 hours of sensor data")
+print("- Monitor: input drift (KS test per feature), output distribution")
+print("- Retrain: weekly or when precision drops below 0.6 for 3 days")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">capstone_maintenance_deploy.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run capstone_maintenance_deploy.py</code>
+         </p>
+        </div></div>
+       </div>
+      </div>
+     </section>
+     
+     <section class="mb-12 scroll-mt-28" id="capstone-nlp">
+      <h2 class="text-2xl font-bold mb-6">
+       15. Capstone 2: Sentiment Analysis with PyTorch
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-6">
+       Build a production-quality sentiment classifier for customer support tickets. You generate synthetic text, build a vocabulary, train an embedding + LSTM model in PyTorch, and deploy it behind a simple API.
+      </p>
+      <div class="space-y-6">
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 1: Generate synthetic support tickets
+        </h3>
+        <p class="text-[var(--muted)] text-sm mb-2">
+         Create labeled text samples for positive, neutral, and negative sentiment.
+        </p>
+        <div class="code-block mb-2">
+         <button class="copy-btn" data-clipboard-target="#nlp-data" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="nlp-data">import random
+import re
+
+random.seed(42)
+
+positive_templates = [
+    "Thank you for the quick resolution.",
+    "I love the new dashboard, very intuitive.",
+    "The team went above and beyond today.",
+    "Fast response and polite support agent.",
+]
+neutral_templates = [
+    "Please confirm receipt of my request.",
+    "I need a copy of my latest invoice.",
+    "How do I reset my notification settings?",
+    "The shipment arrived on time.",
+]
+negative_templates = [
+    "This bug is costing me money every hour.",
+    "Terrible experience, I want a refund.",
+    "No one replied to my last three emails.",
+    "The app crashes every time I open settings.",
+]
+
+samples = []
+for label, templates in [("positive", positive_templates),
+                         ("neutral", neutral_templates),
+                         ("negative", negative_templates)]:
+    for _ in range(500):
+        text = random.choice(templates)
+        # Add random noise words to simulate real variability
+        noise = random.sample(["the", "a", "and", "to", "of", "in", "with", "on"], k=3)
+        samples.append({
+            "text": f"{text} {' '.join(noise)}",
+            "label": label,
+        })
+
+random.shuffle(samples)
+print(len(samples), samples[0])</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">capstone_sentiment_data.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run capstone_sentiment_data.py</code>
+         </p>
+        </div></div>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 2: Build a vocabulary and encode text
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>
+          Lowercase and remove punctuation.
+         </li>
+         <li>
+          Build a word-to-index dictionary from the training split.
+         </li>
+         <li>
+          Convert each ticket into a fixed-length integer tensor by padding or truncating.
+         </li>
+        </ul>
+        <div class="code-block mt-2 mb-2">
+         <button class="copy-btn" data-clipboard-target="#nlp-vocab" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="nlp-vocab">from collections import Counter
+import torch
+
+def tokenize(text):
+    return re.findall(r"\b[a-z]+\b", text.lower())
+
+# Use 80% of data for training
+train_samples = samples[:int(0.8 * len(samples))]
+test_samples = samples[int(0.8 * len(samples)):]
+
+word_counts = Counter()
+for s in train_samples:
+    word_counts.update(tokenize(s["text"]))
+
+PAD_TOKEN = "__PAD__"
+UNK_TOKEN = "__UNK__"
+vocab = {PAD_TOKEN: 0, UNK_TOKEN: 1}
+for word, count in word_counts.items():
+    if count >= 2:
+        vocab[word] = len(vocab)
+
+def encode(text, max_len=20):
+    tokens = tokenize(text)
+    ids = [vocab.get(t, vocab[UNK_TOKEN]) for t in tokens]
+    if len(ids) < max_len:
+        ids += [vocab[PAD_TOKEN]] * (max_len - len(ids))
+    return ids[:max_len]
+
+X_train = torch.tensor([encode(s["text"]) for s in train_samples])
+y_train = torch.tensor([{"negative": 0, "neutral": 1, "positive": 2}[s["label"]] for s in train_samples])
+
+X_test = torch.tensor([encode(s["text"]) for s in test_samples])
+y_test = torch.tensor([{"negative": 0, "neutral": 1, "positive": 2}[s["label"]] for s in test_samples])
+
+print("Vocab size:", len(vocab))
+print("Example encoded ticket:", X_train[0].tolist())</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">capstone_sentiment_vocab.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run capstone_sentiment_vocab.py</code>
+         </p>
+        </div></div>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 3: Define and train an LSTM classifier
+        </h3>
+        <div class="code-block mb-2">
+         <button class="copy-btn" data-clipboard-target="#nlp-model" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="nlp-model">import torch.nn as nn
+from torch.utils.data import DataLoader, TensorDataset
+
+class SentimentLSTM(nn.Module):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, num_classes):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_dim, padding_idx=vocab[PAD_TOKEN])
+        self.lstm = nn.LSTM(embed_dim, hidden_dim, batch_first=True)
+        self.fc = nn.Linear(hidden_dim, num_classes)
+    def forward(self, x):
+        embedded = self.embedding(x)
+        _, (hidden, _) = self.lstm(embedded)
+        return self.fc(hidden[-1])
+
+device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
+model = SentimentLSTM(vocab_size=len(vocab), embed_dim=64,
+                      hidden_dim=128, num_classes=3).to(device)
+
+loader = DataLoader(TensorDataset(X_train, y_train), batch_size=32, shuffle=True)
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+
+for epoch in range(20):
+    model.train()
+    total_loss = 0.0
+    for xb, yb in loader:
+        xb, yb = xb.to(device), yb.to(device)
+        optimizer.zero_grad()
+        logits = model(xb)
+        loss = criterion(logits, yb)
+        loss.backward()
+        optimizer.step()
+        total_loss += loss.item()
+    print(f"Epoch {epoch+1}, loss: {total_loss / len(loader):.4f}")
+
+# Evaluate
+model.eval()
+with torch.no_grad():
+    logits = model(X_test.to(device))
+    preds = logits.argmax(dim=1).cpu()
+    acc = (preds == y_test).float().mean().item()
+print("Test accuracy:", round(acc, 3))</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">capstone_sentiment_lstm.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run capstone_sentiment_lstm.py</code>
+         </p>
+        </div></div>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 4: Compare with a TF-IDF + scikit-learn baseline
+        </h3>
+        <p class="text-[var(--muted)] text-sm mb-2">
+         Deep learning is not always necessary. Compare the LSTM against a Logistic Regression model on TF-IDF features.
+        </p>
+        <div class="code-block mb-2">
+         <button class="copy-btn" data-clipboard-target="#nlp-baseline" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="nlp-baseline">from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+
+texts_train = [s["text"] for s in train_samples]
+labels_train = [s["label"] for s in train_samples]
+texts_test = [s["text"] for s in test_samples]
+labels_test = [s["label"] for s in test_samples]
+
+vectorizer = TfidfVectorizer(max_features=500)
+X_tfidf_train = vectorizer.fit_transform(texts_train)
+X_tfidf_test = vectorizer.transform(texts_test)
+
+lr = LogisticRegression(max_iter=1000)
+lr.fit(X_tfidf_train, labels_train)
+print(classification_report(labels_test, lr.predict(X_tfidf_test)))</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">capstone_sentiment_baseline.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run capstone_sentiment_baseline.py</code>
+         </p>
+        </div></div>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 5: Package and serve the model
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>
+          Save the trained LSTM state dictionary and the vocabulary mapping.
+         </li>
+         <li>
+          Write a predict function that takes raw text and returns predicted sentiment with probability.
+         </li>
+         <li>
+          Wrap it in a FastAPI endpoint and include input validation with Pydantic.
+         </li>
+        </ul>
+        <div class="code-block mt-2 mb-2">
+         <button class="copy-btn" data-clipboard-target="#nlp-deploy" type="button">
+          Copy
+         </button>
+         <pre><code class="language-python" id="nlp-deploy">import json
+
+# Save artifacts
+ torch.save(model.state_dict(), "sentiment_lstm.pt")
+with open("sentiment_vocab.json", "w") as f:
+    json.dump(vocab, f)
+
+# Inference helper
+def predict_sentiment(text, model, vocab, device):
+    model.eval()
+    ids = torch.tensor([encode(text)]).to(device)
+    with torch.no_grad():
+        probs = torch.softmax(model(ids), dim=1).cpu().numpy()[0]
+    idx = int(probs.argmax())
+    return {0: "negative", 1: "neutral", 2: "positive"}[idx], probs[idx].item()
+
+# Example
+print(predict_sentiment("Very disappointed with the slow refund.", model, vocab, device))
+
+# FastAPI wrapper (pip install fastapi uvicorn)
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+app = FastAPI()
+
+class Ticket(BaseModel):
+    text: str
+
+@app.post("/sentiment")
+def sentiment(ticket: Ticket):
+    label, confidence = predict_sentiment(ticket.text, model, vocab, device)
+    return {"label": label, "confidence": round(confidence, 4)}</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">sentiment_api.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run uvicorn sentiment_api:app --reload</code>
+         </p>
+        </div></div>
+       </div>
+      </div>
+     </section>
+     <section class="mb-12 scroll-mt-28" id="quiz">
+      <h2 class="text-2xl font-bold mb-4">
+       16. Knowledge Check
+      </h2>
+      <form class="space-y-6" id="quiz-form">
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         1. What is the main purpose of a validation set?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">
+          To train the model faster
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">
+          To tune hyperparameters without touching the test set
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">
+          To collect more training data
+         </span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q1" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">
+          To remove missing values
+         </span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         2. Which scikit-learn tool prevents data leakage by bundling preprocessing and modeling?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">
+          GridSearchCV
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">
+          train_test_split
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">
+          Pipeline
+         </span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q2" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">
+          StandardScaler
+         </span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         3. In PyTorch, what does Autograd compute automatically?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">
+          Gradients
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">
+          Predictions
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">
+          Hyperparameters
+         </span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q3" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">
+          Dataset splits
+         </span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="d">
+        <p class="font-semibold mb-3">
+         4. Which metric is most appropriate for an imbalanced binary classifier?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">
+          Accuracy
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">
+          R²
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">
+          Mean squared error
+         </span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q4" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">
+          F1-score
+         </span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         5. What does a CNN use to detect spatial patterns in images?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">
+          Recurrent cells
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">
+          Convolutional filters
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">
+          Decision trees
+         </span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q5" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">
+          Linear regression weights
+         </span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         6. Why should you split time-series data chronologically instead of randomly?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">
+          It reduces training time
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">
+          It increases model complexity
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">
+          To avoid using future information in the training set
+         </span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q6" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">
+          To remove outliers
+         </span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         7. Which library is used in this tutorial for experiment tracking?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">
+          MLflow
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">
+          TensorBoard
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">
+          Weights &amp; Biases
+         </span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q7" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">
+          Neptune
+         </span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         8. What does SMOTE help with?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">
+          Reducing overfitting in CNNs
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">
+          Oversampling the minority class
+         </span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">
+          Speeding up gradient descent
+         </span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q8" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">
+          Encoding categorical variables
+         </span>
+        </label>
+       </div>
+       <button class="px-6 py-3 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition" type="submit">
+        Check Answers
+       </button>
+       <div class="hidden mt-4 p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)]" id="quiz-result">
+       </div>
+      </form>
+     </section>
+     <footer class="border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--muted)]">
+      <p class="mb-2">
+       Open directly in any browser. No build step required.
+      </p>
+     </footer>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement;
+   const moon = document.getElementById('moon');
+   const sun = document.getElementById('sun');
+   function applyTheme(theme) {
+     html.classList.remove('light', 'dark');
+     html.classList.add(theme);
+     const lightLink = document.getElementById('hljs-light');
+     const darkLink = document.getElementById('hljs-dark');
+     if (theme === 'dark') {
+       moon.classList.add('hidden');
+       sun.classList.remove('hidden');
+       if (lightLink) lightLink.disabled = true;
+       if (darkLink) darkLink.disabled = false;
+     } else {
+       moon.classList.remove('hidden');
+       sun.classList.add('hidden');
+       if (lightLink) lightLink.disabled = false;
+       if (darkLink) darkLink.disabled = true;
+     }
+     localStorage.setItem('tutorials-theme', theme);
+   }
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+  });
+  const saved = localStorage.getItem('tutorials-theme');
+  applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('menu-overlay');
+    const isOpen = sidebar.classList.toggle('-translate-x-0');
+    sidebar.classList.toggle('-translate-x-full', !isOpen);
+    overlay.classList.toggle('hidden', !isOpen);
+  }
+  document.getElementById('sidebar').classList.add('-translate-x-full', 'lg:translate-x-0');
+
+  function setStatus(status) {
+    localStorage.setItem('tutorial-machine-learning-python-status', status);
+    updateButtons();
+  }
+  function updateButtons() {
+    const status = localStorage.getItem('tutorial-machine-learning-python-status') || 'not-started';
+    document.getElementById('btn-start').textContent = status === 'in-progress' ? 'In Progress' : 'Start';
+    document.getElementById('btn-complete').textContent = status === 'completed' ? 'Completed' : 'Mark Complete';
+  }
+  document.getElementById('btn-start').addEventListener('click', () => setStatus('in-progress'));
+  document.getElementById('btn-complete').addEventListener('click', () => setStatus('completed'));
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    localStorage.removeItem('tutorial-machine-learning-python-status');
+    updateButtons();
+  });
+  updateButtons();
+
+  document.querySelectorAll('.copy-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const target = document.getElementById(btn.dataset.clipboardTarget.substring(1));
+      if (target) {
+        await navigator.clipboard.writeText(target.textContent);
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = original, 1500);
+      }
+    });
+  });
+
+  document.getElementById('quiz-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    let correct = 0;
+    const total = document.querySelectorAll('.quiz-item').length;
+    document.querySelectorAll('.quiz-item').forEach((item) => {
+      const answer = item.querySelector('input:checked')?.value;
+      const right = item.dataset.correct;
+      item.classList.remove('border-[var(--success)]', 'border-[var(--warn)]');
+      if (answer === right) {
+        correct++;
+        item.classList.add('border-[var(--success)]');
+      } else {
+        item.classList.add('border-[var(--warn)]');
+      }
+    });
+    const result = document.getElementById('quiz-result');
+    result.classList.remove('hidden');
+    result.innerHTML = `<strong>${correct}/${total}</strong> correct. ${correct === total ? 'Excellent work!' : 'Review the highlighted questions and try again.'}`;
+    if (correct === total) {
+      setStatus('completed');
+    }
+  });
+
+  const tocLinks = document.querySelectorAll('.toc-link');
+  const sections = Array.from(tocLinks).map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        tocLinks.forEach((link) => {
+          link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+  sections.forEach((s) => observer.observe(s));
+
+  hljs.highlightAll();
+  </script>
+ </body>
+</html>

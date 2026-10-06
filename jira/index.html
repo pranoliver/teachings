@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Jira: Project Management, Agile Boards &amp; Automation
+  </title>
+  <link href="../assets/favicons/svg/Jira.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-jira">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Jira" class="w-10 h-10" src="../assets/favicons/svg/Jira.svg"/>
+     <span class="text-xl font-bold">
+      Jira
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#why-jira">
+      2. Why Jira?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      3. Setup &amp; Installation
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#first-project">
+      4. Your First Project
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#issues">
+      5. Issues, Epics &amp; Stories
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#boards">
+      6. Boards &amp; Sprints
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#workflows">
+      7. Workflows
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#jql">
+      8. JQL Search
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#automation">
+      9. Automation Rules
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#reports">
+      10. Reports &amp; Dashboards
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#advanced">
+      11. Advanced Topics
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#best-practices">
+      12. Best Practices
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone">
+      13. Capstone Project
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#quiz">
+      14. Knowledge Check
+     </a>
+    </nav>
+   </aside>
+   <main class="flex-1 min-w-0 lg:ml-0">
+    <header class="sticky top-0 z-20 bg-[var(--card)]/80 backdrop-blur border-b border-[var(--border)] px-6 py-3 flex items-center justify-between gap-4">
+     <div class="flex items-center gap-3">
+      <button aria-label="Toggle menu" class="lg:hidden p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <img alt="Jira" class="w-8 h-8" src="../assets/favicons/svg/Jira.svg"/>
+      <h1 class="font-bold text-lg hidden sm:block">
+       Jira
+      </h1>
+     </div>
+     <div class="flex items-center gap-3">
+      <button aria-label="Toggle theme" class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+       <svg class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+       <svg class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5" stroke-linecap="round" stroke-linejoin="round">
+        </circle>
+        <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <a class="text-sm font-semibold hover:opacity-80 transition" href="../index.html">
+       ← Home
+      </a>
+      <div class="hidden sm:flex items-center gap-2 text-xs">
+       <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--brand-light)] hover:text-white hover:border-[var(--brand-light)] transition" id="btn-start">
+        Start
+       </button>
+       <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--success)] hover:text-white hover:border-[var(--success)] transition" id="btn-complete">
+        Mark Complete
+       </button>
+       <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] hover:bg-[var(--warn)] hover:text-white hover:border-[var(--warn)] transition" id="btn-reset">
+        Reset
+       </button>
+      </div>
+     </div>
+    </header>
+    <div class="max-w-5xl mx-auto px-6 py-10" id="main">
+     <section class="mb-12 text-center" id="intro">
+      <div class="inline-flex items-center gap-3 mb-4">
+       <img alt="Jira" class="w-14 h-14" src="../assets/favicons/svg/Jira.svg"/>
+       <span class="text-sm font-semibold px-3 py-1 rounded-full bg-[var(--brand-light)] text-white">
+        #29
+       </span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">
+       Jira
+      </h1>
+      <p class="text-lg text-[var(--muted)] max-w-2xl mx-auto leading-relaxed mb-8">
+       Learn how to plan, track, and ship software with Jira. Build Agile boards, automate workflows, write JQL queries, and run a real SaaS launch project from backlog to retrospective.
+      </p>
+      <div class="flex flex-wrap justify-center gap-2 text-xs font-semibold uppercase tracking-wide text-[var(--muted)]">
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">Agile</span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">Project Management</span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">Automation</span>
+       <span class="px-3 py-1 rounded-full border border-[var(--border)]">Reporting</span>
+      </div>
+     </section>
+     <section class="mb-12" id="why-jira">
+      <h2 class="text-2xl font-bold mb-4">
+       2. Why Jira?
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Jira is the most widely used issue and project tracking tool in software teams. It supports Scrum, Kanban, and hybrid processes, and it connects planning, development, and operations in one place.
+      </p>
+      <ul class="list-disc pl-6 space-y-2 text-[var(--muted)] mb-6">
+       <li>
+        <strong>Backlog &amp; boards</strong>
+        — prioritize work visually with drag-and-drop boards.
+       </li>
+       <li>
+        <strong>Sprints &amp; releases</strong>
+        — plan iterations, track velocity, and ship predictably.
+       </li>
+       <li>
+        <strong>Custom workflows</strong>
+        — model your real process: Todo → In Progress → Review → Done.
+       </li>
+       <li>
+        <strong>Automation</strong>
+        — trigger actions on events without writing code.
+       </li>
+       <li>
+        <strong>Integrations</strong>
+        — link GitHub, Bitbucket, Slack, Confluence, Jenkins, and hundreds more.
+       </li>
+      </ul>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)]">
+       <p class="text-sm text-[var(--muted)]">
+        <strong>When to choose Jira:</strong>
+        any team that needs structured issue tracking, sprint planning, or cross-team visibility. For lightweight personal tasks, simpler tools like Trello or GitHub Issues may be faster.
+       </p>
+      </div>
+     </section>
+     <section class="mb-12" id="setup">
+      <h2 class="text-2xl font-bold mb-4">
+       3. Setup &amp; Installation
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       The easiest way to start is
+       <a class="text-[var(--brand-light)] hover:underline" href="https://www.atlassian.com/software/jira" target="_blank">Jira Cloud</a>
+       . Atlassian offers a free plan for up to 10 users. You can also run Jira Data Center locally with Docker for evaluation.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Option A: Jira Cloud (recommended)
+      </h3>
+      <ol class="list-decimal pl-6 space-y-1 text-[var(--muted)] mb-4">
+       <li>Go to
+        <code>atlassian.com/software/jira</code>
+        and click
+        <strong>Try it free</strong>
+        .
+       </li>
+       <li>Create an Atlassian account or sign in with Google.</li>
+       <li>Choose a site name, e.g.
+        <code>yourteam.atlassian.net</code>
+        .
+       </li>
+       <li>Select a project template: Scrum, Kanban, or Bug tracking.</li>
+      </ol>
+      <h3 class="text-lg font-semibold mb-2">
+       Option B: Jira Data Center via Docker
+      </h3>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-docker" type="button">
+        Copy
+       </button>
+       <pre><code class="language-bash" id="code-docker"># Create a persistent volume for Jira data
+docker volume create jira-data
+
+# Run Jira Software Data Center evaluation
+docker run -d --name jira \
+  -p 8080:8080 \
+  -v jira-data:/var/atlassian/application-data/jira \
+  atlassian/jira-software:latest
+
+# Follow setup wizard at http://localhost:8080
+# Default license: request a trial from Atlassian</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       The first startup takes a few minutes. Once the setup wizard appears, choose
+       <strong>I'll set it up myself</strong>
+       , connect a PostgreSQL database for production use, and enter a trial license.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Key concepts before you start
+      </h3>
+      <div class="overflow-x-auto mb-4">
+       <table class="w-full text-sm border border-[var(--border)] rounded-xl">
+        <thead class="bg-[var(--panel)]">
+         <tr>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">Term</th>
+          <th class="text-left px-4 py-2 border-b border-[var(--border)]">Meaning</th>
+         </tr>
+        </thead>
+        <tbody class="text-[var(--muted)]">
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">Project</td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">A container for issues, boards, and settings.</td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">Issue</td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">A single work item: story, task, bug, epic, etc.</td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">Board</td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">A Kanban or Scrum view of issues by status.</td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">Sprint</td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">A time-boxed iteration in Scrum boards.</td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2 border-b border-[var(--border)]">Workflow</td>
+          <td class="px-4 py-2 border-b border-[var(--border)]">The lifecycle states and transitions of an issue.</td>
+         </tr>
+         <tr>
+          <td class="px-4 py-2">JQL</td>
+          <td class="px-4 py-2">Jira Query Language for advanced searches.</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </section>
+     <section class="mb-12" id="first-project">
+      <h2 class="text-2xl font-bold mb-4">
+       4. Your First Project
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A Jira project is the workspace for a product or team. The template you pick defines the default issue types, board, and workflow.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Create a Scrum project
+      </h3>
+      <ol class="list-decimal pl-6 space-y-1 text-[var(--muted)] mb-4">
+       <li>From the top navigation, click
+        <strong>Projects → Create project</strong>
+        .
+       </li>
+       <li>Select
+        <strong>Scrum</strong>
+        under
+        <em>Software development</em>
+        .
+       </li>
+       <li>Name the project
+        <code>Orbit SaaS</code>
+        and choose a key such as
+        <code>ORB</code>
+        .
+       </li>
+       <li>Click
+        <strong>Create project</strong>
+        .
+       </li>
+      </ol>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Jira creates a backlog, a Scrum board, and default issue types. You can customize everything later.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Configure issue types
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Issue types group work by purpose. A common hierarchy for SaaS teams is:
+      </p>
+      <ul class="list-disc pl-6 space-y-1 text-[var(--muted)] mb-4">
+       <li>
+        <strong>Epic</strong>
+        — large initiative that spans multiple sprints.
+       </li>
+       <li>
+        <strong>Story</strong>
+        — user-facing deliverable.
+       </li>
+       <li>
+        <strong>Task</strong>
+        — technical or operational work.
+       </li>
+       <li>
+        <strong>Bug</strong>
+        — defect to fix.
+       </li>
+       <li>
+        <strong>Sub-task</strong>
+        — child of a story or task.
+       </li>
+      </ul>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       To add custom fields, go to
+       <strong>Project settings → Issue types</strong>
+       and then
+       <strong>Fields</strong>
+       . Common custom fields include
+       <em>Acceptance Criteria</em>
+       ,
+       <em>Sprint Goal</em>
+       , and
+       <em>Story Points</em>
+       .
+      </p>
+     </section>
+     <section class="mb-12" id="issues">
+      <h2 class="text-2xl font-bold mb-4">
+       5. Issues, Epics &amp; Stories
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Issues are the core unit of work. Good issue hygiene keeps a team aligned and makes reporting meaningful.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Anatomy of a great issue
+      </h3>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-issue" type="button">
+        Copy
+       </button>
+       <pre><code class="language-yaml" id="code-issue">Summary: User can reset password via email
+Issue Type: Story
+Priority: Medium
+Assignee: alex.chen
+Reporter: product@example.com
+Labels: auth, onboarding
+Components: API, Web
+Story Points: 5
+
+Description:
+As a registered user,
+I want to reset my password from the login page,
+so that I can regain access without contacting support.
+
+Acceptance Criteria:
+1. "Forgot password" link appears on /login.
+2. System sends a signed, time-limited token to the email.
+3. Token link opens a secure reset form.
+4. New password must meet policy requirements.
+5. Old sessions are invalidated after reset.</code></pre>
+      </div>
+      <h3 class="text-lg font-semibold mb-2">
+       Linking issues
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Use issue links to express relationships. A story can
+       <strong>belong to an Epic</strong>
+       , a bug can
+       <strong>block</strong>
+       a feature, and a task can
+       <strong>duplicate</strong>
+       another issue. To add a link, open an issue, click
+       <strong>Link issue</strong>
+       , and choose the relationship.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       REST API example: create an issue
+      </h3>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-api-create" type="button">
+        Copy
+       </button>
+       <pre><code class="language-bash" id="code-api-create"># Replace {site}, {email}, and {token} with your values
+# Generate an API token at id.atlassian.com/manage-profile/security/api-tokens
+
+curl -X POST https://{site}.atlassian.net/rest/api/3/issue \
+  -u {email}:{token} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fields": {
+      "project": { "key": "ORB" },
+      "summary": "Add password reset endpoint",
+      "issuetype": { "name": "Story" },
+      "assignee": { "accountId": "5b10ac8d82e05b22cc7d4ef5" },
+      "description": {
+        "type": "doc",
+        "version": 1,
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [{ "type": "text", "text": "Implement a secure password reset flow." }]
+          }
+        ]
+      }
+    }
+  }'</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed">
+       The response contains the new issue key, e.g.
+       <code>ORB-42</code>
+       . Store it for CI/CD or Slack notifications.
+      </p>
+     </section>
+     <section class="mb-12" id="boards">
+      <h2 class="text-2xl font-bold mb-4">
+       6. Boards &amp; Sprints
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Boards make work visible. A Scrum board adds sprint planning and velocity tracking; a Kanban board focuses on continuous flow and WIP limits.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Scrum board basics
+      </h3>
+      <ol class="list-decimal pl-6 space-y-1 text-[var(--muted)] mb-4">
+       <li>Open your project and click
+        <strong>Backlog</strong>
+        .
+       </li>
+       <li>Click
+        <strong>Create sprint</strong>
+        and name it
+        <code>Orbit Sprint 1</code>
+        .
+       </li>
+       <li>Drag issues from the backlog into the sprint.</li>
+       <li>Click
+        <strong>Start sprint</strong>
+        , set a duration and goal, then confirm.
+       </li>
+       <li>Move issues across columns as they progress.</li>
+       <li>At the end, click
+        <strong>Complete sprint</strong>
+        and review the burndown chart.
+       </li>
+      </ol>
+      <h3 class="text-lg font-semibold mb-2">
+       Kanban WIP limits
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       In Kanban, set a maximum number of issues per column. When a column hits its limit, the team stops starting new work and focuses on finishing. To configure WIP limits, click the three dots on a column and select
+       <strong>Set column constraint</strong>
+       .
+      </p>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-board-config" type="button">
+        Copy
+       </button>
+       <pre><code class="language-yaml" id="code-board-config"># Example board column setup for a SaaS team
+Columns:
+  - To Do        # WIP limit: 10
+  - In Progress  # WIP limit: 4
+  - Code Review  # WIP limit: 3
+  - Testing      # WIP limit: 2
+  - Done</code></pre>
+      </div>
+     </section>
+     <section class="mb-12" id="workflows">
+      <h2 class="text-2xl font-bold mb-4">
+       7. Workflows
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A workflow defines the statuses an issue can have and the transitions between them. You can use the default simplified workflow or create a custom one.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Sample custom workflow
+      </h3>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-workflow" type="button">
+        Copy
+       </button>
+       <pre><code class="language-yaml" id="code-workflow">Statuses:
+  - To Do
+  - In Progress
+  - In Review
+  - Ready for Test
+  - Testing
+  - Done
+  - Reopened
+
+Transitions:
+  Start work:        To Do → In Progress
+  Submit for review: In Progress → In Review
+  Request changes:   In Review → In Progress
+  Approve:           In Review → Ready for Test
+  Begin testing:     Ready for Test → Testing
+  Pass tests:        Testing → Done
+  Fail tests:        Testing → Reopened
+  Reopen:            Done → Reopened
+  Resume:            Reopened → In Progress
+
+Validators:
+  - In Review requires linked PR or branch
+  - Ready for Test requires code review approval</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       To apply a custom workflow, go to
+       <strong>Project settings → Workflows</strong>
+       and associate the workflow with the relevant issue types. Add
+       <strong>conditions</strong>
+       (who can transition),
+       <strong>validators</strong>
+       (what must be true), and
+       <strong>post functions</strong>
+       (what happens after) to enforce quality gates.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Transition screens
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed">
+       A transition screen prompts users for information during a transition. For example, when moving to
+       <strong>Done</strong>
+       , you can require a
+       <em>Resolution</em>
+       and
+       <em>Fix version</em>
+       .
+      </p>
+     </section>
+     <section class="mb-12" id="jql">
+      <h2 class="text-2xl font-bold mb-4">
+       8. JQL Search
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       JQL (Jira Query Language) lets you build precise filters, boards, and dashboards. It looks like SQL but is tailored to Jira's data model.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Common JQL queries
+      </h3>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-jql" type="button">
+        Copy
+       </button>
+       <pre><code class="language-bash" id="code-jql"># Open high-priority bugs in the current sprint
+project = ORB AND issuetype = Bug
+  AND priority IN (High, Highest)
+  AND sprint in openSprints() AND status != Done
+
+# Stories assigned to me that are overdue
+project = ORB AND issuetype = Story
+  AND assignee = currentUser()
+  AND duedate < now() AND status != Done
+
+# Unestimated backlog items ready for sprint planning
+project = ORB AND sprint is EMPTY
+  AND "Story Points" is EMPTY AND status = "To Do"
+
+# Recently closed issues with linked support tickets
+project = ORB AND status = Done
+  AND resolved >= -7d AND labels = support
+
+# Epics with unresolved children
+project = ORB AND issuetype = Epic
+  AND status != Done AND "Epic Link" is not EMPTY</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Save a JQL query as a
+       <strong>filter</strong>
+       and reuse it across boards, dashboards, subscriptions, and automation rules.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Useful JQL functions
+      </h3>
+      <ul class="list-disc pl-6 space-y-1 text-[var(--muted)] mb-4">
+       <li>
+        <code>currentUser()</code>
+        — issues assigned to the viewer.
+       </li>
+       <li>
+        <code>openSprints()</code>
+        / closedSprints()
+        — active or past sprints.
+       </li>
+       <li>
+        <code>startOfWeek()</code>
+        / endOfMonth()
+        — relative date ranges.
+       </li>
+       <li>
+        <code>watchedIssues()</code>
+        — issues the current user watches.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-12" id="automation">
+      <h2 class="text-2xl font-bold mb-4">
+       9. Automation Rules
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Jira Automation uses a trigger-condition-action model. You can build rules visually, and each project has a generous free quota on Cloud.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Example: auto-assign bugs by component
+      </h3>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-automation" type="button">
+        Copy
+       </button>
+       <pre><code class="language-yaml" id="code-automation">Rule: Auto-assign infrastructure bugs
+Trigger: Issue created
+Condition:
+  - issueType = Bug
+  - component = Infrastructure
+Action:
+  - Assign issue to user: ops-lead@example.com
+  - Add comment: "Thanks for reporting. The infrastructure team has been notified."
+  - Transition issue to: Triaged</code></pre>
+      </div>
+      <h3 class="text-lg font-semibold mb-2">
+       Example: close linked issues when PR merges
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       With the GitHub for Jira integration, you can create a rule that transitions issues to
+       <strong>Done</strong>
+       when a linked pull request is merged.
+      </p>
+      <ol class="list-decimal pl-6 space-y-1 text-[var(--muted)] mb-4">
+       <li>Install the
+        <strong>GitHub for Jira</strong>
+        app from Atlassian Marketplace.
+       </li>
+       <li>Connect your GitHub organization and repositories.</li>
+       <li>Developers include issue keys in branch or PR titles, e.g.
+        <code>ORB-42 add password reset</code>
+        .
+       </li>
+       <li>Create an automation rule:
+        <em>When: Pull request merged</em>
+        →
+        <em>For: Linked issues</em>
+        →
+        <em>Then: Transition to Done</em>
+        .
+       </li>
+      </ol>
+      <p class="text-[var(--muted)] leading-relaxed">
+       Other popular automations include: daily Slack summaries, stale-issue reminders, sprint-start notifications, and auto-creating sub-tasks when a story enters
+       <em>In Progress</em>
+       .
+      </p>
+     </section>
+     <section class="mb-12" id="reports">
+      <h2 class="text-2xl font-bold mb-4">
+       10. Reports &amp; Dashboards
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Jira ships with built-in Agile reports. Dashboards let you combine multiple gadgets for cross-project visibility.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Essential reports
+      </h3>
+      <ul class="list-disc pl-6 space-y-1 text-[var(--muted)] mb-4">
+       <li>
+        <strong>Burndown chart</strong>
+        — work remaining vs. ideal trend during a sprint.
+       </li>
+       <li>
+        <strong>Velocity chart</strong>
+        — story points completed per sprint for capacity planning.
+       </li>
+       <li>
+        <strong>Cumulative flow diagram</strong>
+        — where work gets stuck over time.
+       </li>
+       <li>
+        <strong>Control chart</strong>
+        — cycle time and lead time distribution.
+       </li>
+       <li>
+        <strong>Sprint report</strong>
+        — scope changes and completion metrics.
+       </li>
+      </ul>
+      <h3 class="text-lg font-semibold mb-2">
+       Building a dashboard
+      </h3>
+      <ol class="list-decimal pl-6 space-y-1 text-[var(--muted)] mb-4">
+       <li>Go to
+        <strong>Dashboards → Create dashboard</strong>
+        .
+       </li>
+       <li>Name it
+        <code>Engineering Health</code>
+        and set sharing to the engineering team.
+       </li>
+       <li>Add gadgets such as:
+        <em>Filter results</em>
+        ,
+        <em>Assigned to me</em>
+        ,
+        <em>Agile sprint health</em>
+        , and
+        <em>Pie chart by status</em>
+        .
+       </li>
+       <li>Configure each gadget with a saved JQL filter.</li>
+      </ol>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-dashboard-jql" type="button">
+        Copy
+       </button>
+       <pre><code class="language-bash" id="code-dashboard-jql"># Engineering Health dashboard filters
+Open bugs:           project = ORB AND issuetype = Bug AND status != Done
+Sprint backlog:      project = ORB AND sprint in openSprints() ORDER BY priority DESC
+Unassigned work:     project = ORB AND assignee is EMPTY AND status != Done
+This week closed:    project = ORB AND status changed to Done after startOfWeek()</code></pre>
+      </div>
+     </section>
+     <section class="mb-12" id="advanced">
+      <h2 class="text-2xl font-bold mb-4">
+       11. Advanced Topics
+      </h2>
+      <h3 class="text-lg font-semibold mb-2">
+       Roadmaps
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Jira Premium and Cloud Standard offer a timeline view that rolls up epics, dependencies, and releases. Use it for quarterly planning and to surface cross-team dependencies before they block sprints.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Permissions and roles
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Jira permissions are layered:
+       <strong>Global permissions</strong>
+       (site-wide),
+       <strong>Project permissions</strong>
+       (per project), and
+       <strong>Issue security</strong>
+       (per issue). Use groups and project roles to avoid granting access one user at a time.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Integrations
+      </h3>
+      <ul class="list-disc pl-6 space-y-1 text-[var(--muted)] mb-4">
+       <li>
+        <strong>GitHub / Bitbucket</strong>
+        — link branches, commits, and PRs to issues.
+       </li>
+       <li>
+        <strong>Slack</strong>
+        — get notifications and create issues from channels.
+       </li>
+       <li>
+        <strong>Confluence</strong>
+        — store requirements and retrospectives.
+       </li>
+       <li>
+        <strong>Jenkins / GitHub Actions</strong>
+        — update issues from build results.
+       </li>
+      </ul>
+      <h3 class="text-lg font-semibold mb-2">
+       REST API: search with JQL
+      </h3>
+      <div class="code-block mb-4">
+       <button class="copy-btn" data-clipboard-target="#code-api-search" type="button">
+        Copy
+       </button>
+       <pre><code class="language-bash" id="code-api-search">curl -s -u {email}:{token} \
+  -X POST https://{site}.atlassian.net/rest/api/3/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jql": "project = ORB AND status != Done ORDER BY priority DESC",
+    "fields": ["summary", "status", "assignee", "issuetype"],
+    "maxResults": 50
+  }' | python3 -m json.tool</code></pre>
+      </div>
+     </section>
+     <section class="mb-12" id="best-practices">
+      <h2 class="text-2xl font-bold mb-4">
+       12. Best Practices
+      </h2>
+      <ul class="list-disc pl-6 space-y-2 text-[var(--muted)] mb-6">
+       <li>
+        <strong>Keep issue titles actionable.</strong>
+        "Add password reset endpoint" is clearer than "Password stuff".
+       </li>
+       <li>
+        <strong>One concern per issue.</strong>
+        Split large requests into stories and tasks that fit a sprint.
+       </li>
+       <li>
+        <strong>Use a single source of truth.</strong>
+        Put requirements in the issue or linked Confluence page, not scattered across chat.
+       </li>
+       <li>
+        <strong>Estimate consistently.</strong>
+        Use story points or time, but pick one method and calibrate with the team.
+       </li>
+       <li>
+        <strong>Review workflows quarterly.</strong>
+        Remove unused statuses and fix bottlenecks revealed by the control chart.
+       </li>
+       <li>
+        <strong>Automate the boring parts.</strong>
+        Let rules handle assignments, notifications, and state transitions so humans focus on decisions.
+       </li>
+      </ul>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)]">
+       <p class="text-sm text-[var(--muted)]">
+        <strong>Anti-pattern to avoid:</strong>
+        creating a status for every micro-step. A workflow with 15 statuses slows the board down. Aim for 4–7 meaningful states and use fields or comments for detail.
+       </p>
+      </div>
+     </section>
+     <section class="mb-12" id="capstone">
+      <h2 class="text-2xl font-bold mb-6">
+       13. Capstone Project: Launch "Orbit" SaaS with Jira
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-6">
+       You are the delivery lead for
+       <strong>Orbit</strong>
+       , a new team collaboration SaaS. Use Jira to plan the MVP launch, run two sprints, and report progress to stakeholders.
+      </p>
+      <div class="space-y-6">
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 1: Set up the project
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>Create a Scrum project named
+          <code>Orbit SaaS</code>
+          with key
+          <code>ORB</code>
+          .
+         </li>
+         <li>Configure issue types: Epic, Story, Task, Bug, and Sub-task.</li>
+         <li>Add custom fields:
+          <em>Story Points</em>
+          (number),
+          <em>Acceptance Criteria</em>
+          (textarea), and
+          <em>Customer Segment</em>
+          (single-select: SMB, Enterprise, Internal).
+         </li>
+         <li>Invite three fake teammates as project members with Developer and Viewer roles.</li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 2: Build the backlog
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>Create three epics:
+          <em>User Authentication</em>
+          ,
+          <em>Team Workspaces</em>
+          , and
+          <em>Billing</em>
+          .
+         </li>
+         <li>Under each epic, create 3–5 stories with summaries, acceptance criteria, and story points.</li>
+         <li>Prioritize the backlog using drag-and-drop. Place authentication first because other features depend on it.</li>
+         <li>Assign one story per team member and label stories by customer segment.</li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 3: Run a sprint
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>Create a two-week sprint named
+          <code>Orbit Sprint 1</code>
+          with a clear sprint goal.
+         </li>
+         <li>Move the top 10–12 story points into the sprint and start it.</li>
+         <li>Configure the board columns: To Do, In Progress, In Review, Testing, Done.</li>
+         <li>Move at least one story through every column during the sprint and complete the sprint.</li>
+         <li>Review the burndown and velocity charts and record the team's velocity.</li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 4: Automation, JQL, and dashboards
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>Create an automation rule that assigns new bugs to the QA lead and adds a triage comment.</li>
+         <li>Write four saved JQL filters: open bugs, current sprint backlog, my issues, and recently closed.</li>
+         <li>Build a dashboard named
+          <code>Orbit Engineering Health</code>
+          using your filters.
+         </li>
+         <li>Export the dashboard URL and share it in a mock stakeholder update.</li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-5 border border-[var(--border)]">
+        <h3 class="text-lg font-bold mb-2">
+         Phase 5: Integration and retrospective
+        </h3>
+        <ul class="list-disc pl-6 space-y-1 text-[var(--muted)]">
+         <li>Connect a GitHub repository to the project (or simulate with issue links).</li>
+         <li>Create a second sprint with scope based on the velocity from Sprint 1.</li>
+         <li>Run a retrospective in Confluence or a Jira issue: document what went well, what slowed the team down, and one workflow improvement.</li>
+         <li>Adjust the board workflow based on the retrospective finding and document the change.</li>
+        </ul>
+       </div>
+      </div>
+     </section>
+     <section class="mb-12" id="quiz">
+      <h2 class="text-2xl font-bold mb-4">
+       14. Knowledge Check
+      </h2>
+      <form class="space-y-6" id="quiz-form">
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         1. What does a Jira project primarily contain?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Only source code repositories</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Only Confluence pages</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Issues, boards, and project settings</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q1" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">User personas only</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         2. In Scrum, what is a sprint?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">A list of all backlog items</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">A time-boxed iteration of work</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">A single bug report</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q2" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">A release document</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         3. Which JQL fragment finds issues assigned to the current user?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">assignee = currentUser()</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">assignee = me</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">currentUser() = assignee</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q3" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">user = assignee</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="d">
+        <p class="font-semibold mb-3">
+         4. What is the purpose of a workflow validator?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">To send emails after a transition</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">To change the issue assignee automatically</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">To define allowed project roles</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q4" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">To enforce conditions before a transition is allowed</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         5. Which integration links GitHub branches and pull requests to Jira issues?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Jira Connect</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Bitbucket Pipelines</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">GitHub for Jira</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q5" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">GitLab Runner</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         6. A WIP limit is most commonly used in which board type?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Scrum board</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Kanban board</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Roadmap view</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q6" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Dashboard</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         7. What is an Epic in Jira?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">A large body of work that groups multiple stories</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">A single-line code change</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">A type of workflow transition</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q7" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">A JQL function</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         8. Which report shows work remaining versus the ideal trend in a sprint?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Velocity chart</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Control chart</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Burndown chart</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q8" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Pie chart</span>
+        </label>
+       </div>
+       <button class="px-6 py-3 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition" type="submit">
+        Check Answers
+       </button>
+       <div class="hidden mt-4 p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)]" id="quiz-result">
+       </div>
+      </form>
+     </section>
+     <footer class="border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--muted)]">
+      <p class="mb-2">
+       Open directly in any browser. No build step required.
+      </p>
+     </footer>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement;
+   const moon = document.getElementById('moon');
+   const sun = document.getElementById('sun');
+   function applyTheme(theme) {
+     html.classList.remove('light', 'dark');
+     html.classList.add(theme);
+     const lightLink = document.getElementById('hljs-light');
+     const darkLink = document.getElementById('hljs-dark');
+     if (theme === 'dark') {
+       moon.classList.add('hidden');
+       sun.classList.remove('hidden');
+       if (lightLink) lightLink.disabled = true;
+       if (darkLink) darkLink.disabled = false;
+     } else {
+       moon.classList.remove('hidden');
+       sun.classList.add('hidden');
+       if (lightLink) lightLink.disabled = false;
+       if (darkLink) darkLink.disabled = true;
+     }
+     localStorage.setItem('tutorials-theme', theme);
+   }
+   document.getElementById('theme-toggle').addEventListener('click', () => {
+     applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+   });
+   const saved = localStorage.getItem('tutorials-theme');
+   applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+   function toggleSidebar() {
+     const sidebar = document.getElementById('sidebar');
+     const overlay = document.getElementById('menu-overlay');
+     const isOpen = sidebar.classList.toggle('-translate-x-0');
+     sidebar.classList.toggle('-translate-x-full', !isOpen);
+     overlay.classList.toggle('hidden', !isOpen);
+   }
+   document.getElementById('sidebar').classList.add('-translate-x-full', 'lg:translate-x-0');
+
+   function setStatus(status) {
+     localStorage.setItem('tutorial-jira-status', status);
+     updateButtons();
+   }
+   function updateButtons() {
+     const status = localStorage.getItem('tutorial-jira-status') || 'not-started';
+     document.getElementById('btn-start').textContent = status === 'in-progress' ? 'In Progress' : 'Start';
+     document.getElementById('btn-complete').textContent = status === 'completed' ? 'Completed' : 'Mark Complete';
+   }
+   document.getElementById('btn-start').addEventListener('click', () => setStatus('in-progress'));
+   document.getElementById('btn-complete').addEventListener('click', () => setStatus('completed'));
+   document.getElementById('btn-reset').addEventListener('click', () => {
+     localStorage.removeItem('tutorial-jira-status');
+     updateButtons();
+   });
+   updateButtons();
+
+   document.querySelectorAll('.copy-btn').forEach((btn) => {
+     btn.addEventListener('click', async () => {
+       const target = document.getElementById(btn.dataset.clipboardTarget.substring(1));
+       if (target) {
+         await navigator.clipboard.writeText(target.textContent);
+         const original = btn.textContent;
+         btn.textContent = 'Copied!';
+         setTimeout(() => btn.textContent = original, 1500);
+       }
+     });
+   });
+
+   document.getElementById('quiz-form').addEventListener('submit', (e) => {
+     e.preventDefault();
+     let correct = 0;
+     const total = document.querySelectorAll('.quiz-item').length;
+     document.querySelectorAll('.quiz-item').forEach((item) => {
+       const answer = item.querySelector('input:checked')?.value;
+       const right = item.dataset.correct;
+       item.classList.remove('border-[var(--success)]', 'border-[var(--warn)]');
+       if (answer === right) {
+         correct++;
+         item.classList.add('border-[var(--success)]');
+       } else {
+         item.classList.add('border-[var(--warn)]');
+       }
+     });
+     const result = document.getElementById('quiz-result');
+     result.classList.remove('hidden');
+     result.innerHTML = `<strong>${correct}/${total}</strong> correct. ${correct === total ? 'Excellent work!' : 'Review the highlighted questions and try again.'}`;
+     if (correct === total) {
+       setStatus('completed');
+     }
+   });
+
+   const tocLinks = document.querySelectorAll('.toc-link');
+   const sections = Array.from(tocLinks).map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+   const observer = new IntersectionObserver((entries) => {
+     entries.forEach((entry) => {
+       if (entry.isIntersecting) {
+         const id = entry.target.id;
+         tocLinks.forEach((link) => {
+           link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+         });
+       }
+     });
+   }, { rootMargin: '-20% 0px -60% 0px' });
+   sections.forEach((s) => observer.observe(s));
+
+   hljs.highlightAll();
+  </script>
+ </body>
+</html>

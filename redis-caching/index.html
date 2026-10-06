@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Redis &amp; Caching: Speed Up Real-World Apps
+  </title>
+  <link href="../assets/favicons/redis.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-redis-caching">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Redis" class="w-10 h-10" src="../assets/favicons/redis.svg"/>
+     <span class="text-xl font-bold">
+      Redis
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#why-cache">
+      2. Why Caching?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#install">
+      3. Install &amp; Run Redis
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#data-structures">
+      4. Core Data Structures
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#patterns">
+      5. Caching Patterns
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#node">
+      6. Redis from Node.js
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#sessions">
+      7. Session Store
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#rate-limit">
+      8. Rate Limiting
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#cache-strategies">
+      9. Real-World Strategies
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      10. Capstone: E-commerce Cache
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Redis &amp; Caching: Speed Up Real-World Apps
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Redis is an in-memory data store famous for caching, but it is also a powerful real-time database. In this tutorial you will learn how to speed up APIs, share user sessions, and throttle traffic with Redis.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with Node.js and Express.
+        </li>
+        <li>
+         Basic SQL knowledge for the database examples.
+        </li>
+        <li>
+         Docker installed (optional but recommended).
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Core Redis data structures
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Cache-aside and write-through patterns
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Session management with TTL
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Token-bucket rate limiting
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Eviction, expiration, and invalidation
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Capstone: caching an e-commerce API
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        More practice ideas
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Add a leaderboard for a multiplayer game using Sorted Sets.
+        </li>
+        <li>
+         Cache GitHub repository metadata to avoid API rate limits.
+        </li>
+        <li>
+         Build a real-time view counter using Redis HyperLogLog.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#why-cache">
+        Next: Why Caching? &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="why-cache">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Why Caching?
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Most web apps spend the bulk of their time reading the same data over and over. Caching stores that data in fast memory so subsequent reads are nearly instant.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Request with and without cache
+       </h3>
+       <img alt="Diagram showing client request, Redis cache hit, and database fallback" class="diagram" loading="lazy" src="../assets/diagrams/redis-caching/request-cache-flow.svg"/>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4">
+       <div class="card rounded-2xl p-5">
+        <h4 class="font-semibold mb-2">
+         Latency
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Redis reads take microseconds. Disk or network calls to a database take milliseconds.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-5">
+        <h4 class="font-semibold mb-2">
+         Load
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Offload the database for read-heavy workloads like product catalogs and news feeds.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-5">
+        <h4 class="font-semibold mb-2">
+         Cost
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Fewer database connections and cheaper queries mean a smaller production bill.
+        </p>
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#install">
+        Next: Install &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="install">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Install &amp; Run Redis
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The easiest way to run Redis locally is Docker. You can also install Redis directly from redis.io or use a managed cloud service.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Run Redis with Docker 
+docker run -d --name 
+redis -p 6379:6379 
+redis:latest 
+# Or with a volume for persistence 
+docker run -d --name 
+redis \
+-p 6379:6379 \
+-v redis_data:/data \
+redis:latest 
+redis-server --appendonly yes 
+# Test it 
+redis-cli ping 
+# Expected response: PONG</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Basic CLI commands 
+redis-cli SET name "Ada" 
+redis-cli GET name 
+redis-cli EXPIRE name 60 
+redis-cli TTL name 
+redis-cli DEL name</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Start Redis, run
+        <code class="kbd">
+         PING
+        </code>
+        , then
+        <code class="kbd">
+         SET hello world
+        </code>
+        and
+        <code class="kbd">
+         GET hello
+        </code>
+        .
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#why-cache">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#data-structures">
+        Next: Data Structures &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="data-structures">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Core Data Structures
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Redis is more than a key-value store. Its specialized data structures solve specific problems efficiently.
+      </p>
+      <div class="space-y-6 mb-8">
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-bash"># Strings: counters, flags, JSON blobs 
+SET user:42:profile '{"name":"Ada"}' EX 300 
+GET user:42:profile 
+INCR page:views:home 
+INCRBY stock:sku-123 -2</code></pre>
+       </div>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-bash"># Hashes: compact object storage 
+HSET product:123 name "Laptop" price 999 stock 12 
+HGETALL product:123 
+HMGET product:123 name price</code></pre>
+       </div>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-bash"># Lists: queues and timelines 
+LPUSH recent:views sku-123 
+LTRIM recent:views 0 9 
+LRANGE recent:views 0 5</code></pre>
+       </div>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-bash"># Sets: unique collections 
+SADD ip:blocked 10.0.0.1 
+SISMEMBER ip:blocked 10.0.0.1 
+SMEMBERS ip:blocked</code></pre>
+       </div>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-bash"># Sorted sets: leaderboards 
+ZADD leaderboard 1500 "alice" 
+ZINCRBY leaderboard 100 "alice" 
+ZREVRANGE leaderboard 0 2 WITHSCORES</code></pre>
+       </div>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-bash"># TTL: automatic expiration SET temp:token abc123 EX 60 TTL temp:token 
+# Key disappears after 60 seconds</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Which structure for which job?
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          String
+         </strong>
+         &mdash; simple values, counters, serialized JSON.
+        </li>
+        <li>
+         <strong>
+          Hash
+         </strong>
+         &mdash; objects with many fields, e.g. a user profile.
+        </li>
+        <li>
+         <strong>
+          List
+         </strong>
+         &mdash; queues, activity streams, recent items.
+        </li>
+        <li>
+         <strong>
+          Set
+         </strong>
+         &mdash; tags, blocked IPs, unique visitors.
+        </li>
+        <li>
+         <strong>
+          Sorted Set
+         </strong>
+         &mdash; leaderboards, time-series windows, top-N.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#install">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#patterns">
+        Next: Patterns &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="patterns">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Caching Patterns
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       There are two common ways to keep a cache in sync with a database. Each has trade-offs in complexity and consistency.
+      </p>
+      <div class="space-y-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Cache-aside (lazy loading)
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-4">
+         The application checks the cache first. On a miss it loads from the database, then populates the cache.
+        </p>
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-javascript">async function getProduct(id) {
+  const key = `product:${id}`;
+  let data = await redis.get(key);
+  if (data) return JSON.parse(data);
+  data = await db.query("SELECT * FROM products WHERE id = $1", [id]);
+  if (data) {
+    await redis.setex(key, 300, JSON.stringify(data));
+  }
+  return data;
+}</code></pre>
+        </div>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Write-through
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-4">
+         The application writes to both the cache and the database at the same time. Reads are always fast.
+        </p>
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-javascript">async function updateProduct(id, fields) {
+  const updated = await db.query(
+    "UPDATE products SET name = $1 WHERE id = $2 RETURNING *",
+    [fields.name, id],
+  );
+  await redis.setex(`product:${id}`, 300, JSON.stringify(updated));
+  return updated;
+}</code></pre>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Cache invalidation
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          TTL
+         </strong>
+         : set an expiration so stale data disappears automatically.
+        </li>
+        <li>
+         <strong>
+          Write invalidation
+         </strong>
+         : delete the cached key when the source changes.
+        </li>
+        <li>
+         <strong>
+          Tag-based invalidation
+         </strong>
+         : track keys by tags and bulk-delete related entries.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#data-structures">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#node">
+        Next: Node.js &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="node">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Redis from Node.js
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The
+       <code class="kbd">
+        ioredis
+       </code>
+       and
+       <code class="kbd">
+        node-redis
+       </code>
+       clients both work well. We will use
+       <code class="kbd">
+        ioredis
+       </code>
+       for its promise API and clustering support.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm init -y 
+npm install 
+express ioredis pg 
+npm install --save-dev nodemon</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const express = require("express");
+const Redis = require("ioredis");
+const app = express();
+app.use(express.json());
+const redis = new Redis({ host: "localhost", port: 6379 });
+app.get("/hello", async (req, res) =&gt; {
+  const visits = await redis.incr("visits:hello");
+  res.json({ message: "Hello from Redis!", visits });
+});
+app.listen(3000, () =&gt; console.log("Server on http://localhost:3000"));</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create an Express app, connect Redis, and build an endpoint that increments a counter on every request.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#patterns">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#sessions">
+        Next: Sessions &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="sessions">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Session Store
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Storing sessions in Redis is a classic use case. It scales horizontally because every app server reads from the same fast store, and sessions expire automatically.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install express-session connect-redis</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const Redis = require('ioredis');
+const redisClient = new Redis({ host: 'localhost',
+port: 6379 }
+);
+app.use(session({ store: new RedisStore({ client: redisClient }
+),
+secret: process.env.SESSION_SECRET || 'keyboard-cat',
+resave: false,
+saveUninitialized: false,
+name: 'sid',
+cookie: { secure: false, // set
+true in production with HTTPS httpOnly: true,
+maxAge: 1000 * 60 * 60 * 24 // 24
+hours }
+}));
+app.post('/login',
+async (req,
+res) =&gt; { // Verify
+user credentials here... req.session.userId = req.body.userId;
+res.json({ ok: true }
+);
+}
+);
+app.get('/me', (req,
+res) =&gt; { if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' }
+);
+res.json({ userId: req.session.userId }
+);
+}
+);
+app.post('/logout', (req,
+res) =&gt; { req.session.destroy(() =&gt; res.json({ ok: true }
+));
+}
+);</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Real-world considerations
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Rotate the session secret and store it in environment variables.
+        </li>
+        <li>
+         Use
+         <code class="kbd">
+          httpOnly
+         </code>
+         and
+         <code class="kbd">
+          secure
+         </code>
+         cookies to reduce XSS and session theft.
+        </li>
+        <li>
+         Set a Redis TTL that matches the cookie
+         <code class="kbd">
+          maxAge
+         </code>
+         .
+        </li>
+        <li>
+         Run a Redis Sentinel or Cluster for high availability in production.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#node">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#rate-limit">
+        Next: Rate Limiting &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="rate-limit">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Rate Limiting
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Rate limiting protects APIs from abuse. Redis is perfect for this because increments are atomic and fast. We will build a sliding-window limiter using a sorted set.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const WINDOW_MS = 60 * 1000;
+// 1
+minute const MAX_REQUESTS = 10;
+async function isRateLimited(key)
+{ const now = Date.now();
+const windowStart = now - WINDOW_MS;
+const pipeline = redis.pipeline();
+pipeline.zremrangebyscore(key,
+0,
+windowStart);
+// remove
+old entries pipeline.zadd(key,
+now, `${now}:${Math.random()}`);
+// add
+current request pipeline.zcard(key);
+// count
+requests in current window pipeline.pexpire(key,
+WINDOW_MS);
+// keep
+key alive const
+[, ,
+count] = await pipeline.exec();
+return count
+[1] &gt; MAX_REQUESTS;
+}
+app.use(async (req,
+res,
+next) =&gt; { const key = `ratelimit:${req.ip}`;
+if (await isRateLimited(key))
+{ return res.status(429).json({ error: 'Too many requests. Slow down.' }
+);
+}
+next();
+}
+);</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        When to rate limit
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Public APIs and login endpoints.
+        </li>
+        <li>
+         Password reset or payment flows to prevent abuse.
+        </li>
+        <li>
+         Expensive endpoints like exports, reports, or search.
+        </li>
+        <li>
+         Different tiers: free users get 10 req/min, paid users get 1000 req/min.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#sessions">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#cache-strategies">
+        Next: Strategies &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="cache-strategies">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Real-World Strategies
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Choosing a strategy depends on how often data changes and how much consistency your users need.
+      </p>
+      <div class="overflow-x-auto mb-8">
+       <table class="w-full text-sm text-left">
+        <thead class="border-b border-[var(--border)]">
+         <tr>
+          <th class="py-2 pr-4 font-semibold">
+           Strategy
+          </th>
+          <th class="py-2 pr-4 font-semibold">
+           Best for
+          </th>
+          <th class="py-2 pr-4 font-semibold">
+           Trade-off
+          </th>
+         </tr>
+        </thead>
+        <tbody class="text-[var(--muted)]">
+         <tr class="border-b border-[var(--border)]">
+          <td class="py-3 pr-4">
+           Cache-aside + TTL
+          </td>
+          <td class="py-3 pr-4">
+           Product catalogs, news articles, user profiles
+          </td>
+          <td class="py-3 pr-4">
+           Simple, but stale data until TTL expires
+          </td>
+         </tr>
+         <tr class="border-b border-[var(--border)]">
+          <td class="py-3 pr-4">
+           Write-through
+          </td>
+          <td class="py-3 pr-4">
+           Settings, feature flags, frequently updated configs
+          </td>
+          <td class="py-3 pr-4">
+           Always fast reads, but doubles write work
+          </td>
+         </tr>
+         <tr class="border-b border-[var(--border)]">
+          <td class="py-3 pr-4">
+           Write-behind (async)
+          </td>
+          <td class="py-3 pr-4">
+           Analytics counters, high-write logs
+          </td>
+          <td class="py-3 pr-4">
+           Very fast writes, risk of losing recent data
+          </td>
+         </tr>
+         <tr class="border-b border-[var(--border)]">
+          <td class="py-3 pr-4">
+           Probabilistic early expiration
+          </td>
+          <td class="py-3 pr-4">
+           Hot keys under heavy load
+          </td>
+          <td class="py-3 pr-4">
+           Prevents thundering herds, slightly more complex
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Probabilistic
+early expiration helper async function getWithEarlyExpiry(key,
+ttlSeconds,
+fetchFn)
+{ const value = await redis.get(key);
+if (value)
+{ const record = JSON.parse(value);
+const remaining = record.expiresAt - Date.now();
+const isHot = Math.random() &lt; (1 - remaining / (ttlSeconds * 1000));
+if (!isHot) return record.data;
+}
+const fresh = await fetchFn();
+await redis.setex(key,
+ttlSeconds,
+JSON.stringify({ data: fresh,
+expiresAt: Date.now() + ttlSeconds * 1000 }
+));
+return fresh;
+}</code></pre>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#rate-limit">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: E-commerce Cache
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a small product API that caches expensive catalog queries, protects itself with rate limiting, and stores authenticated sessions in Redis. This capstone combines the core patterns from the tutorial into one deployable service.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       1. What is this project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <p class="text-[var(--muted)]">
+        An e-commerce cache layer sits between the database and API clients. It makes product details fast to fetch, prevents abuse with rate limiting, and shares user sessions across server instances using Redis.
+       </p>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       2. What it covers?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Redis as a cache with TTL.
+        </li>
+        <li>
+         Cache-aside reads and explicit invalidation on writes.
+        </li>
+        <li>
+         Session storage backed by Redis.
+        </li>
+        <li>
+         Sliding-window rate limiting with sorted sets.
+        </li>
+        <li>
+         Express middleware stack integration.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       3. How it is done?
+      </h3>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-4">
+       The Express server layers three Redis-backed middlewares: rate limiting on every route, session handling for authentication, and a cache-aside product endpoint.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const express = require("express");
+const session = require("express-session");
+const RedisStore = require("connect-redis")(session);
+const Redis = require("ioredis");
+const { Pool } = require("pg");
+const app = express();
+app.use(express.json());
+const redis = new Redis({ host: "localhost", port: 6379 });
+const db = new Pool({ connectionString: process.env.DATABASE_URL });
+app.use(
+  session({
+    store: new RedisStore({ client: redis }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false, httpOnly: true, maxAge: 24 * 60 * 60 * 1000 },
+  }),
+); // Rate limiting middleware const WINDOW_MS = 60 * 1000; const MAX_REQUESTS = 20; app.use(async (req, res, next) =&gt; { const key = `ratelimit:${req.ip}`; const now = Date.now(); const pipeline = redis.pipeline(); pipeline.zremrangebyscore(key, 0, now - WINDOW_MS); pipeline.zadd(key, now, `${now}:${Math.random()}`); pipeline.zcard(key); pipeline.pexpire(key, WINDOW_MS); const [, , count] = await pipeline.exec(); if (count[1] &gt; MAX_REQUESTS) { return res.status(429).json({ error: 'Too many requests' }); } next(); }); // Cache-aside product endpoint app.get('/products/:id', async (req, res) =&gt; { const id = req.params.id; const key = `product:${id}`; const cached = await redis.get(key); if (cached) return res.json(JSON.parse(cached)); const result = await db.query('SELECT * FROM products WHERE id = $1', [id]); if (result.rows.length === 0) return res.status(404).json({ error: 'Not found' }); await redis.setex(key, 300, JSON.stringify(result.rows[0])); res.json(result.rows[0]); }); // Invalidate cache on update app.put('/products/:id', async (req, res) =&gt; { const id = req.params.id; const result = await db.query( 'UPDATE products SET name = $1, price = $2 WHERE id = $3 RETURNING *', [req.body.name, req.body.price, id] ); if (result.rows.length === 0) return res.status(404).json({ error: 'Not found' }); await redis.del(`product:${id}`); res.json(result.rows[0]); }); // Protected cart endpoint app.get('/cart', (req, res) =&gt; { if (!req.session.userId) return res.status(401).json({ error: 'Unauthorized' }); res.json({ userId: req.session.userId, items: [] }); }); app.listen(3000, () =&gt; console.log('E-commerce cache server running'));</code></pre>
+      </div>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-4">
+       Run the project end to end.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># 1. Start Redis 
+docker run -d --name 
+redis -p 6379:6379 
+redis:latest 
+# 2. Set up PostgreSQL with a products table 
+# (Use the SQL tutorial if you need help creating the table.) 
+# 3. Run the server SESSION_SECRET=super-secret DATABASE_URL=postgres://... 
+node server.js 
+# 4. Test endpoints 
+curl http://localhost:3000/products/1 
+curl -X PUT http://localhost:3000/products/1 -H 'Content-Type: application/json' -d '{"name":"New Name","price":29.99}' 
+curl -c cookies.txt -X POST http://localhost:3000/login -H 'Content-Type: application/json' -d '{"userId":42}' 
+curl -b cookies.txt http://localhost:3000/cart</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       4. What did we learn from this capstone project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Cache-aside is simple and effective for read-heavy product catalogs.
+        </li>
+        <li>
+         TTL alone is not enough: update endpoints should invalidate stale cache keys immediately.
+        </li>
+        <li>
+         Redis sessions let multiple app servers share login state for horizontal scaling.
+        </li>
+        <li>
+         Rate limiting protects the database and improves fairness for all clients.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       5. How can I enhance this project in the future?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Add a product search endpoint with Redis caching for popular queries.
+        </li>
+        <li>
+         Cache a shopping cart in Redis so it survives server restarts.
+        </li>
+        <li>
+         Implement probabilistic early expiration to avoid thundering herds.
+        </li>
+        <li>
+         Add Redis Streams or pub/sub for order-status notifications.
+        </li>
+        <li>
+         Deploy Redis Sentinel or Cluster for high availability.
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Serve a product through the cache, confirm a cache hit, log in to create a session, update the product to see invalidation, and hit the cart endpoint. Verify keys exist in Redis with
+        <code class="kbd">
+         KEYS *
+        </code>
+        .
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#cache-strategies">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+    <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+     <p>
+      Made for teaching Redis and caching. Open directly in any browser.
+     </p>
+    </footer>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement; const lightStylesheet = document.getElementById('hljs-light'); const darkStylesheet = document.getElementById('hljs-dark'); const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { lightStylesheet.disabled = true; darkStylesheet.disabled = false; moon.classList.add('hidden'); sun.classList.remove('hidden'); } else { lightStylesheet.disabled = false; darkStylesheet.disabled = true; moon.classList.remove('hidden'); sun.classList.add('hidden'); } localStorage.setItem('redis-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('redis-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menu-overlay'); sidebar.classList.toggle('open'); overlay.classList.toggle('hidden'); } function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code'); navigator.clipboard.writeText(code.innerText).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); } const sections = document.querySelectorAll('section[id]'); const tocLinks = document.querySelectorAll('.toc-link'); const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { tocLinks.forEach((link) => link.classList.remove('active')); const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (active) active.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach((section) => observer.observe(section)); document.querySelectorAll('.quiz').forEach((quiz) => { const correct = quiz.dataset.answer; const feedback = quiz.nextElementSibling; quiz.querySelectorAll('.quiz-opt').forEach((opt) => { opt.addEventListener('click', () => { quiz.querySelectorAll('.quiz-opt').forEach((o) => { o.classList.remove('selected', 'correct', 'wrong'); o.disabled = true; }); opt.classList.add('selected'); if (opt.dataset.val === correct) { opt.classList.add('correct'); feedback.textContent = 'Correct! ✅'; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]'; } else { opt.classList.add('wrong'); feedback.textContent = `Not quite. The correct answer is ${correct}.`; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]'; } }); }); }); hljs.highlightAll();
+  </script>
+ </body>
+</html>

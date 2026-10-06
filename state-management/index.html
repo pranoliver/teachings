@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   State Management: Redux, Zustand, React Query
+  </title>
+  <link href="../assets/favicons/state-management.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-state-management">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="State Management" class="w-10 h-10" src="../assets/favicons/state-management.svg"/>
+     <span class="text-xl font-bold">
+      State Management
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#problem">
+      2. Why State Management?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#redux">
+      3. Redux Toolkit
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#zustand">
+      4. Zustand
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#react-query">
+      5. React Query
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#choosing">
+      6. Choosing the Right Tool
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#real-world">
+      7. Real-World Systems
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      8. Capstone: Dashboard
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       State Management: Redux, Zustand, React Query
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Modern React applications split state between local UI state, shared global state, and remote server state. Picking the right tool for each layer keeps apps fast, predictable, and easy to maintain. This tutorial covers three industry-standard tools:
+       <strong>
+        Redux Toolkit
+       </strong>
+       for predictable global state,
+       <strong>
+        Zustand
+       </strong>
+       for lightweight stores, and
+       <strong>
+        React Query
+       </strong>
+       (TanStack Query) for server state.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Diagram showing server state, global client state, and local UI state layers" class="diagram" loading="lazy" src="../assets/diagrams/state-management/state-layers.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Server state, global client state, and local UI state each have a best-fit tool.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with React, hooks, and JSX.
+        </li>
+        <li>
+         Understand
+         <code class="kbd">
+          useState
+         </code>
+         and
+         <code class="kbd">
+          useEffect
+         </code>
+         .
+        </li>
+        <li>
+         Basic TypeScript is helpful but not required.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         When to use Redux vs Zustand vs React Query
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Slices, reducers, and actions with Redux Toolkit
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Minimal stores and selectors with Zustand
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Caching, background refetching, and mutations with React Query
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Server state vs client state separation
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Real-world architecture decisions
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Real-world systems using these tools
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Redux Toolkit:
+         </strong>
+         used by
+         <strong>
+          Instagram
+         </strong>
+         ,
+         <strong>
+          Airbnb
+         </strong>
+         , and
+         <strong>
+          Slack
+         </strong>
+         for complex, event-heavy UIs with time-travel debugging needs.
+        </li>
+        <li>
+         <strong>
+          Zustand:
+         </strong>
+         used by
+         <strong>
+          Vercel
+         </strong>
+         ,
+         <strong>
+          Excalidraw
+         </strong>
+         , and
+         <strong>
+          Zed
+         </strong>
+         for fast, minimal stores without boilerplate.
+        </li>
+        <li>
+         <strong>
+          React Query:
+         </strong>
+         used by
+         <strong>
+          Netflix
+         </strong>
+         ,
+         <strong>
+          Amazon
+         </strong>
+         , and
+         <strong>
+          Microsoft
+         </strong>
+         to cache API responses, dedupe requests, and keep server UI fresh.
+        </li>
+        <li>
+         <strong>
+          Combination pattern:
+         </strong>
+         <strong>
+          GitHub
+         </strong>
+         and
+         <strong>
+          Stripe
+         </strong>
+         dashboards mix local React Query caches for server data with Zustand or Redux for UI/global state.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#problem">
+        Next: Why State? &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="problem">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Why State Management?
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       React's built-in state is perfect for small components, but as apps grow you face three problems: prop drilling, inconsistent state copies, and repeated data fetching. State management libraries solve these by centralizing rules, caching, and updates.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Three kinds of state
+       </h3>
+       <div class="space-y-4">
+        <div>
+         <h4 class="font-semibold">
+          Local UI state
+         </h4>
+         <p class="text-[var(--muted)]">
+          Modal open/closed, form input values, hover state. Keep it in
+          <code class="kbd">
+           useState
+          </code>
+          inside the component.
+         </p>
+        </div>
+        <div>
+         <h4 class="font-semibold">
+          Shared client state
+         </h4>
+         <p class="text-[var(--muted)]">
+          Logged-in user, theme, cart, filters applied across routes. Use Redux Toolkit or Zustand.
+         </p>
+        </div>
+        <div>
+         <h4 class="font-semibold">
+          Server state
+         </h4>
+         <p class="text-[var(--muted)]">
+          Data that lives on a server: product catalog, orders, messages. Use React Query to cache, synchronize, and mutate it.
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// Problem:
+prop drilling a user through 3 layers function App()
+{ const
+[user,
+setUser] = useState(null);
+return ;
+}
+function Layout({ user,
+setUser }
+)
+{ return</code><header setuser="{setUser}" user="{user}"><code class="language-typescript">;
+}
+function Header({ user,
+setUser }
+)
+{ return user ? {user.name} :  setUser({ name: 'Ada' }
+)}&gt;Login;
+}</code></header></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// Solution:
+any component reads from a shared store function Header()
+{ const user = useUserStore((state) =&gt; state.user);
+const login = useUserStore((state) =&gt; state.login);
+return user ? {user.name} : Login;
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Identify one piece of local state, one shared state, and one server state in an app you use daily (e.g., a food delivery or banking app).
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#redux">
+        Next: Redux &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="redux">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Redux Toolkit
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Redux Toolkit (RTK) is the official, opinionated way to write Redux. It removes boilerplate with
+       <code class="kbd">
+        createSlice
+       </code>
+       , adds immutable updates via Immer, and includes RTK Query for data fetching.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        When to choose Redux Toolkit
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Many components read and write the same state.
+        </li>
+        <li>
+         You need time-travel debugging or action logging.
+        </li>
+        <li>
+         State transitions are complex and must be predictable.
+        </li>
+        <li>
+         You want a single source of truth with strict rules.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Install and configure the store
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install @reduxjs/toolkit react-redux</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/store/index.ts
+import { configureStore } from "@reduxjs/toolkit";
+import cartReducer from "./cartSlice";
+export const store = configureStore({ reducer: { cart: cartReducer } });
+export type RootState = ReturnType;
+export type AppDispatch = typeof store.dispatch;</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Create a slice
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/store/cartSlice.ts
+import
+{ createSlice,
+PayloadAction }
+from '@reduxjs/toolkit';
+interface CartItem
+{ id: string;
+name: string;
+price: number;
+quantity: number;
+}
+interface CartState
+{ items: CartItem
+[]
+;
+}
+const initialState: CartState = { items: []
+}
+;
+const cartSlice = createSlice({ name: 'cart',
+initialState,
+reducers: { addItem: (state,
+action: PayloadAction) =&gt; { const existing = state.items.find((i) =&gt; i.id === action.payload.id);
+if (existing)
+{ existing.quantity += action.payload.quantity;
+}
+else
+{ state.items.push(action.payload);
+}
+},
+removeItem: (state,
+action: PayloadAction) =&gt; { state.items = state.items.filter((i) =&gt; i.id !== action.payload);
+},
+clearCart: (state) =&gt; { state.items = []
+;
+}, }, }
+);
+export const
+{ addItem,
+removeItem,
+clearCart } = cartSlice.actions;
+export default cartSlice.reducer;
+// Selector
+export const selectCartTotal = (state: { cart: CartState }
+) =&gt; state.cart.items.reduce((sum,
+i) =&gt; sum + i.price * i.quantity,
+0);</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Provide the store and dispatch actions
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/main.tsx
+import
+{ Provider }
+from 'react-redux';
+import
+{ store }
+from './store';
+import App from './App';
+ReactDOM.createRoot(document.getElementById('root')!).render(    );
+// src/components/CartBadge.tsx
+import
+{ useSelector,
+useDispatch }
+from 'react-redux';
+import
+{ selectCartTotal,
+addItem }
+from '../store/cartSlice';
+import type
+{ RootState,
+AppDispatch }
+from '../store';
+export function CartBadge()
+{ const total = useSelector((state: RootState) =&gt; selectCartTotal(state));
+const dispatch = useDispatch();
+return (  dispatch(addItem({ id: 'p1',
+name: 'Mug',
+price: 12,
+quantity: 1 }
+))}&gt; Cart: ${total.toFixed(2)}
+);
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world note
+       </h4>
+       <p class="text-[var(--muted)]">
+        <strong>
+         Slack
+        </strong>
+        rebuilt parts of its desktop app with Redux Toolkit to manage message drafts, channel unread states, and notification counts across thousands of components.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#problem">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#zustand">
+        Next: Zustand &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="zustand">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Zustand
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Zustand is a small, fast state manager for React. It uses hooks, requires almost no boilerplate, and works outside the React tree so non-React code can read or update state too.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        When to choose Zustand
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         You want global state without actions, reducers, or providers.
+        </li>
+        <li>
+         You need a store that is readable by utility functions or event handlers.
+        </li>
+        <li>
+         Bundle size matters; Zustand is ~1 KB.
+        </li>
+        <li>
+         You want TypeScript support out of the box.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Install and create a store
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install zustand</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/store/uiStore.ts
+import
+{ create }
+from 'zustand';
+interface UIState
+{ sidebarOpen: boolean;
+theme: 'light' | 'dark';
+toggleSidebar: () =&gt; void;
+setTheme: (theme: 'light' | 'dark') =&gt; void;
+}
+export const useUIStore = create((set) =&gt; ({ sidebarOpen: false,
+theme: 'light',
+toggleSidebar: () =&gt; set((state) =&gt; ({ sidebarOpen: !state.sidebarOpen }
+)),
+setTheme: (theme) =&gt; set({ theme }
+), }
+));
+// Selector
+example: only re-render when theme changes export const useTheme = () =&gt; useUIStore((state) =&gt; state.theme);</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Use the store in components
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/components/Sidebar.tsx
+import
+{ useUIStore }
+from '../store/uiStore';
+export function Sidebar()
+{ const
+{ sidebarOpen,
+toggleSidebar } = useUIStore();
+return (  Close ...  );
+} // src/components/ThemeToggle.tsx
+import
+{ useUIStore }
+from '../store/uiStore';
+export function ThemeToggle()
+{ const theme = useUIStore((state) =&gt; state.theme);
+const setTheme = useUIStore((state) =&gt; state.setTheme);
+return (  setTheme(theme === 'light' ? 'dark' : 'light')}&gt; Switch to
+{theme === 'light' ? 'dark' : 'light'}
+);
+}</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Persist Zustand to localStorage
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">import { persist } from "zustand/middleware";
+export const useUIStore = create(
+  persist(
+    (set) =&gt; ({
+      sidebarOpen: false,
+      theme: "light",
+      toggleSidebar: () =&gt;
+        set((state) =&gt; ({ sidebarOpen: !state.sidebarOpen })),
+      setTheme: (theme) =&gt; set({ theme }),
+    }),
+    { name: "ui-storage" },
+  ),
+);</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world note
+       </h4>
+       <p class="text-[var(--muted)]">
+        <strong>
+         Vercel
+        </strong>
+        uses Zustand in tools like v0 and Next.js Playground for lightweight global UI state such as canvas selection, toolbars, and theme toggles.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#redux">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#react-query">
+        Next: React Query &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="react-query">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       React Query
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       React Query, now called
+       <strong>
+        TanStack Query
+       </strong>
+       , is not a global state manager for
+       <em>
+        client
+       </em>
+       state. It is a server-state cache. It handles loading states, error handling, background refetching, pagination, and optimistic updates automatically.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        When to choose React Query
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         You fetch data from an API and render it in multiple places.
+        </li>
+        <li>
+         You want stale-while-revalidate caching without writing it yourself.
+        </li>
+        <li>
+         You need pagination, infinite scroll, or mutations with rollback.
+        </li>
+        <li>
+         You want background refetching when the window regains focus.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Install and configure the client
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install @tanstack/react-query</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/main.tsx
+import
+{ QueryClient,
+QueryClientProvider }
+from '@tanstack/react-query';
+const queryClient = new QueryClient({ defaultOptions: { queries: { staleTime: 1000 * 60 * 5, // 5
+minutes refetchOnWindowFocus: false, }, }, }
+);
+ReactDOM.createRoot(document.getElementById('root')!).render(    );</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Fetch data with a query
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/hooks/useOrders.ts
+import { useQuery } from "@tanstack/react-query";
+async function fetchOrders(): Promise {
+  const res = await fetch("/api/orders");
+  if (!res.ok) throw new Error("Failed to fetch orders");
+  return res.json();
+}
+export function useOrders() {
+  return useQuery({ queryKey: ["orders"], queryFn: fetchOrders });
+}</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/components/OrderList.tsx
+import
+{ useOrders }
+from '../hooks/useOrders';
+export function OrderList()
+{ const
+{ data,
+isLoading,
+error } = useOrders();
+if (isLoading) return Loading orders...;
+if (error) return Error: {error.message}
+;
+return (  {data?.map((order) =&gt; ( {order.id} &mdash; ${order.total}
+))}
+);
+}</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Mutate with optimistic updates
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/hooks/useCreateOrder.ts
+import
+{ useMutation,
+useQueryClient }
+from '@tanstack/react-query';
+async function createOrder(order: NewOrder): Promise
+{ const res = await fetch('/api/orders',
+{ method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(order), }
+);
+if (!res.ok) throw new Error('Failed to create order');
+return res.json();
+}
+export function useCreateOrder()
+{ const queryClient = useQueryClient();
+return useMutation({ mutationFn: createOrder,
+onSuccess: (newOrder) =&gt; { // Update
+the cached list without refetching queryClient.setQueryData(['orders'], (old: Order
+[] | undefined) =&gt; old ? [...old,
+newOrder] : [newOrder]
+);
+}, }
+);
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world note
+       </h4>
+       <p class="text-[var(--muted)]">
+        <strong>
+         Netflix
+        </strong>
+        uses TanStack Query in internal dashboards to cache large catalog datasets, dedupe parallel requests from different components, and keep UIs responsive while background refetching freshness.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#zustand">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#choosing">
+        Next: Choosing &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="choosing">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Choosing the Right Tool
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       There is no single best library. Match the tool to the state you are managing and the team's appetite for structure.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Diagram comparing Redux Toolkit, Zustand, and React Query by use case, trade-off, and bundle size" class="diagram" loading="lazy" src="../assets/diagrams/state-management/tool-comparison.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Pick the tool by the kind of state you are managing.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <table class="w-full text-left text-[var(--muted)]">
+        <thead>
+         <tr class="border-b border-[var(--border)]">
+          <th class="py-2 pr-4">
+           Concern
+          </th>
+          <th class="py-2 pr-4">
+           Recommended tool
+          </th>
+          <th class="py-2">
+           Why
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr class="border-b border-[var(--border)]">
+          <td class="py-3 pr-4">
+           Complex global UI state
+          </td>
+          <td class="py-3 pr-4 font-semibold">
+           Redux Toolkit
+          </td>
+          <td class="py-3">
+           Predictable, debuggable, scales to large teams.
+          </td>
+         </tr>
+         <tr class="border-b border-[var(--border)]">
+          <td class="py-3 pr-4">
+           Lightweight global state
+          </td>
+          <td class="py-3 pr-4 font-semibold">
+           Zustand
+          </td>
+          <td class="py-3">
+           Minimal API, no providers, great for UI flags.
+          </td>
+         </tr>
+         <tr class="border-b border-[var(--border)]">
+          <td class="py-3 pr-4">
+           Server data
+          </td>
+          <td class="py-3 pr-4 font-semibold">
+           React Query
+          </td>
+          <td class="py-3">
+           Caching, deduping, refetching, optimistic updates.
+          </td>
+         </tr>
+         <tr>
+          <td class="py-3 pr-4">
+           Component-only state
+          </td>
+          <td class="py-3 pr-4 font-semibold">
+           useState / useReducer
+          </td>
+          <td class="py-3">
+           No external dependency, simplest option.
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Recommended combination
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Most production apps use more than one tool. A common architecture:
+       </p>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          React Query
+         </strong>
+         for all server data (users, orders, reports).
+        </li>
+        <li>
+         <strong>
+          Zustand
+         </strong>
+         for small global UI state (theme, sidebar, filters).
+        </li>
+        <li>
+         <strong>
+          Redux Toolkit
+         </strong>
+         only when you have complex, multi-step workflows (checkout, editor state, real-time dashboards).
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#react-query">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#real-world">
+        Next: Real-World &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="real-world">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Real-World Systems
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       These examples show how mature products combine the three tools to keep hundreds of developers productive.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Instagram web (Meta)
+       </h3>
+       <p class="text-[var(--muted)]">
+        Instagram's web app uses Redux for feed interactions, direct messages, and notification counts. Actions like "like post" dispatch Redux actions that update local cache and trigger optimistic UI changes while the network request runs in the background.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Excalidraw
+       </h3>
+       <p class="text-[var(--muted)]">
+        The collaborative whiteboard uses Zustand for the editor's scene state. Because Zustand stores can be read outside React, collaboration sync logic and export utilities can access the same state tree as the components.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Stripe Dashboard
+       </h3>
+       <p class="text-[var(--muted)]">
+        Stripe uses a combination of React Query for account, payment, and payout data, plus a lightweight store for UI state. This separation means dashboards load instantly from cache and never show stale balances for long.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Linear
+       </h3>
+       <p class="text-[var(--muted)]">
+        Linear's issue tracker keeps local drafts and optimistic issue updates in a normalized cache, similar in spirit to React Query, while routing and command-palette state live in a tiny global store.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#choosing">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Analytics Dashboard
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a small analytics dashboard that combines all three tools. It fetches sales data with React Query, manages global UI filters with Zustand, and keeps a complex cart/wishlist module in Redux Toolkit.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       1. What is this project?
+      </h3>
+      <p class="text-[var(--muted)] mb-6">
+       You will create a dashboard that lists products, lets users filter by category and price range, bookmark products to a wishlist, and add products to a cart. Server data comes from a mock API, UI filters live in Zustand, and cart/wishlist logic lives in Redux Toolkit.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       2. What it covers?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Separating server state (products) from client state (filters, cart, wishlist).
+        </li>
+        <li>
+         Fetching, caching, and background refetching with React Query.
+        </li>
+        <li>
+         Lightweight global UI state with Zustand.
+        </li>
+        <li>
+         Structured cart/wishlist state with Redux Toolkit slices and selectors.
+        </li>
+        <li>
+         Composing multiple providers in the React tree.
+        </li>
+        <li>
+         Selecting the right tool for the right state layer.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       3. How it is done?
+      </h3>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 1: project setup
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npx create-vite@latest dashboard --template react-ts cd dashboard 
+npm install @reduxjs/toolkit react-redux zustand @tanstack/react-query 
+npm run dev</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 2: wire up providers
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/main.tsx
+import { Provider as ReduxProvider } from "react-redux";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { store } from "./store";
+import App from "./App";
+const queryClient = new QueryClient();
+ReactDOM.createRoot(document.getElementById("root")!).render();</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 3: fetch products with React Query
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/hooks/useProducts.ts
+import { useQuery } from "@tanstack/react-query";
+export interface Product {
+  id: number;
+  title: string;
+  price: number;
+  category: string;
+}
+async function fetchProducts(): Promise {
+  const res = await fetch("https://fakestoreapi.com/products");
+  if (!res.ok) throw new Error("Network error");
+  return res.json();
+}
+export function useProducts() {
+  return useQuery({ queryKey: ["products"], queryFn: fetchProducts });
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 4: filters in Zustand
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/store/filterStore.ts
+import { create } from "zustand";
+interface FilterState {
+  category: string;
+  maxPrice: number;
+  setCategory: (category: string) =&gt; void;
+  setMaxPrice: (price: number) =&gt; void;
+}
+export const useFilterStore = create((set) =&gt; ({
+  category: "all",
+  maxPrice: 1000,
+  setCategory: (category) =&gt; set({ category }),
+  setMaxPrice: (maxPrice) =&gt; set({ maxPrice }),
+}));</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 5: cart and wishlist in Redux Toolkit
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/store/dashboardSlice.ts
+import
+{ createSlice,
+PayloadAction }
+from '@reduxjs/toolkit';
+import type
+{ Product }
+from '../hooks/useProducts';
+interface DashboardState
+{ cart: Product
+[]
+;
+wishlist: number
+[]
+;
+}
+const initialState: DashboardState = { cart: [],
+wishlist: []
+}
+;
+const dashboardSlice = createSlice({ name: 'dashboard',
+initialState,
+reducers: { addToCart: (state,
+action: PayloadAction) =&gt; { state.cart.push(action.payload);
+},
+toggleWishlist: (state,
+action: PayloadAction) =&gt; { const index = state.wishlist.indexOf(action.payload);
+if (index === -1) state.wishlist.push(action.payload);
+else state.wishlist.splice(index,
+1);
+}, }, }
+);
+export const
+{ addToCart,
+toggleWishlist } = dashboardSlice.actions;
+export default dashboardSlice.reducer;
+export const selectCartCount = (state: { dashboard: DashboardState }
+) =&gt; state.dashboard.cart.length;
+export const selectIsWishlisted = (id: number) =&gt; (state: { dashboard: DashboardState }
+) =&gt; state.dashboard.wishlist.includes(id);</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 6: product list component
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/components/ProductList.tsx
+import
+{ useProducts }
+from '../hooks/useProducts';
+import
+{ useFilterStore }
+from '../store/filterStore';
+import
+{ useDispatch,
+useSelector }
+from 'react-redux';
+import
+{ addToCart,
+toggleWishlist,
+selectIsWishlisted }
+from '../store/dashboardSlice';
+export function ProductList()
+{ const
+{ data,
+isLoading } = useProducts();
+const
+{ category,
+maxPrice,
+setCategory,
+setMaxPrice } = useFilterStore();
+const dispatch = useDispatch();
+const filtered = data?.filter( (p) =&gt; (category === 'all' || p.category === category) &amp;&amp; p.price &lt;= maxPrice );
+if (isLoading) return Loading...;
+return (    setCategory(e.target.value)}&gt; All Electronics Jewelry Men Women   setMaxPrice(Number(e.target.value))} /&gt; Max ${maxPrice}   {filtered?.map((p) =&gt; (  ))}
+);
+}
+function ProductCard({ product }: { product: import('../hooks/useProducts').Product }
+)
+{ const dispatch = useDispatch();
+const isWishlisted = useSelector(selectIsWishlisted(product.id));
+return (  {product.title} ${product.price}
+dispatch(addToCart(product))}&gt;Add to cart  dispatch(toggleWishlist(product.id))}&gt; {isWishlisted ? '&starf;' : '&star;'}
+);
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 7: cart summary
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-typescript">// src/components/CartSummary.tsx
+import
+{ useSelector }
+from 'react-redux';
+import
+{ selectCartCount }
+from '../store/dashboardSlice';
+export function CartSummary()
+{ const count = useSelector(selectCartCount);
+return Cart: {count}
+;
+}</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       4. What did we learn from this capstone project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Server state belongs in React Query so components share cached API responses automatically.
+        </li>
+        <li>
+         Zustand is ideal for UI-only state like filters because it needs no providers or reducers.
+        </li>
+        <li>
+         Redux Toolkit shines when multiple components perform structured actions on the same data (cart, wishlist).
+        </li>
+        <li>
+         Combining providers is safe if each library is used for its intended state layer.
+        </li>
+        <li>
+         Selectors keep components small and prevent unnecessary re-renders.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       5. How can I enhance this project in the future?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Replace FakeStoreAPI with a real backend and add pagination with React Query's
+         <code class="kbd">
+          useInfiniteQuery
+         </code>
+         .
+        </li>
+        <li>
+         Persist cart and wishlist to localStorage or a database.
+        </li>
+        <li>
+         Add optimistic add-to-cart with React Query mutations for a real checkout API.
+        </li>
+        <li>
+         Write tests for each slice with Redux Toolkit's test helpers and React Query's test providers.
+        </li>
+        <li>
+         Move async side effects into RTK Query for a single API layer backed by Redux.
+        </li>
+        <li>
+         Add routing with React Router so filters can be shared via URL query parameters.
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create the dashboard, fetch products, apply a filter, add two products to the cart, and toggle a wishlist item. Confirm that each state layer updates independently and the UI reflects all changes.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#real-world">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); const lightStylesheet = document.getElementById('hljs-light'); const darkStylesheet = document.getElementById('hljs-dark'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { lightStylesheet.disabled = true; darkStylesheet.disabled = false; moon.classList.add('hidden'); sun.classList.remove('hidden'); } else { lightStylesheet.disabled = false; darkStylesheet.disabled = true; moon.classList.remove('hidden'); sun.classList.add('hidden'); } localStorage.setItem('state-mgmt-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('state-mgmt-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menu-overlay'); sidebar.classList.toggle('open'); overlay.classList.toggle('hidden'); } function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code'); navigator.clipboard.writeText(code.innerText).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); } const sections = document.querySelectorAll('section[id]'); const tocLinks = document.querySelectorAll('.toc-link'); const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { tocLinks.forEach((link) => link.classList.remove('active')); const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (active) active.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach((section) => observer.observe(section)); hljs.highlightAll();
+  </script>
+ </body>
+</html>

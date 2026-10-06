@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" aria-label="Diagram comparing manual file saving with Git version control" role="img"><title>Diagram comparing manual file saving with Git version control</title>
+              <!-- Without Git -->
+              <text x="120" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#1f2328">Without Git</text>
+              <rect x="30" y="50" width="180" height="48" rx="8" fill="#ff7b72" fill-opacity="0.15" stroke="#ff7b72" stroke-width="2"/>
+              <text x="120" y="80" text-anchor="middle" font-size="14" fill="#1f2328">final_v1.js</text>
+              <rect x="30" y="110" width="180" height="48" rx="8" fill="#ff7b72" fill-opacity="0.15" stroke="#ff7b72" stroke-width="2"/>
+              <text x="120" y="140" text-anchor="middle" font-size="14" fill="#1f2328">final_v2_REALLY.js</text>
+              <rect x="30" y="170" width="180" height="48" rx="8" fill="#ff7b72" fill-opacity="0.15" stroke="#ff7b72" stroke-width="2"/>
+              <text x="120" y="200" text-anchor="middle" font-size="14" fill="#1f2328">final_v3_FINAL.js</text>
+
+              <!-- Arrow -->
+              <path d="M240 130 L280 130" stroke="#656d76" stroke-width="2" marker-end="url(#github-arrow)"/>
+
+              <!-- With Git -->
+              <text x="480" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#1f2328">With Git</text>
+              <circle cx="480" cy="80" r="28" fill="#3fb950" fill-opacity="0.15" stroke="#3fb950" stroke-width="2"/>
+              <text x="480" y="86" text-anchor="middle" font-size="13" fill="#1f2328">v1</text>
+              <line x1="508" y1="80" x2="548" y2="80" stroke="#3fb950" stroke-width="2"/>
+              <circle cx="576" cy="80" r="28" fill="#3fb950" fill-opacity="0.15" stroke="#3fb950" stroke-width="2"/>
+              <text x="576" y="86" text-anchor="middle" font-size="13" fill="#1f2328">v2</text>
+              <line x1="480" y1="108" x2="480" y2="148" stroke="#3fb950" stroke-width="2"/>
+              <circle cx="480" cy="176" r="28" fill="#3fb950" fill-opacity="0.15" stroke="#3fb950" stroke-width="2"/>
+              <text x="480" y="182" text-anchor="middle" font-size="13" fill="#1f2328">v3</text>
+              <line x1="508" y1="176" x2="548" y2="176" stroke="#3fb950" stroke-width="2"/>
+              <circle cx="576" cy="176" r="28" fill="#3fb950" fill-opacity="0.15" stroke="#3fb950" stroke-width="2"/>
+              <text x="576" y="182" text-anchor="middle" font-size="13" fill="#1f2328">v4</text>
+
+              <defs>
+                <marker id="github-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#656d76"/>
+                </marker>
+              </defs>
+            </svg>

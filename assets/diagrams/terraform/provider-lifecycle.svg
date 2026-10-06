@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260" class="diagram" role="img" aria-label="Terraform provider lifecycle diagram">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#7b42bc" />
+    </marker>
+  </defs>
+  <rect width="800" height="260" fill="#f6f8fa" rx="12" />
+  <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">Terraform Provider Lifecycle</text>
+  <rect x="40" y="70" width="150" height="60" rx="8" fill="#7b42bc" opacity="0.15" stroke="#7b42bc" stroke-width="2" />
+  <text x="115" y="105" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">Configuration (.tf)</text>
+  <line x1="190" y1="100" x2="260" y2="100" stroke="#7b42bc" stroke-width="2" marker-end="url(#arr)" />
+  <rect x="270" y="70" width="150" height="60" rx="8" fill="#7b42bc" opacity="0.15" stroke="#7b42bc" stroke-width="2" />
+  <text x="345" y="105" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">terraform plan</text>
+  <line x1="420" y1="100" x2="500" y2="100" stroke="#7b42bc" stroke-width="2" marker-end="url(#arr)" />
+  <rect x="510" y="70" width="150" height="60" rx="8" fill="#7b42bc" opacity="0.15" stroke="#7b42bc" stroke-width="2" />
+  <text x="585" y="105" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">Provider API calls</text>
+  <line x1="585" y1="130" x2="585" y2="170" stroke="#7b42bc" stroke-width="2" marker-end="url(#arr)" />
+  <rect x="510" y="175" width="150" height="60" rx="8" fill="#059669" opacity="0.15" stroke="#059669" stroke-width="2" />
+  <text x="585" y="210" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">Cloud resources</text>
+  <rect x="630" y="175" width="130" height="60" rx="8" fill="#0369a1" opacity="0.15" stroke="#0369a1" stroke-width="2" />
+  <text x="695" y="210" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">State file</text>
+  <text x="400" y="250" text-anchor="middle" font-size="12" fill="#656d76">Terraform compares desired state, current state, and provider APIs to propose a plan.</text>
+</svg>

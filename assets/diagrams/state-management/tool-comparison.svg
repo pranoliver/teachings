@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="title desc">
+  <title id="title">State management tool comparison</title>
+  <desc id="desc">A comparison of Redux Toolkit, Zustand, and React Query by strength, learning curve, and best use case.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Outfit', system-ui, sans-serif; }
+      .head { font-size: 15px; font-weight: 700; fill: #1f2328; }
+      .cell { font-size: 14px; fill: #656d76; }
+      .box { rx: 8; }
+    </style>
+  </defs>
+  <rect width="720" height="320" fill="#f6f8fa" />
+
+  <g transform="translate(40, 40)">
+    <rect x="0" y="0" width="640" height="40" fill="#e5e7eb" stroke="#d0d7de" stroke-width="1" class="box" />
+    <text x="20" y="25" class="head">Tool</text>
+    <text x="180" y="25" class="head">Best for</text>
+    <text x="380" y="25" class="head">Trade-off</text>
+    <text x="540" y="25" class="head">Size</text>
+
+    <rect x="0" y="40" width="640" height="60" fill="#ffffff" stroke="#d0d7de" stroke-width="1" class="box" />
+    <text x="20" y="75" class="cell" font-weight="600">Redux Toolkit</text>
+    <text x="180" y="60" class="cell">Complex global state</text>
+    <text x="180" y="80" class="cell">with many rules/actions</text>
+    <text x="380" y="75" class="cell">More boilerplate, powerful devtools</text>
+    <text x="540" y="75" class="cell">~11 KB</text>
+
+    <rect x="0" y="100" width="640" height="60" fill="#ffffff" stroke="#d0d7de" stroke-width="1" class="box" />
+    <text x="20" y="135" class="cell" font-weight="600">Zustand</text>
+    <text x="180" y="120" class="cell">Lightweight global</text>
+    <text x="180" y="140" class="cell">UI / feature state</text>
+    <text x="380" y="135" class="cell">Minimal API, no providers</text>
+    <text x="540" y="135" class="cell">~1 KB</text>
+
+    <rect x="0" y="160" width="640" height="60" fill="#ffffff" stroke="#d0d7de" stroke-width="1" class="box" />
+    <text x="20" y="195" class="cell" font-weight="600">React Query</text>
+    <text x="180" y="180" class="cell">Server state / API</text>
+    <text x="180" y="200" class="cell">cache and mutations</text>
+    <text x="380" y="195" class="cell">Requires server backend</text>
+    <text x="540" y="195" class="cell">~12 KB</text>
+  </g>
+</svg>

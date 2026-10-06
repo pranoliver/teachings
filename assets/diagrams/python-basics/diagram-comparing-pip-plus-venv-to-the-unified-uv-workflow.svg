@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" aria-label="Diagram comparing pip plus venv to the unified uv workflow" role="img"><title>Diagram comparing pip plus venv to the unified uv workflow</title>
+              <text x="180" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2328">Classic workflow</text>
+              <rect x="40" y="45" width="110" height="54" rx="10" fill="#ffd43b" fill-opacity="0.2" stroke="#d29922" stroke-width="2"/>
+              <text x="95" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#323330">python -m venv</text>
+              <rect x="190" y="45" width="80" height="54" rx="10" fill="#306998" fill-opacity="0.15" stroke="#306998" stroke-width="2"/>
+              <text x="230" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#306998">activate</text>
+              <rect x="300" y="45" width="80" height="54" rx="10" fill="#3fb950" fill-opacity="0.15" stroke="#3fb950" stroke-width="2"/>
+              <text x="340" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#1a7f37">pip install</text>
+              <path d="M150 72 L190 72" stroke="#d0d7de" stroke-width="2" marker-end="url(#arrow)"/>
+              <path d="M270 72 L300 72" stroke="#d0d7de" stroke-width="2" marker-end="url(#arrow)"/>
+              <path d="M380 72 L420 72" stroke="#d0d7de" stroke-width="2" marker-end="url(#arrow)"/>
+              <text x="450" y="80" text-anchor="start" font-size="12" fill="#656d76">+ separate tools for</text>
+              <text x="450" y="98" text-anchor="start" font-size="12" fill="#656d76">locking, running, Python versions</text>
+
+              <text x="540" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2328">uv workflow</text>
+              <rect x="450" y="140" width="180" height="64" rx="12" fill="#2f81f7" fill-opacity="0.15" stroke="#2f81f7" stroke-width="2"/>
+              <text x="540" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="#2f81f7">uv</text>
+              <text x="540" y="188" text-anchor="middle" font-size="11" fill="#656d76">venv • pip • run • sync • lock • tool</text>
+            </svg>

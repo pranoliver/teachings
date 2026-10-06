@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" style="font-family: Outfit, system-ui, -apple-system, sans-serif; text-rendering: geometricPrecision; shape-rendering: geometricPrecision;" preserveAspectRatio="xMidYMid meet">
+  <title>Diagram comparing vertical partitioning of table columns with horizontal partitioning of table rows</title>
+  <rect x="0" y="0" width="720" height="300" fill="#ffffff"/>
+  <text x="360" y="30" text-anchor="middle" dominant-baseline="middle" font-size="15" font-weight="700" fill="#1f2328">Vertical vs Horizontal Partitioning</text>  <text x="180" y="60" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#1f2328">Vertical Partitioning</text>  <rect x="80" y="80" width="200" height="60" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+  <text x="180.0" y="110.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#656d76">orders_meta</text>
+  <text x="180.0" y="126.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">id | status | total</text>  <rect x="80" y="160" width="200" height="60" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+  <text x="180.0" y="190.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#656d76">orders_blob</text>
+  <text x="180.0" y="206.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">id | notes | receipt_pdf</text>    <marker id="arr-69198" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#486bb3"/>
+    </marker>
+  <line x1="180" y1="140" x2="180" y2="160" stroke="#486bb3" stroke-width="1.5" marker-end="url(#arr-69198)" stroke-linecap="round"/>
+  <text x="180.0" y="140.0" text-anchor="middle" font-size="10" fill="#848d97">JOIN by id</text>  <line x1="360" y1="45" x2="360" y2="245" stroke="#d0d7de" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="540" y="60" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#1f2328">Horizontal Partitioning</text>  <rect x="400" y="80" width="180" height="50" rx="10" fill="#e8f9ef" stroke="#13aa52" stroke-width="1.5"/>
+  <text x="490.0" y="105.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#13aa52">orders_2023</text>
+  <text x="490.0" y="121.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">older rows</text>  <rect x="400" y="150" width="180" height="50" rx="10" fill="#e8f9ef" stroke="#13aa52" stroke-width="1.5"/>
+  <text x="490.0" y="175.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#13aa52">orders_2024</text>
+  <text x="490.0" y="191.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">current rows</text>  <rect x="400" y="220" width="180" height="50" rx="10" fill="#e8f9ef" stroke="#13aa52" stroke-width="1.5"/>
+  <text x="490.0" y="245.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#13aa52">orders_2025</text>
+  <text x="490.0" y="261.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">future rows</text>  <text x="180" y="250" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="500" fill="#848d97">split wide tables by columns</text>  <text x="540" y="250" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="500" fill="#848d97">split large tables by row ranges</text></svg>

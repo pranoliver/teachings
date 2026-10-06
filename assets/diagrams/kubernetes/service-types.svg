@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="title desc">
+  <title id="title">Kubernetes service types</title>
+  <desc id="desc">ClusterIP is internal, NodePort opens a node port, LoadBalancer provisions a cloud load balancer, and Ingress routes HTTP traffic to services.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Outfit', system-ui, sans-serif; }
+      .label { font-size: 14px; font-weight: 700; fill: #1f2328; }
+      .note { font-size: 12px; fill: #656d76; }
+      .box { rx: 10; }
+    </style>
+  </defs>
+  <rect width="720" height="360" fill="#f6f8fa" />
+
+  <g transform="translate(40, 40)">
+    <rect x="0" y="0" width="150" height="120" fill="#e8f0fe" stroke="#326ce5" stroke-width="2" class="box" />
+    <text x="75" y="30" text-anchor="middle" class="label">ClusterIP</text>
+    <text x="75" y="60" text-anchor="middle" class="note">Internal only</text>
+    <text x="75" y="80" text-anchor="middle" class="note">Default type</text>
+    <text x="75" y="100" text-anchor="middle" class="note">DNS: web.default</text>
+  </g>
+
+  <g transform="translate(210, 40)">
+    <rect x="0" y="0" width="150" height="120" fill="#fff3e0" stroke="#ef6c00" stroke-width="2" class="box" />
+    <text x="75" y="30" text-anchor="middle" class="label">NodePort</text>
+    <text x="75" y="60" text-anchor="middle" class="note">Port on each node</text>
+    <text x="75" y="80" text-anchor="middle" class="note">30000-32767</text>
+    <text x="75" y="100" text-anchor="middle" class="note">Direct access</text>
+  </g>
+
+  <g transform="translate(380, 40)">
+    <rect x="0" y="0" width="150" height="120" fill="#e6f4ea" stroke="#34a853" stroke-width="2" class="box" />
+    <text x="75" y="30" text-anchor="middle" class="label">LoadBalancer</text>
+    <text x="75" y="60" text-anchor="middle" class="note">Cloud LB</text>
+    <text x="75" y="80" text-anchor="middle" class="note">Public IP</text>
+    <text x="75" y="100" text-anchor="middle" class="note">TCP/UDP</text>
+  </g>
+
+  <g transform="translate(550, 40)">
+    <rect x="0" y="0" width="130" height="120" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" class="box" />
+    <text x="65" y="30" text-anchor="middle" class="label">Ingress</text>
+    <text x="65" y="60" text-anchor="middle" class="note">HTTP routing</text>
+    <text x="65" y="80" text-anchor="middle" class="note">TLS termination</text>
+    <text x="65" y="100" text-anchor="middle" class="note">Host/path rules</text>
+  </g>
+
+  <g transform="translate(40, 200)">
+    <rect x="0" y="0" width="640" height="110" fill="#ffffff" stroke="#d0d7de" stroke-width="2" class="box" />
+    <text x="24" y="30" class="label">Traffic flow</text>
+    <text x="24" y="60" class="note">Internet → Ingress → Service → Pod</text>
+    <text x="24" y="85" class="note">Inside the cluster: Pod → ClusterIP Service → Pod</text>
+  </g>
+</svg>

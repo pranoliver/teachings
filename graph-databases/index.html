@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Graph Databases with Neo4j: Hands-On
+  </title>
+  <link href="../assets/favicons/neo4j.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cypher.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-graph-databases">
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Neo4j" class="w-10 h-10" src="../assets/favicons/neo4j.svg"/>
+     <span class="text-xl font-bold">
+      Neo4j
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#why-graph">
+      2. Why Graph Databases?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#install">
+      3. Installing Neo4j
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#cypher">
+      4. Cypher Basics
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#nodes">
+      5. Creating Nodes
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#relationships">
+      6. Relationships
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#querying">
+      7. Querying Patterns
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#aggregations">
+      8. Aggregations
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#indexes">
+      9. Indexes &amp; Constraints
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#node">
+      10. Neo4j from Node.js
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      11. Capstone: Movie Network
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Graph Databases with Neo4j: Hands-On
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Graph databases store data as nodes and relationships, making them perfect for connected data like social networks, recommendation engines, and fraud detection. Neo4j is the most popular graph database, and this tutorial is entirely hands-on.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Install and run Neo4j locally
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Write Cypher queries
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Model nodes and relationships
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Query graph patterns
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Connect from Node.js
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Build a movie recommendation graph
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with SQL basics.
+        </li>
+        <li>
+         Node.js installed for the driver chapter.
+        </li>
+        <li>
+         Docker is the easiest way to run Neo4j locally.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        More practice ideas
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Model your own social network graph.
+        </li>
+        <li>
+         Build a fraud detection query for circular transactions.
+        </li>
+        <li>
+         Create a recommendation engine for e-commerce products.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#why-graph">
+        Next: Why Graph? &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="why-graph">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Why Graph Databases?
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Relational databases struggle with deeply connected data. Graph databases traverse relationships natively, making queries faster and more expressive.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Social network example
+       </h3>
+       <img alt="Graph diagram showing users connected by FOLLOWS and ACTED_IN relationships" class="diagram" loading="lazy" src="../assets/diagrams/graph-databases/graph-diagram-showing-users-connected-by-follows-and-actedin-relationships.svg"/>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        When to use a graph database
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Social networks and recommendations.
+        </li>
+        <li>
+         Fraud detection and identity graphs.
+        </li>
+        <li>
+         Knowledge graphs and master data management.
+        </li>
+        <li>
+         Network and IT operations mapping.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#install">
+        Next: Install &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="install">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Installing Neo4j
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The fastest way to run Neo4j is with Docker. You can also download Neo4j Desktop or use Neo4j AuraDB, the managed cloud service.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Or 
+use Docker Compose
+cat &gt; 
+docker-compose.yml &lt;&lt;'EOF'
+version: "3.8"
+services:
+neo4j:
+    image: 
+neo4j:latest
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=
+neo4j/password123
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+volumes:
+  neo4j_data:
+  neo4j_logs:
+EOF
+docker-compose up -d</code></pre>
+       <code class="language-bash">
+       </code>
+      </div>
+      <code class="language-bash">
+       Checkpoint
+         Start Neo4j and open Neo4j Browser. Log in and run
+          RETURN 1 + 1
+         to confirm it works.
+         &larr; Previous
+         Next: Cypher &rarr;
+      </code>
+     </section>
+     <code class="language-bash">
+      Chapter 4
+        Cypher Basics
+        Cypher is Neo4j's query language. It uses ASCII-art patterns to describe nodes and relationships, making graph queries readable and intuitive.
+         Copy
+        // Return
+a simple value RETURN 1 + 1 AS result;
+// Match
+all nodes MATCH (n) RETURN n LIMIT 10;
+// Count
+all nodes MATCH (n) RETURN count(n) AS total;
+Cypher pattern syntax
+           (n)
+          &mdash; a 
+node.
+           -[r]-
+          &mdash; an undirected relationship.
+           -[r:&gt;]-
+          &mdash; a directed relationship.
+           (p:Person {name: "Ada"})
+          &mdash; labeled 
+node with property.
+         &larr; Previous
+         Next: Nodes &rarr;
+        Chapter 5
+        Creating Nodes
+        Nodes represent entities. Labels group nodes by type, and properties store attributes.
+         Copy
+        // Create
+a single person CREATE (p:Person
+{name: "Tom Hanks",
+born: 1956}
+) RETURN p;
+// Create
+multiple people CREATE (m:Person
+{name: "Meg Ryan",
+born: 1961}
+), (n:Movie
+{title: "You've Got Mail",
+released: 1998}
+), (d:Person
+{name: "Nora Ephron",
+born: 1941}
+) RETURN m,
+n,
+d;
+// List
+all movies MATCH (m:Movie) RETURN m.title,
+m.released;
+Checkpoint
+         Create 3 Person nodes and 2 Movie nodes. Query them with
+          MATCH
+         and verify the results in Neo4j Browser.
+         &larr; Previous
+         Next: Relationships &rarr;
+        Chapter 6
+        Relationships
+        Relationships connect nodes and can also have properties. Direction matters, and every relationship must have exactly one type.
+         Copy
+        // Connect
+Tom Hanks to Forrest Gump MATCH (p:Person
+{name: "Tom Hanks"}
+), (m:Movie
+{title: "Forrest Gump"}
+) CREATE (p)-[r:ACTED_IN
+{roles: ["Forrest Gump"]
+}
+]-&gt;(m) RETURN r;
+// Connect
+a director MATCH (d:Person
+{name: "Robert Zemeckis"}
+), (m:Movie
+{title: "Forrest Gump"}
+) CREATE (d)-[:DIRECTED]-&gt;(m);
+// Find
+all actors in a movie MATCH (p:Person)-[:ACTED_IN]-&gt;(m:Movie
+{title: "Forrest Gump"}
+) RETURN p.name;
+Quick Quiz
+          In Neo4j, every relationship must have:
+          Exactly one type and direction
+          At least one label
+          A unique ID property
+         &larr; Previous
+         Next: Querying &rarr;
+        Chapter 7
+        Querying Patterns
+        Graph queries traverse relationships naturally. You can find friends of friends, co-actors, shortest paths, and recommendation candidates.
+         Copy
+        // Find
+all movies Tom Hanks acted in MATCH (p:Person
+{name: "Tom Hanks"}
+)-[:ACTED_IN]-&gt;(m:Movie) RETURN m.title,
+m.released;
+// Find
+co-actors of Tom Hanks MATCH (tom:Person
+{name: "Tom Hanks"}
+)-[:ACTED_IN]-&gt;(m:Movie)&lt;-[:ACTED_IN]-(coactor:Person) RETURN DISTINCT coactor.name;
+// Find
+friends of friends on a social graph MATCH (me:Person
+{name: "Alice"}
+)-[:FOLLOWS]-&gt;(friend)-[:FOLLOWS]-&gt;(friendOfFriend) WHERE friendOfFriend &lt;&gt; me RETURN DISTINCT friendOfFriend.name;
+// Shortest
+path between two people MATCH path = shortestPath( (a:Person
+{name: "Kevin Bacon"}
+)-[:ACTED_IN|DIRECTED*]-(b:Person
+{name: "Tom Hanks"}
+) ) RETURN path;
+Pattern power
+          Variable-length paths with
+           *1..3
+          .
+           WHERE
+          clauses to filter results.
+           DISTINCT
+          to avoid duplicate matches.
+           shortestPath
+          for network analysis.
+         &larr; Previous
+         Next: Aggregations &rarr;
+        Chapter 8
+        Aggregations
+        Cypher supports aggregation functions like count, sum, avg, max, and min. Aggregations happen automatically when you group results.
+         Copy
+        // Number
+of movies per actor MATCH (p:Person)-[:ACTED_IN]-&gt;(m:Movie) RETURN p.name,
+count(m) AS movieCount ORDER BY movieCount DESC LIMIT 10;
+// Average
+movie release year MATCH (m:Movie) RETURN avg(m.released) AS averageYear;
+// Total
+movies released per decade MATCH (m:Movie) RETURN (m.released / 10) * 10 AS decade,
+count(*) AS total ORDER BY decade;
+&larr; Previous
+         Next: Indexes &rarr;
+        Chapter 9
+        Indexes &amp; Constraints
+        Indexes speed up lookups. Constraints enforce data rules, such as uniqueness of email addresses or usernames.
+         Copy
+        // Create
+an index on Person.name CREATE INDEX person_name_index FOR (p:Person) ON (p.name);
+// Create
+a unique constraint on email CREATE CONSTRAINT user_email_unique FOR (u:User) REQUIRE u.email IS UNIQUE;
+// Show
+all indexes and constraints SHOW INDEXES;
+SHOW CONSTRAINTS;
+Best practices
+          Create indexes on frequently queried properties.
+          Use unique constraints to avoid duplicate identifiers.
+          Profile queries with
+           PROFILE
+          to verify index usage.
+         &larr; Previous
+         Next: Node.js &rarr;
+        Chapter 10
+        Neo4j from Node.js
+        The official Neo4j JavaScript driver lets you run Cypher from a Node.js application. It supports both promises and async/await.
+         Copy
+npm install 
+neo4j-driver
+         Copy
+        const 
+neo4j = require("
+neo4j-driver");
+const driver = 
+neo4j.driver(
+  "bolt://localhost:7687",
+neo4j.auth.basic("
+neo4j", "password123"),
+);
+async function getMovies() {
+  const session = driver.session();
+try {
+    const result = await session.run(
+      "MATCH (m:Movie) RETURN m.title AS title, m.released AS year LIMIT 10",
+    );
+return result.records.map((r) =&gt; ({
+      title: r.get("title"),
+      year: r.get("year").toNumber(),
+    }));
+} finally {
+    await session.close();
+}
+}
+getMovies()
+  .then((movies) =&gt; console.log(movies))
+  .catch((err) =&gt; console.error(err))
+  .finally(() =&gt; driver.close());
+Checkpoint
+         Install the driver, connect to Neo4j, and run a query that returns movies from your graph.
+         &larr; Previous
+         Next: Capstone &rarr;
+        Chapter 11
+        Capstone: Movie Network
+        Build a small movie knowledge graph and query it from Node.js. This capstone models actors, directors, and films as a graph and explores collaborative filtering recommendations.
+        1. What is this project?
+         A movie network graph connects actors, directors, and films with labeled relationships. It is the same underlying idea used by streaming services when they suggest titles based on the people involved.
+        2. What it covers?
+          Modeling people and movies as nodes with labels and properties.
+          Creating directed relationships such as ACTED_IN and DIRECTED.
+          Pattern matching to find co-actors and shared movies.
+          A collaborative-filtering recommendation query.
+          Querying the graph from a Node.js application.
+        3. How it is done?
+        Start by creating the graph in Neo4j Browser. Each person and film is a 
+node, and roles are attached to the relationships.
+         Copy
+        CREATE (tom:Person
+{name: "Tom Hanks",
+born: 1956}
+), (meg:Person
+{name: "Meg Ryan",
+born: 1961}
+), (nora:Person
+{name: "Nora Ephron",
+born: 1941}
+), (mail:Movie
+{title: "You've Got Mail",
+released: 1998}
+), (sleepless:Movie
+{title: "Sleepless in Seattle",
+released: 1993}
+), (tom)-[:ACTED_IN
+{roles: ["Joe Fox"]
+}
+]-&gt;(mail), (meg)-[:ACTED_IN
+{roles: ["Kathleen Kelly"]
+}
+]-&gt;(mail), (nora)-[:DIRECTED]-&gt;(mail), (tom)-[:ACTED_IN
+{roles: ["Sam Baldwin"]
+}
+]-&gt;(sleepless), (meg)-[:ACTED_IN
+{roles: ["Annie Reed"]
+}
+]-&gt;(sleepless), (nora)-[:DIRECTED]-&gt;(sleepless);
+Once the data is in place, run queries that traverse relationships to answer useful questions.
+         Copy
+        // Find
+all movies Tom Hanks acted in MATCH (tom:Person
+{name: "Tom Hanks"}
+)-[:ACTED_IN]-&gt;(m:Movie) RETURN m.title,
+m.released;
+// Find
+co-actors of Tom Hanks MATCH (tom:Person
+{name: "Tom Hanks"}
+)-[:ACTED_IN]-&gt;(m:Movie)&lt;-[:ACTED_IN]-(coactor:Person) RETURN DISTINCT coactor.name;
+// Recommend
+movies based on shared actors MATCH (user:Person
+{name: "Tom Hanks"}
+)-[:ACTED_IN]-&gt;(movie)&lt;-[:ACTED_IN]-(coactor)-[:ACTED_IN]-&gt;(recommendation) WHERE NOT (user)-[:ACTED_IN]-&gt;(recommendation) RETURN recommendation.title,
+count(*) AS strength ORDER BY strength DESC;
+Finally, query the graph from a Node.js script using the Neo4j driver.
+         Copy
+        const 
+neo4j = require("
+neo4j-driver");
+const driver = 
+neo4j.driver(
+  "bolt://localhost:7687",
+neo4j.auth.basic("
+neo4j", "password123"),
+);
+async function recommend(name) {
+  const session = driver.session();
+try {
+    const { records } = await session.run(
+      ` MATCH (user:Person {name: $name})-[:ACTED_IN]-&gt;(movie)&lt;-[:ACTED_IN]-(coactor)-[:ACTED_IN]-&gt;(recommendation) WHERE NOT (user)-[:ACTED_IN]-&gt;(recommendation) RETURN recommendation.title AS title, count(*) AS strength ORDER BY strength DESC `,
+      { name },
+    );
+return records.map((r) =&gt; ({
+      title: r.get("title"),
+      strength: r.get("strength").toNumber(),
+    }));
+} finally {
+    await session.close();
+}
+}
+recommend("Tom Hanks")
+  .then((movies) =&gt; console.log(movies))
+  .finally(() =&gt; driver.close());
+Run the project end to end.
+         Copy
+# 1. Start Neo4j 
+docker-compose up -d 
+# 2. Open Neo4j Browser and run the seed data Cypher http://localhost:7474 
+# 3. Run the Node.js script 
+node recommend.js 
+# 4. Try the recommendation query in Neo4j Browser
+        4. What did we learn from this capstone project?
+          Graphs naturally model networks of connected entities without join tables.
+          Cypher patterns mirror the shape of the data, making traversal queries easy to read.
+          Relationships can carry properties, such as the role an actor played.
+          Collaborative filtering is a matter of counting shared neighbors.
+        5. How can I enhance this project in the future?
+          Add genres as nodes and recommend movies that share genres and actors.
+          Import the full Neo4j Movie database or a real dataset from Kaggle.
+          Add user ratings and build personalized recommendations.
+          Expose the recommendation logic through a small Express API.
+          Add constraints and indexes on
+           Person.name
+          and
+           Movie.title
+          for faster lookups.
+         Checkpoint
+         Seed the movie graph, run the recommendation query, and build a Node.js script that prints suggested movies.
+         &larr; Previous
+     </code>
+    </div>
+    <code class="language-bash">
+     Made for teaching graph databases. Open directly in any browser.
+    </code>
+   </main>
+   <code class="language-bash">
+   </code>
+  </div>
+  <code class="language-bash">
+   const html = document.documentElement;
+const lightStylesheet = document.getElementById('hljs-light');
+const darkStylesheet = document.getElementById('hljs-dark');
+const moon = document.getElementById('moon');
+const sun = document.getElementById('sun');
+function applyTheme(theme) { html.classList.remove('light', 'dark');
+html.classList.add(theme);
+if (theme === 'dark') { lightStylesheet.disabled = true;
+darkStylesheet.disabled = false;
+moon.classList.add('hidden');
+sun.classList.remove('hidden');
+} else { lightStylesheet.disabled = false;
+darkStylesheet.disabled = true;
+moon.classList.remove('hidden');
+sun.classList.add('hidden');
+} localStorage.setItem('
+neo4j-theme', theme);
+} document.getElementById('theme-toggle').addEventListener('click', () =&gt; { applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+});
+const saved = localStorage.getItem('
+neo4j-theme');
+applyTheme(saved === 'dark' ? 'dark' : 'light');
+function toggleSidebar() { const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('menu-overlay');
+sidebar.classList.toggle('open');
+overlay.classList.toggle('hidden');
+} function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code');
+navigator.clipboard.writeText(code.innerText).then(() =&gt; { btn.textContent = 'Copied!';
+btn.classList.add('copied');
+setTimeout(() =&gt; { btn.textContent = 'Copy';
+btn.classList.remove('copied');
+}, 1500);
+});
+} const sections = document.querySelectorAll('section[id]');
+const tocLinks = document.querySelectorAll('.toc-link');
+const observer = new IntersectionObserver((entries) =&gt; { entries.forEach((entry) =&gt; { if (entry.isIntersecting) { tocLinks.forEach((link) =&gt; link.classList.remove('active'));
+const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+if (active) active.classList.add('active');
+} });
+}, { rootMargin: '-20% 0px -60% 0px' });
+sections.forEach((section) =&gt; observer.observe(section));
+document.querySelectorAll('.quiz').forEach((quiz) =&gt; { const correct = quiz.dataset.answer;
+const feedback = quiz.nextElementSibling;
+quiz.querySelectorAll('.quiz-opt').forEach((opt) =&gt; { opt.addEventListener('click', () =&gt; { quiz.querySelectorAll('.quiz-opt').forEach((o) =&gt; { o.classList.remove('selected', 'correct', 'wrong');
+o.disabled = true;
+});
+opt.classList.add('selected');
+if (opt.dataset.val === correct) { opt.classList.add('correct');
+feedback.textContent = 'Correct! ✅';
+feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]';
+} else { opt.classList.add('wrong');
+feedback.textContent = `Not quite. The correct answer is ${correct}.`;
+feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]';
+} });
+});
+});
+hljs.highlightAll();
+  </code>
+ </body>
+</html>

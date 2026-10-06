@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" aria-label="Diagram showing a folder becoming a Git repository" role="img"><title>Diagram showing a folder becoming a Git repository</title>
+              <rect x="40" y="40" width="160" height="100" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="2"/>
+              <text x="120" y="85" text-anchor="middle" font-size="15" fill="#1f2328">my-project</text>
+              <text x="120" y="110" text-anchor="middle" font-size="12" fill="#656d76">ordinary folder</text>
+
+              <rect x="260" y="30" width="120" height="50" rx="8" fill="#2f81f7" fill-opacity="0.15"/>
+              <text x="320" y="60" text-anchor="middle" font-size="14" fill="white" font-weight="600">git init</text>
+              <path d="M220 90 L255 90" stroke="#d0d7de" stroke-width="2" marker-end="url(#github-arrow2)"/>
+
+              <rect x="420" y="40" width="180" height="100" rx="12" fill="rgba(47,129,247,0.08)" stroke="#6e40c9" stroke-width="2"/>
+              <text x="510" y="85" text-anchor="middle" font-size="15" fill="#1f2328">my-project</text>
+              <text x="510" y="110" text-anchor="middle" font-size="12" fill="#656d76">.git folder added</text>
+
+              <defs>
+                <marker id="github-arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#d0d7de"/>
+                </marker>
+              </defs>
+            </svg>

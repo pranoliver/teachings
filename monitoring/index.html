@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Monitoring &amp; Observability: Prometheus, Grafana &amp; Logging
+  </title>
+  <link href="../assets/favicons/monitoring.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-monitoring">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Monitoring" class="w-10 h-10" src="../assets/favicons/monitoring.svg"/>
+     <span class="text-xl font-bold">
+      Monitoring
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pillars">
+      2. The Three Pillars
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#metrics">
+      3. Metrics with Prometheus
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#promql">
+      4. PromQL Deep Dive
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#grafana">
+      5. Visualization with Grafana
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#alerting">
+      6. Alerting
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#logging">
+      7. Logging Fundamentals
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#loki">
+      8. Log Aggregation with Loki
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#tracing">
+      9. Tracing Overview
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#exporters">
+      10. Exporters &amp; Instrumentation
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#real-world">
+      11. Real-World Systems
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      12. Capstone: Monitor a Node.js App
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Monitoring &amp; Observability: Prometheus, Grafana &amp; Logging
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Monitoring tells you when something is broken. Observability helps you understand why. In modern systems, metrics, logs, and traces are the three pillars that give engineers a complete picture of application health. This tutorial goes deep into Prometheus for metrics, Grafana for visualization, and logging patterns and aggregation with Loki.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with Docker and Docker Compose.
+        </li>
+        <li>
+         Basic command-line and YAML knowledge.
+        </li>
+        <li>
+         A running application or service to monitor (we'll provide one).
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Metrics, logs, and traces concepts
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Prometheus architecture and scrape model
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         PromQL: selectors, aggregations, functions, recording rules
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Grafana dashboards, variables, and panels
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Alertmanager routing, silences, inhibition
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Logging patterns, levels, and structured logs
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Loki log aggregation and LogQL
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Exporters, instrumentation, and OpenTelemetry
+        </li>
+       </ul>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6" data-quiz="intro">
+       <p class="font-semibold mb-4">
+        What is the main difference between monitoring and observability?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Monitoring is free; observability is expensive.
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         Monitoring checks known signals; observability lets you ask unknown questions.
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Observability only includes metrics.
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="pillars">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       The Three Pillars
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Observability is often described using three data types. They serve different purposes but work best when correlated.
+      </p>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h3 class="font-bold mb-2">
+         Metrics
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Numeric measurements over time. Great for dashboards, trends, and alerts. Examples: request rate, latency, CPU usage, error rate.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h3 class="font-bold mb-2">
+         Logs
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Discrete records of events. Great for debugging specific requests or failures. Examples: HTTP access logs, application errors, audit events.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h3 class="font-bold mb-2">
+         Traces
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         End-to-end request flows across services. Great for distributed systems and performance bottlenecks. Examples: OpenTelemetry spans, Jaeger traces.
+        </p>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Correlation is key
+       </h3>
+       <p class="text-[var(--muted)]">
+        The most effective debugging sessions start with a metric alert, drill into logs for the affected time window, and then use a trace to find the slow or failing service. A request ID carried through metrics, logs, and traces makes this possible.
+       </p>
+      </div>
+      <img alt="The three observability pillars: metrics, logs, and traces" class="diagram rounded-xl border border-[var(--border)] mb-6" loading="lazy" src="../assets/diagrams/monitoring/three-pillars.svg"/>
+     </section>
+     <section class="scroll-mt-24" id="metrics">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Metrics with Prometheus
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Prometheus is an open-source metrics database and monitoring system. It uses a pull model: the Prometheus server periodically scrapes HTTP endpoints exposed by applications and exporters. Metrics are stored as time-series data identified by name and labels.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Prometheus architecture" class="diagram" loading="lazy" src="../assets/diagrams/monitoring/prometheus-architecture.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Prometheus scrapes targets, stores time-series, and can trigger alerts.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Core concepts
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Targets:
+         </strong>
+         endpoints Prometheus scrapes, usually
+         <code class="font-mono">
+          /metrics
+         </code>
+         .
+        </li>
+        <li>
+         <strong>
+          Exporters:
+         </strong>
+         sidecars that translate existing metrics into Prometheus format (Node Exporter, MySQL Exporter, Blackbox Exporter).
+        </li>
+        <li>
+         <strong>
+          Metrics types:
+         </strong>
+         Counter (always increases), Gauge (goes up and down), Histogram (buckets of observations), Summary (percentiles).
+        </li>
+        <li>
+         <strong>
+          Labels:
+         </strong>
+         key-value pairs that add dimensions to metrics (e.g.,
+         <code class="font-mono">
+          method="GET", status="200"
+         </code>
+         ).
+        </li>
+        <li>
+         <strong>
+          Scrape interval:
+         </strong>
+         how often Prometheus collects data, typically 15s or 30s.
+        </li>
+        <li>
+         <strong>
+          Retention:
+         </strong>
+         how long data is kept, configurable by time or disk size.
+        </li>
+       </ul>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-yaml"># prometheus.yml scrape_configs: - job_name: 'prometheus' static_configs: - targets: ['localhost:9090'] - job_name: 'node-exporter' static_configs: - targets: ['node-exporter:9100'] - job_name: 'my-app' static_configs: - targets: ['app:3000']
+metrics_path: /metrics scrape_interval: 10s</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-bash"># Example /metrics output 
+# HELP http_requests_total Total HTTP requests 
+# TYPE http_requests_total counter http_requests_total{method="GET",status="200"} 1027 http_requests_total{method="POST",status="500"} 12 
+# HELP process_cpu_seconds_total CPU time used 
+# TYPE process_cpu_seconds_total counter process_cpu_seconds_total 45.23</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        When to use each metric type
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Counter:
+         </strong>
+         total requests, total errors, bytes sent.
+        </li>
+        <li>
+         <strong>
+          Gauge:
+         </strong>
+         temperature, memory usage, queue length, connections.
+        </li>
+        <li>
+         <strong>
+          Histogram:
+         </strong>
+         request durations, payload sizes. You define buckets.
+        </li>
+        <li>
+         <strong>
+          Summary:
+         </strong>
+         similar to histogram but computes sliding quantiles on the client. Use histograms unless you need exact client-side quantiles.
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="promql">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       PromQL Deep Dive
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       PromQL is Prometheus's query language. It looks simple at first but has powerful operators for filtering, aggregation, and time-series math. Mastering PromQL is what turns raw metrics into actionable insight.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Essential PromQL patterns
+       </h3>
+       <div class="space-y-6">
+        <div class="code-block rounded-xl overflow-hidden">
+         <button aria-label="Copy code" class="copy-btn">
+          Copy
+         </button>
+         <pre><code class="language-promql"># Instant query: current value http_requests_total # Filter by labels http_requests_total
+{method="GET",
+status="200"} # Rate of change per second over 5 minutes rate(http_requests_total
+[5m]
+) # Request errors per second rate(http_requests_total
+{status=~"5.."}
+[5m]
+) # Error ratio rate(http_requests_total
+{status=~"5.."}
+[5m]
+) / rate(http_requests_total
+[5m]
+) # Average request duration rate(http_request_duration_seconds_sum
+[5m]
+) / rate(http_request_duration_seconds_count
+[5m]
+)</code></pre>
+        </div>
+        <div class="code-block rounded-xl overflow-hidden">
+         <button aria-label="Copy code" class="copy-btn">
+          Copy
+         </button>
+         <pre><code class="language-promql"># Aggregate across instances sum by (method) (rate(http_requests_total
+[5m]
+)) # Top 5 erroring paths topk(5,
+sum by (path) (rate(http_requests_total
+{status=~"5.."}
+[5m]
+))) # 95th percentile from histogram histogram_quantile(0.95,
+sum(rate(http_request_duration_seconds_bucket
+[5m]
+)) by (le)) # Predict disk full in 4 days predict_linear(node_filesystem_avail_bytes
+[1h],
+4 * 24 * 3600) &lt; 0 # Missing targets up == 0</code></pre>
+        </div>
+       </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold mb-2">
+         Vector types
+        </h4>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-4 space-y-1">
+         <li>
+          <strong>
+           Instant vector:
+          </strong>
+          latest value at a single point in time.
+         </li>
+         <li>
+          <strong>
+           Range vector:
+          </strong>
+          values over a time window, used with functions like
+          <code class="font-mono">
+           rate()
+          </code>
+          .
+         </li>
+         <li>
+          <strong>
+           Scalar:
+          </strong>
+          a single number.
+         </li>
+         <li>
+          <strong>
+           String:
+          </strong>
+          rarely used.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold mb-2">
+         Common operators
+        </h4>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-4 space-y-1">
+         <li>
+          <code class="font-mono">
+           + - * /
+          </code>
+          between vectors or scalars.
+         </li>
+         <li>
+          <code class="font-mono">
+           == != &lt; &gt;
+          </code>
+          for filtering.
+         </li>
+         <li>
+          <code class="font-mono">
+           and, or, unless
+          </code>
+          set operations.
+         </li>
+         <li>
+          <code class="font-mono">
+           aggregation operators:
+          </code>
+          sum, avg, min, max, count, topk.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># Recording rule: precompute an expensive query rules: - record: job:http_request_duration_seconds:95p5m expr: | histogram_quantile(0.95,
+sum(rate(http_request_duration_seconds_bucket
+[5m]
+)) by (job,
+le) )</code></pre>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6" data-quiz="promql">
+       <p class="font-semibold mb-4">
+        Which PromQL function calculates the per-second rate of increase for a counter?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         avg()
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         rate()
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         sum()
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="grafana">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Visualization with Grafana
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Grafana is the most popular dashboarding tool for metrics. It connects to many data sources, but the Prometheus + Grafana combination is the de facto open-source observability stack. A good dashboard tells a story: it shows the health of a service at a glance and lets you drill into details.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Grafana dashboard architecture" class="diagram" loading="lazy" src="../assets/diagrams/monitoring/grafana-dashboard.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Grafana queries Prometheus and renders panels into shareable dashboards.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Dashboard design principles
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          RED method:
+         </strong>
+         Rate, Errors, Duration for request-driven services.
+        </li>
+        <li>
+         <strong>
+          USE method:
+         </strong>
+         Utilization, Saturation, Errors for resources.
+        </li>
+        <li>
+         <strong>
+          Four golden signals:
+         </strong>
+         Latency, Traffic, Errors, Saturation.
+        </li>
+        <li>
+         Use repeated panels and variables to avoid copy-pasting dashboards.
+        </li>
+        <li>
+         Color-code severity: green for healthy, yellow for warning, red for critical.
+        </li>
+        <li>
+         Add links from panels to logs or traces for faster incident response.
+        </li>
+       </ul>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-yaml"># docker-compose.yml for Grafana + Prometheus
+'3.8'
+prometheus:
+prom/prometheus:latest
+- "9090:9090"
+- ./prometheus.yml:/etc/prometheus/prometheus.yml
+image: grafana/grafana:latest
+- "3000:3000"
+- GF_SECURITY_ADMIN_PASSWORD=admin
+- grafana-storage:/var/lib/grafana
+grafana-storage:</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-json"># Example Grafana panel query for error rate
+{ "title": "Error Rate",
+"type": "timeseries",
+"targets": [{ "expr": "sum(rate(http_requests_total
+{status=~\"5..\"}
+[5m]
+))",
+"legendFormat": "errors/sec" }
+],
+"fieldConfig": { "defaults": { "custom": {"lineWidth": 2},
+"unit": "reqps" }
+} }</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Grafana features beyond graphs
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Templating:
+         </strong>
+         variables for environment, job, or instance.
+        </li>
+        <li>
+         <strong>
+          Annotations:
+         </strong>
+         mark deployments or incidents on graphs.
+        </li>
+        <li>
+         <strong>
+          Alerts:
+         </strong>
+         Grafana can alert directly, or you can use Alertmanager.
+        </li>
+        <li>
+         <strong>
+          Logs panel:
+         </strong>
+         show Loki logs next to metrics.
+        </li>
+        <li>
+         <strong>
+          Plugins:
+         </strong>
+         add new panel types and data sources.
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="alerting">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Alerting
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Alerts should be actionable, specific, and rare enough that engineers take them seriously. Prometheus evaluates alert rules and sends firing alerts to Alertmanager, which routes them to receivers like Slack, PagerDuty, email, or webhooks.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Prometheus alerting flow" class="diagram" loading="lazy" src="../assets/diagrams/monitoring/alerting-flow.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Alertmanager deduplicates, groups, routes, and silences alerts before notifying.
+       </p>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-yaml"># Alert rules in prometheus.yml rule_files: - /etc/prometheus/alerts.yml # alerts.yml groups: - name: app.rules rules: - alert: HighErrorRate expr: | sum(rate(http_requests_total
+{status=~"5.."}
+[5m]
+)) / sum(rate(http_requests_total
+[5m]
+)) &gt; 0.05 for: 2m labels: severity: critical annotations: summary: "High error rate on
+{{ $labels.job }
+}" description: "Error rate is
+{{ $value | humanizePercentage }
+} over 5m"</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-yaml"># alertmanager.yml global: smtp_smarthost: 'localhost:25' smtp_from: 'alerts@example.com' route: receiver: 'default' group_by: ['alertname', 'severity']
+group_wait: 30s group_interval: 5m repeat_interval: 4h routes: - match: severity: critical receiver: 'pagerduty' receivers: - name: 'default' slack_configs: - api_url: 'https://hooks.slack.com/services/...'
+channel: '#alerts' - name: 'pagerduty' pagerduty_configs: - service_key: '...'</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Alerting best practices
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Alert on symptoms that affect users, not just low-level resource metrics.
+        </li>
+        <li>
+         Use a
+         <code class="font-mono">
+          for
+         </code>
+         duration to avoid flapping on brief spikes.
+        </li>
+        <li>
+         Group alerts by service or severity so one incident does not spam 50 messages.
+        </li>
+        <li>
+         Include runbook links and dashboards in annotations.
+        </li>
+        <li>
+         Use silences for planned maintenance; use inhibition to suppress lower-priority alerts when a critical one fires.
+        </li>
+       </ul>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6" data-quiz="alerting">
+       <p class="font-semibold mb-4">
+        What does Alertmanager do with alerts from Prometheus?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         Routes, groups, deduplicates, and notifies
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Stores long-term metrics history
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Generates SSL certificates
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="logging">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Logging Fundamentals
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Logs are the most granular observability signal. A good logging strategy helps you debug failures, audit security events, and understand user behavior. Bad logging &mdash; too much, too little, or unstructured &mdash; makes all of that harder.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Log levels
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          DEBUG:
+         </strong>
+         detailed internal state, usually disabled in production.
+        </li>
+        <li>
+         <strong>
+          INFO:
+         </strong>
+         normal operational events.
+        </li>
+        <li>
+         <strong>
+          WARN:
+         </strong>
+         unusual but non-fatal events.
+        </li>
+        <li>
+         <strong>
+          ERROR:
+         </strong>
+         failures that affected a request or operation.
+        </li>
+        <li>
+         <strong>
+          FATAL:
+         </strong>
+         application is about to exit.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Structured vs. unstructured logs
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Unstructured logs are strings humans parse. Structured logs are key-value pairs (usually JSON) that machines can index, filter, and aggregate.
+       </p>
+       <div class="space-y-6">
+        <div class="code-block rounded-xl overflow-hidden">
+         <button aria-label="Copy code" class="copy-btn">
+          Copy
+         </button>
+         <pre><code class="language-bash"># Unstructured 2024-10-05 14:23:01 ERROR user login failed for alice from 10.0.0.5</code></pre>
+        </div>
+        <div class="code-block rounded-xl overflow-hidden">
+         <button aria-label="Copy code" class="copy-btn">
+          Copy
+         </button>
+         <pre><code class="language-json">// Structured
+{
+  "timestamp": "2024-10-05T14:23:01Z",
+  "level": "ERROR",
+  "event": "login_failed",
+  "user": "alice",
+  "ip": "10.0.0.5",
+  "request_id": "req-123"
+}</code></pre>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Logging best practices
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Always include a timestamp in UTC and a request/correlation ID.
+        </li>
+        <li>
+         Use consistent field names across services (e.g.,
+         <code class="font-mono">
+          user_id
+         </code>
+         , not
+         <code class="font-mono">
+          userId
+         </code>
+         in one place and
+         <code class="font-mono">
+          user_id
+         </code>
+         in another).
+        </li>
+        <li>
+         Do not log secrets, passwords, tokens, or PII unless required and masked.
+        </li>
+        <li>
+         Log the inputs and outputs at service boundaries.
+        </li>
+        <li>
+         Keep log volume reasonable: sampling DEBUG logs is fine.
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="loki">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Log Aggregation with Loki
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Loki is a horizontally-scalable, highly-available, multi-tenant log aggregation system from Grafana Labs. Unlike Elasticsearch, Loki only indexes labels, not the full log content. That makes it cheaper and easier to operate at scale while still letting you search logs with LogQL.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Loki architecture" class="diagram" loading="lazy" src="../assets/diagrams/monitoring/loki-architecture.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Promtail ships logs to Loki; Grafana queries Loki with LogQL.
+       </p>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-yaml"># promtail-config.yml server: http_listen_port: 9080 grpc_listen_port: 0 positions: filename: /tmp/positions.yaml clients: - url: http://loki:3100/loki/api/v1/push
+scrape_configs: - job_name: app-logs static_configs: - targets: - localhost labels: job: my-app env: production __path__: /var/log/app/*.log</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-logql"># LogQL queries # All logs for a job
+{job="my-app"} # Logs containing "error" {job="my-app"} |= "error" # JSON logs with level=ERROR
+{job="my-app"} | json | level="ERROR" # Count errors per minute sum by (level) ( rate( {job="my-app"} | json | level="ERROR"[1m]
+) ) # Parse Nginx access logs and graph status
+{job="nginx"} | regexp "(?P&lt;method&gt;\\w+) (?P&lt;path&gt;\\S+) .* (?P&lt;status&gt;\\d
+{3}
+)" | status = "500"</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Loki advantages
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Only indexes labels, not every word in the log line.
+        </li>
+        <li>
+         Integrates natively with Grafana and Prometheus.
+        </li>
+        <li>
+         Supports the same label model as Prometheus for easy correlation.
+        </li>
+        <li>
+         LogQL lets you filter, parse JSON/regex, and even generate metrics from logs.
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="tracing">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Tracing Overview
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Traces follow a single request as it moves through multiple services. Each span represents one operation, and parent-child relationships show causality. Tracing is essential for microservices where a single user request may touch a dozen services.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Distributed tracing with spans" class="diagram" loading="lazy" src="../assets/diagrams/monitoring/distributed-tracing.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        A trace is a tree of spans; each span records start time, duration, and attributes.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Tracing concepts
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Trace:
+         </strong>
+         end-to-end request journey with a unique trace ID.
+        </li>
+        <li>
+         <strong>
+          Span:
+         </strong>
+         a single unit of work, e.g., a database query or HTTP call.
+        </li>
+        <li>
+         <strong>
+          Parent span:
+         </strong>
+         the span that caused another span to start.
+        </li>
+        <li>
+         <strong>
+          Baggage:
+         </strong>
+         key-value data propagated across spans.
+        </li>
+        <li>
+         <strong>
+          Sampling:
+         </strong>
+         deciding which traces to keep; head sampling is fast, tail sampling needs buffering.
+        </li>
+       </ul>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># OpenTelemetry Collector example receivers: otlp: protocols: grpc: http: processors: batch: exporters: jaeger: endpoint: jaeger:14250 tls: insecure: true service: pipelines: traces: receivers: [otlp]
+processors: [batch]
+exporters: [jaeger]</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Tracing tools
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Jaeger:
+         </strong>
+         open-source distributed tracing platform from the CNCF.
+        </li>
+        <li>
+         <strong>
+          Zipkin:
+         </strong>
+         older but widely supported tracing system.
+        </li>
+        <li>
+         <strong>
+          Tempo:
+         </strong>
+         Grafana's backend for traces, designed to be cost-effective.
+        </li>
+        <li>
+         <strong>
+          OpenTelemetry:
+         </strong>
+         vendor-neutral standard for instrumentation and collection.
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="exporters">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Exporters &amp; Instrumentation
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Not every system exposes Prometheus metrics natively. Exporters bridge that gap. For applications you control, instrumenting your own code gives you the best, most relevant metrics.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Common exporters
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Node Exporter &mdash; Linux/Unix machine metrics
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Blackbox Exporter &mdash; probe endpoints over HTTP, DNS, TCP, ICMP
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         MySQL / PostgreSQL Exporter &mdash; database metrics
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Redis Exporter &mdash; cache metrics
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Kafka Exporter &mdash; message broker metrics
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         cAdvisor &mdash; container metrics
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         JMX Exporter &mdash; Java application metrics
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         StatsD Exporter &mdash; bridge StatsD to Prometheus
+        </li>
+       </ul>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-javascript">// Node.js
+instrumentation with prom-client const client = require('prom-client');
+const express = require('express');
+const app = express();
+const httpRequests = new client.Counter({ name: 'http_requests_total',
+help: 'Total HTTP requests',
+labelNames: ['method', 'status']
+}
+);
+const httpDuration = new client.Histogram({ name: 'http_request_duration_seconds',
+help: 'HTTP request duration',
+labelNames: ['method', 'status'],
+buckets: [0.1,
+0.3,
+0.5,
+1,
+2,
+5]
+}
+);
+app.use((req,
+res,
+next) =&gt; { const end = httpDuration.startTimer();
+res.on('finish', () =&gt; { httpRequests.inc({ method: req.method,
+status: res.statusCode }
+);
+end({ method: req.method,
+status: res.statusCode }
+);
+}
+);
+next();
+}
+);
+app.get('/metrics',
+async (req,
+res) =&gt; { res.set('Content-Type',
+client.register.contentType);
+res.end(await client.register.metrics());
+}
+);</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-yaml"># Prometheus scrape for exporters scrape_configs: - job_name: 'node-exporter' static_configs: - targets: ['node-exporter:9100'] - job_name: 'blackbox' metrics_path: /probe params: module: [http_2xx]
+static_configs: - targets: - https://example.com
+relabel_configs: - source_labels: [__address__]
+target_label: __param_target - target_label: __address__ replacement: blackbox-exporter:9115</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Instrumentation checklist
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Instrument request rate, latency, and errors at every service boundary.
+        </li>
+        <li>
+         Use meaningful labels, but keep cardinality low (avoid high-cardinality IDs).
+        </li>
+        <li>
+         Expose a
+         <code class="font-mono">
+          /metrics
+         </code>
+         endpoint and scrape it with Prometheus.
+        </li>
+        <li>
+         Prefer library instrumentation over manual calls when available.
+        </li>
+        <li>
+         Add business metrics (checkouts, signups) alongside technical ones.
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="real-world">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 11
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Real-World Systems
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Companies of all sizes rely on Prometheus, Grafana, and logging stacks to run production systems. Here are concrete examples of how they use these tools.
+      </p>
+      <div class="grid md:grid-cols-2 gap-6">
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/40 flex items-center justify-center text-lg">
+          🎵
+         </div>
+         <h3 class="text-xl font-bold">
+          SoundCloud
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         SoundCloud was one of the early production users of Prometheus. They scrape thousands of targets, use recording rules for expensive queries, and run Alertmanager for on-call routing. Their experience helped shape Prometheus's design.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         start scraping standard exporters, then add application metrics.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-lg">
+          🛒
+         </div>
+         <h3 class="text-xl font-bold">
+          DigitalOcean
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         DigitalOcean uses Prometheus to monitor its cloud infrastructure. They run Prometheus in a federated setup, aggregate select metrics to a global instance, and use Grafana dashboards for cross-region visibility.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         federation helps scale Prometheus across teams and regions.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center text-lg">
+          🚕
+         </div>
+         <h3 class="text-xl font-bold">
+          Grab
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Grab uses Grafana Loki for log aggregation across its ride-hailing and delivery platform. They correlate logs with Prometheus metrics using the same labels and reduce log storage costs compared to full-text indexing.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         label-based log indexing can scale to huge volumes.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center text-lg">
+          🎮
+         </div>
+         <h3 class="text-xl font-bold">
+          Ubisoft
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Ubisoft uses Grafana dashboards and Prometheus metrics for game backend services. During live game launches, they rely on real-time dashboards and alerts to detect issues with matchmaking and player progression.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         dashboards are critical during high-traffic events.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center text-lg">
+          🏦
+         </div>
+         <h3 class="text-xl font-bold">
+          ING Bank
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         ING uses Prometheus and Grafana alongside centralized logging for its cloud-native banking platforms. They enforce standards so every team exposes RED metrics for services and USE metrics for infrastructure.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         standardize observability contracts across teams.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-lg">
+          ☁️
+         </div>
+         <h3 class="text-xl font-bold">
+          GitLab
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         GitLab publishes its own internal monitoring setup. They run multiple Prometheus instances, use Thanos for long-term storage, and rely on Grafana for engineering and business dashboards.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         long-term metrics need external storage; Thanos and Cortex are common choices.
+        </p>
+       </div>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 12
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Monitor a Node.js App
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a complete observability stack for a Node.js Express application. You will instrument the app, run Prometheus and Grafana in Docker, create dashboards, add alerts, and ship logs to Loki. This capstone ties together everything in the tutorial.
+      </p>
+      <div class="space-y-10">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         1. What is this project?
+        </h3>
+        <p class="text-[var(--muted)] leading-relaxed">
+         You will deploy a small Express API, instrument it with Prometheus metrics, collect logs with Promtail, visualize everything in Grafana, and alert when error rate is high. The result is a realistic local observability setup you can reuse for future projects.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         2. What it covers?
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Node.js application instrumentation with
+          <code class="font-mono">
+           prom-client
+          </code>
+          .
+         </li>
+         <li>
+          Prometheus scraping and service discovery.
+         </li>
+         <li>
+          Grafana dashboard with RED-method panels.
+         </li>
+         <li>
+          Prometheus alert rules and Alertmanager routing to a webhook.
+         </li>
+         <li>
+          Structured JSON logging with request IDs.
+         </li>
+         <li>
+          Loki log aggregation via Promtail.
+         </li>
+         <li>
+          Correlation between metrics, logs, and the application.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         3. How it is done?
+        </h3>
+        <div class="space-y-6">
+         <div>
+          <p class="font-semibold mb-2">
+           Step 1 &mdash; Project layout
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-bash">monitoring-capstone/ &boxvr;&boxh;&boxh; 
+docker-compose.yml &boxvr;&boxh;&boxh; prometheus/ &boxv; &boxvr;&boxh;&boxh; prometheus.yml &boxv; &boxur;&boxh;&boxh; alerts.yml &boxvr;&boxh;&boxh; alertmanager/ &boxv; &boxur;&boxh;&boxh; alertmanager.yml &boxvr;&boxh;&boxh; app/ &boxv; &boxvr;&boxh;&boxh; package.json &boxv; &boxvr;&boxh;&boxh; server.js &boxv; &boxur;&boxh;&boxh; Dockerfile &boxvr;&boxh;&boxh; promtail/ &boxv; &boxur;&boxh;&boxh; promtail.yml &boxur;&boxh;&boxh; grafana/ &boxur;&boxh;&boxh; provisioning/ &boxur;&boxh;&boxh; dashboards/ &boxur;&boxh;&boxh; dashboard.json</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 2 &mdash; Instrument the Node.js app
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-javascript">const express = require("express");
+const client = require("prom-client");
+const { v4: uuidv4 } = require("uuid");
+const app = express();
+const requestCounter = new client.Counter({
+  name: "http_requests_total",
+  help: "Total requests",
+  labelNames: ["method", "route", "status"],
+});
+const requestDuration = new client.Histogram({
+  name: "http_request_duration_seconds",
+  help: "Request duration",
+  labelNames: ["method", "route", "status"],
+  buckets: [0.05, 0.1, 0.3, 0.5, 1, 2, 5],
+});
+app.use((req, res, next) =&gt; {
+  req.id = uuidv4();
+  const end = requestDuration.startTimer();
+  res.on("finish", () =&gt; {
+    const labels = {
+      method: req.method,
+      route: req.route?.path || "unknown",
+      status: res.statusCode,
+    };
+    requestCounter.inc(labels);
+    end(labels);
+  });
+  next();
+});
+app.get("/", (req, res) =&gt; res.json({ ok: true, request_id: req.id }));
+app.get("/error", (req, res) =&gt; {
+  res.status(500).json({ error: " simulated failure", request_id: req.id });
+});
+app.get("/metrics", async (req, res) =&gt; {
+  res.set("Content-Type", client.register.contentType);
+  res.end(await client.register.metrics());
+});
+app.listen(3000, () =&gt; console.log("App listening on port 3000"));</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 3 &mdash; Prometheus configuration
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-yaml"># prometheus.yml global: scrape_interval: 10s evaluation_interval: 10s rule_files: - /etc/prometheus/alerts.yml alerting: alertmanagers: - static_configs: - targets: ['alertmanager:9093']
+scrape_configs: - job_name: 'prometheus' static_configs: - targets: ['localhost:9090'] - job_name: 'app' static_configs: - targets: ['app:3000']</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 4 &mdash; Alert rule
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-yaml"># alerts.yml groups: - name: app.rules rules: - alert: HighErrorRate expr: | sum(rate(http_requests_total
+{status=~"5.."}
+[1m]
+)) / sum(rate(http_requests_total
+[1m]
+)) &gt; 0.1 for: 30s labels: severity: warning annotations: summary: "High error rate detected" description: "{{ $value | humanizePercentage }
+} of requests are failing."</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 5 &mdash; Alertmanager to webhook
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-yaml"># alertmanager.yml route: receiver: 'webhook' group_by: ['alertname', 'severity']
+group_wait: 10s group_interval: 1m repeat_interval: 4h receivers: - name: 'webhook' webhook_configs: - url: 'http://webhook:5000/alerts'
+send_resolved: true</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 6 &mdash; Docker Compose
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-yaml">version: '3.8'
+app:
+./app
+- "3000:3000"
+driver: json-file
+max-size: "10m"
+image: prom/prometheus:latest
+- "9090:9090"
+- ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml - ./prometheus/alerts.yml:/etc/prometheus/alerts.yml
+image: prom/alertmanager:latest
+- "9093:9093"
+- ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+image: grafana/grafana:latest
+- "3000:3000"
+- GF_SECURITY_ADMIN_PASSWORD=admin
+- ./grafana/provisioning:/etc/grafana/provisioning - grafana-storage:/var/lib/grafana
+image: grafana/loki:latest
+- "3100:3100"
+-config.file=/etc/loki/local-config.yaml
+image: grafana/promtail:latest
+- /var/lib/docker/containers:/var/lib/docker/containers:ro - ./promtail/promtail.yml:/etc/promtail/config.yml
+-config.file=/etc/promtail/config.yml
+grafana-storage:</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 7 &mdash; Verify and explore
+          </p>
+          <div class="card rounded-2xl p-6">
+           <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+            <li>
+             Open Grafana at
+             <code class="font-mono">
+              http://localhost:3000
+             </code>
+             (admin / admin).
+            </li>
+            <li>
+             Check Prometheus targets at
+             <code class="font-mono">
+              http://localhost:9090/targets
+             </code>
+             .
+            </li>
+            <li>
+             Generate traffic with
+             <code class="font-mono">
+              curl http://localhost:3000
+             </code>
+             and
+             <code class="font-mono">
+              curl http://localhost:3000/error
+             </code>
+             .
+            </li>
+            <li>
+             Watch the RED-method dashboard update in real time.
+            </li>
+            <li>
+             Trigger enough errors to fire the HighErrorRate alert.
+            </li>
+            <li>
+             Search Loki logs in Grafana with
+             <code class="font-mono">
+              {job="app"} |= "error"
+             </code>
+             .
+            </li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         4. What did we learn from this capstone project?
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Instrumentation in application code provides the most useful metrics.
+         </li>
+         <li>
+          Prometheus scrape config and alert rules are declarative and version-controllable.
+         </li>
+         <li>
+          Grafana turns raw metrics into dashboards that help incident response.
+         </li>
+         <li>
+          Alertmanager separates alert evaluation from notification routing.
+         </li>
+         <li>
+          Loki makes log search cheap by indexing only labels.
+         </li>
+         <li>
+          Request IDs connect metrics, logs, and traces together.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         5. How can I enhance this project in the future?
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Add tracing with OpenTelemetry and Jaeger/Tempo.
+         </li>
+         <li>
+          Replace local storage with Thanos or Cortex for long-term retention.
+         </li>
+         <li>
+          Export metrics to a cloud provider (CloudWatch, Google Managed Prometheus, Azure Monitor).
+         </li>
+         <li>
+          Add business metrics: signups, orders, revenue per minute.
+         </li>
+         <li>
+          Build SLO-based alerts with burn-rate rules.
+         </li>
+         <li>
+          Use Grafana OnCall or PagerDuty for real on-call workflows.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6 mt-10" data-quiz="capstone">
+       <p class="font-semibold mb-4">
+        In the monitoring stack, which component is responsible for storing and querying time-series metrics?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Grafana
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         Prometheus
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Loki
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24">
+      <div class="card rounded-2xl p-6 text-center">
+       <p class="text-[var(--muted)] mb-3">
+        Great work! Next, provision this monitoring stack across cloud providers with Terraform.
+       </p>
+       <a class="inline-flex items-center px-5 py-2.5 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition" href="../terraform/index.html" target="_blank">
+        Continue to Terraform &rarr;
+       </a>
+      </div>
+     </section>
+    </div>
+   </main>
+  </div>
+  <script>
+   function toggleSidebar() { const s = document.getElementById('sidebar'); const o = document.getElementById('menu-overlay'); s.classList.toggle('open'); o.classList.toggle('hidden'); } const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { moon.classList.add('hidden'); sun.classList.remove('hidden'); document.getElementById('hljs-light').disabled = true; document.getElementById('hljs-dark').disabled = false; } else { moon.classList.remove('hidden'); sun.classList.add('hidden'); document.getElementById('hljs-light').disabled = false; document.getElementById('hljs-dark').disabled = true; } localStorage.setItem('tutorials-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('tutorials-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); document.querySelectorAll('.copy-btn').forEach(btn => { btn.addEventListener('click', () => { const code = btn.parentElement.querySelector('code').textContent; navigator.clipboard.writeText(code).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); }); }); document.querySelectorAll('[data-quiz]').forEach(q => { const opts = q.querySelectorAll('.quiz-opt'); const fb = q.querySelector('.quiz-feedback'); opts.forEach(opt => { opt.addEventListener('click', () => { if (q.dataset.locked) return; q.dataset.locked = 'true'; opts.forEach(o => o.classList.remove('selected')); opt.classList.add('selected'); const correct = opt.dataset.correct === 'true'; if (correct) { opt.classList.add('correct'); fb.textContent = 'Correct!'; fb.classList.add('text-[var(--success)]'); } else { opt.classList.add('wrong'); q.querySelector('[data-correct="true"]').classList.add('correct'); fb.textContent = 'Not quite. The correct answer is highlighted.'; fb.classList.add('text-[var(--danger)]'); } fb.classList.remove('hidden'); }); }); }); const tocLinks = document.querySelectorAll('.toc-link'); const sections = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean); const obs = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { tocLinks.forEach(l => l.classList.remove('active')); const link = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (link) link.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach(s => obs.observe(s));
+  </script>
+ </body>
+</html>

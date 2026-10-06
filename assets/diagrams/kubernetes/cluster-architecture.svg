@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-labelledby="title desc">
+  <title id="title">Kubernetes cluster architecture</title>
+  <desc id="desc">The control plane and worker nodes that make up a Kubernetes cluster.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Outfit', system-ui, sans-serif; }
+      .head { font-size: 15px; font-weight: 700; fill: #1f2328; }
+      .item { font-size: 13px; fill: #656d76; }
+      .box { rx: 12; }
+    </style>
+  </defs>
+  <rect width="720" height="420" fill="#f6f8fa" />
+
+  <g transform="translate(40, 40)">
+    <rect x="0" y="0" width="640" height="140" fill="#e8f0fe" stroke="#326ce5" stroke-width="2" class="box" />
+    <text x="24" y="32" class="head">Control Plane</text>
+    <g transform="translate(24, 50)">
+      <rect x="0" y="0" width="110" height="36" fill="#ffffff" stroke="#d0d7de" stroke-width="1" rx="6" />
+      <text x="55" y="22" text-anchor="middle" class="item">kube-apiserver</text>
+    </g>
+    <g transform="translate(144, 50)">
+      <rect x="0" y="0" width="110" height="36" fill="#ffffff" stroke="#d0d7de" stroke-width="1" rx="6" />
+      <text x="55" y="22" text-anchor="middle" class="item">etcd</text>
+    </g>
+    <g transform="translate(268, 50)">
+      <rect x="0" y="0" width="110" height="36" fill="#ffffff" stroke="#d0d7de" stroke-width="1" rx="6" />
+      <text x="55" y="22" text-anchor="middle" class="item">scheduler</text>
+    </g>
+    <g transform="translate(392, 50)">
+      <rect x="0" y="0" width="110" height="36" fill="#ffffff" stroke="#d0d7de" stroke-width="1" rx="6" />
+      <text x="55" y="22" text-anchor="middle" class="item">controllers</text>
+    </g>
+    <g transform="translate(516, 50)">
+      <rect x="0" y="0" width="100" height="36" fill="#ffffff" stroke="#d0d7de" stroke-width="1" rx="6" />
+      <text x="50" y="22" text-anchor="middle" class="item">cloud</text>
+    </g>
+    <text x="24" y="116" class="item">Manages cluster state, scheduling, and the API.</text>
+  </g>
+
+  <g transform="translate(40, 220)">
+    <rect x="0" y="0" width="640" height="160" fill="#e6f4ea" stroke="#34a853" stroke-width="2" class="box" />
+    <text x="24" y="32" class="head">Worker Nodes</text>
+
+    <g transform="translate(24, 50)">
+      <rect x="0" y="0" width="180" height="80" fill="#ffffff" stroke="#d0d7de" stroke-width="1" rx="8" />
+      <text x="90" y="22" text-anchor="middle" class="head" font-size="13">Node 1</text>
+      <text x="90" y="48" text-anchor="middle" class="item">kubelet</text>
+      <text x="90" y="68" text-anchor="middle" class="item">kube-proxy · runtime</text>
+    </g>
+    <g transform="translate(230, 50)">
+      <rect x="0" y="0" width="180" height="80" fill="#ffffff" stroke="#d0d7de" stroke-width="1" rx="8" />
+      <text x="90" y="22" text-anchor="middle" class="head" font-size="13">Node 2</text>
+      <text x="90" y="48" text-anchor="middle" class="item">kubelet</text>
+      <text x="90" y="68" text-anchor="middle" class="item">kube-proxy · runtime</text>
+    </g>
+    <g transform="translate(436, 50)">
+      <rect x="0" y="0" width="180" height="80" fill="#ffffff" stroke="#d0d7de" stroke-width="1" rx="8" />
+      <text x="90" y="22" text-anchor="middle" class="head" font-size="13">Node 3</text>
+      <text x="90" y="48" text-anchor="middle" class="item">kubelet</text>
+      <text x="90" y="68" text-anchor="middle" class="item">kube-proxy · runtime</text>
+    </g>
+  </g>
+</svg>

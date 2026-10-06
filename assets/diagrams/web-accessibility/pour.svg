@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="title desc">
+  <title id="title">WCAG POUR principles</title>
+  <desc id="desc">Four boxes showing Perceivable, Operable, Understandable, and Robust principles from WCAG.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Outfit', system-ui, sans-serif; }
+      .label { font-size: 20px; font-weight: 700; fill: #1f2328; }
+      .desc { font-size: 13px; fill: #656d76; }
+      .box { rx: 16; }
+    </style>
+  </defs>
+  <rect width="720" height="360" fill="#f6f8fa" />
+
+  <g transform="translate(40, 60)">
+    <rect x="0" y="0" width="300" height="110" fill="#fff3e0" stroke="#ef6c00" stroke-width="2" class="box" />
+    <text x="20" y="40" class="label">Perceivable</text>
+    <text x="20" y="70" class="desc">Text alternatives, captions,</text>
+    <text x="20" y="88" class="desc">adaptable layouts</text>
+    <text x="250" y="55" font-size="28">👁</text>
+  </g>
+
+  <g transform="translate(380, 60)">
+    <rect x="0" y="0" width="300" height="110" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" class="box" />
+    <text x="20" y="40" class="label">Operable</text>
+    <text x="20" y="70" class="desc">Keyboard access, enough time,</text>
+    <text x="20" y="88" class="desc">seizure-safe design</text>
+    <text x="250" y="55" font-size="28">⌨</text>
+  </g>
+
+  <g transform="translate(40, 190)">
+    <rect x="0" y="0" width="300" height="110" fill="#e3f2fd" stroke="#1565c0" stroke-width="2" class="box" />
+    <text x="20" y="40" class="label">Understandable</text>
+    <text x="20" y="70" class="desc">Readable text, predictable UI,</text>
+    <text x="20" y="88" class="desc">helpful error messages</text>
+    <text x="250" y="55" font-size="28">🗣</text>
+  </g>
+
+  <g transform="translate(380, 190)">
+    <rect x="0" y="0" width="300" height="110" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" class="box" />
+    <text x="20" y="40" class="label">Robust</text>
+    <text x="20" y="70" class="desc">Valid markup, proper roles,</text>
+    <text x="20" y="88" class="desc">future assistive tech support</text>
+    <text x="250" y="55" font-size="28">🛠</text>
+  </g>
+</svg>

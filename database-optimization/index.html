@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Database Optimization: Indexes, Query Plans, Partitioning
+  </title>
+  <link href="../assets/favicons/database-optimization.png" rel="icon" type="image/png"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-database-optimization">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Database Optimization" class="w-10 h-10" src="../assets/favicons/database-optimization.png"/>
+     <span class="text-xl font-bold">
+      DB Optimization
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      2. Setup &amp; Sample Database
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#indexes">
+      3. Indexing Deep Dive
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#plans">
+      4. Query Execution Plans
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#partitioning">
+      5. Partitioning
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#tuning">
+      6. Practical Tuning
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#monitoring">
+      7. Monitoring
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      8. Capstone: Optimize an E-Commerce Store
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Database Optimization: Indexes, Query Plans, Partitioning
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Slow databases are one of the most common causes of slow applications. The good news is that most performance problems are predictable: a missing index, a bad query, an oversized table, or too many rows scanned. This tutorial teaches you how to find and fix them using real queries you can run yourself.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with SQL and one relational database (we use PostgreSQL).
+        </li>
+        <li>
+         Know how to create tables and run SELECT / JOIN / WHERE.
+        </li>
+        <li>
+         A laptop that can run Docker is enough for all exercises.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         How B-tree indexes work
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Single-column, composite, partial, and covering indexes
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         How to read EXPLAIN / EXPLAIN ANALYZE output
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Partitioning tables by range, list, and hash
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Real query tuning workflow
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Capstone: optimize a slow e-commerce store
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Real-world impact
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Shopify
+         </strong>
+         reduced checkout latency by adding targeted partial indexes during flash sales.
+        </li>
+        <li>
+         <strong>
+          GitHub
+         </strong>
+         partitions large event tables by time to keep queries fast and archival cheap.
+        </li>
+        <li>
+         <strong>
+          Stripe
+         </strong>
+         uses carefully chosen composite indexes to look up transactions by merchant, status, and date.
+        </li>
+        <li>
+         <strong>
+          Uber
+         </strong>
+         partitions trip data by city and date; query time stays flat as data grows.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#setup">
+        Next: Setup &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="setup">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Setup &amp; Sample Database
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       We will use PostgreSQL because its EXPLAIN output is the most detailed teaching tool. Every example also translates to MySQL, MariaDB, SQL Server, or SQLite with small syntax changes.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Start PostgreSQL locally with Docker 
+docker run -d --name postgres-opt \
+-e POSTGRES_USER=admin \
+-e POSTGRES_PASSWORD=secret \
+-e POSTGRES_DB=shop \
+-p 5432:5432 \
+postgres:16 
+# Connect with 
+psql 
+docker exec -it postgres-opt 
+psql -U admin -d shop</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Create realistic e-commerce tables CREATE TABLE customers ( id bigserial PRIMARY KEY,
+email text NOT NULL,
+city text NOT NULL,
+created_at timestamptz NOT NULL DEFAULT now() );
+CREATE TABLE products ( id bigserial PRIMARY KEY,
+name text NOT NULL,
+category text NOT NULL,
+price numeric(10,
+2) NOT NULL );
+CREATE TABLE orders ( id bigserial PRIMARY KEY,
+customer_id bigint NOT NULL REFERENCES customers(id),
+status text NOT NULL CHECK (status IN ('pending','shipped','delivered','cancelled')),
+total numeric(12,
+2) NOT NULL,
+created_at timestamptz NOT NULL DEFAULT now() );
+CREATE TABLE order_items ( id bigserial PRIMARY KEY,
+order_id bigint NOT NULL REFERENCES orders(id),
+product_id bigint NOT NULL REFERENCES products(id),
+qty int NOT NULL,
+price numeric(10,
+2) NOT NULL );
+-- Insert seed data (small: 10k rows) INSERT INTO customers (email,
+city,
+created_at) SELECT 'user' || i || '@example.com', (ARRAY
+['Mumbai','Delhi','Bangalore','Chennai','Kolkata']
+)[1 + (i % 5)],
+now() - (random() * 365 * interval '1 day') FROM generate_series(1,
+10000) AS i;
+INSERT INTO products (name,
+category,
+price) SELECT 'Product ' || i, (ARRAY
+['Electronics','Clothing','Home','Books','Sports']
+)[1 + (i % 5)], (random() * 5000 + 100)::numeric(10,
+2) FROM generate_series(1,
+500) AS i;
+INSERT INTO orders (customer_id,
+status,
+total,
+created_at) SELECT 1 + (i % 10000), (ARRAY
+['pending','shipped','delivered','cancelled']
+)[1 + (i % 4)], (random() * 5000)::numeric(12,
+2),
+now() - (random() * 365 * interval '1 day') FROM generate_series(1,
+50000) AS i;
+INSERT INTO order_items (order_id,
+product_id,
+qty,
+price) SELECT 1 + (i % 50000),
+1 + (i % 500),
+1 + (i % 5), (random() * 5000)::numeric(10,
+2) FROM generate_series(1,
+150000) AS i;</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Confirm the tables and row counts with
+        <code class="kbd">
+         \dt
+        </code>
+        and
+        <code class="kbd">
+         SELECT count(*) FROM orders;
+        </code>
+        . You should see 50,000 orders and 150,000 line items.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#indexes">
+        Next: Indexes &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="indexes">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Indexing Deep Dive
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       An index is a separate data structure that lets the database find rows without scanning the whole table. The most common index type in PostgreSQL, MySQL, and MongoDB is a B-tree. Think of it as a sorted, searchable shortcut.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        B-tree index structure
+       </h3>
+       <img alt="Diagram of a B-tree index mapping keys to data rows" class="diagram" loading="lazy" src="../assets/diagrams/database-optimization/b-tree-index.svg"/>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Index types
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          <strong>
+           B-tree
+          </strong>
+          : equality, range, sorting. Default and most common.
+         </li>
+         <li>
+          <strong>
+           Hash
+          </strong>
+          : equality only. Rarely needed.
+         </li>
+         <li>
+          <strong>
+           GiST / GIN / SP-GiST
+          </strong>
+          : full-text, JSON, geospatial, arrays.
+         </li>
+         <li>
+          <strong>
+           Partial
+          </strong>
+          : only index rows matching a predicate.
+         </li>
+         <li>
+          <strong>
+           Covering
+          </strong>
+          : index contains all columns a query needs.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Trade-offs
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Speeds up reads.
+         </li>
+         <li>
+          Slows down writes (INSERT/UPDATE/DELETE) because the index must be maintained.
+         </li>
+         <li>
+          Uses extra disk space.
+         </li>
+         <li>
+          Too many indexes can confuse the optimizer.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Single-column index for customer lookups CREATE INDEX idx_orders_customer_id ON orders(customer_id);
+-- Composite index: status first,
+then created_at for date-range status reports -- Column order matters! Put the most selective column first. CREATE INDEX idx_orders_status_created ON orders(status,
+created_at);
+-- Partial index: only delivered orders,
+used for monthly revenue reports CREATE INDEX idx_orders_delivered_created ON orders(created_at) WHERE status = 'delivered';
+-- Covering index: includes total so the heap is not touched CREATE INDEX idx_orders_status_created_total ON orders(status,
+created_at) INCLUDE (total);
+-- Expression index: index lower-cased emails for case-insensitive login CREATE INDEX idx_customers_email_lower ON customers(LOWER(email));</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Composite index column order demo -- Good: status is highly selective here,
+created_at supports the range CREATE INDEX idx_orders_status_date ON orders(status,
+created_at);
+-- Query that uses the index efficiently SELECT * FROM orders WHERE status = 'delivered' AND created_at &gt;= now() - interval '7 days';
+-- Bad column order: created_at first cannot filter status efficiently CREATE INDEX idx_orders_date_status ON orders(created_at,
+status);
+-- The planner may still use it,
+but a status-first index is usually better.</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Quiz: Indexes always make writes faster.
+       </h3>
+       <div class="quiz space-y-2" data-answer="False">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-val="True">
+         True
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-val="False">
+         False
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium text-[var(--muted)]">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#plans">
+        Next: Query Plans &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="plans">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Query Execution Plans
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       EXPLAIN is the most important tool in database optimization. It shows how the database plans to execute a query before it runs. EXPLAIN ANALYZE runs the query and adds actual timing. Together they tell you exactly where time is spent.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        How the query optimizer chooses a plan
+       </h3>
+       <img alt="Diagram showing query optimizer choosing between sequential scan and index scan" class="diagram" loading="lazy" src="../assets/diagrams/database-optimization/query-execution-plan.svg"/>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Reading an EXPLAIN plan tree
+       </h3>
+       <img alt="Diagram of an EXPLAIN plan tree showing cost, rows, and width annotations" class="diagram" loading="lazy" src="../assets/diagrams/database-optimization/query-plan-anatomy.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Before adding an index: likely a sequential scan EXPLAIN ANALYZE SELECT * FROM orders WHERE status = 'delivered' AND created_at &gt;= now() - interval '7 days';
+-- Output to look for: -- Seq Scan on orders (cost=0.00..2291.00 rows=228 width=48) (actual time=0.023..8.421 rows=230 loops=1) -- Filter: ((status = 'delivered') AND (created_at &gt;= ...)) -- Rows Removed by Filter: 49770 -- Planning Time: 0.123 ms -- Execution Time: 8.512 ms</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Add a covering index and re-run CREATE INDEX idx_orders_status_created_total ON orders(status,
+created_at) INCLUDE (total);
+EXPLAIN ANALYZE SELECT total FROM orders WHERE status = 'delivered' AND created_at &gt;= now() - interval '7 days';
+-- Output to look for: -- Index Only Scan using idx_orders_status_created_total -- Heap Fetches: 0 (perfect: no table access needed)</code></pre>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4 mb-8">
+       <div class="metric-card">
+        <p class="text-2xl font-bold brand">
+         8.5 ms
+        </p>
+        <p class="text-sm text-[var(--muted)]">
+         Before index
+        </p>
+       </div>
+       <div class="metric-card">
+        <p class="text-2xl font-bold brand">
+         0.08 ms
+        </p>
+        <p class="text-sm text-[var(--muted)]">
+         After index
+        </p>
+       </div>
+       <div class="metric-card">
+        <p class="text-2xl font-bold brand">
+         100x
+        </p>
+        <p class="text-sm text-[var(--muted)]">
+         Speedup
+        </p>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        EXPLAIN fields to watch
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          cost
+         </strong>
+         &mdash; estimated work; lower is better.
+        </li>
+        <li>
+         <strong>
+          rows
+         </strong>
+         &mdash; estimated rows the planner expects; compare to actual.
+        </li>
+        <li>
+         <strong>
+          actual time
+         </strong>
+         &mdash; real milliseconds (only in ANALYZE).
+        </li>
+        <li>
+         <strong>
+          Seq Scan
+         </strong>
+         &mdash; full table scan; fine for tiny tables, bad for big ones.
+        </li>
+        <li>
+         <strong>
+          Index Scan / Index Only Scan
+         </strong>
+         &mdash; using an index; good.
+        </li>
+        <li>
+         <strong>
+          rows removed by filter
+         </strong>
+         &mdash; how many rows were discarded after reading.
+        </li>
+        <li>
+         <strong>
+          Heap Fetches
+         </strong>
+         &mdash; number of times the database had to look at the table; 0 is ideal for index-only scans.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#indexes">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#partitioning">
+        Next: Partitioning &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="partitioning">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Partitioning
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       When a table grows too large, indexes and queries slow down. Partitioning splits one logical table into smaller physical pieces. Queries that target a specific partition scan far fewer rows and can be maintained independently.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Vertical vs horizontal partitioning
+       </h3>
+       <img alt="Diagram comparing vertical column partitioning with horizontal row range partitioning" class="diagram" loading="lazy" src="../assets/diagrams/database-optimization/vertical-horizontal-partitioning.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Range partitioning by month for orders CREATE TABLE orders_partitioned ( id bigserial,
+customer_id bigint NOT NULL,
+status text NOT NULL,
+total numeric(12,
+2) NOT NULL,
+created_at timestamptz NOT NULL,
+PRIMARY KEY (id,
+created_at) ) PARTITION BY RANGE (created_at);
+CREATE TABLE orders_2024_01 PARTITION OF orders_partitioned FOR VALUES FROM ('2024-01-01') TO ('2024-02-01');
+CREATE TABLE orders_2024_02 PARTITION OF orders_partitioned FOR VALUES FROM ('2024-02-01') TO ('2024-03-01');
+CREATE TABLE orders_2024_03 PARTITION OF orders_partitioned FOR VALUES FROM ('2024-03-01') TO ('2024-04-01');
+-- Queries touching only one month skip the rest SELECT * FROM orders_partitioned WHERE created_at &gt;= '2024-02-01' AND created_at &lt; '2024-03-01';
+-- Check partition pruning EXPLAIN SELECT * FROM orders_partitioned WHERE created_at &gt;= '2024-02-01' AND created_at &lt; '2024-02-02';
+-- Should show only orders_2024_02 being scanned.</code></pre>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Partitioning strategies
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          <strong>
+           Range
+          </strong>
+          : time series, events, orders by date.
+         </li>
+         <li>
+          <strong>
+           List
+          </strong>
+          : discrete categories, e.g., orders by region or status.
+         </li>
+         <li>
+          <strong>
+           Hash
+          </strong>
+          : even distribution when no natural range exists.
+         </li>
+         <li>
+          <strong>
+           Composite
+          </strong>
+          : range by date, then hash by tenant.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Benefits
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Faster queries that target a partition.
+         </li>
+         <li>
+          Cheaper vacuum, analyze, and reindex on one partition.
+         </li>
+         <li>
+          Easy archival: detach old partitions instead of deleting rows.
+         </li>
+         <li>
+          Can place hot partitions on faster storage.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#plans">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#tuning">
+        Next: Tuning &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="tuning">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Practical Tuning Workflow
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Optimization is not guesswork. It is a repeatable workflow: measure, identify the slow query, understand the plan, apply the smallest fix that helps, and verify with EXPLAIN ANALYZE.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        The before-and-after of adding the right index
+       </h3>
+       <img alt="Diagram comparing a slow sequential scan query with a fast index-only scan query" class="diagram" loading="lazy" src="../assets/diagrams/database-optimization/slow-fast-query.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Step 1: find slow queries from pg_stat_statements SELECT query,
+mean_exec_time,
+calls,
+rows FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 10;
+-- Step 2: run EXPLAIN ANALYZE on the slow query EXPLAIN (ANALYZE,
+BUFFERS,
+FORMAT TEXT) SELECT o.id,
+o.total,
+c.email FROM orders o JOIN customers c ON c.id = o.customer_id WHERE o.status = 'delivered' AND o.created_at &gt;= now() - interval '30 days' ORDER BY o.total DESC LIMIT 100;</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Step 3: design the index based on the query -- Predicates: status = 'delivered',
+created_at &gt;= ... -- Join key: customer_id -- Sort: total DESC -- Output: id,
+total,
+email (from customers) CREATE INDEX idx_orders_status_created_total_cust ON orders(status,
+created_at DESC,
+total,
+customer_id);
+-- Step 4: re-run EXPLAIN ANALYZE and compare -- Look for: Index Scan,
+lower cost,
+no Sort step,
+reduced buffers.</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-8">
+       <h4 class="font-semibold mb-2">
+        Common query anti-patterns
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Functions on indexed columns
+         </strong>
+         :
+         <code class="kbd">
+          WHERE DATE(created_at) = '2024-06-01'
+         </code>
+         cannot use a B-tree index on created_at. Use range instead.
+        </li>
+        <li>
+         <strong>
+          Leading wildcards
+         </strong>
+         :
+         <code class="kbd">
+          LIKE '%burger%'
+         </code>
+         defeats a regular B-tree. Use full-text search (GIN/GiST) or trigram indexes.
+        </li>
+        <li>
+         <strong>
+          Select *
+         </strong>
+         : fetching unnecessary columns prevents covering indexes.
+        </li>
+        <li>
+         <strong>
+          Wrong join order
+         </strong>
+         : small tables first, filter aggressively before joining.
+        </li>
+        <li>
+         <strong>
+          Missing statistics
+         </strong>
+         : run
+         <code class="kbd">
+          ANALYZE
+         </code>
+         after bulk loads or index creation.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Index design cheat sheet
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Equality first
+         </strong>
+         : put columns with = conditions before range columns.
+        </li>
+        <li>
+         <strong>
+          Sort columns next
+         </strong>
+         : if you ORDER BY, include those columns.
+        </li>
+        <li>
+         <strong>
+          Covering
+         </strong>
+         : INCLUDE columns the query returns but does not filter on.
+        </li>
+        <li>
+         <strong>
+          Partial
+         </strong>
+         : when most queries filter on the same predicate, index only those rows.
+        </li>
+        <li>
+         <strong>
+          Remove unused
+         </strong>
+         : monitor
+         <code class="kbd">
+          pg_stat_user_indexes
+         </code>
+         and drop indexes with zero scans after a representative period.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#partitioning">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#monitoring">
+        Next: Monitoring &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="monitoring">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Monitoring
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       You cannot optimize what you do not measure. PostgreSQL and most databases expose system views that tell you which queries are slow, which indexes are used, and where locks wait.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Enable pg_stat_statements in postgresql.conf: -- shared_preload_libraries = 'pg_stat_statements' -- pg_stat_statements.track = all -- Top 10 queries by total time SELECT query,
+calls,
+round(total_exec_time::numeric,
+2) AS total_ms,
+round(mean_exec_time::numeric,
+2) AS avg_ms,
+rows FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT 10;
+-- Index usage by table SELECT schemaname,
+relname,
+indexrelname,
+idx_scan,
+idx_tup_read FROM pg_stat_user_indexes ORDER BY idx_scan DESC;</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Tables with the most sequential scans (candidates for indexing) SELECT relname,
+seq_scan,
+seq_tup_read,
+idx_scan,
+n_live_tup FROM pg_stat_user_tables WHERE seq_scan &gt; 0 ORDER BY seq_tup_read DESC LIMIT 10;
+-- Long-running queries right now SELECT pid,
+now() - query_start AS duration,
+query FROM pg_stat_activity WHERE state = 'active' AND now() - query_start &gt; interval '1 second' ORDER BY duration DESC;</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Golden metrics
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Query latency p95/p99
+         </strong>
+         : what the slowest 5% of users experience.
+        </li>
+        <li>
+         <strong>
+          Index hit ratio
+         </strong>
+         : high ratio means most reads are served from memory.
+        </li>
+        <li>
+         <strong>
+          Active connections
+         </strong>
+         : watch for pool exhaustion.
+        </li>
+        <li>
+         <strong>
+          Deadlocks and lock waits
+         </strong>
+         : signs of contention or bad transaction order.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#tuning">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Optimize an E-Commerce Store
+      </h2>
+      <h3 class="text-xl font-semibold mb-3">
+       1. What is this project?
+      </h3>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       You inherit a slow e-commerce database. Product managers complain that the dashboard and search are sluggish. Your job is to make measurable improvements using only indexes, query rewrites, and partitioning.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       2. What it covers?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Dashboard query "revenue by category this month" takes 6 seconds.
+        </li>
+        <li>
+         Customer lookup by email is case-sensitive and does not use an index.
+        </li>
+        <li>
+         Order history page for a customer scans the entire orders table.
+        </li>
+        <li>
+         "Recent delivered orders" query returns columns from orders, customers, and order_items, causing heavy joins.
+        </li>
+        <li>
+         The orders table is expected to grow by 1M rows per month.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       3. How it is done?
+      </h3>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Run the sample database script, use
+       <code class="kbd">
+        EXPLAIN ANALYZE
+       </code>
+       to measure each slow query, then design the smallest set of indexes that fixes all four problems and partition orders by month for future scale.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Problem 1: revenue by category this month SELECT p.category,
+SUM(oi.qty * oi.price) AS revenue FROM order_items oi JOIN products p ON p.id = oi.product_id JOIN orders o ON o.id = oi.order_id WHERE o.status = 'delivered' AND o.created_at &gt;= date_trunc('month',
+now()) GROUP BY p.category;
+-- Problem 2: case-insensitive customer lookup SELECT * FROM customers WHERE email = 'User42@Example.COM';
+-- Problem 3: customer order history SELECT * FROM orders WHERE customer_id = 1234 ORDER BY created_at DESC LIMIT 20;
+-- Problem 4: recent delivered orders with items SELECT o.id,
+o.total,
+c.email,
+oi.product_id,
+oi.qty FROM orders o JOIN customers c ON c.id = o.customer_id JOIN order_items oi ON oi.order_id = o.id WHERE o.status = 'delivered' AND o.created_at &gt;= now() - interval '7 days';</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- Suggested solution indexes (test and measure each one) CREATE INDEX idx_customers_email_lower ON customers(LOWER(email));
+CREATE INDEX idx_orders_customer_created ON orders(customer_id,
+created_at DESC);
+CREATE INDEX idx_orders_status_created ON orders(status,
+created_at) INCLUDE (total,
+customer_id);
+CREATE INDEX idx_order_items_order_product ON order_items(order_id,
+product_id,
+qty,
+price);
+-- For the dashboard,
+a covering index on order_items may be even better CREATE INDEX idx_order_items_product_order ON order_items(product_id,
+order_id,
+qty,
+price);
+-- Then update statistics ANALYZE orders;
+ANALYZE order_items;</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       4. What did we learn from this capstone project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         EXPLAIN ANALYZE reveals whether a query scans the whole table or uses an index.
+        </li>
+        <li>
+         Composite, partial, and covering indexes can turn multi-second queries into millisecond responses.
+        </li>
+        <li>
+         Column order in an index matters: equality columns should come before range columns.
+        </li>
+        <li>
+         Partitioning keeps query time flat as the orders table grows by millions of rows per month.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       5. How can I enhance this project in the future?
+      </h3>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Automate monthly partition creation and attach old partitions to a cold-storage archive.
+        </li>
+        <li>
+         Track query performance with
+         <code class="kbd">
+          pg_stat_statements
+         </code>
+         and drop unused indexes.
+        </li>
+        <li>
+         Add a trigram index for fuzzy product search and a full-text index for product descriptions.
+        </li>
+        <li>
+         Replace in-memory seed data with a load test that simulates concurrent shoppers.
+        </li>
+        <li>
+         Set up alerts when p95 query latency crosses a threshold.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#monitoring">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); const lightStylesheet = document.getElementById('hljs-light'); const darkStylesheet = document.getElementById('hljs-dark'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { lightStylesheet.disabled = true; darkStylesheet.disabled = false; moon.classList.add('hidden'); sun.classList.remove('hidden'); } else { lightStylesheet.disabled = false; darkStylesheet.disabled = true; moon.classList.remove('hidden'); sun.classList.add('hidden'); } localStorage.setItem('dbopt-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('dbopt-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menu-overlay'); sidebar.classList.toggle('open'); overlay.classList.toggle('hidden'); } function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code'); navigator.clipboard.writeText(code.innerText).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); } const sections = document.querySelectorAll('section[id]'); const tocLinks = document.querySelectorAll('.toc-link'); const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { tocLinks.forEach((link) => link.classList.remove('active')); const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (active) active.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach((section) => observer.observe(section)); document.querySelectorAll('.quiz').forEach((quiz) => { const correct = quiz.dataset.answer; const feedback = quiz.nextElementSibling; quiz.querySelectorAll('.quiz-opt').forEach((opt) => { opt.addEventListener('click', () => { quiz.querySelectorAll('.quiz-opt').forEach((o) => { o.classList.remove('selected', 'correct', 'wrong'); o.disabled = true; }); opt.classList.add('selected'); if (opt.dataset.val === correct) { opt.classList.add('correct'); feedback.textContent = 'Correct! ✅'; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]'; } else { opt.classList.add('wrong'); feedback.textContent = `Not quite. The correct answer is ${correct}.`; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]'; } }); }); }); hljs.highlightAll();
+  </script>
+ </body>
+</html>

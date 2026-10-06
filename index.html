@@ -1,396 +1,1094 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Technology Tutorials</title>
-  <link rel="icon" type="image/svg+xml" href="assets/favicons/root.svg">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = { darkMode: 'class' }
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Technology Tutorials
+  </title>
+  <link href="assets/favicons/root.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
   </script>
-  <style>
-    :root {
-      --brand-light: #2f81f7;
-      --brand-dark: #58a6ff;
-      --ink: #1f2328;
-      --muted: #656d76;
-      --panel: #f6f8fa;
-      --card: #ffffff;
-      --border: #d0d7de;
-      --success: #1a7f37;
-      --warn: #9a6700;
-      --frontend: #7c3aed;
-      --backend: #059669;
-      --devops: #ea580c;
-      --foundation: #0369a1;
-    }
-    html.dark {
-      --ink: #e6edf3;
-      --muted: #848d97;
-      --panel: #0d1117;
-      --card: #161b22;
-      --border: #30363d;
-      --success: #3fb950;
-      --warn: #d29922;
-      --frontend: #a78bfa;
-      --backend: #34d399;
-      --devops: #fb923c;
-      --foundation: #38bdf8;
-    }
-    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
-    .brand { color: var(--brand-light); }
-    html.dark .brand { color: var(--brand-dark); }
-    .card { border: 1px solid var(--border); background: var(--card); }
-    .progress-ring { transform: rotate(-90deg); }
-    .progress-ring-circle { transition: stroke-dashoffset 0.35s; }
-    .completed-badge { background: var(--success); color: white; }
-    .in-progress-badge { background: var(--warn); color: white; }
-    .category-frontend { color: var(--frontend); background: var(--frontend); }
-    .category-backend { color: var(--backend); background: var(--backend); }
-    .category-devops { color: var(--devops); background: var(--devops); }
-    .category-foundation { color: var(--foundation); background: var(--foundation); }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
-    .card-completed { border-color: var(--success); }
-    .card-in-progress { border-color: var(--warn); }
-    @media (prefers-reduced-motion: reduce) {
-      .progress-ring-circle { transition: none; }
-      * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-    }
-  </style>
-</head>
-<body class="antialiased transition-colors duration-300 min-h-screen">
-
-  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded">Skip to content</a>
-
-  <header class="border-b border-[var(--border)] bg-[var(--card)] px-6 py-6">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div>
-          <h1 class="text-2xl font-extrabold">Technology Tutorials</h1>
-          <p class="text-sm text-[var(--muted)]">Interactive guides for students</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-3">
-        <a href="glossary.html" class="text-sm font-medium text-[var(--muted)] hover:text-[var(--brand-light)] transition">Glossary →</a>
-        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
-          <svg id="moon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
-          <svg id="sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main id="main" class="max-w-6xl mx-auto px-6 py-8">
-
-    <section class="mb-10">
-      <div class="card rounded-2xl p-8 text-center relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--foundation)] via-[var(--frontend)] to-[var(--devops)]"></div>
-        <h2 class="text-3xl sm:text-4xl font-extrabold mb-3">Learn by building.</h2>
-        <p class="text-lg text-[var(--muted)] max-w-2xl mx-auto mb-6">11 self-contained tutorials take you from the command line to production deployment. No setup required — just open and start.</p>
-        <div id="hero-cta" class="flex flex-wrap justify-center gap-3">
-          <a href="linux/index.html" target="_blank" class="px-6 py-3 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition">Start at #1: Linux →</a>
-          <a href="#getting-started" class="px-6 py-3 rounded-xl border border-[var(--border)] font-semibold hover:bg-[var(--panel)] transition">Explore paths</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="getting-started" class="mb-8 card rounded-2xl p-5">
-      <div class="grid lg:grid-cols-[1fr_14rem] gap-6">
-        <div class="flex flex-col justify-between">
-          <div>
-            <h2 class="text-xl font-bold mb-2">Getting Started</h2>
-            <p class="text-sm text-[var(--muted)] leading-relaxed mb-4">Self-contained tutorials from the command line to production. Open any card in a new tab and follow along.</p>
-
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="text-xs font-medium px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">Frontend: #1 → #3 → #9 → #10</span>
-              <span class="text-xs font-medium px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">Backend: #1 → #3 → #5 → #7 → #8</span>
-              <span class="text-xs font-medium px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">Full-stack: #1 → #11</span>
-            </div>
-          </div>
-
-          <details class="group">
-            <summary class="cursor-pointer text-sm font-semibold brand hover:opacity-80 transition">View learning paths by goal →</summary>
-            <div class="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
-              <div class="bg-[var(--panel)] rounded-lg p-3 border border-[var(--border)]">
-                <p class="font-semibold mb-1">Frontend developer</p>
-                <p class="text-[var(--muted)]">
-                  <a href="linux/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">Linux</a> →
-                  <a href="html-css/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">HTML/CSS</a> →
-                  <a href="javascript-basics/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">JavaScript</a> →
-                  <a href="react/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">React</a> →
-                  <a href="typescript/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">TypeScript</a> →
-                  <a href="github/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">GitHub</a>
-                </p>
-              </div>
-              <div class="bg-[var(--panel)] rounded-lg p-3 border border-[var(--border)]">
-                <p class="font-semibold mb-1">Backend developer</p>
-                <p class="text-[var(--muted)]">
-                  <a href="linux/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">Linux</a> →
-                  <a href="javascript-basics/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">JavaScript</a> →
-                  <a href="nodejs-express/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">Node.js &amp; Express</a> →
-                  <a href="sql-databases/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">SQL</a> →
-                  <a href="docker/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">Docker</a> →
-                  <a href="typescript/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">TypeScript</a> →
-                  <a href="devops-cicd/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">DevOps</a>
-                </p>
-              </div>
-              <div class="bg-[var(--panel)] rounded-lg p-3 border border-[var(--border)]">
-                <p class="font-semibold mb-1">Full-stack developer</p>
-                <p class="text-[var(--muted)]">
-                  Follow the numbered order from
-                  <a href="linux/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">#1</a> to
-                  <a href="devops-cicd/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">#11</a>.
-                </p>
-              </div>
-              <div class="bg-[var(--panel)] rounded-lg p-3 border border-[var(--border)]">
-                <p class="font-semibold mb-1">DevOps / Platform engineer</p>
-                <p class="text-[var(--muted)]">
-                  <a href="linux/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">Linux</a> →
-                  <a href="github/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">GitHub</a> →
-                  <a href="sql-databases/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">SQL</a> →
-                  <a href="docker/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">Docker</a> →
-                  <a href="nodejs-express/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">Node.js</a> →
-                  <a href="typescript/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">TypeScript</a> →
-                  <a href="devops-cicd/index.html" target="_blank" class="hover:text-[var(--brand-light)] hover:underline">DevOps CI/CD</a>
-                </p>
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <div class="flex flex-row lg:flex-col items-center justify-between lg:justify-center gap-4 bg-[var(--panel)] rounded-2xl p-4 border border-[var(--border)]">
-          <div class="relative w-24 h-24">
-            <svg class="progress-ring w-full h-full" viewBox="0 0 100 100">
-              <circle class="progress-ring-circle" stroke="var(--border)" stroke-width="8" fill="transparent" r="42" cx="50" cy="50"/>
-              <circle id="progress-circle" class="progress-ring-circle" stroke="var(--brand-light)" stroke-width="8" fill="transparent" r="42" cx="50" cy="50" stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round"/>
-            </svg>
-            <div class="absolute inset-0 flex flex-col items-center justify-center">
-              <span id="progress-percent" class="text-xl font-bold">0%</span>
-              <span class="text-[10px] text-[var(--muted)] uppercase tracking-wide">done</span>
-            </div>
-          </div>
-          <div class="text-right lg:text-center">
-            <p id="progress-text" class="text-sm text-[var(--muted)]">No tutorials completed yet.</p>
-            <a id="continue-link" href="#" target="_blank" class="hidden mt-2 inline-block text-xs font-semibold px-3 py-1.5 rounded-md bg-[var(--brand-light)] text-white hover:opacity-90 transition">Continue →</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="mb-6 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-      <div class="flex flex-wrap gap-2">
-        <button class="filter-btn active px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] bg-[var(--brand-light)] text-white transition" data-filter="all">All</button>
-        <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="foundation">Foundation</button>
-        <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="frontend">Frontend</button>
-        <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="backend">Backend</button>
-        <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="devops">DevOps</button>
-      </div>
-
-      <div class="relative">
-        <label for="search" class="sr-only">Search tutorials</label>
-        <input id="search" type="text" placeholder="Search tutorials..." class="w-full sm:w-64 px-4 py-2 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-light)]">
-      </div>
-    </section>
-
-    <div id="tutorial-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      <!-- Tutorial cards -->
-      <a href="linux/index.html" target="_blank" data-id="linux" data-category="foundation" data-duration="4 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#1</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-foundation">Foundation</span>
-          </div>
-          <img src="assets/favicons/linux.svg" alt="Linux" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">Linux Command Line</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Master the terminal: files, permissions, processes, networking, SSH, scripting, and systemd.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 4 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="html-css/index.html" target="_blank" data-id="html-css" data-category="frontend" data-duration="5 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#2</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-frontend">Frontend</span>
-          </div>
-          <img src="assets/favicons/html-css.svg" alt="HTML &amp; CSS" class="w-8 h-8 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">HTML &amp; CSS Fundamentals</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Modern HTML5, CSS3, Flexbox, Grid, responsive design, and a portfolio project.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 5 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="javascript-basics/index.html" target="_blank" data-id="javascript-basics" data-category="frontend" data-duration="6 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#3</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-frontend">Frontend</span>
-          </div>
-          <img src="assets/favicons/javascript.svg" alt="JavaScript" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">JavaScript Basics</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Learn JavaScript fundamentals with interactive playgrounds and build a to-do list app.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 6 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="python-basics/index.html" target="_blank" data-id="python-basics" data-category="backend" data-duration="6 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#4</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-backend">Backend</span>
-          </div>
-          <img src="assets/favicons/python.svg" alt="Python" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">Python Fundamentals</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Master Python from syntax to advanced features and build a CLI expense tracker.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 6 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="nodejs-express/index.html" target="_blank" data-id="nodejs-express" data-category="backend" data-duration="7 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#5</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-backend">Backend</span>
-          </div>
-          <img src="assets/favicons/node.svg" alt="Node.js" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">Node.js &amp; Express</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Build REST APIs with Node.js, Express, PostgreSQL, JWT authentication, and automated tests.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 7 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="github/index.html" target="_blank" data-id="github" data-category="foundation" data-duration="3 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#6</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-foundation">Foundation</span>
-          </div>
-          <img src="assets/favicons/github.svg" alt="Git" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">Git &amp; GitHub</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Complete beginner guide to version control with Git and collaboration on GitHub.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 3 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="sql-databases/index.html" target="_blank" data-id="sql-databases" data-category="backend" data-duration="5 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#7</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-backend">Backend</span>
-          </div>
-          <img src="assets/favicons/postgres.svg" alt="PostgreSQL" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">SQL &amp; Databases</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Learn SQL with PostgreSQL using a real online store database: joins, analytics, transactions, and indexes.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 5 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="docker/index.html" target="_blank" data-id="docker" data-category="devops" data-duration="5 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#8</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-devops">DevOps</span>
-          </div>
-          <img src="assets/favicons/docker.svg" alt="Docker" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">Docker: Containers to Production</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Advanced guide to containers: Linux OS, PostgreSQL, Nginx, Dockerfiles, Compose, and CI/CD.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 5 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="react/index.html" target="_blank" data-id="react" data-category="frontend" data-duration="6 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#9</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-frontend">Frontend</span>
-          </div>
-          <img src="assets/favicons/react.svg" alt="React" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">React: Modern Frontend</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Build user interfaces with components, hooks, routing, and a Kanban task board.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 6 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="typescript/index.html" target="_blank" data-id="typescript" data-category="frontend" data-duration="5 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#10</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-frontend">Frontend</span>
-          </div>
-          <img src="assets/favicons/typescript.svg" alt="TypeScript" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">TypeScript</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Add static types to JavaScript with real-world React and Node.js examples; capstone: typed e-commerce cart.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 5 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-
-      <a href="devops-cicd/index.html" target="_blank" data-id="devops-cicd" data-category="devops" data-duration="4 hrs" class="tutorial-card group block bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-lg hover:border-[var(--brand-light)] transition">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2 py-1 rounded-md bg-[var(--panel)] border border-[var(--border)] text-[var(--muted)]">#11</span>
-            <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full text-white category-devops">DevOps</span>
-          </div>
-          <img src="assets/favicons/devops.svg" alt="DevOps" class="w-7 h-7 group-hover:scale-110 transition">
-        </div>
-        <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">DevOps CI/CD</h2>
-        <p class="text-[var(--muted)] text-sm leading-relaxed">Automate software delivery with GitHub Actions, Docker, environments, deployment strategies, monitoring, and IaC.</p>
-        <div class="mt-3 flex items-center justify-between">
-          <span class="text-xs text-[var(--muted)]">⏱ 4 hrs</span>
-          <div class="status-area"></div>
-        </div>
-      </a>
-    </div>
-
-    <p id="no-results" class="hidden text-center text-[var(--muted)] mt-12">No tutorials match your search.</p>
-  </main>
-
-  <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
-    <p class="mb-2">Open directly in any browser. No build step required.</p>
-    <div class="flex justify-center gap-4">
-      <a href="README.md" target="_blank" class="hover:text-[var(--brand-light)] transition">About</a>
-      <a href="CONTRIBUTING.md" target="_blank" class="hover:text-[var(--brand-light)] transition">Contribute</a>
-      <a href="LICENSE" target="_blank" class="hover:text-[var(--brand-light)] transition">License</a>
-    </div>
-  </footer>
-
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="assets/styles.css" rel="stylesheet"/>
   <script>
-    const html = document.documentElement;
+   tailwind.config = { darkMode: 'class' }
+  </script>
+ </head>
+ <body class="antialiased transition-colors duration-300 min-h-screen brand-root">
+  <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded" href="#main">
+   Skip to content
+  </a>
+  <header class="border-b border-[var(--border)] bg-[var(--card)] px-6 py-6">
+   <div class="max-w-[1600px] mx-auto flex items-center justify-between">
+    <div class="flex items-center gap-3">
+     <div>
+      <h1 class="text-2xl font-extrabold">
+       Technology Tutorials
+      </h1>
+      <p class="text-sm text-[var(--muted)]">
+       Interactive guides for students
+      </p>
+     </div>
+    </div>
+    <div class="flex items-center gap-3">
+     <a class="text-sm font-medium text-[var(--muted)] hover:text-[var(--brand-light)] transition" href="glossary.html">
+      Glossary &rarr;
+     </a>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </div>
+   </div>
+  </header>
+  <main class="max-w-[1600px] mx-auto px-6 py-8" id="main">
+   <section class="mb-10">
+  <div class="card hero-glow rounded-2xl p-10 text-center relative overflow-hidden hero-pattern">
+    <div class="absolute inset-x-0 top-0 h-1.5 hero-gradient rounded-t-2xl"></div>
+    <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-gradient-to-br from-[var(--brand-light)] to-[var(--frontend)] opacity-20 blur-2xl"></div>
+    <div class="absolute -bottom-10 -left-10 w-40 h-40 rounded-full bg-gradient-to-br from-[var(--foundation)] to-[var(--brand-light)] opacity-20 blur-2xl"></div>
+     <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[var(--foundation)] via-[var(--frontend)] to-[var(--devops)]">
+     </div>
+     <h2 class="relative z-10 text-4xl sm:text-5xl font-extrabold mb-4 tracking-tight">Learn by building.</h2>
+    <p class="relative z-10 text-lg sm:text-xl text-[var(--muted)] max-w-2xl mx-auto mb-8 leading-relaxed">
+      30 self-contained tutorials take you from the command line to production deployment. No setup required &mdash; just open and start.
+     </p>
+    </div>
+   </section>
+   <section class="mb-8 card rounded-2xl p-6 border border-[var(--border)] shadow-sm" id="getting-started">
+    <div class="grid lg:grid-cols-[1fr_16rem] gap-8">
+      <div>
+        <h2 class="text-xl font-bold mb-2">Getting Started</h2>
+        <p class="text-sm text-[var(--muted)] leading-relaxed mb-5">
+          Self-contained tutorials from the command line to production. Open any card in a new tab and follow along.
+        </p>
+
+        <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-3 mb-5">
+          <a href="linux/index.html" target="_blank" class="path-card group">
+            <div class="path-icon foundation">🖥️</div>
+            <div>
+              <div class="path-title">Foundation</div>
+              <div class="path-links">Linux → GitHub → HTML/CSS → JavaScript → Jira</div>
+            </div>
+          </a>
+          <a href="html-css/index.html" target="_blank" class="path-card group">
+            <div class="path-icon frontend">🎨</div>
+            <div>
+              <div class="path-title">Frontend</div>
+              <div class="path-links">HTML/CSS → JavaScript → React → TypeScript → Next.js</div>
+            </div>
+          </a>
+          <a href="python-basics/index.html" target="_blank" class="path-card group">
+            <div class="path-icon backend">⚙️</div>
+            <div>
+              <div class="path-title">Backend</div>
+              <div class="path-links">Python → Node.js → SQL → GraphQL → Redis → TypeScript</div>
+            </div>
+          </a>
+          <a href="docker/index.html" target="_blank" class="path-card group">
+            <div class="path-icon devops">🚀</div>
+            <div>
+              <div class="path-title">DevOps</div>
+              <div class="path-links">Jira → Docker → Kubernetes → Cloud → Monitoring → Terraform → CI/CD → Jenkins</div>
+            </div>
+          </a>
+          <a href="sql-databases/index.html" target="_blank" class="path-card group">
+            <div class="path-icon foundation">🗄️</div>
+            <div>
+              <div class="path-title">Data</div>
+              <div class="path-links">SQL → Graph Databases → Redis → MongoDB → Optimization</div>
+            </div>
+          </a>
+          <a href="owasp-top-10/index.html" target="_blank" class="path-card group">
+            <div class="path-icon security">🛡️</div>
+            <div>
+              <div class="path-title">Security</div>
+              <div class="path-links">OWASP Top 10 → Secure Authentication</div>
+            </div>
+          </a>
+          <a href="linux/index.html" target="_blank" class="path-card group">
+            <div class="path-icon frontend">🌐</div>
+            <div>
+              <div class="path-title">Full-stack</div>
+              <div class="path-links">Follow #1 through #29 in order</div>
+            </div>
+          </a>
+        </div>
+
+        <details class="group">
+          <summary class="cursor-pointer text-sm font-semibold brand hover:opacity-80 transition inline-flex items-center gap-1">
+            View detailed learning paths by goal →
+          </summary>
+          <div class="mt-3 grid sm:grid-cols-2 gap-3 text-sm">
+            <div class="path-card">
+              <div class="path-icon frontend">🎨</div>
+              <div>
+                <div class="path-title">Frontend developer</div>
+                <div class="path-links">
+                  <a href="linux/index.html" target="_blank">Linux</a> →
+                  <a href="html-css/index.html" target="_blank">HTML/CSS</a> →
+                  <a href="web-accessibility/index.html" target="_blank">Web Accessibility</a> →
+                  <a href="javascript-basics/index.html" target="_blank">JavaScript</a> →
+                  <a href="react/index.html" target="_blank">React</a> →
+                  <a href="state-management/index.html" target="_blank">State Management</a> →
+                  <a href="typescript/index.html" target="_blank">TypeScript</a> →
+                  <a href="nextjs-fullstack/index.html" target="_blank">Next.js</a> →
+                  <a href="github/index.html" target="_blank">GitHub</a>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-icon backend">⚙️</div>
+              <div>
+                <div class="path-title">Backend developer</div>
+                <div class="path-links">
+                  <a href="linux/index.html" target="_blank">Linux</a> →
+                  <a href="javascript-basics/index.html" target="_blank">JavaScript</a> →
+                  <a href="python-basics/index.html" target="_blank">Python</a> →
+                  <a href="nodejs-express/index.html" target="_blank">Node.js &amp; Express</a> →
+                  <a href="websockets-realtime/index.html" target="_blank">WebSockets</a> →
+                  <a href="sql-databases/index.html" target="_blank">SQL</a> →
+                  <a href="graphql/index.html" target="_blank">GraphQL</a> →
+                  <a href="graph-databases/index.html" target="_blank">Graph Databases</a> →
+                  <a href="redis-caching/index.html" target="_blank">Redis &amp; Caching</a> →
+                  <a href="mongodb-nosql/index.html" target="_blank">MongoDB &amp; NoSQL</a> →
+                  <a href="database-optimization/index.html" target="_blank">DB Optimization</a> →
+                  <a href="typescript/index.html" target="_blank">TypeScript</a> →
+                  <a href="docker/index.html" target="_blank">Docker</a> →
+                  <a href="microservices-basics/index.html" target="_blank">Microservices</a>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-icon frontend">🌐</div>
+              <div>
+                <div class="path-title">Full-stack developer</div>
+                <div class="path-links">
+                  Follow the numbered order from <a href="linux/index.html" target="_blank">#1</a> to <a href="secure-authentication/index.html" target="_blank">#29</a>.
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-icon devops">🚀</div>
+              <div>
+                <div class="path-title">DevOps / Platform engineer</div>
+                <div class="path-links">
+                   <a href="linux/index.html" target="_blank">Linux</a> →
+                   <a href="github/index.html" target="_blank">GitHub</a> →
+                   <a href="jira/index.html" target="_blank">Jira</a> →
+                   <a href="python-basics/index.html" target="_blank">Python</a> →
+                   <a href="sql-databases/index.html" target="_blank">SQL</a> →
+                   <a href="docker/index.html" target="_blank">Docker</a> →
+                   <a href="kubernetes/index.html" target="_blank">Kubernetes</a> →
+                   <a href="cloud-providers/index.html" target="_blank">Cloud Providers</a> →
+                   <a href="monitoring/index.html" target="_blank">Monitoring</a> →
+                   <a href="terraform/index.html" target="_blank">Terraform</a> →
+                   <a href="devops-cicd/index.html" target="_blank">DevOps CI/CD</a> →
+                   <a href="jenkins/index.html" target="_blank">Jenkins</a>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-icon devops">🏗️</div>
+              <div>
+                <div class="path-title">System architect</div>
+                <div class="path-links">
+                   <a href="linux/index.html" target="_blank">Linux</a> →
+                   <a href="jira/index.html" target="_blank">Jira</a> →
+                   <a href="nodejs-express/index.html" target="_blank">Node.js &amp; Express</a> →
+                   <a href="sql-databases/index.html" target="_blank">SQL</a> →
+                   <a href="graphql/index.html" target="_blank">GraphQL</a> →
+                   <a href="graph-databases/index.html" target="_blank">Graph Databases</a> →
+                   <a href="redis-caching/index.html" target="_blank">Redis</a> →
+                   <a href="mongodb-nosql/index.html" target="_blank">MongoDB</a> →
+                   <a href="database-optimization/index.html" target="_blank">DB Optimization</a> →
+                   <a href="microservices-basics/index.html" target="_blank">Microservices</a> →
+                   <a href="docker/index.html" target="_blank">Docker</a> →
+                   <a href="kubernetes/index.html" target="_blank">Kubernetes</a> →
+                   <a href="cloud-providers/index.html" target="_blank">Cloud Providers</a> →
+                   <a href="monitoring/index.html" target="_blank">Monitoring</a> →
+                   <a href="terraform/index.html" target="_blank">Terraform</a> →
+                   <a href="devops-cicd/index.html" target="_blank">DevOps CI/CD</a> →
+                   <a href="jenkins/index.html" target="_blank">Jenkins</a>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-icon foundation">🗄️</div>
+              <div>
+                <div class="path-title">Data engineer</div>
+                <div class="path-links">
+                  <a href="linux/index.html" target="_blank">Linux</a> →
+                  <a href="python-basics/index.html" target="_blank">Python</a> →
+                  <a href="sql-databases/index.html" target="_blank">SQL</a> →
+                  <a href="graphql/index.html" target="_blank">GraphQL</a> →
+                  <a href="graph-databases/index.html" target="_blank">Graph Databases</a> →
+                  <a href="redis-caching/index.html" target="_blank">Redis</a> →
+                  <a href="mongodb-nosql/index.html" target="_blank">MongoDB &amp; NoSQL</a> →
+                  <a href="database-optimization/index.html" target="_blank">Database Optimization</a>
+                </div>
+              </div>
+            </div>
+            <div class="path-card">
+              <div class="path-icon security">🔒</div>
+              <div>
+                <div class="path-title">Security engineer</div>
+                <div class="path-links">
+                  <a href="linux/index.html" target="_blank">Linux</a> →
+                  <a href="nodejs-express/index.html" target="_blank">Node.js &amp; Express</a> →
+                  <a href="owasp-top-10/index.html" target="_blank">OWASP Top 10</a> →
+                  <a href="secure-authentication/index.html" target="_blank">Secure Authentication</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="flex flex-row lg:flex-col items-center justify-between lg:justify-center gap-4 bg-[var(--panel)] rounded-2xl p-4 border border-[var(--border)] h-fit">
+        <div class="relative w-24 h-24">
+          <svg class="progress-ring w-full h-full" viewBox="0 0 100 100">
+            <circle class="progress-ring-circle" cx="50" cy="50" fill="transparent" r="42" stroke="var(--border)" stroke-width="8"/>
+            <circle id="progress-circle" class="progress-ring-circle" cx="50" cy="50" fill="transparent" r="42" stroke="var(--brand-light)" stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round" stroke-width="8"/>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span id="progress-percent" class="text-xl font-bold">0%</span>
+            <span class="text-[10px] text-[var(--muted)] uppercase tracking-wide">done</span>
+          </div>
+        </div>
+        <div class="text-right lg:text-center">
+          <p id="progress-text" class="text-sm text-[var(--muted)]">No tutorials completed yet.</p>
+          <a id="continue-link" href="#" target="_blank" class="hidden mt-2 inline-block text-xs font-semibold px-3 py-1.5 rounded-md bg-[var(--brand-light)] text-white hover:opacity-90 transition">Continue →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+   <section class="mb-6 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+    <div class="flex flex-wrap gap-2">
+     <button class="filter-btn active px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] bg-[var(--brand-light)] text-white transition" data-filter="all">
+      All
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="foundation">
+      Foundation
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="frontend">
+      Frontend
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="backend">
+      Backend
+     </button>
+     <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="devops">
+      DevOps
+     </button>
+      <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="security">
+       Security
+      </button>
+      <button class="filter-btn px-3 py-1.5 rounded-full text-sm font-medium border border-[var(--border)] hover:bg-[var(--panel)] transition" data-filter="ai">
+       AI / ML / LLM
+      </button>
+     </div>
+    <div class="relative">
+     <label class="sr-only" for="search">
+      Search tutorials
+     </label>
+     <input class="w-full sm:w-64 px-4 py-2 rounded-xl border border-[var(--border)] bg-[var(--card)] text-[var(--ink)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-light)]" id="search" placeholder="Search tutorials..." type="text"/>
+    </div>
+   </section>
+   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5" id="tutorial-grid">
+<!-- Tutorial cards -->
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="foundation" data-duration="4 hrs" data-id="linux" href="linux/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #1
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-foundation">
+        Foundation
+       </span>
+      </div>
+      <img alt="Linux Command Line" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/linux.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Linux Command Line
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Master the terminal: files, permissions, processes, networking, SSH, scripting, and systemd.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="frontend" data-duration="5 hrs" data-id="html-css" href="html-css/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #2
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-frontend">
+        Frontend
+       </span>
+      </div>
+      <img alt="HTML & CSS Fundamentals" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/html-css.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       HTML &amp; CSS Fundamentals
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Modern HTML5, CSS3, Flexbox, Grid, responsive design, and a portfolio project.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="frontend" data-duration="4 hrs" data-id="web-accessibility" href="web-accessibility/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #3
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-frontend">
+        Frontend
+       </span>
+      </div>
+      <img alt="Web Accessibility" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/web-accessibility.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Web Accessibility
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Semantic HTML, ARIA, keyboard navigation, screen readers, contrast, and real-world a11y patterns from Gov.uk, Apple, and BBC.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="frontend" data-duration="6 hrs" data-id="javascript-basics" href="javascript-basics/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #4
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-frontend">
+        Frontend
+       </span>
+      </div>
+      <img alt="JavaScript Basics" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/javascript.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       JavaScript Basics
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Learn JavaScript fundamentals with interactive playgrounds and build a to-do list app.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="6 hrs" data-id="python-basics" href="python-basics/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #5
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="Python Fundamentals" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/python.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Python Fundamentals
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Master Python from syntax to advanced features and build a CLI expense tracker.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="foundation" data-duration="3 hrs" data-id="github" href="github/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #6
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-foundation">
+        Foundation
+       </span>
+      </div>
+      <img alt="Git & GitHub" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/github.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Git &amp; GitHub
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Complete beginner guide to version control with Git and collaboration on GitHub.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="foundation" data-duration="4 hrs" data-id="jira" href="jira/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #7
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-foundation">
+        Foundation
+       </span>
+      </div>
+      <img alt="Jira" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/svg/Jira.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Jira
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Agile project management with Jira: boards, sprints, workflows, JQL, automation, dashboards, and a SaaS launch capstone.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="7 hrs" data-id="nodejs-express" href="nodejs-express/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #8
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="Node.js & Express" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/node.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Node.js &amp; Express
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Build REST APIs with Node.js, Express, PostgreSQL, JWT authentication, and automated tests.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="5 hrs" data-id="websockets-realtime" href="websockets-realtime/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #9
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="WebSockets & Real-Time Apps" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/socketio.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       WebSockets &amp; Real-Time Apps
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Build live chat, dashboards, and collaborative features with Socket.io: events, rooms, presence, and scaling.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="5 hrs" data-id="sql-databases" href="sql-databases/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #10
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="SQL & Databases" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/postgres.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       SQL &amp; Databases
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Learn SQL with PostgreSQL using a real online store database: joins, analytics, transactions, and indexes.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="5 hrs" data-id="graphql" href="graphql/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #11
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="GraphQL APIs" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/graphql.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       GraphQL APIs
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Build flexible APIs with queries, mutations, schemas, resolvers, Apollo Server, and a blog API capstone.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="5 hrs" data-id="graph-databases" href="graph-databases/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #12
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="Graph Databases with Neo4j" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/neo4j.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Graph Databases with Neo4j
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Hands-on Neo4j: install with Docker, write Cypher, model nodes and relationships, and build a movie recommendation graph.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="5 hrs" data-id="redis-caching" href="redis-caching/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #13
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="Redis & Caching" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/redis.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Redis &amp; Caching
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Speed up real-world apps with caching strategies, Redis data structures, sessions, and sliding-window rate limiting.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="frontend" data-duration="6 hrs" data-id="react" href="react/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #14
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-frontend">
+        Frontend
+       </span>
+      </div>
+      <img alt="React: Modern Frontend" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/react.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       React: Modern Frontend
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Build user interfaces with components, hooks, routing, and a Kanban task board.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="frontend" data-duration="5 hrs" data-id="state-management" href="state-management/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #15
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-frontend">
+        Frontend
+       </span>
+      </div>
+      <img alt="State Management" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/state-management.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       State Management
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Redux Toolkit, Zustand, and React Query with real-world examples from Instagram, Vercel, and Netflix.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="frontend" data-duration="5 hrs" data-id="typescript" href="typescript/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #16
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-frontend">
+        Frontend
+       </span>
+      </div>
+      <img alt="TypeScript" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/typescript.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       TypeScript
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Add static types to JavaScript with real-world React and Node.js examples; capstone: typed e-commerce cart.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="devops" data-duration="5 hrs" data-id="docker" href="docker/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #17
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-devops">
+        Devops
+       </span>
+      </div>
+      <img alt="Docker: Containers to Production" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/docker.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Docker: Containers to Production
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Advanced guide to containers: Linux OS, PostgreSQL, Nginx, Dockerfiles, Compose, and CI/CD.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="devops" data-duration="6 hrs" data-id="kubernetes" href="kubernetes/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #18
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-devops">
+        Devops
+       </span>
+      </div>
+      <img alt="Kubernetes" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/kubernetes.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Kubernetes
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Orchestrate containers with pods, deployments, services, ConfigMaps, Secrets, Helm charts, and real-world scaling patterns.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="devops" data-duration="7 hrs" data-id="cloud-providers" href="cloud-providers/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #19
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-devops">
+        Devops
+       </span>
+      </div>
+      <img alt="Cloud Providers" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/cloud-providers.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Cloud Providers
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       AWS / Azure / GCP fundamentals side-by-side: compute, storage, networking, IAM, databases, serverless, security, and cost.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="devops" data-duration="6 hrs" data-id="monitoring" href="monitoring/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #20
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-devops">
+        Devops
+       </span>
+      </div>
+      <img alt="Monitoring & Observability" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/monitoring.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Monitoring &amp; Observability
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Deep dive into Prometheus metrics, Grafana dashboards, PromQL, Alertmanager, and log aggregation with Loki.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="devops" data-duration="6 hrs" data-id="terraform" href="terraform/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #21
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-devops">
+        Devops
+       </span>
+      </div>
+      <img alt="Terraform" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/terraform.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Terraform
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Provision cloud infrastructure as code with providers, modules, workspaces, and a multi-tier AWS stack capstone.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="devops" data-duration="4 hrs" data-id="devops-cicd" href="devops-cicd/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #22
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-devops">
+        Devops
+       </span>
+      </div>
+      <img alt="DevOps CI/CD" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/devops.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       DevOps CI/CD
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Automate software delivery with GitHub Actions, Docker, environments, deployment strategies, monitoring, and IaC.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="devops" data-duration="5 hrs" data-id="jenkins" href="jenkins/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #23
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-devops">
+        Devops
+       </span>
+      </div>
+      <img alt="Jenkins" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/svg/Jenkins.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Jenkins
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       CI/CD pipelines, declarative Jenkinsfiles, multibranch pipelines, shared libraries, Docker agents, plugins, and a Node.js API capstone.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="5 hrs" data-id="microservices-basics" href="microservices-basics/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #24
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="Microservices Basics" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/microservices.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Microservices Basics
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Service boundaries, inter-service communication, API gateways, resilience, sagas, and a food delivery system capstone.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="6 hrs" data-id="mongodb-nosql" href="mongodb-nosql/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #25
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="MongoDB & NoSQL" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/mongodb.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       MongoDB &amp; NoSQL
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Documents, BSON, CRUD, modeling, aggregation pipelines, indexing, replica sets, sharding, and a food delivery analytics capstone.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="backend" data-duration="6 hrs" data-id="database-optimization" href="database-optimization/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #26
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-backend">
+        Backend
+       </span>
+      </div>
+      <img alt="Database Optimization" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/database-optimization.png"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Database Optimization
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Deep dive into indexing, query execution plans with EXPLAIN, partitioning, monitoring, and optimizing a real e-commerce store.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="frontend" data-duration="6 hrs" data-id="nextjs-fullstack" href="nextjs-fullstack/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #27
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-frontend">
+        Frontend
+       </span>
+      </div>
+      <img alt="Next.js Full-Stack" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/nextjs.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Next.js Full-Stack
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       SSR, SSG, ISR, App Router, API routes, dynamic routes, and deployment to Vercel with a real e-commerce store capstone.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="security" data-duration="5 hrs" data-id="owasp-top-10" href="owasp-top-10/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #28
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-security">
+        Security
+       </span>
+      </div>
+      <img alt="OWASP Top 10" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/owasp.svg"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       OWASP Top 10
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       Common web vulnerabilities and real-world defenses: access control, injection, crypto failures, SSRF, XSS, CSRF, and secure SDLC habits.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+<a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--brand-light)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="security" data-duration="6 hrs" data-id="secure-authentication" href="secure-authentication/index.html" target="_blank">
+     <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center gap-2">
+       <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--brand-light)] text-white shadow-md border border-white/20">
+        #29
+       </span>
+       <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-security">
+        Security
+       </span>
+      </div>
+      <img alt="Secure Authentication" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/secure-authentication.png"/>
+     </div>
+     <div class="flex-1 min-h-0">
+      <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--brand-light)] transition">
+       Secure Authentication
+      </h2>
+      <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+       OAuth 2.0, OpenID Connect, SSO, MFA, RBAC, ABAC, secure sessions, and real-world breach lessons with a SaaS identity capstone.
+      </p>
+     </div>
+     <div class="status-area">
+     </div>
+    </a>
+   </div>
+   <p class="hidden text-center text-[var(--muted)] mt-12" id="no-results">
+    No tutorials match your search.
+   </p>
+    <section class="mt-16 mb-10" id="ai-track">
+     <div class="card rounded-2xl p-6 border-dashed border-2 border-[var(--ai)]">
+      <div class="flex flex-col md:flex-row md:items-center gap-6">
+       <div class="flex-1">
+        <div class="flex items-center gap-2 mb-2">
+         <span class="text-2xl">
+          🤖
+         </span>
+         <h2 class="text-xl font-bold">
+          AI / ML / LLM Track
+         </h2>
+        </div>
+        <p class="text-sm text-[var(--muted)] leading-relaxed mb-4">
+         A dedicated track for AI, machine learning, and LLM engineering. These tutorials cover practical model development from classical ML to production-ready agent systems.
+        </p>
+        <div class="flex flex-wrap gap-2 mb-5">
+         <span class="category-pill ai">
+          ML
+         </span>
+         <span class="category-pill ai">
+          LLMs
+         </span>
+         <span class="category-pill ai">
+          RAG
+         </span>
+         <span class="category-pill ai">
+          AI Agents
+         </span>
+         <span class="category-pill ai">
+          Fine-Tuning
+         </span>
+         <span class="category-pill ai">
+          Agent Harness
+         </span>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+         <a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--ai)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="ai" data-duration="10 hrs" data-id="machine-learning-python" href="machine-learning-python/index.html" target="_blank">
+          <div class="flex items-center justify-between mb-3">
+           <div class="flex items-center gap-2">
+            <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--ai)] text-white shadow-md border border-white/20">
+             AI-1
+            </span>
+            <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-ai">
+             AI / ML / LLM
+            </span>
+           </div>
+           <img alt="PyTorch" class="w-7 h-7 group-hover:scale-110 transition" src="assets/favicons/svg/PyTorch.svg"/>
+          </div>
+          <div class="flex-1 min-h-0">
+           <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--ai)] transition">
+            Machine Learning with Python
+           </h2>
+           <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+            scikit-learn, PyTorch, classification, regression, CNNs, pipelines, experiment tracking, and a predictive maintenance capstone.
+           </p>
+          </div>
+           <div class="status-area">
+           </div>
+          </a>
+          <a class="tutorial-card group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 hover:shadow-xl hover:border-[var(--ai)] hover:-translate-y-1 transition-all duration-200 min-h-[260px]" data-category="ai" data-duration="6 hrs" data-id="llms" href="llms/index.html" target="_blank">
+           <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+             <span class="text-sm font-extrabold px-3 py-1.5 rounded-lg bg-[var(--ai)] text-white shadow-md border border-white/20">
+              AI-2
+             </span>
+             <span class="text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full text-white category-ai">
+              AI / ML / LLM
+             </span>
+            </div>
+            <span class="text-2xl group-hover:scale-110 transition">🤖</span>
+           </div>
+           <div class="flex-1 min-h-0">
+            <h2 class="text-lg font-bold mb-1 group-hover:text-[var(--ai)] transition">
+             Large Language Models (LLMs)
+            </h2>
+            <p class="text-[var(--muted)] text-sm leading-relaxed overflow-y-auto max-h-[80px] pr-1 custom-scrollbar">
+             Prompt engineering, tokenization, context windows, model selection, OpenAI/Anthropic APIs, open-source models, agents, and a DraftSmith writing assistant capstone.
+            </p>
+           </div>
+           <div class="status-area">
+           </div>
+          </a>
+         </div>
+        </div>
+        <div class="md:w-48 text-center">
+         <span class="text-sm font-semibold text-[var(--muted)]">
+          More coming soon
+         </span>
+        </div>
+       </div>
+      </div>
+     </section>
+  </main>
+  <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+   <p class="mb-2">
+    Open directly in any browser. No build step required.
+   </p>
+   <div class="flex justify-center gap-4">
+    <a class="hover:text-[var(--brand-light)] transition" href="README.md" target="_blank">
+     About
+    </a>
+    <a class="hover:text-[var(--brand-light)] transition" href="CONTRIBUTING.md" target="_blank">
+     Contribute
+    </a>
+    <a class="hover:text-[var(--brand-light)] transition" href="LICENSE" target="_blank">
+     License
+    </a>
+   </div>
+  </footer>
+  <script>
+   const html = document.documentElement;
     const moon = document.getElementById('moon');
     const sun = document.getElementById('sun');
-
     function applyTheme(theme) {
       html.classList.remove('light', 'dark');
       html.classList.add(theme);
@@ -403,41 +1101,54 @@
       }
       localStorage.setItem('tutorials-theme', theme);
     }
-
     document.getElementById('theme-toggle').addEventListener('click', () => {
       applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
     });
-
     const saved = localStorage.getItem('tutorials-theme');
     applyTheme(saved === 'dark' ? 'dark' : 'light');
-
-    // Completion tracking
     const TUTORIALS = [
       { id: 'linux', url: 'linux/index.html' },
       { id: 'html-css', url: 'html-css/index.html' },
+      { id: 'web-accessibility', url: 'web-accessibility/index.html' },
       { id: 'javascript-basics', url: 'javascript-basics/index.html' },
       { id: 'python-basics', url: 'python-basics/index.html' },
-      { id: 'nodejs-express', url: 'nodejs-express/index.html' },
       { id: 'github', url: 'github/index.html' },
+      { id: 'jira', url: 'jira/index.html' },
+      { id: 'nodejs-express', url: 'nodejs-express/index.html' },
+      { id: 'websockets-realtime', url: 'websockets-realtime/index.html' },
       { id: 'sql-databases', url: 'sql-databases/index.html' },
-      { id: 'docker', url: 'docker/index.html' },
+      { id: 'graphql', url: 'graphql/index.html' },
+      { id: 'graph-databases', url: 'graph-databases/index.html' },
+      { id: 'redis-caching', url: 'redis-caching/index.html' },
       { id: 'react', url: 'react/index.html' },
+      { id: 'state-management', url: 'state-management/index.html' },
       { id: 'typescript', url: 'typescript/index.html' },
-      { id: 'devops-cicd', url: 'devops-cicd/index.html' }
+      { id: 'docker', url: 'docker/index.html' },
+      { id: 'kubernetes', url: 'kubernetes/index.html' },
+      { id: 'cloud-providers', url: 'cloud-providers/index.html' },
+      { id: 'monitoring', url: 'monitoring/index.html' },
+      { id: 'terraform', url: 'terraform/index.html' },
+      { id: 'devops-cicd', url: 'devops-cicd/index.html' },
+      { id: 'jenkins', url: 'jenkins/index.html' },
+      { id: 'microservices-basics', url: 'microservices-basics/index.html' },
+      { id: 'mongodb-nosql', url: 'mongodb-nosql/index.html' },
+      { id: 'database-optimization', url: 'database-optimization/index.html' },
+      { id: 'nextjs-fullstack', url: 'nextjs-fullstack/index.html' },
+      { id: 'owasp-top-10', url: 'owasp-top-10/index.html' },
+      { id: 'secure-authentication', url: 'secure-authentication/index.html' },
+       { id: 'machine-learning-python', url: 'machine-learning-python/index.html' },
+       { id: 'llms', url: 'llms/index.html' }
     ];
-
     function getProgress() {
       return TUTORIALS.reduce((acc, { id }) => {
         acc[id] = localStorage.getItem(`tutorial-${id}-status`) || 'not-started';
         return acc;
       }, {});
     }
-
     function setStatus(id, status) {
       localStorage.setItem(`tutorial-${id}-status`, status);
       renderProgress();
     }
-
     function renderProgress() {
       const progress = getProgress();
       const completed = TUTORIALS.filter(({ id }) => progress[id] === 'completed').length;
@@ -447,11 +1158,9 @@
       const radius = circle.r.baseVal.value;
       const circumference = 2 * Math.PI * radius;
       const offset = circumference - (percent / 100) * circumference;
-
       circle.style.strokeDasharray = `${circumference} ${circumference}`;
       circle.style.strokeDashoffset = offset;
       document.getElementById('progress-percent').textContent = `${percent}%`;
-
       const text = document.getElementById('progress-text');
       if (completed === 0 && inProgress === 0) {
         text.textContent = 'No tutorials completed yet.';
@@ -460,8 +1169,6 @@
       } else {
         text.textContent = `${completed} done, ${inProgress} in progress`;
       }
-
-      // Continue button
       const continueLink = document.getElementById('continue-link');
       const inProgressTutorial = TUTORIALS.find(({ id }) => progress[id] === 'in-progress');
       if (inProgressTutorial) {
@@ -471,44 +1178,44 @@
         continueLink.classList.add('hidden');
       }
 
-      // Update hero CTA if progress exists
-      const heroCta = document.getElementById('hero-cta');
-      if (inProgressTutorial) {
-        heroCta.innerHTML = `<a href="${inProgressTutorial.url}" target="_blank" class="px-6 py-3 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition">Continue ${inProgressTutorial.id.replace(/-/g, ' ')} →</a>
-          <a href="linux/index.html" target="_blank" class="px-6 py-3 rounded-xl border border-[var(--border)] font-semibold hover:bg-[var(--panel)] transition">Start over</a>`;
-      }
-
       document.querySelectorAll('.tutorial-card').forEach((card) => {
         const id = card.dataset.id;
         const status = progress[id];
         const area = card.querySelector('.status-area');
+        area.classList.add('mt-auto');
         card.classList.remove('card-completed', 'card-in-progress');
         area.innerHTML = '';
-
         if (status === 'completed') {
           card.classList.add('card-completed');
-          area.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-md completed-badge">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            Completed
-          </span>`;
         } else if (status === 'in-progress') {
           card.classList.add('card-in-progress');
-          area.innerHTML = `<span class="inline-flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-md in-progress-badge">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            In progress
-          </span>`;
         }
-
-        const controls = document.createElement('div');
-        controls.className = 'mt-2 flex gap-2';
-        controls.innerHTML = `
-          <button class="text-xs px-2 py-1 rounded border border-[var(--border)] hover:bg-[var(--panel)] transition" data-action="start" data-id="${id}" aria-label="Mark ${id} in progress">Start</button>
-          <button class="text-xs px-2 py-1 rounded border border-[var(--border)] hover:bg-[var(--panel)] transition" data-action="complete" data-id="${id}" aria-label="Mark ${id} completed">Done</button>
-          <button class="text-xs px-2 py-1 rounded border border-[var(--border)] hover:bg-[var(--panel)] transition" data-action="reset" data-id="${id}" aria-label="Reset ${id} progress">Reset</button>
+        const footer = document.createElement('div');
+        footer.className = 'card-footer mt-auto -mx-5 -mb-5 px-5 py-3 rounded-b-2xl bg-[var(--panel)] border-t border-[var(--border)] flex items-center justify-between gap-2';
+        footer.innerHTML = `
+          <span class="text-xs font-medium text-[var(--muted)] whitespace-nowrap">⏱ ${card.dataset.duration}</span>
+          <div class="status-area-inner flex flex-wrap justify-end gap-2"></div>
         `;
-        area.appendChild(controls);
+        area.appendChild(footer);
+        const inner = footer.querySelector('.status-area-inner');
+        const controls = document.createElement('div');
+        controls.className = 'flex gap-2';
+        const startButton = (status === 'in-progress' || status === 'completed')
+          ? ''
+          : `<button class="text-xs px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--brand-light)] hover:text-white hover:border-[var(--brand-light)] transition font-medium" data-action="start" data-id="${id}" aria-label="Mark ${id} in progress">Start</button>`;
+        const completeButton = (status === 'completed')
+          ? `<span class="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1.5 rounded-lg bg-[var(--success)] text-white">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            Completed
+          </span>`
+          : `<button class="text-xs px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--success)] hover:text-white hover:border-[var(--success)] transition font-medium" data-action="complete" data-id="${id}" aria-label="Mark ${id} completed">Done</button>`;
+        controls.innerHTML = `
+          ${startButton}
+          ${completeButton}
+          <button class="text-xs px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--warn)] hover:text-white hover:border-[var(--warn)] transition font-medium" data-action="reset" data-id="${id}" aria-label="Reset ${id} progress">Reset</button>
+        `;
+        inner.appendChild(controls);
       });
-
       document.querySelectorAll('[data-action]').forEach((btn) => {
         btn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -523,10 +1230,7 @@
         });
       });
     }
-
     renderProgress();
-
-    // Filtering
     document.querySelectorAll('.filter-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach((b) => {
@@ -535,7 +1239,6 @@
         });
         btn.classList.add('bg-[var(--brand-light)]', 'text-white');
         btn.classList.remove('hover:bg-[var(--panel)]');
-
         const filter = btn.dataset.filter;
         document.querySelectorAll('.tutorial-card').forEach((card) => {
           const match = filter === 'all' || card.dataset.category === filter;
@@ -544,8 +1247,6 @@
         updateNoResults();
       });
     });
-
-    // Search
     const search = document.getElementById('search');
     search.addEventListener('input', (e) => {
       const query = e.target.value.toLowerCase();
@@ -555,11 +1256,10 @@
       });
       updateNoResults();
     });
-
     function updateNoResults() {
       const visible = Array.from(document.querySelectorAll('.tutorial-card')).some((c) => c.style.display !== 'none');
       document.getElementById('no-results').classList.toggle('hidden', visible);
     }
   </script>
-</body>
+ </body>
 </html>

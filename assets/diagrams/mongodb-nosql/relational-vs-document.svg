@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" style="font-family: Outfit, system-ui, -apple-system, sans-serif; text-rendering: geometricPrecision; shape-rendering: geometricPrecision;" preserveAspectRatio="xMidYMid meet">
+  <title>Diagram comparing normalized relational tables to a denormalized MongoDB document</title>
+  <rect x="0" y="0" width="720" height="420" fill="#ffffff"/>
+  <text x="360.0" y="32" text-anchor="middle" dominant-baseline="middle" font-size="18" font-weight="700" fill="#1f2328" >Relational Tables vs MongoDB Documents</text>
+  <text x="245" y="72" text-anchor="middle" dominant-baseline="middle" font-size="15" font-weight="700" fill="#1f2328" >Relational (SQL)</text>
+  <rect x="55" y="95" width="130" height="140" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+  <rect x="55" y="95" width="130" height="32" rx="8" fill="#e5e7eb" stroke="#d0d7de" stroke-width="1.5"/>
+  <text x="120" y="111" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#374151" >users</text>
+  <text x="120" y="151" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#4b5563" >id</text>
+  <text x="120" y="181" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#4b5563" >name</text>
+  <text x="120" y="211" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#4b5563" >email</text>
+  <rect x="205" y="95" width="130" height="140" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+  <rect x="205" y="95" width="130" height="32" rx="8" fill="#e5e7eb" stroke="#d0d7de" stroke-width="1.5"/>
+  <text x="270" y="111" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#374151" >orders</text>
+  <text x="270" y="151" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#4b5563" >id</text>
+  <text x="270" y="181" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#4b5563" >user_id</text>
+  <text x="270" y="211" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#4b5563" >total</text>
+  <rect x="355" y="95" width="130" height="140" rx="8" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+  <rect x="355" y="95" width="130" height="32" rx="8" fill="#e5e7eb" stroke="#d0d7de" stroke-width="1.5"/>
+  <text x="420" y="111" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#374151" >items</text>
+  <text x="420" y="151" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#4b5563" >id</text>
+  <text x="420" y="181" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#4b5563" >order_id</text>
+  <text x="420" y="211" text-anchor="middle" dominant-baseline="middle" font-size="12" font-weight="600" fill="#4b5563" >sku</text>
+    <marker id="arr-27206" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#6b7280"/>
+    </marker>
+  <line x1="185" y1="165" x2="205" y2="165" stroke="#6b7280" stroke-width="2" marker-end="url(#arr-27206)" stroke-linecap="round"/>
+  <text x="195" y="155" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="600" fill="#6b7280" >JOIN</text>
+    <marker id="arr-9969" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#6b7280"/>
+    </marker>
+  <line x1="335" y1="165" x2="355" y2="165" stroke="#6b7280" stroke-width="2" marker-end="url(#arr-9969)" stroke-linecap="round"/>
+  <text x="345" y="155" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="600" fill="#6b7280" >JOIN</text>
+  <line x1="510" y1="55" x2="510" y2="365" stroke="#d0d7de" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="615" y="72" text-anchor="middle" dominant-baseline="middle" font-size="15" font-weight="700" fill="#1f2328" >MongoDB Document</text>
+  <rect x="535" y="95" width="160" height="255" rx="12" fill="#e8f9ef" stroke="#13aa52" stroke-width="1.5"/>
+  <text x="549" y="117" text-anchor="start" dominant-baseline="hanging" font-size="18" font-weight="700" fill="#13aa52" >{</text>
+  <text x="557" y="123" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">_id: ObjectId(&quot;...&quot;)</text>
+  <text x="557" y="141" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">name: &quot;Priya Das&quot;</text>
+  <text x="557" y="159" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">email: &quot;priya@example.com&quot;</text>
+  <text x="557" y="177" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">orders: [</text>
+  <text x="573" y="195" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">{ orderId: 1,</text>
+  <text x="573" y="213" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">total: 45.00,</text>
+  <text x="589" y="231" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">items: [</text>
+  <text x="605" y="249" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">{ sku: &quot;COF-01&quot;,</text>
+  <text x="605" y="267" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">qty: 2 },</text>
+  <text x="589" y="285" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">]</text>
+  <text x="573" y="303" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">},</text>
+  <text x="557" y="321" text-anchor="start" dominant-baseline="hanging" font-size="11" font-weight="500" fill="#1f2328" font-family="ui-monospace, monospace">]</text>
+  <text x="549" y="326" text-anchor="start" dominant-baseline="hanging" font-size="18" font-weight="700" fill="#13aa52" >}</text>
+  <text x="245" y="350" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#6b7280" >normalized: data split across tables; joins required</text>
+  <text x="615" y="350" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#6b7280" >denormalized: arrays and objects embedded in one document</text>
+</svg>

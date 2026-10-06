@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" aria-label="Diagram showing push and pull between local and remote" role="img"><title>Diagram showing push and pull between local and remote</title>
+              <rect x="40" y="40" width="160" height="120" rx="12" fill="rgba(47,129,247,0.08)" stroke="#6e40c9" stroke-width="2"/>
+              <text x="120" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2328">Your Laptop</text>
+              <circle cx="120" cy="120" r="18" fill="#58a6ff" fill-opacity="0.15" stroke="#58a6ff" stroke-width="2"/>
+
+              <rect x="440" y="40" width="160" height="120" rx="12" fill="rgba(47,129,247,0.08)" stroke="#6e40c9" stroke-width="2"/>
+              <text x="520" y="80" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2328">GitHub</text>
+              <circle cx="520" cy="120" r="18" fill="#58a6ff" fill-opacity="0.15" stroke="#58a6ff" stroke-width="2"/>
+
+              <path d="M300 70 C 340 70, 340 70, 380 70" stroke="#3fb950" stroke-width="2" marker-end="url(#github-arrow6)" class="flow-line"/>
+              <text x="340" y="60" text-anchor="middle" font-size="12" fill="#656d76">git push</text>
+
+              <path d="M380 140 C 340 140, 340 140, 300 140" stroke="#a371f7" stroke-width="2" marker-end="url(#github-arrow7)" class="flow-line"/>
+              <text x="340" y="165" text-anchor="middle" font-size="12" fill="#656d76">git pull</text>
+
+              <defs>
+                <marker id="github-arrow6" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#3fb950"/>
+                </marker>
+                <marker id="github-arrow7" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                  <path d="M0,0 L0,6 L9,3 z" fill="#a371f7"/>
+                </marker>
+              </defs>
+            </svg>

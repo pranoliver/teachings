@@ -1,932 +1,1534 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JavaScript Basics for Beginners</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/favicons/javascript.svg">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
-  <script>
-    tailwind.config = { darkMode: 'class' }
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   JavaScript Basics for Beginners
+  </title>
+  <link href="../assets/favicons/javascript.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
   </script>
-  <style>
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-    .sr-only:focus { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 50; background: white; color: black; padding: 0.5rem 0.75rem; border-radius: 0.375rem; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
-    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
-    :root {
-      --brand-light: #2f81f7;
-      --brand-dark: #58a6ff;
-      --ink: #1f2328;
-      --muted: #656d76;
-      --panel: #f6f8fa;
-      --border: #d0d7de;
-      --success: #1a7f37;
-      --danger: #cf222e;
-      --warn: #9a6700;
-      --preview-bg: #ffffff;
-      --js-yellow: #f7df1e;
-    }
-    html.dark {
-      --ink: #e6edf3;
-      --muted: #848d97;
-      --panel: #161b22;
-      --border: #30363d;
-      --success: #3fb950;
-      --danger: #f85149;
-      --warn: #d29922;
-      --preview-bg: #0d1117;
-    }
-    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
-    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
-    .brand { color: var(--brand-light); }
-    html.dark .brand { color: var(--brand-dark); }
-    .toc-link.active { background: rgba(47,129,247,0.12); border-left: 3px solid var(--brand-light); color: var(--brand-light); }
-    html.dark .toc-link.active { background: rgba(88,166,255,0.15); border-left-color: var(--brand-dark); color: var(--brand-dark); }
-    .card { border: 1px solid var(--border); background: var(--panel); }
-    .code-block { position: relative; }
-    .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--panel); color: var(--muted); opacity: 0; transition: opacity 0.15s; }
-    .code-block:hover .copy-btn { opacity: 1; }
-    .copy-btn.copied { color: var(--success); border-color: var(--success); }
-    .diagram { width: 100%; max-width: 720px; }
-    .flow-line { stroke-dasharray: 10; animation: dash 1.2s linear infinite; }
-    @keyframes dash { to { stroke-dashoffset: -20; } }
-    .quiz-opt.selected { border-color: var(--brand-light); background: rgba(47,129,247,0.08); }
-    html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba(88,166,255,0.12); }
-    .quiz-opt.correct { border-color: var(--success); background: rgba(26,127,55,0.08); }
-    .quiz-opt.wrong { border-color: var(--danger); background: rgba(207,34,46,0.08); }
-    .scroll-smooth { scroll-behavior: smooth; }
-    @media (max-width: 1024px) { #sidebar { transform: translateX(-100%); transition: transform .25s; } #sidebar.open { transform: translateX(0); } }
-    .kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:0.375rem; padding:0.125rem 0.375rem; font-family:ui-monospace,monospace; font-size:0.875rem; }
-    .preview-frame { border: 1px solid var(--border); background: var(--preview-bg); min-height: 160px; }
-    .playground-output { font-family: ui-monospace, monospace; font-size: 0.875rem; white-space: pre-wrap; }
-    .js-badge { background: var(--js-yellow); color: #323330; }
-  </style>
-</head>
-<body class="antialiased transition-colors duration-300">
-
-  <a href="#main" class="sr-only">Skip to content</a>
-
-  <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
-
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-javascript-basics">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
   <div class="flex min-h-screen">
-
-    <!-- Sidebar -->
-    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6">
-      <div class="flex items-center gap-3 mb-8">
-        <svg class="w-8 h-8" viewBox="0 0 128 128"><path fill="#F0DB4F" d="M1.408 1.408h125.184v125.185H1.408z"/><path fill="#323330" d="M116.347 96.736c-.917-5.711-4.641-10.508-15.672-14.981-3.832-1.761-8.104-3.022-9.377-5.926-.452-1.69-.512-2.642-.226-3.665.821-3.32 4.784-4.355 7.925-3.403 2.023.678 3.938 2.237 5.093 4.724 5.402-3.498 5.391-3.475 9.163-5.879-1.381-2.141-2.118-3.129-3.022-4.045-3.249-3.629-7.676-5.498-14.756-5.355l-3.688.477c-3.534.893-6.902 2.748-8.877 5.235-5.926 6.724-4.236 18.492 2.975 23.335 7.104 5.332 17.54 6.545 18.873 11.531 1.297 6.104-4.486 8.08-10.234 7.378-4.236-.881-6.592-3.034-9.139-6.949-4.688 2.713-4.688 2.713-9.508 5.485 1.143 2.499 2.344 3.63 4.26 5.795 9.068 9.198 31.76 8.746 35.83-5.176.165-.478 1.261-3.666.38-8.581zM69.462 58.943H57.753l-.048 30.272c0 6.438.333 12.34-.714 14.149-1.713 3.558-6.152 3.117-8.175 2.427-2.059-1.012-3.106-2.451-4.319-4.485-.333-.584-.583-1.036-.667-1.071l-9.52 5.83c1.583 3.249 3.915 6.069 6.902 7.901 4.462 2.678 10.459 3.499 16.731 2.059 4.082-1.189 7.604-3.652 9.448-7.401 2.666-4.915 2.094-10.864 2.07-17.444.06-10.735.001-21.468.001-32.237z"/></svg>
-        <span class="text-xl font-bold">JavaScript</span>
+   <!-- Sidebar -->
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <svg class="w-8 h-8" viewBox="0 0 128 128">
+      <path d="M1.408 1.408h125.184v125.185H1.408z" fill="#F0DB4F">
+      </path>
+      <path d="M116.347 96.736c-.917-5.711-4.641-10.508-15.672-14.981-3.832-1.761-8.104-3.022-9.377-5.926-.452-1.69-.512-2.642-.226-3.665.821-3.32 4.784-4.355 7.925-3.403 2.023.678 3.938 2.237 5.093 4.724 5.402-3.498 5.391-3.475 9.163-5.879-1.381-2.141-2.118-3.129-3.022-4.045-3.249-3.629-7.676-5.498-14.756-5.355l-3.688.477c-3.534.893-6.902 2.748-8.877 5.235-5.926 6.724-4.236 18.492 2.975 23.335 7.104 5.332 17.54 6.545 18.873 11.531 1.297 6.104-4.486 8.08-10.234 7.378-4.236-.881-6.592-3.034-9.139-6.949-4.688 2.713-4.688 2.713-9.508 5.485 1.143 2.499 2.344 3.63 4.26 5.795 9.068 9.198 31.76 8.746 35.83-5.176.165-.478 1.261-3.666.38-8.581zM69.462 58.943H57.753l-.048 30.272c0 6.438.333 12.34-.714 14.149-1.713 3.558-6.152 3.117-8.175 2.427-2.059-1.012-3.106-2.451-4.319-4.485-.333-.584-.583-1.036-.667-1.071l-9.52 5.83c1.583 3.249 3.915 6.069 6.902 7.901 4.462 2.678 10.459 3.499 16.731 2.059 4.082-1.189 7.604-3.652 9.448-7.401 2.666-4.915 2.094-10.864 2.07-17.444.06-10.735.001-21.468.001-32.237z" fill="#323330">
+      </path>
+     </svg>
+     <span class="text-xl font-bold">
+      JavaScript
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#what-is-js">
+      2. What is JavaScript?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#where-js">
+      3. Where to Write JavaScript
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#variables">
+      4. Variables
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#data-types">
+      5. Data Types
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#operators">
+      6. Operators
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#strings">
+      7. Strings &amp; Template Literals
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#conditionals">
+      8. Conditionals
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#loops">
+      9. Loops
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#functions">
+      10. Functions
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#arrays">
+      11. Arrays
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#objects">
+      12. Objects
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dom">
+      13. The DOM
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#selecting">
+      14. Selecting &amp; Modifying Elements
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#events">
+      15. Events
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#app">
+      16. Build a Small App
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#debugging">
+      17. Debugging Tips
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#best-practices">
+      18. Best Practices
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <!-- Main content -->
+   <main class="flex-1 min-w-0" id="main">
+    <!-- Header -->
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       JavaScript Basics
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <!-- 1. Introduction -->
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Welcome! This guide teaches the fundamentals of JavaScript &mdash; the language that brings websites to life. By the end, you'll be able to add interactivity, handle data, and build small apps.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Basic HTML and CSS are recommended
+        </li>
+        <li>
+         A modern web browser and a text editor
+        </li>
+        <li>
+         No prior programming experience is required
+        </li>
+       </ul>
       </div>
-      <nav id="toc" class="space-y-1 text-sm">
-        <a href="#intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">1. Introduction</a>
-        <a href="#what-is-js" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">2. What is JavaScript?</a>
-        <a href="#where-js" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">3. Where to Write JavaScript</a>
-        <a href="#variables" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">4. Variables</a>
-        <a href="#data-types" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">5. Data Types</a>
-        <a href="#operators" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">6. Operators</a>
-        <a href="#strings" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">7. Strings & Template Literals</a>
-        <a href="#conditionals" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">8. Conditionals</a>
-        <a href="#loops" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">9. Loops</a>
-        <a href="#functions" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">10. Functions</a>
-        <a href="#arrays" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">11. Arrays</a>
-        <a href="#objects" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">12. Objects</a>
-        <a href="#dom" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">13. The DOM</a>
-        <a href="#selecting" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">14. Selecting & Modifying Elements</a>
-        <a href="#events" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">15. Events</a>
-        <a href="#app" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">16. Build a Small App</a>
-        <a href="#debugging" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">17. Debugging Tips</a>
-        <a href="#best-practices" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">18. Best Practices</a>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Variables, data types, and operators
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Strings, conditionals, loops, and functions
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Arrays and objects
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         The DOM and events
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         How to run code in a browser
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         A small interactive to-do list app
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        What is JavaScript used for?
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Adding interactivity to buttons, forms, and menus
+        </li>
+        <li>
+         Validating user input before sending it to a server
+        </li>
+        <li>
+         Building games, charts, maps, and animations
+        </li>
+        <li>
+         Fetching data from APIs without reloading the page
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        More practice ideas
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Build a number-guessing game that gives hints after each guess.
+        </li>
+        <li>
+         Make a weather dashboard that fetches data from a public API.
+        </li>
+        <li>
+         Create a simple quiz app that tracks your score and shows results.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#what-is-js">
+        Next: What is JavaScript? &rarr;
+       </a>
       </nav>
-      <div class="mt-8 pt-6 border-t border-[var(--border)]">
-        <p class="text-xs text-[var(--muted)]">Open in any browser. No build step required.</p>
+     </section>
+     <!-- 2. What is JavaScript? -->
+     <section class="scroll-mt-24" id="what-is-js">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       What is JavaScript?
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       JavaScript is a programming language that runs inside web browsers. While HTML structures a page and CSS styles it, JavaScript makes it respond to the user.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        The web stack
+       </h3>
+       <svg aria-label="Diagram showing HTML, CSS, and JavaScript layers" class="diagram" viewBox="0 0 720 180">
+        <rect fill="#e34c26" height="45" opacity="0.15" rx="10" stroke="#e34c26" stroke-width="2" width="560" x="80" y="20">
+        </rect>
+        <text fill="#e34c26" font-size="16" font-weight="700" text-anchor="middle" x="360" y="50">
+         HTML &mdash; Structure
+        </text>
+        <rect fill="#264de4" height="45" opacity="0.15" rx="10" stroke="#264de4" stroke-width="2" width="560" x="80" y="70">
+        </rect>
+        <text fill="#264de4" font-size="16" font-weight="700" text-anchor="middle" x="360" y="100">
+         CSS &mdash; Style
+        </text>
+        <rect fill="#f7df1e" height="45" opacity="0.25" rx="10" stroke="#f7df1e" stroke-width="2" width="560" x="80" y="120">
+        </rect>
+        <text fill="#323330" font-size="16" font-weight="700" text-anchor="middle" x="360" y="150">
+         JavaScript &mdash; Behavior
+        </text>
+       </svg>
       </div>
-    </aside>
-
-    <!-- Main content -->
-    <main id="main" class="flex-1 min-w-0">
-
-      <!-- Header -->
-      <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <button class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()" aria-label="Open menu">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <h1 class="text-lg sm:text-xl font-bold tracking-tight">JavaScript Basics</h1>
-        </div>
-        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
-          <svg id="moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
-          <svg id="sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="C">
+        <p class="mb-3">
+         Which language is mainly responsible for making a website interactive?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         HTML
         </button>
-      </header>
-
-      <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
-
-        <!-- 1. Introduction -->
-        <section id="intro" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 1</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Welcome! This guide teaches the fundamentals of JavaScript — the language that brings websites to life. By the end, you'll be able to add interactivity, handle data, and build small apps.</p>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">Before you start</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Basic HTML and CSS are recommended</li>
-              <li>A modern web browser and a text editor</li>
-              <li>No prior programming experience is required</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">What you'll learn</h3>
-            <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Variables, data types, and operators</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Strings, conditionals, loops, and functions</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Arrays and objects</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> The DOM and events</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> How to run code in a browser</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> A small interactive to-do list app</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">What is JavaScript used for?</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li>Adding interactivity to buttons, forms, and menus</li>
-              <li>Validating user input before sending it to a server</li>
-              <li>Building games, charts, maps, and animations</li>
-              <li>Fetching data from APIs without reloading the page</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">More practice ideas</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Build a number-guessing game that gives hints after each guess.</li>
-              <li>Make a weather dashboard that fetches data from a public API.</li>
-              <li>Create a simple quiz app that tracks your score and shows results.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><span></span><a href="#what-is-js" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: What is JavaScript? →</a></nav>
-        </section>
-
-        <!-- 2. What is JavaScript? -->
-        <section id="what-is-js" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 2</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">What is JavaScript?</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">JavaScript is a programming language that runs inside web browsers. While HTML structures a page and CSS styles it, JavaScript makes it respond to the user.</p>
-
-          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
-            <h3 class="text-xl font-semibold mb-4 w-full">The web stack</h3>
-            <svg class="diagram" viewBox="0 0 720 180" aria-label="Diagram showing HTML, CSS, and JavaScript layers">
-              <rect x="80" y="20" width="560" height="45" rx="10" fill="#e34c26" opacity="0.15" stroke="#e34c26" stroke-width="2"/>
-              <text x="360" y="50" text-anchor="middle" font-size="16" font-weight="700" fill="#e34c26">HTML — Structure</text>
-
-              <rect x="80" y="70" width="560" height="45" rx="10" fill="#264de4" opacity="0.15" stroke="#264de4" stroke-width="2"/>
-              <text x="360" y="100" text-anchor="middle" font-size="16" font-weight="700" fill="#264de4">CSS — Style</text>
-
-              <rect x="80" y="120" width="560" height="45" rx="10" fill="#f7df1e" opacity="0.25" stroke="#f7df1e" stroke-width="2"/>
-              <text x="360" y="150" text-anchor="middle" font-size="16" font-weight="700" fill="#323330">JavaScript — Behavior</text>
-            </svg>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="C">
-              <p class="mb-3">Which language is mainly responsible for making a website interactive?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">HTML</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">CSS</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">JavaScript</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#where-js" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Where to Write JS →</a></nav>
-        </section>
-
-        <!-- 3. Where to Write JavaScript -->
-        <section id="where-js" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 3</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Where to Write JavaScript</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">You can write JavaScript directly inside an HTML file, or in a separate <code class="kbd">.js</code> file. The browser runs it when the page loads.</p>
-
-          <div class="grid md:grid-cols-2 gap-4 mb-8">
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-2">Internal script</h3>
-              <div class="code-block">
-                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-                <pre><code class="language-html">&lt;script&gt;
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         CSS
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         JavaScript
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#where-js">
+        Next: Where to Write JS &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 3. Where to Write JavaScript -->
+     <section class="scroll-mt-24" id="where-js">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Where to Write JavaScript
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       You can write JavaScript directly inside an HTML file, or in a separate
+       <code class="kbd">
+        .js
+       </code>
+       file. The browser runs it when the page loads.
+      </p>
+      <div class="grid md:grid-cols-2 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-2">
+         Internal script
+        </h3>
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-html">&lt;script&gt;
   console.log("Hello, JS!");
 &lt;/script&gt;</code></pre>
-              </div>
-            </div>
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-2">External script</h3>
-              <div class="code-block">
-                <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-                <pre><code class="language-html">&lt;script src="app.js"&gt;&lt;/script&gt;</code></pre>
-              </div>
-              <p class="text-xs text-[var(--muted)] mt-2">Place this just before the closing <code class="kbd">&lt;/body&gt;</code> tag.</p>
-            </div>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Browser console</h3>
-            <p class="text-[var(--muted)] mb-3">Every browser has a console where you can type and run JavaScript. Open it with:</p>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li><span class="kbd">F12</span> or <span class="kbd">Cmd + Option + J</span> (Mac)</li>
-              <li>Right-click → Inspect → Console tab</li>
-              <li>Type <code class="kbd">console.log("hi")</code> and press Enter</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#what-is-js" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#variables" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Variables →</a></nav>
-        </section>
-
-        <!-- 4. Variables -->
-        <section id="variables" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 4</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Variables: let, const, var</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Variables are labeled containers for storing data. Modern JavaScript uses <code class="kbd">let</code> and <code class="kbd">const</code>.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// let: value can change
+        </div>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-2">
+         External script
+        </h3>
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-html">&lt;script src="app.js"&gt;&lt;/script&gt;</code></pre>
+        </div>
+        <p class="text-xs text-[var(--muted)] mt-2">
+         Place this just before the closing
+         <code class="kbd">
+          &lt;/body&gt;
+         </code>
+         tag.
+        </p>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Browser console
+       </h3>
+       <p class="text-[var(--muted)] mb-3">
+        Every browser has a console where you can type and run JavaScript. Open it with:
+       </p>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <span class="kbd">
+          F12
+         </span>
+         or
+         <span class="kbd">
+          Cmd + Option + J
+         </span>
+         (Mac)
+        </li>
+        <li>
+         Right-click &rarr; Inspect &rarr; Console tab
+        </li>
+        <li>
+         Type
+         <code class="kbd">
+          console.log("hi")
+         </code>
+         and press Enter
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#what-is-js">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#variables">
+        Next: Variables &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 4. Variables -->
+     <section class="scroll-mt-24" id="variables">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Variables: let, const, var
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Variables are labeled containers for storing data. Modern JavaScript uses
+       <code class="kbd">
+        let
+       </code>
+       and
+       <code class="kbd">
+        const
+       </code>
+       .
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// let: value can change
 let score = 0;
 score = 10;
-
 // const: value cannot be reassigned
 const name = "Alex";
 // name = "Sam"; // ❌ Error!
-
 // var is old-fashioned; avoid it
 var oldWay = "not recommended";
-
 console.log(score, name);</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-6">
-            <h3 class="text-xl font-semibold mb-3">When to use what</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Use <code class="kbd">const</code> by default.</li>
-              <li>Use <code class="kbd">let</code> when the value will change.</li>
-              <li>Avoid <code class="kbd">var</code>; it has confusing behavior.</li>
-            </ul>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Try it in the playground</h4>
-            <div class="code-block">
-              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-              <pre><code class="language-javascript" id="playground-variables">let counter = 5;
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        When to use what
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Use
+         <code class="kbd">
+          const
+         </code>
+         by default.
+        </li>
+        <li>
+         Use
+         <code class="kbd">
+          let
+         </code>
+         when the value will change.
+        </li>
+        <li>
+         Avoid
+         <code class="kbd">
+          var
+         </code>
+         ; it has confusing behavior.
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Try it in the playground
+       </h4>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-javascript" id="playground-variables">let counter = 5;
 counter = counter + 3;
 console.log(counter);</code></pre>
-            </div>
-            <button class="mt-3 px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white text-sm font-medium hover:opacity-90" onclick="runPlayground('playground-variables', 'output-variables')">Run code</button>
-            <div id="output-variables" class="playground-output mt-3 p-3 rounded-lg bg-[var(--panel)] border border-[var(--border)] min-h-[3rem] text-[var(--muted)]">Output will appear here...</div>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#where-js" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#data-types" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Data Types →</a></nav>
-        </section>
-
-        <!-- 5. Data Types -->
-        <section id="data-types" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 5</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Data Types</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">JavaScript has several built-in data types. The <code class="kbd">typeof</code> operator tells you what kind of value something is.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const message = "Hello";      // string
-const age = 25;                 // number
-const isActive = true;          // boolean
-const user = { name: "Alex" };  // object
-const items = [1, 2, 3];        // array (also an object)
-const nothing = null;           // null
-let notDefined;                 // undefined
-
-console.log(typeof message);    // "string"
-console.log(typeof age);          // "number"
-console.log(typeof isActive);     // "boolean"
-console.log(typeof user);         // "object"
-console.log(typeof items);        // "object"</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-6">
-            <h3 class="text-xl font-semibold mb-3">Strings and numbers in detail</h3>
-            <p class="text-[var(--muted)]">Strings are text wrapped in quotes. Numbers can be integers or decimals. JavaScript does not separate <code class="kbd">int</code> and <code class="kbd">float</code> — everything is just <code class="kbd">number</code>.</p>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="B">
-              <p class="mb-3">What is the result of <code class="kbd">typeof []</code>?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">"array"</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">"object"</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">"list"</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#variables" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#operators" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Operators →</a></nav>
-        </section>
-
-        <!-- 6. Operators -->
-        <section id="operators" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 6</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Operators</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Operators perform actions on values: math, comparison, assignment, and more.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// Math
-const sum = 5 + 3;      // 8
+       </div>
+       <button class="mt-3 px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white text-sm font-medium hover:opacity-90" onclick="runPlayground('playground-variables', 'output-variables')">
+        Run code
+       </button>
+       <div class="playground-output mt-3 p-3 rounded-lg bg-[var(--panel)] border border-[var(--border)] min-h-[3rem] text-[var(--muted)]" id="output-variables">
+        Output will appear here...
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#where-js">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#data-types">
+        Next: Data Types &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 5. Data Types -->
+     <section class="scroll-mt-24" id="data-types">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Data Types
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       JavaScript has several built-in data types. The
+       <code class="kbd">
+        typeof
+       </code>
+       operator tells you what kind of value something is.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const message = "Hello"; // string
+const age = 25; // number
+const isActive = true; // boolean
+const user = { name: "Alex" }; // object
+const items = [1, 2, 3]; // array (also an object)
+const nothing = null; // null
+let notDefined; // undefined
+console.log(typeof message); // "string"
+console.log(typeof age); // "number"
+console.log(typeof isActive); // "boolean"
+console.log(typeof user); // "object"
+console.log(typeof items); // "object"</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Strings and numbers in detail
+       </h3>
+       <p class="text-[var(--muted)]">
+        Strings are text wrapped in quotes. Numbers can be integers or decimals. JavaScript does not separate
+        <code class="kbd">
+         int
+        </code>
+        and
+        <code class="kbd">
+         float
+        </code>
+        &mdash; everything is just
+        <code class="kbd">
+         number
+        </code>
+        .
+       </p>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         What is the result of
+         <code class="kbd">
+          typeof []
+         </code>
+         ?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         "array"
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         "object"
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         "list"
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#variables">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#operators">
+        Next: Operators &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 6. Operators -->
+     <section class="scroll-mt-24" id="operators">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Operators
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Operators perform actions on values: math, comparison, assignment, and more.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Math
+const sum = 5 + 3; // 8
 const product = 5 * 3; // 15
 const remainder = 10 % 3; // 1
-
 // Assignment shorthand
 let count = 0;
-count++;     // 1
-count += 5;  // 6
-
+count++; // 1
+count += 5; // 6
 // Comparison
-console.log(5 === 5);  // true
+console.log(5 === 5); // true
 console.log(5 == "5"); // true (loose, avoid)
 console.log(5 === "5"); // false (strict, prefer)
-
 // Logical
-const isAdult = age >= 18 && hasID === true;
+const isAdult = age &gt;= 18 &amp;&amp; hasID === true;
 const isWeekend = day === "Sat" || day === "Sun";
 const isNotReady = !isReady;</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Prefer strict equality</h3>
-            <p class="text-[var(--muted)]">Always use <code class="kbd">===</code> and <code class="kbd">!==</code> instead of <code class="kbd">==</code> and <code class="kbd">!=</code>. Strict comparison checks both value and type, preventing unexpected conversions.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#data-types" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#strings" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Strings →</a></nav>
-        </section>
-
-        <!-- 7. Strings and Template Literals -->
-        <section id="strings" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 7</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Strings & Template Literals</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Strings store text. Template literals (backticks) make it easy to include variables inside strings.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const firstName = "Alex";
-const lastName = 'Lee';
-
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Prefer strict equality
+       </h3>
+       <p class="text-[var(--muted)]">
+        Always use
+        <code class="kbd">
+         ===
+        </code>
+        and
+        <code class="kbd">
+         !==
+        </code>
+        instead of
+        <code class="kbd">
+         ==
+        </code>
+        and
+        <code class="kbd">
+         !=
+        </code>
+        . Strict comparison checks both value and type, preventing unexpected conversions.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#data-types">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#strings">
+        Next: Strings &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 7. Strings and Template Literals -->
+     <section class="scroll-mt-24" id="strings">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Strings &amp; Template Literals
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Strings store text. Template literals (backticks) make it easy to include variables inside strings.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const firstName = "Alex";
+const lastName = "Lee";
 // Old way: concatenation
 const full = firstName + " " + lastName;
-
 // Modern way: template literal
 const greeting = `Hello, ${full}!`;
-
 console.log(greeting); // Hello, Alex Lee!
-
 // Multiline strings
 const poem = `Roses are red,
 Violets are blue,
 JavaScript is fun,
 And so are you.`;
-
 console.log(poem);</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Try it yourself</h4>
-            <p class="text-[var(--muted)]">Create variables for your name, age, and city. Use a template literal to print a sentence like: "Hi, I'm Alex from Paris and I'm 25."</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#operators" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#conditionals" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Conditionals →</a></nav>
-        </section>
-
-        <!-- 8. Conditionals -->
-        <section id="conditionals" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 8</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Conditionals</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Conditionals let your code make decisions based on true or false checks.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const score = 85;
-
-if (score >= 90) {
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Try it yourself
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create variables for your name, age, and city. Use a template literal to print a sentence like: "Hi, I'm Alex from Paris and I'm 25."
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#operators">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#conditionals">
+        Next: Conditionals &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 8. Conditionals -->
+     <section class="scroll-mt-24" id="conditionals">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Conditionals
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Conditionals let your code make decisions based on true or false checks.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const score = 85;
+if (score &gt;= 90) {
   console.log("A grade");
-} else if (score >= 80) {
+} else if (score &gt;= 80) {
   console.log("B grade");
-} else if (score >= 70) {
+} else if (score &gt;= 70) {
   console.log("C grade");
 } else {
   console.log("Keep practicing");
 }
-
 // Ternary operator for simple cases
-const message = score >= 50 ? "Pass" : "Fail";
+const message = score &gt;= 50 ? "Pass" : "Fail";
 console.log(message);</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-6">
-            <h3 class="text-xl font-semibold mb-3">Truthy and falsy values</h3>
-            <p class="text-[var(--muted)] mb-3">Some values act like <code class="kbd">false</code> in conditions:</p>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li><code class="kbd">false</code>, <code class="kbd">0</code>, <code class="kbd">""</code>, <code class="kbd">null</code>, <code class="kbd">undefined</code>, <code class="kbd">NaN</code></li>
-              <li>Everything else is truthy, including <code class="kbd">"0"</code> and <code class="kbd">[]</code></li>
-            </ul>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Try it in the playground</h4>
-            <div class="code-block">
-              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-              <pre><code class="language-javascript" id="playground-conditionals">const temperature = 28;
-if (temperature > 30) {
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Truthy and falsy values
+       </h3>
+       <p class="text-[var(--muted)] mb-3">
+        Some values act like
+        <code class="kbd">
+         false
+        </code>
+        in conditions:
+       </p>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          false
+         </code>
+         ,
+         <code class="kbd">
+          0
+         </code>
+         ,
+         <code class="kbd">
+          ""
+         </code>
+         ,
+         <code class="kbd">
+          null
+         </code>
+         ,
+         <code class="kbd">
+          undefined
+         </code>
+         ,
+         <code class="kbd">
+          NaN
+         </code>
+        </li>
+        <li>
+         Everything else is truthy, including
+         <code class="kbd">
+          "0"
+         </code>
+         and
+         <code class="kbd">
+          []
+         </code>
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Try it in the playground
+       </h4>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-javascript" id="playground-conditionals">const temperature = 28;
+if (temperature &gt; 30) {
   console.log("It's hot!");
-} else if (temperature > 20) {
+} else if (temperature &gt; 20) {
   console.log("It's warm.");
 } else {
   console.log("It's cold.");
 }</code></pre>
-            </div>
-            <button class="mt-3 px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white text-sm font-medium hover:opacity-90" onclick="runPlayground('playground-conditionals', 'output-conditionals')">Run code</button>
-            <div id="output-conditionals" class="playground-output mt-3 p-3 rounded-lg bg-[var(--panel)] border border-[var(--border)] min-h-[3rem] text-[var(--muted)]">Output will appear here...</div>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#strings" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#loops" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Loops →</a></nav>
-        </section>
-
-        <!-- 9. Loops -->
-        <section id="loops" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 9</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Loops</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Loops repeat code. Use them when you want to do the same thing many times.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// for loop
-for (let i = 1; i <= 5; i++) {
+       </div>
+       <button class="mt-3 px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white text-sm font-medium hover:opacity-90" onclick="runPlayground('playground-conditionals', 'output-conditionals')">
+        Run code
+       </button>
+       <div class="playground-output mt-3 p-3 rounded-lg bg-[var(--panel)] border border-[var(--border)] min-h-[3rem] text-[var(--muted)]" id="output-conditionals">
+        Output will appear here...
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#strings">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#loops">
+        Next: Loops &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 9. Loops -->
+     <section class="scroll-mt-24" id="loops">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Loops
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Loops repeat code. Use them when you want to do the same thing many times.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// for loop
+for (let i = 1; i &lt;= 5; i++) {
   console.log(i);
 }
-
 // while loop
 let n = 1;
-while (n <= 3) {
+while (n &lt;= 3) {
   console.log("while", n);
   n++;
 }
-
 // for...of for arrays
 const fruits = ["apple", "banana", "cherry"];
 for (const fruit of fruits) {
   console.log(fruit);
 }</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Loop anatomy</h3>
-            <p class="text-[var(--muted)]">A <code class="kbd">for</code> loop has three parts: initialization (<code class="kbd">let i = 1</code>), condition (<code class="kbd">i <= 5</code>), and update (<code class="kbd">i++</code>). The loop runs while the condition is true.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#conditionals" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#functions" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Functions →</a></nav>
-        </section>
-
-        <!-- 10. Functions -->
-        <section id="functions" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 10</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Functions</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Functions are reusable blocks of code. They can accept inputs and return outputs.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// Function declaration
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Loop anatomy
+       </h3>
+       <p class="text-[var(--muted)]">
+        A
+        <code class="kbd">
+         for
+        </code>
+        loop has three parts: initialization (
+        <code class="kbd">
+         let i = 1
+        </code>
+        ), condition (
+        <code class="kbd">
+         i &lt;= 5
+        </code>
+        ), and update (
+        <code class="kbd">
+         i++
+        </code>
+        ). The loop runs while the condition is true.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#conditionals">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#functions">
+        Next: Functions &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 10. Functions -->
+     <section class="scroll-mt-24" id="functions">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Functions
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Functions are reusable blocks of code. They can accept inputs and return outputs.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Function declaration
 function greet(name) {
   return `Hello, ${name}!`;
 }
-
 // Function expression
 const add = function (a, b) {
   return a + b;
 };
-
 // Arrow function
-const multiply = (a, b) => a * b;
-
+const multiply = (a, b) =&gt; a * b;
 console.log(greet("Alex"));
 console.log(add(2, 3));
 console.log(multiply(4, 5));</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-6">
-            <h3 class="text-xl font-semibold mb-3">Arrow functions</h3>
-            <p class="text-[var(--muted)]">Arrow functions are a shorter syntax. If the body is a single expression, you can skip the <code class="kbd">return</code> keyword and curly braces.</p>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="A">
-              <p class="mb-3">Which keyword sends a value back from a function?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">return</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">function</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">console.log</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#loops" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#arrays" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Arrays →</a></nav>
-        </section>
-
-        <!-- 11. Arrays -->
-        <section id="arrays" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 11</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Arrays</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Arrays store ordered lists of values. They are one of the most useful tools in JavaScript.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const colors = ["red", "green", "blue"];
-
-console.log(colors[0]);     // "red"
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Arrow functions
+       </h3>
+       <p class="text-[var(--muted)]">
+        Arrow functions are a shorter syntax. If the body is a single expression, you can skip the
+        <code class="kbd">
+         return
+        </code>
+        keyword and curly braces.
+       </p>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="A">
+        <p class="mb-3">
+         Which keyword sends a value back from a function?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         return
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         function
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         console.log
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#loops">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#arrays">
+        Next: Arrays &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 11. Arrays -->
+     <section class="scroll-mt-24" id="arrays">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 11
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Arrays
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Arrays store ordered lists of values. They are one of the most useful tools in JavaScript.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const colors = ["red", "green", "blue"];
+console.log(colors[0]); // "red"
 console.log(colors.length); // 3
-
-colors.push("yellow");      // add to end
-colors.pop();               // remove from end
-colors.unshift("purple");   // add to start
-
+colors.push("yellow"); // add to end
+colors.pop(); // remove from end
+colors.unshift("purple"); // add to start
 // Common array methods
 const numbers = [1, 2, 3, 4];
-const doubled = numbers.map(n => n * 2);
-const evens = numbers.filter(n => n % 2 === 0);
-const total = numbers.reduce((sum, n) => sum + n, 0);
-
+const doubled = numbers.map((n) =&gt; n * 2);
+const evens = numbers.filter((n) =&gt; n % 2 === 0);
+const total = numbers.reduce((sum, n) =&gt; sum + n, 0);
 console.log(doubled); // [2, 4, 6, 8]
-console.log(evens);   // [2, 4]
-console.log(total);   // 10</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Try it in the playground</h4>
-            <div class="code-block">
-              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-              <pre><code class="language-javascript" id="playground-arrays">const names = ["Alex", "Sam", "Jordan"];
+console.log(evens); // [2, 4]
+console.log(total); // 10</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Try it in the playground
+       </h4>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-javascript" id="playground-arrays">const names = ["Alex", "Sam", "Jordan"];
 names.push("Taylor");
 console.log(names);
 console.log("Total names:", names.length);</code></pre>
-            </div>
-            <button class="mt-3 px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white text-sm font-medium hover:opacity-90" onclick="runPlayground('playground-arrays', 'output-arrays')">Run code</button>
-            <div id="output-arrays" class="playground-output mt-3 p-3 rounded-lg bg-[var(--panel)] border border-[var(--border)] min-h-[3rem] text-[var(--muted)]">Output will appear here...</div>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#functions" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#objects" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Objects →</a></nav>
-        </section>
-
-        <!-- 12. Objects -->
-        <section id="objects" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 12</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Objects</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Objects group related data using key-value pairs. They are perfect for representing real-world things.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const user = {
+       </div>
+       <button class="mt-3 px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white text-sm font-medium hover:opacity-90" onclick="runPlayground('playground-arrays', 'output-arrays')">
+        Run code
+       </button>
+       <div class="playground-output mt-3 p-3 rounded-lg bg-[var(--panel)] border border-[var(--border)] min-h-[3rem] text-[var(--muted)]" id="output-arrays">
+        Output will appear here...
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#functions">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#objects">
+        Next: Objects &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 12. Objects -->
+     <section class="scroll-mt-24" id="objects">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 12
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Objects
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Objects group related data using key-value pairs. They are perfect for representing real-world things.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const user = {
   name: "Alex",
   age: 25,
   isAdmin: false,
   greet() {
     return `Hi, I'm ${this.name}`;
-  }
+  },
 };
-
-console.log(user.name);      // "Alex"
-console.log(user["age"]);     // 25
-console.log(user.greet());    // "Hi, I'm Alex"
-
+console.log(user.name); // "Alex"
+console.log(user["age"]); // 25
+console.log(user.greet()); // "Hi, I'm Alex"
 // Update and add properties
 user.age = 26;
 user.country = "Canada";
 console.log(user);</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Destructuring</h3>
-            <div class="code-block">
-              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-              <pre><code class="language-javascript">const { name, age } = user;
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Destructuring
+       </h3>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-javascript">const { name, age } = user;
 console.log(name, age);</code></pre>
-            </div>
-            <p class="text-[var(--muted)] mt-3">Destructuring pulls values out of an object into separate variables in a clean way.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#arrays" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#dom" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: The DOM →</a></nav>
-        </section>
-
-        <!-- 13. The DOM -->
-        <section id="dom" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 13</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">The DOM</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">The DOM (Document Object Model) is a tree-like representation of your HTML page. JavaScript uses it to read and change the page.</p>
-
-          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
-            <h3 class="text-xl font-semibold mb-4 w-full">HTML becomes a tree of objects</h3>
-            <svg class="diagram" viewBox="0 0 720 260" aria-label="Diagram showing HTML document tree">
-              <!-- document -->
-              <rect x="310" y="20" width="100" height="40" rx="8" fill="#f7df1e" stroke="#d29922" stroke-width="2"/>
-              <text x="360" y="46" text-anchor="middle" font-size="13" font-weight="700" fill="#323330">document</text>
-
-              <line x1="360" y1="60" x2="360" y2="90" stroke="var(--border)" stroke-width="2"/>
-
-              <!-- html -->
-              <rect x="310" y="90" width="100" height="40" rx="8" fill="#ddf4ff" stroke="var(--brand-light)" stroke-width="2"/>
-              <text x="360" y="116" text-anchor="middle" font-size="13" font-weight="700" fill="var(--brand-light)">&lt;html&gt;</text>
-
-              <line x1="360" y1="130" x2="360" y2="150" stroke="var(--border)" stroke-width="2"/>
-              <line x1="200" y1="150" x2="520" y2="150" stroke="var(--border)" stroke-width="2"/>
-              <line x1="200" y1="150" x2="200" y2="170" stroke="var(--border)" stroke-width="2"/>
-              <line x1="520" y1="150" x2="520" y2="170" stroke="var(--border)" stroke-width="2"/>
-
-              <!-- head -->
-              <rect x="150" y="170" width="100" height="40" rx="8" fill="#f5f0ff" stroke="#a371f7" stroke-width="2"/>
-              <text x="200" y="196" text-anchor="middle" font-size="13" font-weight="700" fill="#a371f7">&lt;head&gt;</text>
-
-              <!-- body -->
-              <rect x="470" y="170" width="100" height="40" rx="8" fill="#f5f0ff" stroke="#a371f7" stroke-width="2"/>
-              <text x="520" y="196" text-anchor="middle" font-size="13" font-weight="700" fill="#a371f7">&lt;body&gt;</text>
-
-              <line x1="520" y1="210" x2="520" y2="230" stroke="var(--border)" stroke-width="2"/>
-              <line x1="420" y1="230" x2="620" y2="230" stroke="var(--border)" stroke-width="2"/>
-              <line x1="420" y1="230" x2="420" y2="250" stroke="var(--border)" stroke-width="2"/>
-              <line x1="520" y1="230" x2="520" y2="250" stroke="var(--border)" stroke-width="2"/>
-              <line x1="620" y1="230" x2="620" y2="250" stroke="var(--border)" stroke-width="2"/>
-
-              <!-- h1, p, button -->
-              <rect x="370" y="250" width="80" height="30" rx="6" fill="#dafbe1" stroke="#3fb950" stroke-width="2"/>
-              <text x="410" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1a7f37">&lt;h1&gt;</text>
-
-              <rect x="470" y="250" width="80" height="30" rx="6" fill="#dafbe1" stroke="#3fb950" stroke-width="2"/>
-              <text x="510" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1a7f37">&lt;p&gt;</text>
-
-              <rect x="570" y="250" width="80" height="30" rx="6" fill="#dafbe1" stroke="#3fb950" stroke-width="2"/>
-              <text x="610" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#1a7f37">&lt;button&gt;</text>
-            </svg>
-            <p class="text-sm text-[var(--muted)] mt-2">JavaScript can read and modify any node in this tree.</p>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Open any webpage, right-click, choose Inspect, and type <code class="kbd">document.title</code> in the console. What does it return?</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#objects" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#selecting" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Selecting Elements →</a></nav>
-        </section>
-
-        <!-- 14. Selecting and Modifying Elements -->
-        <section id="selecting" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 14</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Selecting & Modifying Elements</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">JavaScript provides methods to grab HTML elements and change their content, style, or attributes.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// Select one element
+       </div>
+       <p class="text-[var(--muted)] mt-3">
+        Destructuring pulls values out of an object into separate variables in a clean way.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#arrays">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#dom">
+        Next: The DOM &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 13. The DOM -->
+     <section class="scroll-mt-24" id="dom">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 13
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       The DOM
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The DOM (Document Object Model) is a tree-like representation of your HTML page. JavaScript uses it to read and change the page.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        HTML becomes a tree of objects
+       </h3>
+       <svg aria-label="Diagram showing HTML document tree" class="diagram" viewBox="0 0 720 260">
+        <!-- document -->
+        <rect fill="#f7df1e" height="40" rx="8" stroke="#d29922" stroke-width="2" width="100" x="310" y="20">
+        </rect>
+        <text fill="#323330" font-size="13" font-weight="700" text-anchor="middle" x="360" y="46">
+         document
+        </text>
+        <line stroke="var(--border)" stroke-width="2" x1="360" x2="360" y1="60" y2="90">
+        </line>
+        <!-- html -->
+        <rect fill="#ddf4ff" height="40" rx="8" stroke="var(--brand-light)" stroke-width="2" width="100" x="310" y="90">
+        </rect>
+        <text fill="var(--brand-light)" font-size="13" font-weight="700" text-anchor="middle" x="360" y="116">
+         &lt;html&gt;
+        </text>
+        <line stroke="var(--border)" stroke-width="2" x1="360" x2="360" y1="130" y2="150">
+        </line>
+        <line stroke="var(--border)" stroke-width="2" x1="200" x2="520" y1="150" y2="150">
+        </line>
+        <line stroke="var(--border)" stroke-width="2" x1="200" x2="200" y1="150" y2="170">
+        </line>
+        <line stroke="var(--border)" stroke-width="2" x1="520" x2="520" y1="150" y2="170">
+        </line>
+        <!-- head -->
+        <rect fill="#f5f0ff" height="40" rx="8" stroke="#a371f7" stroke-width="2" width="100" x="150" y="170">
+        </rect>
+        <text fill="#a371f7" font-size="13" font-weight="700" text-anchor="middle" x="200" y="196">
+         &lt;head&gt;
+        </text>
+        <!-- body -->
+        <rect fill="#f5f0ff" height="40" rx="8" stroke="#a371f7" stroke-width="2" width="100" x="470" y="170">
+        </rect>
+        <text fill="#a371f7" font-size="13" font-weight="700" text-anchor="middle" x="520" y="196">
+         &lt;body&gt;
+        </text>
+        <line stroke="var(--border)" stroke-width="2" x1="520" x2="520" y1="210" y2="230">
+        </line>
+        <line stroke="var(--border)" stroke-width="2" x1="420" x2="620" y1="230" y2="230">
+        </line>
+        <line stroke="var(--border)" stroke-width="2" x1="420" x2="420" y1="230" y2="250">
+        </line>
+        <line stroke="var(--border)" stroke-width="2" x1="520" x2="520" y1="230" y2="250">
+        </line>
+        <line stroke="var(--border)" stroke-width="2" x1="620" x2="620" y1="230" y2="250">
+        </line>
+        <!-- h1, p, button -->
+        <rect fill="#dafbe1" height="30" rx="6" stroke="#3fb950" stroke-width="2" width="80" x="370" y="250">
+        </rect>
+        <text fill="#1a7f37" font-size="12" font-weight="600" text-anchor="middle" x="410" y="270">
+         &lt;h1&gt;
+        </text>
+        <rect fill="#dafbe1" height="30" rx="6" stroke="#3fb950" stroke-width="2" width="80" x="470" y="250">
+        </rect>
+        <text fill="#1a7f37" font-size="12" font-weight="600" text-anchor="middle" x="510" y="270">
+         &lt;p&gt;
+        </text>
+        <rect fill="#dafbe1" height="30" rx="6" stroke="#3fb950" stroke-width="2" width="80" x="570" y="250">
+        </rect>
+        <text fill="#1a7f37" font-size="12" font-weight="600" text-anchor="middle" x="610" y="270">
+         &lt;button&gt;
+        </text>
+       </svg>
+       <p class="text-sm text-[var(--muted)] mt-2">
+        JavaScript can read and modify any node in this tree.
+       </p>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Open any webpage, right-click, choose Inspect, and type
+        <code class="kbd">
+         document.title
+        </code>
+        in the console. What does it return?
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#objects">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#selecting">
+        Next: Selecting Elements &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 14. Selecting and Modifying Elements -->
+     <section class="scroll-mt-24" id="selecting">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 14
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Selecting &amp; Modifying Elements
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       JavaScript provides methods to grab HTML elements and change their content, style, or attributes.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Select one element
 const heading = document.querySelector("h1");
-
 // Select many elements
 const items = document.querySelectorAll(".item");
-
 // Change text
 heading.textContent = "New title";
-
 // Change style
 heading.style.color = "blue";
-
 // Add or remove classes
 heading.classList.add("highlight");
 heading.classList.remove("dark");
 heading.classList.toggle("visible");
-
 // Read or set attributes
 const link = document.querySelector("a");
 console.log(link.getAttribute("href"));
 link.setAttribute("href", "https://example.com");</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-6">
-            <h3 class="text-xl font-semibold mb-3">Live demo</h3>
-            <p class="text-[var(--muted)] mb-3">Click the button to change the heading below using JavaScript.</p>
-            <div class="preview-frame rounded-xl p-6 text-center">
-              <h3 id="demo-heading" class="text-2xl font-bold mb-4">Hello, World!</h3>
-              <button class="px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90" onclick="document.getElementById('demo-heading').textContent = 'Changed by JavaScript!'">Change text</button>
-            </div>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#dom" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#events" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Events →</a></nav>
-        </section>
-
-        <!-- 15. Events -->
-        <section id="events" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 15</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Events</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Events are actions that happen in the browser, like clicks, typing, scrolling, or page load. JavaScript listens for events and responds to them.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const button = document.querySelector("#myButton");
-
-button.addEventListener("click", () => {
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Live demo
+       </h3>
+       <p class="text-[var(--muted)] mb-3">
+        Click the button to change the heading below using JavaScript.
+       </p>
+       <div class="preview-frame rounded-xl p-6 text-center">
+        <h3 class="text-2xl font-bold mb-4" id="demo-heading">
+         Hello, World!
+        </h3>
+        <button class="px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90" onclick="document.getElementById('demo-heading').textContent = 'Changed by JavaScript!'">
+         Change text
+        </button>
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dom">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#events">
+        Next: Events &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 15. Events -->
+     <section class="scroll-mt-24" id="events">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 15
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Events
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Events are actions that happen in the browser, like clicks, typing, scrolling, or page load. JavaScript listens for events and responds to them.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const button = document.querySelector("#myButton");
+button.addEventListener("click", () =&gt; {
   console.log("Button clicked!");
 });
-
 // Common events: click, submit, input, keydown, mouseover, load</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-6">
-            <h3 class="text-xl font-semibold mb-3">Live demo: click counter</h3>
-            <div class="preview-frame rounded-xl p-6 text-center">
-              <p class="text-2xl font-bold mb-4">Count: <span id="click-count">0</span></p>
-              <button id="counter-btn" class="px-5 py-2.5 rounded-lg js-badge font-bold hover:opacity-90">Click me</button>
-            </div>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Try it yourself</h4>
-            <p class="text-[var(--muted)]">Create a button and use <code class="kbd">addEventListener</code> to show an alert when it's clicked.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#selecting" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#app" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Build an App →</a></nav>
-        </section>
-
-        <!-- 16. Build a Small App -->
-        <section id="app" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 16</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Build a Small App: To-Do List</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">This capstone project combines variables, arrays, functions, DOM selection, and events into one useful mini-app.</p>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-4">Live to-do list</h3>
-            <div class="preview-frame rounded-xl p-5">
-              <div class="flex gap-2 mb-4">
-                <input id="todo-input" type="text" placeholder="Enter a task" class="flex-1 px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--panel)] text-[var(--ink)]">
-                <button id="todo-add" class="px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90">Add</button>
-              </div>
-              <ul id="todo-list" class="space-y-2">
-                <!-- Tasks appear here -->
-              </ul>
-            </div>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const input = document.querySelector("#todo-input");
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Live demo: click counter
+       </h3>
+       <div class="preview-frame rounded-xl p-6 text-center">
+        <p class="text-2xl font-bold mb-4">
+         Count:
+         <span id="click-count">
+          0
+         </span>
+        </p>
+        <button class="px-5 py-2.5 rounded-lg js-badge font-bold hover:opacity-90" id="counter-btn">
+         Click me
+        </button>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Try it yourself
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create a button and use
+        <code class="kbd">
+         addEventListener
+        </code>
+        to show an alert when it's clicked.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#selecting">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#app">
+        Next: Build an App &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 16. Build a Small App -->
+     <section class="scroll-mt-24" id="app">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 16
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Build a Small App: To-Do List
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       This capstone project combines variables, arrays, functions, DOM selection, and events into one useful mini-app.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-4">
+        Live to-do list
+       </h3>
+       <div class="preview-frame rounded-xl p-5">
+        <div class="flex gap-2 mb-4">
+         <input class="flex-1 px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--panel)] text-[var(--ink)]" id="todo-input" placeholder="Enter a task" type="text"/>
+         <button class="px-4 py-2 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90" id="todo-add">
+          Add
+         </button>
+        </div>
+        <ul class="space-y-2" id="todo-list">
+         <!-- Tasks appear here -->
+        </ul>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const input = document.querySelector("#todo-input");
 const addBtn = document.querySelector("#todo-add");
 const list = document.querySelector("#todo-list");
-
 function addTask() {
   const text = input.value.trim();
   if (!text) return;
-
   const li = document.createElement("li");
-  li.className = "flex items-center justify-between px-3 py-2 rounded-lg bg-[var(--panel)] border border-[var(--border)]";
+  li.className =
+    "flex items-center justify-between px-3 py-2 rounded-lg bg-[var(--panel)] border border-[var(--border)]";
   li.innerHTML = `
-    <span class="todo-text">${text}</span>
-    <div class="flex gap-2">
-      <button class="done-btn px-2 py-1 rounded text-xs bg-[#dafbe1] text-[#1a7f37]">Done</button>
-      <button class="delete-btn px-2 py-1 rounded text-xs bg-[#ffebee] text-[#cf222e]">Delete</button>
-    </div>
+    ${text}
+      Done
+      Delete
   `;
-
-  li.querySelector(".done-btn").addEventListener("click", () => {
+  li.querySelector(".done-btn").addEventListener("click", () =&gt; {
     li.querySelector(".todo-text").classList.toggle("line-through");
     li.querySelector(".todo-text").classList.toggle("text-[var(--muted)]");
   });
-
-  li.querySelector(".delete-btn").addEventListener("click", () => {
+  li.querySelector(".delete-btn").addEventListener("click", () =&gt; {
     li.remove();
   });
-
   list.appendChild(li);
   input.value = "";
   input.focus();
 }
-
 addBtn.addEventListener("click", addTask);
-input.addEventListener("keydown", (e) => {
+input.addEventListener("keydown", (e) =&gt; {
   if (e.key === "Enter") addTask();
 });</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Capstone challenge</h4>
-            <p class="text-[var(--muted)]">Add a counter that shows how many tasks are left undone. Try adding a "Clear completed" button.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#events" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#debugging" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Debugging →</a></nav>
-        </section>
-
-        <!-- 17. Debugging Tips -->
-        <section id="debugging" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 17</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Debugging Tips</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Bugs are a normal part of coding. These habits help you find and fix problems faster.</p>
-
-          <div class="card rounded-2xl p-6 mb-6">
-            <h3 class="text-xl font-semibold mb-3">Helpful techniques</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li>Read error messages carefully; they usually include a line number.</li>
-              <li>Use <code class="kbd">console.log()</code> to inspect values at different points.</li>
-              <li>Check for typos in variable and function names.</li>
-              <li>Make sure quotes and brackets are matched.</li>
-              <li>Use the browser debugger with breakpoints.</li>
-              <li>Comment out code to isolate the problem.</li>
-            </ul>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// Add logs to see what's happening
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Capstone challenge
+       </h4>
+       <p class="text-[var(--muted)]">
+        Add a counter that shows how many tasks are left undone. Try adding a "Clear completed" button.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#events">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#debugging">
+        Next: Debugging &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 17. Debugging Tips -->
+     <section class="scroll-mt-24" id="debugging">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 17
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Debugging Tips
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Bugs are a normal part of coding. These habits help you find and fix problems faster.
+      </p>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Helpful techniques
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Read error messages carefully; they usually include a line number.
+        </li>
+        <li>
+         Use
+         <code class="kbd">
+          console.log()
+         </code>
+         to inspect values at different points.
+        </li>
+        <li>
+         Check for typos in variable and function names.
+        </li>
+        <li>
+         Make sure quotes and brackets are matched.
+        </li>
+        <li>
+         Use the browser debugger with breakpoints.
+        </li>
+        <li>
+         Comment out code to isolate the problem.
+        </li>
+       </ul>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Add logs to see what's happening
 function add(a, b) {
   console.log("a:", a, "b:", b);
   return a + b;
 }
-
 add(2, 3);</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#app" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#best-practices" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Best Practices →</a></nav>
-        </section>
-
-        <!-- 18. Best Practices -->
-        <section id="best-practices" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 18</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Best Practices</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Good habits make your code easier to read, debug, and maintain.</p>
-
-          <div class="grid md:grid-cols-2 gap-6 mb-8">
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-3">Code style</h3>
-              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
-                <li>Use clear, descriptive variable names.</li>
-                <li>Prefer <code class="kbd">const</code>, then <code class="kbd">let</code>, never <code class="kbd">var</code>.</li>
-                <li>Use strict equality <code class="kbd">===</code>.</li>
-                <li>Keep functions small and focused.</li>
-              </ul>
-            </div>
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-3">Working habits</h3>
-              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
-                <li>Test small pieces of code as you write them.</li>
-                <li>Use the console to explore values.</li>
-                <li>Break big problems into smaller functions.</li>
-                <li>Read error messages before searching online.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-10">
-            <h4 class="font-semibold mb-2">Final Quiz</h4>
-            <div class="quiz" data-answer="B">
-              <p class="mb-3">What does <code class="kbd">document.querySelector(".item")</code> select?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">All elements with class "item"</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">The first element with class "item"</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">An element with id "item"</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <div class="card rounded-2xl p-8 text-center">
-            <h3 class="text-2xl font-bold mb-3">Great work! 🎉</h3>
-            <p class="text-[var(--muted)] mb-5">You've learned the basics of JavaScript. Keep building small projects — that's the best way to grow.</p>
-            <div class="flex justify-center gap-4 flex-wrap">
-              <a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">Restart tutorial</a>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">MDN JavaScript →</a>
-            </div>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#debugging" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><span></span></nav>
-        </section>
-
       </div>
-
-      <!-- Footer -->
-      <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
-        <p>Made for teaching JavaScript. Open directly in any browser.</p>
-      </footer>
-    </main>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#app">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#best-practices">
+        Next: Best Practices &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 18. Best Practices -->
+     <section class="scroll-mt-24" id="best-practices">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 18
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Best Practices
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Good habits make your code easier to read, debug, and maintain.
+      </p>
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-3">
+         Code style
+        </h3>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Use clear, descriptive variable names.
+         </li>
+         <li>
+          Prefer
+          <code class="kbd">
+           const
+          </code>
+          , then
+          <code class="kbd">
+           let
+          </code>
+          , never
+          <code class="kbd">
+           var
+          </code>
+          .
+         </li>
+         <li>
+          Use strict equality
+          <code class="kbd">
+           ===
+          </code>
+          .
+         </li>
+         <li>
+          Keep functions small and focused.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-3">
+         Working habits
+        </h3>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Test small pieces of code as you write them.
+         </li>
+         <li>
+          Use the console to explore values.
+         </li>
+         <li>
+          Break big problems into smaller functions.
+         </li>
+         <li>
+          Read error messages before searching online.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-10">
+       <h4 class="font-semibold mb-2">
+        Final Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         What does
+         <code class="kbd">
+          document.querySelector(".item")
+         </code>
+         select?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         All elements with class "item"
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         The first element with class "item"
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         An element with id "item"
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <div class="card rounded-2xl p-8 text-center">
+       <h3 class="text-2xl font-bold mb-3">
+        Great work! 🎉
+       </h3>
+       <p class="text-[var(--muted)] mb-5">
+        You've learned the basics of JavaScript. Keep building small projects &mdash; that's the best way to grow.
+       </p>
+       <div class="flex justify-center gap-4 flex-wrap">
+        <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+         Restart tutorial
+        </a>
+        <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
+         MDN JavaScript &rarr;
+        </a>
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#debugging">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+    <!-- Footer -->
+    <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+     <p>
+      Made for teaching JavaScript. Open directly in any browser.
+     </p>
+    </footer>
+   </main>
   </div>
-
   <script>
-    // Theme handling
+   // Theme handling
     const html = document.documentElement;
     const lightStylesheet = document.getElementById('hljs-light');
     const darkStylesheet = document.getElementById('hljs-dark');
     const moon = document.getElementById('moon');
     const sun = document.getElementById('sun');
-
     function applyTheme(theme) {
       html.classList.remove('light', 'dark');
       html.classList.add(theme);
@@ -944,14 +1546,11 @@ add(2, 3);</code></pre>
       localStorage.setItem('js-tutorial-theme', theme);
       hljs.highlightAll();
     }
-
     document.getElementById('theme-toggle').addEventListener('click', () => {
       applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
     });
-
     const saved = localStorage.getItem('js-tutorial-theme');
     applyTheme(saved === 'dark' ? 'dark' : 'light');
-
     // Sidebar toggle
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
@@ -959,17 +1558,14 @@ add(2, 3);</code></pre>
       sidebar.classList.toggle('open');
       overlay.classList.toggle('hidden');
     }
-
     document.querySelectorAll('#toc a').forEach(link => {
       link.addEventListener('click', () => {
         if (window.innerWidth < 1024) toggleSidebar();
       });
     });
-
     // Active TOC highlight on scroll
     const sections = document.querySelectorAll('section[id]');
     const tocLinks = document.querySelectorAll('.toc-link');
-
     function onScroll() {
       let current = '';
       sections.forEach(sec => {
@@ -983,7 +1579,6 @@ add(2, 3);</code></pre>
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-
     // Copy code buttons
     async function copyCode(btn) {
       const code = btn.nextElementSibling.textContent;
@@ -997,7 +1592,6 @@ add(2, 3);</code></pre>
         setTimeout(() => btn.textContent = 'Copy', 1500);
       }
     }
-
     // Quiz logic
     document.querySelectorAll('.quiz').forEach(quiz => {
       const answer = quiz.dataset.answer;
@@ -1022,18 +1616,15 @@ add(2, 3);</code></pre>
         });
       });
     });
-
     // Playground runner
     function runPlayground(codeId, outputId) {
       const code = document.getElementById(codeId).textContent;
       const output = document.getElementById(outputId);
       const logs = [];
-
       const originalLog = console.log;
       console.log = (...args) => {
         logs.push(args.map(arg => typeof arg === 'object' ? JSON.stringify(arg) : String(arg)).join(' '));
       };
-
       try {
         // eslint-disable-next-line no-eval
         eval(code);
@@ -1046,23 +1637,19 @@ add(2, 3);</code></pre>
         console.log = originalLog;
       }
     }
-
     // Click counter demo
     let clicks = 0;
     document.getElementById('counter-btn').addEventListener('click', () => {
       clicks++;
       document.getElementById('click-count').textContent = clicks;
     });
-
     // To-do list app
     const todoInput = document.getElementById('todo-input');
     const todoAdd = document.getElementById('todo-add');
     const todoList = document.getElementById('todo-list');
-
     function addTask() {
       const text = todoInput.value.trim();
       if (!text) return;
-
       const li = document.createElement('li');
       li.className = 'flex items-center justify-between px-3 py-2 rounded-lg bg-[var(--panel)] border border-[var(--border)]';
       li.innerHTML = `
@@ -1072,28 +1659,23 @@ add(2, 3);</code></pre>
           <button class="delete-btn px-2 py-1 rounded text-xs bg-[#ffebee] text-[#cf222e]">Delete</button>
         </div>
       `;
-
       li.querySelector('.done-btn').addEventListener('click', () => {
         li.querySelector('.todo-text').classList.toggle('line-through');
         li.querySelector('.todo-text').classList.toggle('text-[var(--muted)]');
       });
-
       li.querySelector('.delete-btn').addEventListener('click', () => {
         li.remove();
       });
-
       todoList.appendChild(li);
       todoInput.value = '';
       todoInput.focus();
     }
-
     todoAdd.addEventListener('click', addTask);
     todoInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') addTask();
     });
-
     // Syntax highlighting
     hljs.highlightAll();
   </script>
-</body>
+ </body>
 </html>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="title desc">
+  <title id="title">Semantic HTML vs ARIA layer</title>
+  <desc id="desc">A diagram showing semantic HTML as the base layer and ARIA as a smaller bridge on top for custom widgets.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Outfit', system-ui, sans-serif; }
+      .title { font-size: 16px; font-weight: 700; fill: #1f2328; }
+      .note { font-size: 13px; fill: #656d76; }
+      .box { rx: 12; }
+    </style>
+  </defs>
+  <rect width="720" height="320" fill="#f6f8fa" />
+
+  <g transform="translate(80, 80)">
+    <rect x="0" y="0" width="560" height="120" fill="#ffffff" stroke="#d0d7de" stroke-width="2" class="box" />
+    <text x="24" y="45" class="title">Semantic HTML</text>
+    <text x="24" y="75" class="note">Landmarks, headings, labels, native buttons, links, form controls</text>
+    <text x="24" y="95" class="note">Use this first. It gives browsers and assistive tech the most information.</text>
+  </g>
+
+  <g transform="translate(80, 150)">
+    <rect x="0" y="0" width="560" height="90" fill="#fff3e0" stroke="#ef6c00" stroke-width="2" class="box" opacity="0.95" />
+    <text x="24" y="38" class="title">ARIA bridge</text>
+    <text x="24" y="66" class="note">Roles, states, properties, live regions — for custom widgets when HTML is not enough.</text>
+  </g>
+
+  <g transform="translate(270, 30)">
+    <text x="0" y="0" font-size="14" fill="#656d76">Assistive Technologies</text>
+  </g>
+
+  <g stroke="#656d76" stroke-width="2" marker-end="url(#arrow)" opacity="0.5">
+    <line x1="360" y1="50" x2="360" y2="80" />
+  </g>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#656d76" />
+    </marker>
+  </defs>
+</svg>

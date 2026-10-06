@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   GraphQL APIs: Modern API Design
+  </title>
+  <link href="../assets/favicons/graphql.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-graphql">
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="GraphQL" class="w-10 h-10" src="../assets/favicons/graphql.svg"/>
+     <span class="text-xl font-bold">
+      GraphQL
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#why-graphql">
+      2. Why GraphQL?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      3. Setup &amp; Schema
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#queries">
+      4. Queries
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#mutations">
+      5. Mutations
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#resolvers">
+      6. Resolvers
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#types">
+      7. Type System
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#apollo">
+      8. Apollo Server
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#client">
+      9. Client with React
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#auth">
+      10. Authentication
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pagination">
+      11. Pagination &amp; Performance
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      12. Capstone: Blog API
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       GraphQL APIs: Modern API Design
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       GraphQL is a query language for APIs and a runtime for executing those queries. It lets clients request exactly the data they need, making APIs more flexible and efficient than traditional REST.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         GraphQL syntax and concepts
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Queries, mutations, and subscriptions
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Schemas and resolvers
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Apollo Server and Apollo Client
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Authentication and pagination
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Capstone: full blog API
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with JavaScript and Node.js basics.
+        </li>
+        <li>
+         Familiar with REST APIs and HTTP concepts.
+        </li>
+        <li>
+         React knowledge is useful for the client chapter.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        More practice ideas
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Build a GraphQL API for a movie database.
+        </li>
+        <li>
+         Add real-time subscriptions to a chat app.
+        </li>
+        <li>
+         Create a GraphQL wrapper around a public REST API.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#why-graphql">
+        Next: Why GraphQL? &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="why-graphql">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Why GraphQL?
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       REST APIs are great, but they often return too much or too little data. Clients may need multiple round-trips to assemble the right information. GraphQL solves this with a single endpoint and a flexible query language.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-4">
+        REST vs GraphQL
+       </h3>
+       <div class="space-y-6">
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-javascript">// Multiple
+REST endpoints GET /users/1 GET /users/1/posts GET /users/1/followers // Then
+manually combine responses const user = await fetchUser(1);
+const posts = await fetchPosts(1);
+const followers = await fetchFollowers(1);</code></pre>
+        </div>
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-javascript">// Single
+GraphQL query query
+{ user(id: 1)
+{ name posts
+{ title }
+followers
+{ name }
+} }</code></pre>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Key advantages
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Request only the fields you need.
+        </li>
+        <li>
+         Fetch nested related data in one request.
+        </li>
+        <li>
+         Strongly typed schema documents the API.
+        </li>
+        <li>
+         Introspection lets tools auto-generate clients.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#setup">
+        Next: Setup &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="setup">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Setup &amp; Schema
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A GraphQL schema defines what data is available and how clients can interact with it. The schema is the contract between client and server.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm init -y 
+npm install 
+express 
+express-graphql graphql cnpm install --save-dev nodemon</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const express = require("express");
+const { graphqlHTTP } = require("express-graphql");
+const { buildSchema } = require("graphql");
+const schema = buildSchema(` type Query { hello: String } `);
+const root = { hello: () =&gt; "Hello, GraphQL!" };
+const app = express();
+app.use("/graphql", graphqlHTTP({ schema, rootValue: root, graphiql: true }));
+app.listen(4000, () =&gt;
+  console.log("Server running on http://localhost:4000/graphql"),
+);</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Install dependencies, create a basic schema, and open GraphiQL at
+        <code class="kbd">
+         http://localhost:4000/graphql
+        </code>
+        .
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#why-graphql">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#queries">
+        Next: Queries &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="queries">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Queries
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Queries fetch data from a GraphQL server. You specify the exact shape of the response, including nested fields.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-graphql">query {
+  user(id: "1") {
+    id
+    name
+    email
+    posts {
+      title
+      published
+    }
+  }
+}</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-json">{
+  "data": {
+    "user": {
+      "id": "1",
+      "name": "Ada Lovelace",
+      "email": "ada@example.com",
+      "posts": [{ "title": "Intro to GraphQL", "published": true }]
+    }
+  }
+}</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Query features
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Fields: select exactly what you need.
+        </li>
+        <li>
+         Arguments: pass parameters like
+         <code class="kbd">
+          id
+         </code>
+         or
+         <code class="kbd">
+          first
+         </code>
+         .
+        </li>
+        <li>
+         Aliases: rename fields to avoid conflicts.
+        </li>
+        <li>
+         Fragments: reuse field selections across queries.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#mutations">
+        Next: Mutations &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="mutations">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Mutations
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Mutations modify server-side data. They are the GraphQL equivalent of POST, PUT, and DELETE in REST.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-graphql">mutation CreatePost($input: PostInput!) {
+  createPost(input: $input) {
+    id
+    title
+    author {
+      name
+    }
+  }
+} # Variables { "input": { "title": "GraphQL for Beginners", "content": "GraphQL is a query language..." } }</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         What is the GraphQL equivalent of a DELETE request in REST?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         Query
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         Mutation
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         Subscription
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#queries">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#resolvers">
+        Next: Resolvers &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="resolvers">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Resolvers
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Resolvers are functions that return the data for each field in your schema. They connect GraphQL types to databases, APIs, or any data source.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const resolvers = {
+  Query: {
+    users: () =&gt; db.users,
+    user: (_, { id }) =&gt; db.users.find((u) =&gt; u.id === id),
+  },
+  User: { posts: (user) =&gt; db.posts.filter((p) =&gt; p.authorId === user.id) },
+  Mutation: {
+    createPost: (_, { title, content, authorId }) =&gt; {
+      const post = {
+        id: String(db.posts.length + 1),
+        title,
+        content,
+        authorId,
+      };
+      db.posts.push(post);
+      return post;
+    },
+  },
+};</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Resolver signature
+       </h3>
+       <p class="text-[var(--muted)] mb-2">
+        Every resolver receives up to four arguments:
+       </p>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          parent
+         </code>
+         &mdash; the result of the parent resolver.
+        </li>
+        <li>
+         <code class="kbd">
+          args
+         </code>
+         &mdash; arguments passed to the field.
+        </li>
+        <li>
+         <code class="kbd">
+          context
+         </code>
+         &mdash; shared data like authentication.
+        </li>
+        <li>
+         <code class="kbd">
+          info
+         </code>
+         &mdash; query execution metadata.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#mutations">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#types">
+        Next: Type System &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="types">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Type System
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       GraphQL is strongly typed. Every field has a type, and the schema validates queries before executing them.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-graphql">type User {
+  id: ID!
+  name: String!
+  email: String
+  age: Int
+  posts: [Post!]!
+}
+type Post {
+  id: ID!
+  title: String!
+  content: String
+  published: Boolean!
+  author: User!
+}
+type Query {
+  users: [User!]!
+  user(id: ID!): User
+}
+input PostInput {
+  title: String!
+  content: String
+  authorId: ID!
+}
+type Mutation {
+  createPost(input: PostInput!): Post!
+}</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Common scalar types
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          String
+         </code>
+         ,
+         <code class="kbd">
+          Int
+         </code>
+         ,
+         <code class="kbd">
+          Float
+         </code>
+         ,
+         <code class="kbd">
+          Boolean
+         </code>
+         ,
+         <code class="kbd">
+          ID
+         </code>
+        </li>
+        <li>
+         <code class="kbd">
+          !
+         </code>
+         means non-nullable.
+        </li>
+        <li>
+         <code class="kbd">
+          [Type]
+         </code>
+         means a list of Type.
+        </li>
+        <li>
+         Custom object types and input types define your domain.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#resolvers">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#apollo">
+        Next: Apollo Server &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="apollo">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Apollo Server
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Apollo Server is the most popular GraphQL server for Node.js. It supports plugins, caching, error formatting, and federation.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install @apollo/server graphql</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const { ApolloServer } = require("@apollo/server");
+const { startStandaloneServer } = require("@apollo/server/standalone");
+const typeDefs = ` type Query { books: [Book] } type Book { title: String author: String } `;
+const resolvers = {
+  Query: {
+    books: () =&gt; [
+      { title: "The Awakening", author: "Kate Chopin" },
+      { title: "City of Glass", author: "Paul Auster" },
+    ],
+  },
+};
+const server = new ApolloServer({ typeDefs, resolvers });
+startStandaloneServer(server, { listen: { port: 4000 } }).then(({ url }) =&gt;
+  console.log(`Server ready at ${url}`),
+);</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Install Apollo Server, define a schema and resolvers, then run the server and test queries in Apollo Sandbox.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#types">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#client">
+        Next: Client &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="client">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Client with React
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Apollo Client makes it easy to fetch GraphQL data inside React components. It handles caching, loading states, and UI updates.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install @apollo/client graphql</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">import
+{ ApolloClient,
+InMemoryCache,
+ApolloProvider,
+useQuery,
+gql }
+from "@apollo/client";
+const client = new ApolloClient({ uri: "http://localhost:4000",
+cache: new InMemoryCache(), }
+);
+const GET_USERS = gql` query GetUsers
+{ users
+{ id name }
+} `;
+function Users()
+{ const
+{ loading,
+error,
+data } = useQuery(GET_USERS);
+if (loading) return Loading...;
+if (error) return Error: {error.message}
+;
+return
+{data.users.map((u) =&gt; {u.name}
+)}
+;
+}
+function App()
+{ return (    );
+}</code></pre>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#apollo">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#auth">
+        Next: Auth &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="auth">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Authentication
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       GraphQL itself does not handle authentication, but the context object makes it easy to attach user identity to every resolver.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const server = new ApolloServer({ typeDefs, resolvers });
+const { url } = await startStandaloneServer(server, {
+  listen: { port: 4000 },
+  context: async ({ req }) =&gt; {
+    const token = req.headers.authorization || "";
+    const user = await getUserFromToken(token);
+    return { user };
+  },
+}); // In resolvers const resolvers = { Query: { me: (_, __, { user }) =&gt; { if (!user) throw new Error("Not authenticated"); return user; }, }, };</code></pre>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#client">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#pagination">
+        Next: Pagination &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="pagination">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 11
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Pagination &amp; Performance
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       GraphQL supports common pagination patterns like offset-based and cursor-based pagination. Cursor pagination is preferred for large or frequently changing lists.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-graphql">query {
+  posts(first: 10, after: "cursor-123") {
+    edges {
+      node {
+        id
+        title
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Performance tips
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Use DataLoader to batch and deduplicate database queries.
+        </li>
+        <li>
+         Persist complex queries with persisted queries.
+        </li>
+        <li>
+         Add query cost analysis to prevent abuse.
+        </li>
+        <li>
+         Cache frequently accessed fields at the resolver level.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#auth">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 12
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Blog API
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a complete GraphQL blog API with Apollo Server. The project consolidates schemas, resolvers, authentication, pagination, and performance optimization into one working API.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       1. What is this project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <p class="text-[var(--muted)]">
+        This is a fully functional blog backend. Authors can create posts, readers can add comments, and clients can query a paginated feed with nested relationships. It is a realistic example of a modern GraphQL service.
+       </p>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       2. What it covers?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         A strongly typed schema for users, posts, and comments.
+        </li>
+        <li>
+         Resolvers that fetch nested data from an in-memory store.
+        </li>
+        <li>
+         Authentication via context so only logged-in authors can create posts.
+        </li>
+        <li>
+         Cursor-based pagination for the post feed.
+        </li>
+        <li>
+         Apollo Server setup with GraphiQL / Apollo Sandbox.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       3. How it is done?
+      </h3>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-4">
+       The schema defines the domain, and resolvers connect each field to data. Context carries the authenticated user, and connection arguments drive pagination.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-graphql">type User {
+  id: ID!
+  name: String!
+  email: String!
+  posts: [Post!]!
+}
+type Post {
+  id: ID!
+  title: String!
+  content: String!
+  author: User!
+  comments: [Comment!]!
+}
+type Comment {
+  id: ID!
+  text: String!
+  author: User!
+  post: Post!
+}
+type PostEdge {
+  node: Post!
+  cursor: String!
+}
+type PostConnection {
+  edges: [PostEdge!]!
+  pageInfo: PageInfo!
+}
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: String
+}
+type Query {
+  posts(first: Int, after: String): PostConnection!
+  post(id: ID!): Post
+}
+type Mutation {
+  createPost(title: String!, content: String!): Post!
+  addComment(postId: ID!, text: String!): Comment!
+}</code></pre>
+      </div>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-4">
+       Apollo Server serves the schema. The example below keeps data in memory; in production you would replace the store with a real database.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const { ApolloServer } = require("@apollo/server");
+const { startStandaloneServer } = require("@apollo/server/standalone");
+const typeDefs = ` type Query { posts: [Post] } type Post { id: ID title: String author: User } type User { id: ID name: String } `;
+const db = {
+  posts: [
+    { id: "1", title: "GraphQL Basics", authorId: "1" },
+    { id: "2", title: "Apollo Server Tips", authorId: "2" },
+  ],
+  users: [
+    { id: "1", name: "Ada Lovelace" },
+    { id: "2", name: "Grace Hopper" },
+  ],
+};
+const resolvers = {
+  Query: { posts: () =&gt; db.posts },
+  Post: { author: (post) =&gt; db.users.find((u) =&gt; u.id === post.authorId) },
+};
+const server = new ApolloServer({ typeDefs, resolvers });
+startStandaloneServer(server, { listen: { port: 4000 } }).then(({ url }) =&gt;
+  console.log(`Server ready at ${url}`),
+);</code></pre>
+      </div>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-4">
+       Run the server and test the API.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install 
+npm start 
+# Test in Apollo Sandbox or with 
+curl 
+curl -X POST http://localhost:4000 \
+-H "Content-Type: application/json" \
+-d '{"query": "query { users { id name } }"}'</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       4. What did we learn from this capstone project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         A schema is a contract: it documents the API and validates client queries.
+        </li>
+        <li>
+         Resolvers separate data fetching from schema definition, making it easy to swap data sources.
+        </li>
+        <li>
+         Context is the cleanest place to attach authentication to every resolver.
+        </li>
+        <li>
+         Cursor pagination is more robust than offset pagination for frequently updated feeds.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       5. How can I enhance this project in the future?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Persist users, posts, and comments in PostgreSQL or MongoDB.
+        </li>
+        <li>
+         Add
+         <strong>
+          subscriptions
+         </strong>
+         so clients receive new comments in real time.
+        </li>
+        <li>
+         Use
+         <strong>
+          DataLoader
+         </strong>
+         to batch related queries and avoid the N+1 problem.
+        </li>
+        <li>
+         Add search and filtering by title, author, or date range.
+        </li>
+        <li>
+         Write integration tests for queries, mutations, and error cases.
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Implement the full blog schema and resolvers, seed sample data, protect the create-post mutation with context, and verify pagination in Apollo Sandbox.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pagination">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+    <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+     <p>
+      Made for teaching GraphQL. Open directly in any browser.
+     </p>
+    </footer>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement; const lightStylesheet = document.getElementById('hljs-light'); const darkStylesheet = document.getElementById('hljs-dark'); const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { lightStylesheet.disabled = true; darkStylesheet.disabled = false; moon.classList.add('hidden'); sun.classList.remove('hidden'); } else { lightStylesheet.disabled = false; darkStylesheet.disabled = true; moon.classList.remove('hidden'); sun.classList.add('hidden'); } localStorage.setItem('graphql-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('graphql-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menu-overlay'); sidebar.classList.toggle('open'); overlay.classList.toggle('hidden'); } function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code'); navigator.clipboard.writeText(code.innerText).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); } const sections = document.querySelectorAll('section[id]'); const tocLinks = document.querySelectorAll('.toc-link'); const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { tocLinks.forEach((link) => link.classList.remove('active')); const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (active) active.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach((section) => observer.observe(section)); document.querySelectorAll('.quiz').forEach((quiz) => { const correct = quiz.dataset.answer; const feedback = quiz.nextElementSibling; quiz.querySelectorAll('.quiz-opt').forEach((opt) => { opt.addEventListener('click', () => { quiz.querySelectorAll('.quiz-opt').forEach((o) => { o.classList.remove('selected', 'correct', 'wrong'); o.disabled = true; }); opt.classList.add('selected'); if (opt.dataset.val === correct) { opt.classList.add('correct'); feedback.textContent = 'Correct! ✅'; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]'; } else { opt.classList.add('wrong'); feedback.textContent = `Not quite. The correct answer is ${correct}.`; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]'; } }); }); }); hljs.highlightAll();
+  </script>
+ </body>
+</html>

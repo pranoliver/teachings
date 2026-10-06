@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Kubernetes: Pods, Deployments, Services, Helm
+  </title>
+  <link href="../assets/favicons/kubernetes.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-kubernetes">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Kubernetes" class="w-10 h-10" src="../assets/favicons/kubernetes.svg"/>
+     <span class="text-xl font-bold">
+      Kubernetes
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#cluster">
+      2. Cluster Architecture
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pods">
+      3. Pods
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#deployments">
+      4. Deployments
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#services">
+      5. Services
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#config">
+      6. Config &amp; Secrets
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#helm">
+      7. Helm
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#real-world">
+      8. Real-World Systems
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      9. Capstone: E-Commerce Stack
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Kubernetes: Pods, Deployments, Services, Helm
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Kubernetes is the de facto platform for running containerized applications at scale. It abstracts a pool of machines into a single compute surface, then automates deployment, scaling, networking, and recovery. This tutorial covers the core building blocks: pods, deployments, services, config maps, secrets, and Helm charts.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with containers and Docker.
+        </li>
+        <li>
+         Basic command-line usage.
+        </li>
+        <li>
+         Familiarity with YAML syntax.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Cluster control plane and nodes
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Pods and multi-container patterns
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Deployments and rolling updates
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Services and ingress
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         ConfigMaps and Secrets
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Helm package management
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Production patterns and observability
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Real-world systems using Kubernetes
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Spotify
+         </strong>
+         runs thousands of microservices on Kubernetes, scaling workloads across dozens of clusters.
+        </li>
+        <li>
+         <strong>
+          Airbnb
+         </strong>
+         migrated its data platform to Kubernetes to standardize batch and streaming jobs.
+        </li>
+        <li>
+         <strong>
+          Samsung
+         </strong>
+         uses Kubernetes to manage device firmware update services at global scale.
+        </li>
+        <li>
+         <strong>
+          Goldman Sachs
+         </strong>
+         runs trading and risk workloads on Kubernetes with strict multi-tenancy controls.
+        </li>
+        <li>
+         <strong>
+          Ticketmaster
+         </strong>
+         handles ticket on-sales spikes by autoscaling Kubernetes deployments.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#cluster">
+        Next: Cluster &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="cluster">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Cluster Architecture
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A Kubernetes cluster has two kinds of machines: control plane nodes that manage the cluster, and worker nodes that run your containers. The control plane schedules pods, monitors health, and exposes the API.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Diagram showing Kubernetes control plane and worker nodes" class="diagram" loading="lazy" src="../assets/diagrams/kubernetes/cluster-architecture.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Control plane components manage state; worker nodes run pods.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Control plane components
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          kube-apiserver
+         </code>
+         &mdash; the front door for all API requests.
+        </li>
+        <li>
+         <code class="kbd">
+          etcd
+         </code>
+         &mdash; distributed key-value store for cluster state.
+        </li>
+        <li>
+         <code class="kbd">
+          kube-scheduler
+         </code>
+         &mdash; decides which node runs a new pod.
+        </li>
+        <li>
+         <code class="kbd">
+          kube-controller-manager
+         </code>
+         &mdash; runs controllers for nodes, replication, endpoints, and more.
+        </li>
+        <li>
+         <code class="kbd">
+          cloud-controller-manager
+         </code>
+         &mdash; talks to cloud providers for load balancers and node lifecycle.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Worker node components
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          kubelet
+         </code>
+         &mdash; agent that runs pods assigned to the node.
+        </li>
+        <li>
+         <code class="kbd">
+          kube-proxy
+         </code>
+         &mdash; maintains network rules for services.
+        </li>
+        <li>
+         <code class="kbd">
+          container runtime
+         </code>
+         &mdash; containerd, CRI-O, or Docker.
+        </li>
+       </ul>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Install a local cluster with minikube or kind minikube start --driver=
+docker 
+kubectl cluster-info 
+# Or 
+use kind for a multi-
+node local cluster kind create cluster --name dev 
+kubectl get nodes</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world note
+       </h4>
+       <p class="text-[var(--muted)]">
+        <strong>
+         Shopify
+        </strong>
+        runs many small clusters to isolate failure domains. Their SRE teams rely on the control plane's etcd backups and API server audit logs for incident response.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#pods">
+        Next: Pods &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="pods">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Pods
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A pod is the smallest deployable unit in Kubernetes. It wraps one or more containers that share networking and storage. Most pods run a single container, but sidecar, init, and ambassador patterns use multiple containers.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Diagram showing a pod with containers, shared network, and volumes" class="diagram" loading="lazy" src="../assets/diagrams/kubernetes/pod-lifecycle.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Containers in a pod share an IP address and can mount the same volumes.
+       </p>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Pod manifest
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># pod.yaml
+v1
+Pod
+name: nginx
+app: nginx
+containers: -
+nginx
+nginx:1.27
+-
+80
+requests:
+"64Mi"
+"100m"
+memory: "128Mi"
+"200m"</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">kubectl apply -f pod.yaml 
+kubectl get pods 
+kubectl describe pod 
+nginx 
+kubectl logs 
+nginx 
+kubectl exec -it 
+nginx -- /bin/bash</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Multi-container sidecar pattern
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        A common production pattern: the main container serves traffic while a sidecar ships logs or handles TLS.
+       </p>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml">apiVersion: v1
+Pod
+name: web-with-logger
+containers: -
+web
+myapp:1.0
+-
+logs
+/var/log/app -
+fluent-bit
+fluent/fluent-bit:3.0
+-
+logs
+/var/log/app
+-
+logs
+{}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world note
+       </h4>
+       <p class="text-[var(--muted)]">
+        <strong>
+         GitHub
+        </strong>
+        uses sidecar containers in Kubernetes for observability, log forwarding, and TLS termination in its internal services.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#cluster">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#deployments">
+        Next: Deployments &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="deployments">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Deployments
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       You rarely create pods directly. A Deployment manages a set of identical pods, handles rolling updates, and can roll back to a previous version. It uses a ReplicaSet under the hood to maintain the desired number of pods.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Diagram showing a Deployment rolling update from old pods to new pods" class="diagram" loading="lazy" src="../assets/diagrams/kubernetes/deployment-rollout.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Deployments replace pods gradually so the service stays available.
+       </p>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Deployment manifest
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># deployment.yaml
+apps/v1
+Deployment
+name: web
+replicas: 3
+type: RollingUpdate
+maxSurge: 1
+0
+matchLabels:
+web
+metadata:
+app: web
+containers: -
+web
+nginx:1.27
+-
+80
+httpGet:
+/
+80
+5
+10
+httpGet:
+/
+80
+15
+20</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">kubectl apply -f deployment.yaml 
+kubectl get deployments 
+kubectl get pods -l app=web 
+kubectl rollout status deployment/web 
+# Update image and watch rolling update 
+kubectl set image deployment/web web=
+nginx:1.28 
+kubectl rollout status deployment/web 
+# Roll back if something breaks 
+kubectl rollout undo deployment/web 
+kubectl rollout history deployment/web</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world note
+       </h4>
+       <p class="text-[var(--muted)]">
+        <strong>
+         Netflix
+        </strong>
+        deploys hundreds of times per day using Kubernetes Deployments. Their Spinnaker pipelines orchestrate canary analysis before promoting a new version to all pods.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pods">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#services">
+        Next: Services &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="services">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Services
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Services give pods a stable network identity. They abstract pod IP addresses behind a single DNS name and can load balance traffic across replicas. Ingresses expose services to the outside world with HTTP routing.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Diagram showing ClusterIP, NodePort, LoadBalancer, and Ingress service types" class="diagram" loading="lazy" src="../assets/diagrams/kubernetes/service-types.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Service types progress from internal-only to internet-facing ingress.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Service types
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          ClusterIP
+         </code>
+         &mdash; internal traffic only, default.
+        </li>
+        <li>
+         <code class="kbd">
+          NodePort
+         </code>
+         &mdash; exposes a port on every node.
+        </li>
+        <li>
+         <code class="kbd">
+          LoadBalancer
+         </code>
+         &mdash; provisions a cloud load balancer.
+        </li>
+        <li>
+         <code class="kbd">
+          ExternalName
+         </code>
+         &mdash; DNS alias to an external service.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       ClusterIP service
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># service.yaml
+v1
+Service
+name: web
+selector:
+web
+-
+80
+80
+ClusterIP</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Ingress with NGINX
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># ingress.yaml
+networking.k8s.io/v1
+Ingress
+name: web
+nginx.ingress.kubernetes.io/rewrite-target: /
+rules: -
+shop.example.com
+paths: -
+/
+Prefix
+service:
+web
+number: 80</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Check DNS resolution inside the cluster 
+kubectl run -it --rm debug --image=busybox:1.36 -- nslookup web 
+# Port-forward a service to your local machine 
+kubectl port-forward svc/web 8080:80</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world note
+       </h4>
+       <p class="text-[var(--muted)]">
+        <strong>
+         Reddit
+        </strong>
+        uses Kubernetes Ingress controllers for HTTP routing and rate limiting. They split traffic by path and host header across dozens of microservices.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#deployments">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#config">
+        Next: Config &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="config">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Config &amp; Secrets
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Applications need configuration and credentials. Kubernetes separates these with ConfigMaps for non-sensitive data and Secrets for sensitive data. Mount them as files or environment variables.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       ConfigMap
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># configmap.yaml
+v1
+ConfigMap
+name: app-config
+DATABASE_HOST: "postgres"
+"info"
+
+apps/v1
+Deployment
+name: api
+replicas: 2
+matchLabels:
+api
+metadata:
+app: api
+containers: -
+api
+api:1.0
+-
+name: app-config
+-
+3000</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Secret
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Create a secret imperatively 
+kubectl create secret generic db-creds \
+--from-literal=password='super-secret' \
+--from-literal=user='app'</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml">apiVersion: v1
+Secret
+name: db-creds
+Opaque
+user: app
+super-secret
+
+ Mount as environment variables
+containers: -
+api
+api:1.0
+-
+DB_USER
+secretKeyRef:
+db-creds
+user -
+DB_PASSWORD
+secretKeyRef:
+db-creds
+password</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world note
+       </h4>
+       <p class="text-[var(--muted)]">
+        <strong>
+         HashiCorp Vault
+        </strong>
+        and
+        <strong>
+         AWS Secrets Manager
+        </strong>
+        are often used instead of native Secrets for rotation, audit logs, and fine-grained access control. The Kubernetes Secret then only holds short-lived tokens.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#services">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#helm">
+        Next: Helm &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="helm">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Helm
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Helm is the package manager for Kubernetes. A Helm chart bundles templates, default values, and metadata so you can install, upgrade, and roll back complex applications with one command.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Install Helm from brew or https://
+helm.sh brew install 
+helm 
+# Add a chart repository and install an app 
+helm repo add bitnami https://charts.bitnami.com/bitnami 
+helm repo update 
+helm install my-postgres bitnami/postgresql 
+# See installed releases 
+helm list 
+# Upgrade a release 
+helm upgrade my-postgres bitnami/postgresql --set auth.postgresPassword=newpass</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Chart structure
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">mychart/ &boxvr;&boxh;&boxh; Chart.yaml 
+# metadata and dependencies &boxvr;&boxh;&boxh; values.yaml 
+# default configuration &boxvr;&boxh;&boxh; templates/ 
+# Kubernetes manifests with Go templates &boxv; &boxvr;&boxh;&boxh; deployment.yaml &boxv; &boxvr;&boxh;&boxh; service.yaml &boxv; &boxvr;&boxh;&boxh; ingress.yaml &boxv; &boxur;&boxh;&boxh; _helpers.tpl &boxur;&boxh;&boxh; README.md</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Templated deployment
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># templates/deployment.yaml apiVersion: apps/v1 kind: Deployment metadata: name: {{ include "mychart.fullname" . }
+} spec: replicas: {{ .Values.replicaCount }
+} selector: matchLabels: app: {{ include "mychart.name" . }
+} template: metadata: labels: app: {{ include "mychart.name" . }
+} spec: containers: - name: web image: "{{ .Values.image.repository }
+}:{{ .Values.image.tag }
+}" ports: - containerPort: {{ .Values.service.port }
+}</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># values.yaml
+3
+repository: nginx
+"1.27"
+type: ClusterIP
+80
+enabled: true
+shop.example.com</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world note
+       </h4>
+       <p class="text-[var(--muted)]">
+        <strong>
+         Datadog
+        </strong>
+        publishes Helm charts for its agent and cluster monitoring. SRE teams install the chart once and upgrade it across hundreds of clusters with a single values file per environment.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#config">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#real-world">
+        Next: Real-World &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="real-world">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Real-World Systems
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       These companies show how Kubernetes is used for scale, resilience, cost optimization, and developer velocity.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Spotify
+       </h3>
+       <p class="text-[var(--muted)]">
+        Spotify runs a large multi-region Kubernetes fleet. They built their own platform, Backstage, on top of it. Kubernetes lets them bin-pack workloads, autoscale on demand, and isolate failures per squad.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Airbnb
+       </h3>
+       <p class="text-[var(--muted)]">
+        Airbnb migrated its monolithic data infrastructure to Kubernetes. They run Spark and streaming jobs as Kubernetes workloads, unifying batch and real-time data processing on one orchestration layer.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Goldman Sachs
+       </h3>
+       <p class="text-[var(--muted)]">
+        Goldman Sachs runs regulated workloads on Kubernetes with strict network policies, pod security standards, and resource quotas. Their platform team uses Operators to automate database and middleware lifecycle.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Ticketmaster
+       </h3>
+       <p class="text-[var(--muted)]">
+        Ticketmaster uses Kubernetes Horizontal Pod Autoscalers to handle sudden traffic spikes during ticket sales. They combine cluster autoscaling with pod autoscaling to keep latency low without over-provisioning.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Reddit
+       </h3>
+       <p class="text-[var(--muted)]">
+        Reddit's Kubernetes platform runs microservices behind a service mesh. They use canary deployments, circuit breakers, and observability tools to deploy safely hundreds of times per week.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#helm">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: E-Commerce Stack
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Deploy a small e-commerce stack on Kubernetes: a frontend web app, an API service, a PostgreSQL database, and an NGINX Ingress. Package everything in a Helm chart and demonstrate rolling updates and rollbacks.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       1. What is this project?
+      </h3>
+      <p class="text-[var(--muted)] mb-6">
+       You will build a Helm chart for a fictional online store. It includes a frontend Deployment and Service, an API Deployment and Service, a PostgreSQL StatefulSet backed by a PersistentVolumeClaim, a ConfigMap for shared settings, a Secret for database credentials, and an Ingress that routes traffic by path.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       2. What it covers?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Cluster architecture and kubectl workflow.
+        </li>
+        <li>
+         Pods, Deployments, Services, and Ingress.
+        </li>
+        <li>
+         ConfigMaps and Secrets for configuration.
+        </li>
+        <li>
+         StatefulSet for stateful database workloads.
+        </li>
+        <li>
+         Helm chart structure and templating.
+        </li>
+        <li>
+         Rolling updates, rollbacks, and health probes.
+        </li>
+        <li>
+         Real-world packaging of a multi-service app.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       3. How it is done?
+      </h3>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 1: create the chart
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">helm create shop rm -rf shop/templates/* shop/values.yaml 
+# Chart structure shop/ &boxvr;&boxh;&boxh; Chart.yaml &boxvr;&boxh;&boxh; values.yaml &boxur;&boxh;&boxh; templates/ &boxvr;&boxh;&boxh; _helpers.tpl &boxvr;&boxh;&boxh; configmap.yaml &boxvr;&boxh;&boxh; secret.yaml &boxvr;&boxh;&boxh; postgres.yaml &boxvr;&boxh;&boxh; api-deployment.yaml &boxvr;&boxh;&boxh; api-service.yaml &boxvr;&boxh;&boxh; web-deployment.yaml &boxvr;&boxh;&boxh; web-service.yaml &boxur;&boxh;&boxh; ingress.yaml</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 2: default values
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># values.yaml
+image: shop/web:1.0
+2
+image: shop/api:1.0
+2
+image: postgres:16
+5Gi
+shop
+changeme
+shopdb
+host: shop.local
+true</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 3: PostgreSQL StatefulSet
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># templates/postgres.yaml apiVersion: apps/v1 kind: StatefulSet metadata: name: {{ include "shop.fullname" . }
+}-postgres spec: serviceName: {{ include "shop.fullname" . }
+}-postgres replicas: 1 selector: matchLabels: app: postgres template: metadata: labels: app: postgres spec: containers: - name: postgres image: {{ .Values.database.image }
+} envFrom: - secretRef: name: {{ include "shop.fullname" . }
+}-db-creds volumeMounts: - name: data mountPath: /var/lib/postgresql/data volumeClaimTemplates: - metadata: name: data spec: accessModes: ["ReadWriteOnce"]
+resources: requests: storage: {{ .Values.database.storage }
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 4: API and web deployments
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># templates/api-deployment.yaml apiVersion: apps/v1 kind: Deployment metadata: name: {{ include "shop.fullname" . }
+}-api spec: replicas: {{ .Values.api.replicas }
+} selector: matchLabels: app: api template: metadata: labels: app: api spec: containers: - name: api image: {{ .Values.api.image }
+} ports: - containerPort: 3000 envFrom: - configMapRef: name: {{ include "shop.fullname" . }
+}-config - secretRef: name: {{ include "shop.fullname" . }
+}-db-creds readinessProbe: httpGet: path: /health port: 3000 livenessProbe: httpGet: path: /health port: 3000</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 5: ConfigMap and Secret
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># templates/configmap.yaml apiVersion: v1 kind: ConfigMap metadata: name: {{ include "shop.fullname" . }
+}-config data: DB_HOST: {{ include "shop.fullname" . }
+}-postgres DB_NAME: {{ .Values.database.name }
+} --- # templates/secret.yaml apiVersion: v1 kind: Secret metadata: name: {{ include "shop.fullname" . }
+}-db-creds type: Opaque stringData: DB_USER: {{ .Values.database.user }
+} DB_PASSWORD: {{ .Values.database.password }
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 6: Service and Ingress
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># templates/web-service.yaml apiVersion: v1 kind: Service metadata: name: {{ include "shop.fullname" . }
+}-web spec: selector: app: web ports: - port: 80 targetPort: 80 --- # templates/ingress.yaml apiVersion: networking.k8s.io/v1 kind: Ingress metadata: name: {{ include "shop.fullname" . }
+}-ingress annotations: nginx.ingress.kubernetes.io/rewrite-target: / spec: rules: - host: {{ .Values.ingress.host }
+} http: paths: - path: /api pathType: Prefix backend: service: name: {{ include "shop.fullname" . }
+}-api port: number: 80 - path: / pathType: Prefix backend: service: name: {{ include "shop.fullname" . }
+}-web port: number: 80</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Step 7: install and upgrade
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Install the chart 
+helm install my-shop ./shop 
+# Verify everything is running 
+kubectl get pods,svc,ingress 
+# Upgrade to a new web image 
+helm upgrade my-shop ./shop --set web.image=shop/web:1.1 
+kubectl rollout status deployment/my-shop-web 
+# Simulate a bad deploy and roll back 
+helm upgrade my-shop ./shop --set web.image=shop/web:broken 
+helm rollback my-shop 1 
+# Clean up 
+helm uninstall my-shop</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       4. What did we learn from this capstone project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Kubernetes separates concerns: compute (Deployments), networking (Services), storage (PVCs), and configuration (ConfigMaps/Secrets).
+        </li>
+        <li>
+         Helm makes multi-service apps repeatable across environments.
+        </li>
+        <li>
+         StatefulSets protect data with stable network identity and ordered pod management.
+        </li>
+        <li>
+         Health probes keep services reliable during updates.
+        </li>
+        <li>
+         Rolling updates and rollbacks reduce risk when shipping new versions.
+        </li>
+        <li>
+         Ingress unifies external routing by host and path.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       5. How can I enhance this project in the future?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Add Horizontal Pod Autoscaler for web and API based on CPU.
+        </li>
+        <li>
+         Use cert-manager with Let's Encrypt for TLS on the Ingress.
+        </li>
+        <li>
+         Replace the hand-written Secret with external-secrets or Vault integration.
+        </li>
+        <li>
+         Add Prometheus metrics and Grafana dashboards for the API.
+        </li>
+        <li>
+         Implement a CI pipeline with helm lint, helm test, and kubectl dry-run.
+        </li>
+        <li>
+         Introduce a service mesh like Istio or Linkerd for mTLS and traffic shifting.
+        </li>
+        <li>
+         Package the chart in a Helm repository and version it with Git tags.
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Install the Helm chart, confirm the web and API pods are running, curl the Ingress endpoint, upgrade the web image, verify the rolling update succeeds, then roll back and confirm the previous version is restored.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#real-world">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); const lightStylesheet = document.getElementById('hljs-light'); const darkStylesheet = document.getElementById('hljs-dark'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { lightStylesheet.disabled = true; darkStylesheet.disabled = false; moon.classList.add('hidden'); sun.classList.remove('hidden'); } else { lightStylesheet.disabled = false; darkStylesheet.disabled = true; moon.classList.remove('hidden'); sun.classList.add('hidden'); } localStorage.setItem('k8s-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('k8s-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menu-overlay'); sidebar.classList.toggle('open'); overlay.classList.toggle('hidden'); } function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code'); navigator.clipboard.writeText(code.innerText).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); } const sections = document.querySelectorAll('section[id]'); const tocLinks = document.querySelectorAll('.toc-link'); const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { tocLinks.forEach((link) => link.classList.remove('active')); const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (active) active.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach((section) => observer.observe(section)); hljs.highlightAll();
+  </script>
+ </body>
+</html>

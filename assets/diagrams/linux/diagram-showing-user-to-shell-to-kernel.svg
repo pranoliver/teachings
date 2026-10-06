@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 100" aria-label="Diagram showing user to shell to kernel" role="img"><title>Diagram showing user to shell to kernel</title>
+              <rect x="30" y="25" width="140" height="50" rx="10" fill="#FCC624" fill-opacity="0.2" stroke="#333" stroke-width="2"/>
+              <text x="100" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#333">You</text>
+
+              <path d="M170 50 L 260 50" stroke="#d0d7de" stroke-width="2" marker-end="url(#linux-arrow)"/>
+              <text x="215" y="40" text-anchor="middle" font-size="11" fill="#656d76">type</text>
+
+              <rect x="280" y="25" width="160" height="50" rx="10" fill="#FCC624" fill-opacity="0.2" stroke="#333" stroke-width="2"/>
+              <text x="360" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Shell (bash/zsh)</text>
+
+              <path d="M440 50 L 530 50" stroke="#d0d7de" stroke-width="2" marker-end="url(#linux-arrow)"/>
+              <text x="485" y="40" text-anchor="middle" font-size="11" fill="#656d76">invokes</text>
+
+              <rect x="550" y="25" width="140" height="50" rx="10" fill="#FCC624" fill-opacity="0.2" stroke="#333" stroke-width="2"/>
+              <text x="620" y="55" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Kernel</text>
+
+              <defs>
+                <marker id="linux-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#d0d7de"/></marker>
+              </defs>
+            </svg>

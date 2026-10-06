@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 280" class="diagram" role="img" aria-label="Terraform backend and workspaces diagram">
+  <defs>
+    <marker id="b" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#7b42bc" />
+    </marker>
+  </defs>
+  <rect width="800" height="280" fill="#f6f8fa" rx="12" />
+  <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">Remote Backends &amp; Workspaces</text>
+  <rect x="80" y="60" width="180" height="70" rx="8" fill="#7b42bc" opacity="0.15" stroke="#7b42bc" stroke-width="2" />
+  <text x="170" y="95" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">dev workspace</text>
+  <rect x="310" y="60" width="180" height="70" rx="8" fill="#7b42bc" opacity="0.15" stroke="#7b42bc" stroke-width="2" />
+  <text x="400" y="95" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">staging workspace</text>
+  <rect x="540" y="60" width="180" height="70" rx="8" fill="#7b42bc" opacity="0.15" stroke="#7b42bc" stroke-width="2" />
+  <text x="630" y="95" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">prod workspace</text>
+  <line x1="170" y1="130" x2="360" y2="210" stroke="#7b42bc" stroke-width="2" marker-end="url(#b)" />
+  <line x1="400" y1="130" x2="400" y2="210" stroke="#7b42bc" stroke-width="2" marker-end="url(#b)" />
+  <line x1="630" y1="130" x2="440" y2="210" stroke="#7b42bc" stroke-width="2" marker-end="url(#b)" />
+  <rect x="260" y="210" width="280" height="60" rx="8" fill="#0369a1" opacity="0.15" stroke="#0369a1" stroke-width="2" />
+  <text x="400" y="245" text-anchor="middle" font-size="14" font-weight="600" fill="#1f2328">S3 state bucket + DynamoDB lock</text>
+  <text x="400" y="270" text-anchor="middle" font-size="12" fill="#656d76">Each workspace keeps its own state under the same backend.</text>
+</svg>

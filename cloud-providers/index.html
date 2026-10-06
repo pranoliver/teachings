@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Cloud Providers: AWS / Azure / GCP Fundamentals
+  </title>
+  <link href="../assets/favicons/cloud-providers.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/hcl.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-cloud-providers">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Cloud Providers" class="w-10 h-10" src="../assets/favicons/cloud-providers.svg"/>
+     <span class="text-xl font-bold">
+      Cloud Providers
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#regions">
+      2. Regions, AZs &amp; Global Networks
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#iam">
+      3. Identity &amp; Access Management
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#compute">
+      4. Compute Services
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#storage">
+      5. Storage Services
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#networking">
+      6. Networking Services
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#databases">
+      7. Managed Databases
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#serverless">
+      8. Serverless &amp; Containers
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#observability">
+      9. Observability &amp; Security
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pricing">
+      10. Pricing &amp; Cost Management
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#real-world">
+      11. Real-World Systems
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      12. Capstone: Deploy on Two Providers
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Cloud Providers: AWS / Azure / GCP Fundamentals
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Amazon Web Services (AWS), Microsoft Azure, and Google Cloud Platform (GCP) are the three dominant public clouds. They each provide compute, storage, networking, databases, identity, and machine-learning services. This tutorial teaches the core building blocks side-by-side, so you can understand the concepts once and translate them across providers.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with the command line and basic networking terms (IP, DNS, subnet).
+        </li>
+        <li>
+         Understand what a virtual machine is.
+        </li>
+        <li>
+         Have (or be ready to create) free-tier accounts on AWS, Azure, and GCP for the capstone.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Global regions and availability zones
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         IAM: users, roles, policies, and service principals
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Virtual machines, autoscaling, and container compute
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Object, block, and file storage
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         VPCs, subnets, load balancers, and DNS
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Managed relational and NoSQL databases
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Serverless functions and managed Kubernetes
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Monitoring, billing, and security controls
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Concept-to-service map
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Concept
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Virtual machine
+          </td>
+          <td>
+           EC2
+          </td>
+          <td>
+           Virtual Machines
+          </td>
+          <td>
+           Compute Engine
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Object storage
+          </td>
+          <td>
+           S3
+          </td>
+          <td>
+           Blob Storage
+          </td>
+          <td>
+           Cloud Storage
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Block storage
+          </td>
+          <td>
+           EBS
+          </td>
+          <td>
+           Managed Disks
+          </td>
+          <td>
+           Persistent Disk
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Virtual network
+          </td>
+          <td>
+           VPC
+          </td>
+          <td>
+           Virtual Network (VNet)
+          </td>
+          <td>
+           VPC
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Load balancer
+          </td>
+          <td>
+           ELB / ALB
+          </td>
+          <td>
+           Load Balancer
+          </td>
+          <td>
+           Cloud Load Balancing
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Managed Kubernetes
+          </td>
+          <td>
+           EKS
+          </td>
+          <td>
+           AKS
+          </td>
+          <td>
+           GKE
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Serverless functions
+          </td>
+          <td>
+           Lambda
+          </td>
+          <td>
+           Functions
+          </td>
+          <td>
+           Cloud Functions
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Managed PostgreSQL
+          </td>
+          <td>
+           RDS
+          </td>
+          <td>
+           Azure Database for PostgreSQL
+          </td>
+          <td>
+           Cloud SQL
+          </td>
+         </tr>
+         <tr>
+          <td>
+           IAM identity
+          </td>
+          <td>
+           IAM Role
+          </td>
+          <td>
+           Service Principal / Managed Identity
+          </td>
+          <td>
+           Service Account
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6" data-quiz="intro">
+       <p class="font-semibold mb-4">
+        Which AWS service is the equivalent of Azure Blob Storage and Google Cloud Storage?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         Amazon S3
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Amazon EBS
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Amazon RDS
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="regions">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Regions, Availability Zones &amp; Global Networks
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Cloud providers divide the world into
+       <strong>
+        regions
+       </strong>
+       (geographic areas like us-east-1 or westeurope). Each region contains multiple
+       <strong>
+        availability zones
+       </strong>
+       (AZs) &mdash; physically separate data centers with independent power, cooling, and networking. Global services like DNS and content delivery sit above regions.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <img alt="Global infrastructure: regions, availability zones, edge locations" class="diagram" loading="lazy" src="../assets/diagrams/cloud-providers/global-infrastructure.svg"/>
+       <p class="text-sm text-[var(--muted)] mt-3">
+        Regions contain AZs; edge locations cache content close to users.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Side-by-side: regions and zones
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Concept
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Region example
+          </td>
+          <td>
+           us-east-1 (N. Virginia)
+          </td>
+          <td>
+           westeurope (Netherlands)
+          </td>
+          <td>
+           us-central1 (Iowa)
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Availability zone
+          </td>
+          <td>
+           us-east-1a, us-east-1b, us-east-1c
+          </td>
+          <td>
+           westeurope-1, westeurope-2, westeurope-3
+          </td>
+          <td>
+           us-central1-a, us-central1-b, us-central1-c
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Edge / CDN
+          </td>
+          <td>
+           CloudFront
+          </td>
+          <td>
+           Azure Front Door / CDN
+          </td>
+          <td>
+           Cloud CDN (Cloud Front in AWS)
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Global load balancing
+          </td>
+          <td>
+           Global Accelerator, Route 53
+          </td>
+          <td>
+           Azure Front Door, Traffic Manager
+          </td>
+          <td>
+           Cloud Load Balancing (Global)
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Private global network
+          </td>
+          <td>
+           AWS Global Network
+          </td>
+          <td>
+           Azure Global Network
+          </td>
+          <td>
+           Google Global Backbone
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-aws mb-2">
+         AWS
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         AWS launched us-east-1 in 2006 and now has 30+ regions. Each region has at least 3 AZs. Choose a region based on latency, compliance, and service availability; some newer services launch first in specific regions.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-azure mb-2">
+         Azure
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Azure has 60+ regions and is strong in enterprise and government clouds. Regions are paired for disaster recovery (e.g., West US paired with East US), and many services offer zone-redundant options.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-gcp mb-2">
+         GCP
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         GCP has fewer regions than AWS or Azure but emphasizes a private global fiber backbone. Live migration of VMs and custom machine types are differentiators for Compute Engine.
+        </p>
+       </div>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-bash"># List AWS AZs 
+aws ec2 describe-availability-zones --region us-east-1 
+# List Azure locations 
+az account list-locations --query "[].name" -o table 
+# List GCP zones gcloud compute zones list</code></pre>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="iam">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Identity &amp; Access Management
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       IAM controls who can do what. All three clouds share the same core ideas:
+       <strong>
+        identities
+       </strong>
+       (users, groups, service accounts),
+       <strong>
+        policies
+       </strong>
+       (JSON or YAML permission documents), and
+       <strong>
+        roles
+       </strong>
+       (temporary credentials attached to resources). The golden rule is least privilege: grant only the permissions required.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Side-by-side: IAM concepts
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Concept
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Identity for a person
+          </td>
+          <td>
+           IAM User
+          </td>
+          <td>
+           Azure AD User
+          </td>
+          <td>
+           Google Workspace / Cloud Identity user
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Identity for an app/workload
+          </td>
+          <td>
+           IAM Role
+          </td>
+          <td>
+           Service Principal / Managed Identity
+          </td>
+          <td>
+           Service Account
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Permission document
+          </td>
+          <td>
+           IAM Policy (JSON)
+          </td>
+          <td>
+           Role Definition (JSON)
+          </td>
+          <td>
+           IAM Policy (YAML/JSON)
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Temporary credentials
+          </td>
+          <td>
+           STS AssumeRole
+          </td>
+          <td>
+           Azure AD token
+          </td>
+          <td>
+           IAM Service Account token
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Resource organization
+          </td>
+          <td>
+           Organizations, OUs
+          </td>
+          <td>
+           Management Groups, Subscriptions
+          </td>
+          <td>
+           Organizations, Folders, Projects
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Federated login
+          </td>
+          <td>
+           IAM Identity Center (SSO)
+          </td>
+          <td>
+           Azure AD / Entra ID
+          </td>
+          <td>
+           Cloud Identity / Workspace SSO
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-json">// AWS
+IAM policy: read-only S3
+{ "Version": "2012-10-17",
+"Statement": [{ "Effect": "Allow",
+"Action": ["s3:GetObject"],
+"Resource": "arn:aws:s3:::my-bucket/*" }
+]
+}</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-json">// Azure
+custom role: VM reader
+{ "Name": "VM Reader",
+"Actions": [ "Microsoft.Compute/virtualMachines/read" ],
+"NotActions": [],
+"DataActions": [],
+"AssignableScopes": ["/subscriptions/00000000-0000-0000-0000-000000000000"]
+}</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-yaml"># GCP IAM
+storage object viewer
+roles/storage.objectViewer
+- serviceAccount:app@project.iam.gserviceaccount.com</code></pre>
+       </div>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6" data-quiz="iam">
+       <p class="font-semibold mb-4">
+        In GCP, what is the workload equivalent of an AWS IAM Role?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         IAM User
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         Service Account
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Managed Identity
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="compute">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Compute Services
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Compute is the most used cloud service category. Providers offer virtual machines, managed container orchestration, serverless functions, and specialized GPU/AI instances. The trick is matching the right compute option to your workload.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Side-by-side: compute options
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Option
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Virtual machine
+          </td>
+          <td>
+           EC2
+          </td>
+          <td>
+           Virtual Machines
+          </td>
+          <td>
+           Compute Engine
+          </td>
+         </tr>
+         <tr>
+          <td>
+           VM scale / autoscaling
+          </td>
+          <td>
+           Auto Scaling Groups
+          </td>
+          <td>
+           Virtual Machine Scale Sets
+          </td>
+          <td>
+           Managed Instance Groups
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Spot / preemptible VMs
+          </td>
+          <td>
+           Spot Instances
+          </td>
+          <td>
+           Spot Virtual Machines
+          </td>
+          <td>
+           Spot VMs / Preemptible VMs
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Bare metal
+          </td>
+          <td>
+           Bare Metal
+          </td>
+          <td>
+           BareMetal Infrastructure
+          </td>
+          <td>
+           Bare Metal Solution
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Managed Kubernetes
+          </td>
+          <td>
+           Elastic Kubernetes Service (EKS)
+          </td>
+          <td>
+           Azure Kubernetes Service (AKS)
+          </td>
+          <td>
+           Google Kubernetes Engine (GKE)
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Serverless functions
+          </td>
+          <td>
+           Lambda
+          </td>
+          <td>
+           Azure Functions
+          </td>
+          <td>
+           Cloud Functions
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Serverless containers
+          </td>
+          <td>
+           Fargate
+          </td>
+          <td>
+           Container Instances
+          </td>
+          <td>
+           Cloud Run
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Platform-as-a-Service
+          </td>
+          <td>
+           Elastic Beanstalk
+          </td>
+          <td>
+           App Service
+          </td>
+          <td>
+           App Engine
+          </td>
+         </tr>
+         <tr>
+          <td>
+           GPU / AI training
+          </td>
+          <td>
+           P3/P4/G5 instances, SageMaker
+          </td>
+          <td>
+           NC/ND series, Azure ML
+          </td>
+          <td>
+           A2/A3 VMs, Vertex AI
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-aws mb-2">
+         AWS EC2 details
+        </h4>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-4 space-y-1">
+         <li>
+          Instance families: T (burstable), M (general), C (compute), R (memory), G/P (GPU).
+         </li>
+         <li>
+          AMIs are the disk images used to launch instances.
+         </li>
+         <li>
+          User data scripts run at first boot for automation.
+         </li>
+         <li>
+          Spot Instances can save up to 90% but can be interrupted.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-azure mb-2">
+         Azure VM details
+        </h4>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-4 space-y-1">
+         <li>
+          Series: Bs (burstable), Dv5 (general), F (compute), E (memory), N (GPU).
+         </li>
+         <li>
+          VMs live inside a VNet and NIC; public IPs are optional.
+         </li>
+         <li>
+          Availability Sets protect against rack/fault-domain failures.
+         </li>
+         <li>
+          Azure Hybrid Benefit lets you bring existing Windows licenses.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-gcp mb-2">
+         GCP Compute Engine details
+        </h4>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-4 space-y-1">
+         <li>
+          Machine types: E2 (cost-optimized), N2/N2D (general), C2/C3 (compute), M3 (memory).
+         </li>
+         <li>
+          Custom machine types let you pick exact vCPU and memory.
+         </li>
+         <li>
+          Live migration moves VMs during host maintenance without reboot.
+         </li>
+         <li>
+          Sustained use discounts apply automatically.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-bash"># AWS: launch a t3.micro EC2 instance 
+aws ec2 run-instances --image-id ami-0123456789abcdef0 --count 1 --instance-type t3.micro \
+--key-name my-key --security-group-ids sg-12345 --subnet-id subnet-12345 
+# Azure: create a D2s v5 VM 
+az vm create --resource-group myRG --name myVM --image Ubuntu2204 \
+--size Standard_D2s_v5 --admin-username azureuser --generate-
+ssh-keys 
+# GCP: create an e2-medium VM gcloud compute instances create my-vm --zone=us-central1-a --machine-type=e2-medium \
+--image-family=ubuntu-2204-lts --image-project=ubuntu-os-cloud</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        When to use what
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          VMs:
+         </strong>
+         legacy apps, full control over OS, long-running workloads.
+        </li>
+        <li>
+         <strong>
+          Managed Kubernetes (EKS/AKS/GKE):
+         </strong>
+         microservices, containerized apps, multi-service teams.
+        </li>
+        <li>
+         <strong>
+          Serverless functions (Lambda/Azure Functions/Cloud Functions):
+         </strong>
+         event-driven glue, APIs with sporadic traffic.
+        </li>
+        <li>
+         <strong>
+          Serverless containers (Fargate/Container Instances/Cloud Run):
+         </strong>
+         containers without managing nodes, HTTP services.
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="storage">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Storage Services
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Cloud storage comes in three main flavors:
+       <strong>
+        object
+       </strong>
+       (flat, scalable, accessed over HTTP),
+       <strong>
+        block
+       </strong>
+       (raw disks attached to VMs), and
+       <strong>
+        file
+       </strong>
+       (shared network file systems). Each provider also offers tiering, lifecycle, and archival options to reduce cost.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Side-by-side: storage services
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Flavor
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Object storage
+          </td>
+          <td>
+           S3
+          </td>
+          <td>
+           Blob Storage
+          </td>
+          <td>
+           Cloud Storage
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Block storage for VMs
+          </td>
+          <td>
+           EBS
+          </td>
+          <td>
+           Managed Disks
+          </td>
+          <td>
+           Persistent Disk
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Shared file storage
+          </td>
+          <td>
+           EFS
+          </td>
+          <td>
+           Azure Files
+          </td>
+          <td>
+           Filestore
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Archive / cold storage
+          </td>
+          <td>
+           Glacier / Glacier Deep Archive
+          </td>
+          <td>
+           Archive / Cool / Hot Blob tiers
+          </td>
+          <td>
+           Archive / Nearline / Coldline
+          </td>
+         </tr>
+         <tr>
+          <td>
+           High-performance file
+          </td>
+          <td>
+           FSx for Lustre
+          </td>
+          <td>
+           Azure HPC Cache
+          </td>
+          <td>
+           Parallelstore
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Hybrid / on-prem sync
+          </td>
+          <td>
+           Storage Gateway
+          </td>
+          <td>
+           Azure File Sync / StorSimple
+          </td>
+          <td>
+           Cloud Storage for Firebase / Transfer Appliance
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-aws mb-2">
+         Amazon S3
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         S3 is the oldest and most mature object store. Buckets are globally unique. Storage classes include Standard, Intelligent-Tiering, Standard-IA, One Zone-IA, Glacier Instant Retrieval, Glacier Flexible Retrieval, and Glacier Deep Archive. Versioning, lifecycle policies, and bucket policies are essential tools.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-azure mb-2">
+         Azure Blob Storage
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Blob Storage supports block blobs, page blobs (for VM disks), and append blobs. Access tiers are Hot, Cool, Cold, and Archive. Azure Data Lake Storage Gen2 adds hierarchical namespaces and analytics integration.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-gcp mb-2">
+         Google Cloud Storage
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Cloud Storage classes include Standard, Nearline, Coldline, and Archive. It offers uniform bucket-level access for simpler IAM and Autoclass for automatic tier management. Strong global consistency is a common selling point.
+        </p>
+       </div>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-bash"># AWS S3: create bucket, upload, set lifecycle 
+aws s3 mb s3://my-uniq-bucket 
+aws s3 cp file.txt s3://my-uniq-bucket/ 
+aws s3api put-bucket-lifecycle --bucket my-uniq-bucket --lifecycle-configuration file://lifecycle.json</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-bash"># Azure Blob: create storage account and container 
+az storage account create --name mystorageacct --resource-group myRG --sku Standard_LRS 
+az storage container create --name mycontainer --account-name mystorageacct 
+az storage blob upload --file file.txt --container-name mycontainer --name file.txt --account-name mystorageacct</code></pre>
+       </div>
+       <div class="code-block rounded-xl overflow-hidden">
+        <button aria-label="Copy code" class="copy-btn">
+         Copy
+        </button>
+        <pre><code class="language-bash"># GCP Cloud Storage: create bucket, upload, set lifecycle 
+gsutil mb -l us-central1 gs://my-uniq-bucket 
+gsutil cp file.txt gs://my-uniq-bucket/ 
+gsutil lifecycle set lifecycle.json gs://my-uniq-bucket</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Storage design checklist
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Choose the right access tier; most objects become cold within 30 days.
+        </li>
+        <li>
+         Block public access by default; use IAM or signed URLs.
+        </li>
+        <li>
+         Enable versioning if you need recovery from accidental deletes.
+        </li>
+        <li>
+         Encrypt data at rest (provider-managed keys are default; bring your own key for compliance).
+        </li>
+        <li>
+         Use lifecycle rules to move or delete old objects automatically.
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="networking">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Networking Services
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Cloud networking lets you build isolated virtual networks, connect on-premises data centers, distribute traffic, and protect resources with firewalls. The core concepts are the same across providers; only the service names differ.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Side-by-side: networking services
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Concept
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Virtual network
+          </td>
+          <td>
+           VPC
+          </td>
+          <td>
+           Virtual Network (VNet)
+          </td>
+          <td>
+           VPC
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Isolated subnet
+          </td>
+          <td>
+           Subnet
+          </td>
+          <td>
+           Subnet
+          </td>
+          <td>
+           Subnet
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Public IP
+          </td>
+          <td>
+           Elastic IP / Public IP
+          </td>
+          <td>
+           Public IP
+          </td>
+          <td>
+           External IP
+          </td>
+         </tr>
+         <tr>
+          <td>
+           DNS service
+          </td>
+          <td>
+           Route 53
+          </td>
+          <td>
+           Azure DNS / Private DNS
+          </td>
+          <td>
+           Cloud DNS
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Layer 4 load balancer
+          </td>
+          <td>
+           Network Load Balancer (NLB)
+          </td>
+          <td>
+           Azure Load Balancer
+          </td>
+          <td>
+           Network Load Balancing
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Layer 7 load balancer
+          </td>
+          <td>
+           Application Load Balancer (ALB)
+          </td>
+          <td>
+           Azure Application Gateway
+          </td>
+          <td>
+           HTTP(S) Load Balancer
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Firewall
+          </td>
+          <td>
+           Security Groups + NACLs + AWS Network Firewall
+          </td>
+          <td>
+           NSGs + Azure Firewall
+          </td>
+          <td>
+           Firewall rules + Cloud Firewall + Cloud Armor
+          </td>
+         </tr>
+         <tr>
+          <td>
+           VPN to on-prem
+          </td>
+          <td>
+           Site-to-Site VPN / Client VPN
+          </td>
+          <td>
+           VPN Gateway / Virtual WAN
+          </td>
+          <td>
+           Cloud VPN
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Private dedicated link
+          </td>
+          <td>
+           Direct Connect
+          </td>
+          <td>
+           ExpressRoute
+          </td>
+          <td>
+           Cloud Interconnect
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Private connectivity to PaaS
+          </td>
+          <td>
+           VPC Endpoints / PrivateLink
+          </td>
+          <td>
+           Private Link / Service Endpoints
+          </td>
+          <td>
+           Private Service Connect / Private Google Access
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-aws mb-2">
+         AWS VPC
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         A VPC is a private network in one AWS region. Subnets map to AZs. Route tables control traffic flow. Internet gateways give public access; NAT gateways let private subnets reach the internet. Security groups are stateful firewalls attached to resources.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-azure mb-2">
+         Azure VNet
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         A VNet is scoped to a region and subscription. Subnets are tied to the VNet (not directly to AZs in the same way). Network Security Groups filter traffic by 5-tuple. Azure Firewall is a managed, stateful firewall with threat intelligence.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-gcp mb-2">
+         GCP VPC
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         GCP VPCs are global by default &mdash; subnets can span regions. Firewall rules are global unless restricted. Cloud Load Balancing is anycast, so a single global IP can front multiple regions.
+        </p>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Networking best practices
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Use private subnets for databases and application backends.
+        </li>
+        <li>
+         Place load balancers in public subnets and point them to private targets.
+        </li>
+        <li>
+         Restrict security groups / NSGs / firewall rules to least privilege.
+        </li>
+        <li>
+         Use DNS and health checks to build resilient multi-region architectures.
+        </li>
+        <li>
+         Prefer private connectivity (VPC endpoints, Private Link, PSC) for PaaS traffic.
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="databases">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Managed Databases
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Managed databases remove operational toil: backups, patching, failover, and scaling are handled by the provider. All three clouds offer relational, NoSQL, cache, and data-warehouse services.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Side-by-side: database services
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Type
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Managed PostgreSQL
+          </td>
+          <td>
+           RDS for PostgreSQL
+          </td>
+          <td>
+           Azure Database for PostgreSQL
+          </td>
+          <td>
+           Cloud SQL for PostgreSQL
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Managed MySQL
+          </td>
+          <td>
+           RDS for MySQL
+          </td>
+          <td>
+           Azure Database for MySQL
+          </td>
+          <td>
+           Cloud SQL for MySQL
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Managed SQL Server
+          </td>
+          <td>
+           RDS for SQL Server
+          </td>
+          <td>
+           Azure SQL Database / SQL Managed Instance
+          </td>
+          <td>
+           Cloud SQL for SQL Server
+          </td>
+         </tr>
+         <tr>
+          <td>
+           NoSQL document store
+          </td>
+          <td>
+           DynamoDB
+          </td>
+          <td>
+           Azure Cosmos DB
+          </td>
+          <td>
+           Firestore
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Wide-column / key-value
+          </td>
+          <td>
+           DynamoDB, Keyspaces
+          </td>
+          <td>
+           Cosmos DB Table API
+          </td>
+          <td>
+           Bigtable
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Managed cache
+          </td>
+          <td>
+           ElastiCache (Redis/Memcached)
+          </td>
+          <td>
+           Azure Cache for Redis
+          </td>
+          <td>
+           Memorystore
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Data warehouse
+          </td>
+          <td>
+           Redshift
+          </td>
+          <td>
+           Synapse Analytics
+          </td>
+          <td>
+           BigQuery
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Time-series DB
+          </td>
+          <td>
+           Timestream
+          </td>
+          <td>
+           Azure Data Explorer
+          </td>
+          <td>
+           BigQuery / Cloud Monitoring
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-aws mb-2">
+         Amazon RDS
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         RDS supports multi-AZ standby, automated backups, read replicas, and parameter groups. Aurora is a MySQL/PostgreSQL-compatible engine with up to 15 read replicas and distributed storage.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-azure mb-2">
+         Azure SQL Database
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Azure SQL Database is a fully managed SQL Server with serverless and hyperscale tiers. It offers built-in high availability, automated backups, and Intelligent Query Processing.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-gcp mb-2">
+         Cloud SQL / Spanner
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Cloud SQL is managed PostgreSQL, MySQL, and SQL Server. Spanner is a globally distributed, strongly consistent relational database for planet-scale apps.
+        </p>
+       </div>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-bash"># AWS RDS: create a PostgreSQL instance 
+aws rds create-db-instance --db-instance-identifier mydb --db-instance-class db.t3.micro \
+--engine postgres --master-username admin --master-user-password Secret123! \
+--allocated-storage 20 
+# Azure: create a PostgreSQL flexible server 
+az postgres flexible-server create --name mypg --resource-group myRG --location westeurope \
+--admin-user azureuser --admin-password Secret123! --sku-name Standard_B1ms 
+# GCP: create a Cloud SQL PostgreSQL instance gcloud sql instances create mypg --database-version=POSTGRES_15 --tier=db-f1-micro \
+--region=us-central1 --storage-size=20GB</code></pre>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="serverless">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Serverless &amp; Containers
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Serverless lets you run code without provisioning servers. Container services let you deploy Docker images without managing the control plane. These layers are where most modern applications are built.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Side-by-side: serverless and container services
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Use case
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Function-as-a-Service
+          </td>
+          <td>
+           Lambda
+          </td>
+          <td>
+           Azure Functions
+          </td>
+          <td>
+           Cloud Functions
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Container-to-HTTP
+          </td>
+          <td>
+           Fargate + App Runner
+          </td>
+          <td>
+           Container Apps / Container Instances
+          </td>
+          <td>
+           Cloud Run
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Managed Kubernetes
+          </td>
+          <td>
+           EKS
+          </td>
+          <td>
+           AKS
+          </td>
+          <td>
+           GKE
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Event bus
+          </td>
+          <td>
+           EventBridge
+          </td>
+          <td>
+           Event Grid
+          </td>
+          <td>
+           Eventarc
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Pub/Sub messaging
+          </td>
+          <td>
+           SQS / SNS
+          </td>
+          <td>
+           Service Bus / Queue Storage
+          </td>
+          <td>
+           Pub/Sub
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Workflow orchestration
+          </td>
+          <td>
+           Step Functions
+          </td>
+          <td>
+           Logic Apps
+          </td>
+          <td>
+           Workflows / Cloud Composer
+          </td>
+         </tr>
+         <tr>
+          <td>
+           API gateway
+          </td>
+          <td>
+           API Gateway
+          </td>
+          <td>
+           API Management
+          </td>
+          <td>
+           Apigee / API Gateway
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-aws mb-2">
+         AWS Lambda
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Lambda runs code in response to events. Runtime choices include Node.js, Python, Java, Go, Ruby, and custom containers. Pay per request and per duration (ms). Cold starts and concurrency limits are key design considerations.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-azure mb-2">
+         Azure Functions
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Functions support consumption, premium, and dedicated plans. Durable Functions add stateful orchestration. Great for event-driven Azure integrations and bindings to Blob, Queue, Cosmos DB, etc.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-gcp mb-2">
+         Cloud Run
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Cloud Run is a standout GCP service: it takes any container and serves it over HTTP with scale-to-zero. It supports custom domains, gradual rollouts, and VPC connectivity. Cloud Functions builds on Cloud Run under the hood.
+        </p>
+       </div>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Deploy a container to Cloud Run (GCP) gcloud run deploy hello --image gcr.io/PROJECT/hello --region us-central1 --allow-unauthenticated 
+# Deploy to AWS App Runner 
+aws apprunner create-service --service-name hello --source-configuration \
+ImageRepository={ImageIdentifier=123456789012.dkr.ecr.us-east-1.amazonaws.com/hello:latest,ImageRepositoryType=ECR} 
+# Deploy to Azure Container Apps 
+az containerapp create --name hello --resource-group myRG --environment myenv \
+--image myregistry.azurecr.io/hello:latest --target-port 8080 --ingress external</code></pre>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="observability">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Observability &amp; Security
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       You cannot operate what you cannot see. Each cloud provides monitoring, logging, tracing, and security controls. Use them together to detect, investigate, and prevent incidents.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Side-by-side: observability and security
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Capability
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Metrics
+          </td>
+          <td>
+           CloudWatch
+          </td>
+          <td>
+           Azure Monitor Metrics
+          </td>
+          <td>
+           Cloud Monitoring
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Logs
+          </td>
+          <td>
+           CloudWatch Logs
+          </td>
+          <td>
+           Azure Monitor Logs / Log Analytics
+          </td>
+          <td>
+           Cloud Logging
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Distributed tracing
+          </td>
+          <td>
+           X-Ray
+          </td>
+          <td>
+           Application Insights
+          </td>
+          <td>
+           Cloud Trace
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Profiler
+          </td>
+          <td>
+           CodeGuru Profiler
+          </td>
+          <td>
+           Application Insights Profiler
+          </td>
+          <td>
+           Cloud Profiler
+          </td>
+         </tr>
+         <tr>
+          <td>
+           SIEM / security analytics
+          </td>
+          <td>
+           Security Lake / OpenSearch
+          </td>
+          <td>
+           Sentinel
+          </td>
+          <td>
+           Chronicle / Security Command Center
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Secrets manager
+          </td>
+          <td>
+           Secrets Manager / Parameter Store
+          </td>
+          <td>
+           Azure Key Vault
+          </td>
+          <td>
+           Secret Manager
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Certificate manager
+          </td>
+          <td>
+           AWS Certificate Manager
+          </td>
+          <td>
+           App Service Certs / Key Vault
+          </td>
+          <td>
+           Certificate Manager
+          </td>
+         </tr>
+         <tr>
+          <td>
+           DDoS / WAF
+          </td>
+          <td>
+           Shield / WAF
+          </td>
+          <td>
+           DDoS Protection / WAF
+          </td>
+          <td>
+           Cloud Armor
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Compliance scans
+          </td>
+          <td>
+           Security Hub / Config
+          </td>
+          <td>
+           Defender for Cloud / Policy
+          </td>
+          <td>
+           Security Command Center
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-aws mb-2">
+         AWS CloudWatch
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         CloudWatch collects metrics, logs, and events. Alarms trigger actions. CloudWatch Logs Insights lets you query logs with SQL-like syntax. X-Ray traces requests across Lambda, API Gateway, and ECS.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-azure mb-2">
+         Azure Monitor
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Azure Monitor is a unified observability platform. Application Insights adds APM for apps. Log Analytics workspaces run KQL queries across logs from many Azure services.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-gcp mb-2">
+         Google Cloud Operations
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Cloud Monitoring, Logging, Trace, Profiler, and Error Reporting form the operations suite. BigQuery exports make long-term log analysis cheap and powerful.
+        </p>
+       </div>
+      </div>
+      <div class="code-block rounded-xl overflow-hidden mb-6">
+       <button aria-label="Copy code" class="copy-btn">
+        Copy
+       </button>
+       <pre><code class="language-bash"># AWS: put a custom metric and create an alarm 
+aws cloudwatch put-metric-data --namespace MyApp --metric-name Latency --value 120 --unit Milliseconds 
+aws cloudwatch put-metric-alarm --alarm-name high-latency --metric-name Latency --namespace MyApp \
+--statistic Average --threshold 200 --comparison-operator GreaterThanThreshold --evaluation-periods 2 
+# Azure: query Log Analytics with KQL 
+az monitor log-analytics query -w "workspace-id" --analytics-query "Heartbeat | summarize count() by Computer" 
+# GCP: create an alerting policy gcloud alpha monitoring policies create --policy-from-file="policy.json"</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="font-bold mb-2">
+        Security essentials
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Rotate credentials; prefer IAM roles / managed identities / service accounts over long-lived keys.
+        </li>
+        <li>
+         Store secrets in a dedicated secrets manager, never in source code.
+        </li>
+        <li>
+         Enable CloudTrail / Activity Log / Audit Logs to record API activity.
+        </li>
+        <li>
+         Use encryption at rest and in transit by default.
+        </li>
+        <li>
+         Regularly scan resources with the provider's security posture tool (Security Hub / Defender / Security Command Center).
+        </li>
+       </ul>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="pricing">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Pricing &amp; Cost Management
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Cloud pricing is granular. Compute is usually billed per second or hour; storage per GB-month; data transfer per GB; and requests per million. Understanding pricing models helps you avoid surprises.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 overflow-x-auto">
+       <h3 class="text-xl font-semibold mb-3">
+        Side-by-side: pricing concepts
+       </h3>
+       <table class="compare-table w-full text-sm">
+        <thead>
+         <tr>
+          <th>
+           Concept
+          </th>
+          <th class="provider-aws">
+           AWS
+          </th>
+          <th class="provider-azure">
+           Azure
+          </th>
+          <th class="provider-gcp">
+           GCP
+          </th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td>
+           Free tier
+          </td>
+          <td>
+           12 months + always-free
+          </td>
+          <td>
+           12 months + always-free
+          </td>
+          <td>
+           $300 credit + always-free
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Compute discounts
+          </td>
+          <td>
+           Savings Plans, Reserved Instances, Spot
+          </td>
+          <td>
+           Reserved Instances, Savings Plans, Spot
+          </td>
+          <td>
+           Sustained use, Committed use, Spot
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Billing alerts
+          </td>
+          <td>
+           Budgets
+          </td>
+          <td>
+           Cost Alerts / Budgets
+          </td>
+          <td>
+           Budgets
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Cost explorer
+          </td>
+          <td>
+           Cost Explorer / CUR
+          </td>
+          <td>
+           Cost Management + Advisor
+          </td>
+          <td>
+           Cloud Billing Reports
+          </td>
+         </tr>
+         <tr>
+          <td>
+           Resource tagging
+          </td>
+          <td>
+           Cost Allocation Tags
+          </td>
+          <td>
+           Cost Allocation Tags
+          </td>
+          <td>
+           Labels
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-aws mb-2">
+         AWS cost tips
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Use Savings Plans for predictable workloads; use Spot for fault-tolerant batch jobs; enable S3 Intelligent-Tiering; review Cost Explorer monthly; and delete unattached EBS volumes.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-azure mb-2">
+         Azure cost tips
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Use Hybrid Benefit for Windows/SQL licenses; right-size VMs with Advisor; set budget alerts; reserve capacity for 1 or 3 years; and shut down dev VMs with automation.
+        </p>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h4 class="font-bold provider-gcp mb-2">
+         GCP cost tips
+        </h4>
+        <p class="text-sm text-[var(--muted)]">
+         Use Preemptible and Spot VMs for batch jobs; leverage sustained-use discounts; use Committed Use Discounts for steady workloads; and export billing to BigQuery for analysis.
+        </p>
+       </div>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="real-world">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 11
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Real-World Systems
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Major companies often use more than one provider or pick one for strategic reasons. These examples show how cloud choice maps to business and technical requirements.
+      </p>
+      <div class="grid md:grid-cols-2 gap-6">
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-orange-100 dark:bg-orange-900/40 flex items-center justify-center text-lg">
+          📺
+         </div>
+         <h3 class="text-xl font-bold">
+          Netflix on AWS
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Netflix runs almost entirely on AWS. It uses S3 for content storage, EC2 for encoding pipelines, and a global CDN strategy. The elastic nature of AWS lets Netflix scale during viral shows without pre-buying hardware.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         pick the provider whose elasticity matches unpredictable traffic.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-lg">
+          🏢
+         </div>
+         <h3 class="text-xl font-bold">
+          HSBC on Azure
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         HSBC moved significant workloads to Azure, driven by existing Microsoft enterprise agreements, hybrid identity with Azure AD, and strong compliance tooling. Azure's hybrid features eased on-premises integration.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         existing enterprise relationships and identity integration can drive cloud choice.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-lg">
+          🛒
+         </div>
+         <h3 class="text-xl font-bold">
+          Spotify on GCP
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Spotify chose GCP for data and machine learning. BigQuery powers analytics; Pub/Sub feeds event pipelines; and GKE runs services. GCP's data tooling and global backbone fit Spotify's scale.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         align provider strengths with your most important workload type.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/40 flex items-center justify-center text-lg">
+          🎮
+         </div>
+         <h3 class="text-xl font-bold">
+          Epic Games multi-cloud
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Epic Games runs Fortnite across AWS and its own private infrastructure. They use AWS for bursting during live events and Fortnite's backend services, while keeping critical real-time game servers optimized in their own data centers.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         a hybrid or multi-cloud strategy can combine control with cloud elasticity.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center text-lg">
+          📱
+         </div>
+         <h3 class="text-xl font-bold">
+          Snap on GCP
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Snap built Snapchat on GCP, leveraging App Engine, Datastore, and Bigtable in the early days. GCP's fully managed services let a small team scale to hundreds of millions of users.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         managed services can dramatically reduce early engineering overhead.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-3">
+         <div class="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/40 flex items-center justify-center text-lg">
+          🚗
+         </div>
+         <h3 class="text-xl font-bold">
+          Toyota on AWS
+         </h3>
+        </div>
+        <p class="text-[var(--muted)] text-sm leading-relaxed mb-2">
+         Toyota uses AWS for connected car data, analytics, and machine learning. Kinesis ingests telemetry; S3 and Redshift store and analyze it; and SageMaker builds predictive models for maintenance.
+        </p>
+        <p class="text-xs text-[var(--muted)]">
+         <strong>
+          Lesson:
+         </strong>
+         IoT + analytics + ML is a common modern cloud use case.
+        </p>
+       </div>
+      </div>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 12
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Deploy on Two Providers
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build the same small web application stack on AWS and GCP (or AWS and Azure). The goal is to feel the differences in CLI, naming, and console flow while reinforcing the underlying concepts: compute, storage, networking, and IAM.
+      </p>
+      <div class="space-y-10">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         1. What is this project?
+        </h3>
+        <p class="text-[var(--muted)] leading-relaxed">
+         You will deploy a simple static or containerized "Hello Cloud" application behind a load balancer with object storage for assets. You will do it twice &mdash; once on AWS and once on GCP or Azure &mdash; using the provider CLI. This comparison makes service names and patterns stick.
+        </p>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         2. What it covers?
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Creating a VPC/VNet and public/private subnets.
+         </li>
+         <li>
+          Launching a VM and installing a web server.
+         </li>
+         <li>
+          Creating an object storage bucket and uploading assets.
+         </li>
+         <li>
+          Configuring a security group / firewall rule.
+         </li>
+         <li>
+          Adding a basic load balancer (if available in free tier).
+         </li>
+         <li>
+          Cleaning up resources to avoid charges.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         3. How it is done?
+        </h3>
+        <div class="space-y-6">
+         <div>
+          <p class="font-semibold mb-2">
+           Step 1 &mdash; AWS path
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-bash"># Create a VPC and subnet 
+aws ec2 create-vpc --cidr-block 10.0.0.0/16 
+aws ec2 create-subnet --vpc-id vpc-xxx --cidr-block 10.0.1.0/24 
+# Create an internet gateway and attach it 
+aws ec2 create-internet-gateway 
+aws ec2 attach-internet-gateway --internet-gateway-id igw-xxx --vpc-id vpc-xxx 
+# Launch an EC2 instance in the public subnet 
+aws ec2 run-instances --image-id ami-0123456789abcdef0 --count 1 \
+--instance-type t2.micro --key-name my-key --security-group-ids sg-xxx --subnet-id subnet-xxx \
+--user-data '#!/bin/bash 
+yum update -y 
+yum install -y httpd systemctl start httpd systemctl enable httpd echo "Hello from AWS" &gt; /var/www/html/index.html' 
+# Create an S3 bucket and upload an asset 
+aws s3 mb s3://my-uniq-hello-bucket 
+aws s3 cp logo.png s3://my-uniq-hello-bucket/ 
+# Clean up when done 
+aws ec2 terminate-instances --instance-ids i-xxx 
+aws s3 rb s3://my-uniq-hello-bucket --force</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 2 &mdash; GCP path
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-bash"># Create a VPC network and subnet gcloud compute networks create hello-net --subnet-mode=custom gcloud compute networks subnets create hello-subnet \
+--network=hello-net --range=10.0.1.0/24 --region=us-central1 
+# Create a firewall rule for HTTP gcloud compute firewall-rules create allow-http \
+--network=hello-net --allow=tcp:80 --source-ranges=0.0.0.0/0 
+# Launch a Compute Engine VM gcloud compute instances create hello-vm \
+--zone=us-central1-a --machine-type=e2-micro \
+--network=hello-net --subnet=hello-subnet \
+--metadata-from-file startup-script=startup.sh \
+--tags=http-server 
+# startup.sh installs 
+nginx and writes a page 
+# Create a Cloud Storage bucket and upload an asset 
+gsutil mb -l us-central1 gs://my-uniq-hello-bucket 
+gsutil cp logo.png gs://my-uniq-hello-bucket/ 
+# Clean up when done gcloud compute instances delete hello-vm --zone=us-central1-a --quiet 
+gsutil rm -r gs://my-uniq-hello-bucket</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 3 &mdash; Azure path (alternative)
+          </p>
+          <div class="code-block rounded-xl overflow-hidden">
+           <button aria-label="Copy code" class="copy-btn">
+            Copy
+           </button>
+           <pre><code class="language-bash"># Create a resource group, VNet, and subnet 
+az group create --name helloRG --location westeurope 
+az network vnet create --name helloVNet --resource-group helloRG --subnet-name helloSubnet 
+# Create a public IP and a VM 
+az vm create --resource-group helloRG --name helloVM --image Ubuntu2204 \
+--size Standard_B1s --admin-username azureuser --generate-
+ssh-keys \
+--vnet-name helloVNet --subnet helloSubnet 
+# Open port 80 
+az vm open-port --resource-group helloRG --name helloVM --port 80 
+# SSH in and install 
+nginx 
+ssh azureuser@PUBLIC_IP 
+sudo 
+apt update &amp;&amp; 
+sudo 
+apt install -y 
+nginx 
+# Create a storage account and upload an asset 
+az storage account create --name hellostore123 --resource-group helloRG --sku Standard_LRS 
+az storage container create --name assets --account-name hellostore123 
+az storage blob upload --file logo.png --container-name assets --name logo.png --account-name hellostore123 
+# Clean up when done 
+az group delete --name helloRG --yes --no-wait</code></pre>
+          </div>
+         </div>
+         <div>
+          <p class="font-semibold mb-2">
+           Step 4 &mdash; Compare your experience
+          </p>
+          <div class="card rounded-2xl p-6">
+           <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+            <li>
+             Which CLI felt fastest for creating resources?
+            </li>
+            <li>
+             Where did you need extra steps (resource group, storage account, etc.)?
+            </li>
+            <li>
+             How did each console display networking and IAM?
+            </li>
+            <li>
+             Which free-tier limits did you hit first?
+            </li>
+           </ul>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         4. What did we learn from this capstone project?
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Every provider has a VPC/VNet, subnets, firewalls, VMs, object storage, and IAM &mdash; but the names and CLI flows differ.
+         </li>
+         <li>
+          Azure requires a resource group as a parent for almost every resource.
+         </li>
+         <li>
+          GCP VPCs are global by default, while AWS VPCs and Azure VNets are regional.
+         </li>
+         <li>
+          Object storage buckets are globally unique across all providers.
+         </li>
+         <li>
+          Cleaning up resources is just as important as creating them to avoid unexpected bills.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-bold mb-3">
+         5. How can I enhance this project in the future?
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Automate both deployments with Terraform and compare module structure across providers.
+         </li>
+         <li>
+          Add a managed database and a load balancer to the stack.
+         </li>
+         <li>
+          Deploy the same container to AWS App Runner, Azure Container Apps, and GCP Cloud Run.
+         </li>
+         <li>
+          Set up budget alerts and tag/label every resource.
+         </li>
+         <li>
+          Measure cold-start and request latency from multiple regions.
+         </li>
+         <li>
+          Build a cost report comparing the two provider deployments.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="quiz rounded-2xl border border-[var(--border)] p-6 mt-10" data-quiz="capstone">
+       <p class="font-semibold mb-4">
+        Which statement is true when comparing AWS, Azure, and GCP networking?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Only AWS has a virtual network service.
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition">
+         Azure requires resource groups, so it cannot use virtual networks.
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-correct="true">
+         All three providers offer virtual networks, subnets, firewalls, and load balancers.
+        </button>
+       </div>
+       <p class="quiz-feedback mt-4 font-medium hidden">
+       </p>
+      </div>
+     </section>
+     <section class="scroll-mt-24">
+      <div class="card rounded-2xl p-6 text-center">
+       <p class="text-[var(--muted)] mb-3">
+        Great work! Now automate everything you built with Terraform.
+       </p>
+       <a class="inline-flex items-center px-5 py-2.5 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition" href="../terraform/index.html" target="_blank">
+        Continue to Terraform &rarr;
+       </a>
+      </div>
+     </section>
+    </div>
+   </main>
+  </div>
+  <script>
+   function toggleSidebar() { const s = document.getElementById('sidebar'); const o = document.getElementById('menu-overlay'); s.classList.toggle('open'); o.classList.toggle('hidden'); } const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { moon.classList.add('hidden'); sun.classList.remove('hidden'); document.getElementById('hljs-light').disabled = true; document.getElementById('hljs-dark').disabled = false; } else { moon.classList.remove('hidden'); sun.classList.add('hidden'); document.getElementById('hljs-light').disabled = false; document.getElementById('hljs-dark').disabled = true; } localStorage.setItem('tutorials-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('tutorials-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); document.querySelectorAll('.copy-btn').forEach(btn => { btn.addEventListener('click', () => { const code = btn.parentElement.querySelector('code').textContent; navigator.clipboard.writeText(code).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); }); }); document.querySelectorAll('[data-quiz]').forEach(q => { const opts = q.querySelectorAll('.quiz-opt'); const fb = q.querySelector('.quiz-feedback'); opts.forEach(opt => { opt.addEventListener('click', () => { if (q.dataset.locked) return; q.dataset.locked = 'true'; opts.forEach(o => o.classList.remove('selected')); opt.classList.add('selected'); const correct = opt.dataset.correct === 'true'; if (correct) { opt.classList.add('correct'); fb.textContent = 'Correct!'; fb.classList.add('text-[var(--success)]'); } else { opt.classList.add('wrong'); q.querySelector('[data-correct="true"]').classList.add('correct'); fb.textContent = 'Not quite. The correct answer is highlighted.'; fb.classList.add('text-[var(--danger)]'); } fb.classList.remove('hidden'); }); }); }); const tocLinks = document.querySelectorAll('.toc-link'); const sections = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean); const obs = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { tocLinks.forEach(l => l.classList.remove('active')); const link = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (link) link.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach(s => obs.observe(s));
+  </script>
+ </body>
+</html>

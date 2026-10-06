@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260" class="diagram" role="img" aria-label="The three observability pillars: metrics, logs, traces">
+  <rect width="800" height="260" fill="#f6f8fa" rx="12"/>
+  <text x="400" y="35" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">The Three Pillars of Observability</text>
+  <rect x="70" y="70" width="200" height="140" rx="12" fill="#e6522c" opacity="0.15" stroke="#e6522c" stroke-width="2"/>
+  <text x="170" y="125" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">Metrics</text>
+  <text x="170" y="150" text-anchor="middle" font-size="12" fill="#656d76">Numbers over time</text>
+  <text x="170" y="170" text-anchor="middle" font-size="12" fill="#656d76">Prometheus</text>
+  <rect x="300" y="70" width="200" height="140" rx="12" fill="#059669" opacity="0.15" stroke="#059669" stroke-width="2"/>
+  <text x="400" y="125" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">Logs</text>
+  <text x="400" y="150" text-anchor="middle" font-size="12" fill="#656d76">Discrete events</text>
+  <text x="400" y="170" text-anchor="middle" font-size="12" fill="#656d76">Loki / ELK</text>
+  <rect x="530" y="70" width="200" height="140" rx="12" fill="#0369a1" opacity="0.15" stroke="#0369a1" stroke-width="2"/>
+  <text x="630" y="125" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">Traces</text>
+  <text x="630" y="150" text-anchor="middle" font-size="12" fill="#656d76">Request flows</text>
+  <text x="630" y="170" text-anchor="middle" font-size="12" fill="#656d76">Jaeger / Tempo</text>
+  <text x="400" y="245" text-anchor="middle" font-size="12" fill="#656d76">Correlate all three to understand unknown unknowns in production.</text>
+</svg>

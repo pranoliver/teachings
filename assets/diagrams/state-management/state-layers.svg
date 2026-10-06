@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="title desc">
+  <title id="title">State layers in a React app</title>
+  <desc id="desc">Three horizontal layers: server state handled by React Query, global client state by Redux or Zustand, and local UI state by useState.</desc>
+  <defs>
+    <style>
+      text { font-family: 'Outfit', system-ui, sans-serif; }
+      .label { font-size: 16px; font-weight: 600; fill: #1f2328; }
+      .desc { font-size: 13px; fill: #656d76; }
+      .box { rx: 12; }
+    </style>
+  </defs>
+  <rect width="720" height="360" fill="#f6f8fa" />
+
+  <g transform="translate(60, 40)">
+    <rect x="0" y="0" width="600" height="80" fill="#e1f5fe" stroke="#039be5" stroke-width="2" class="box" />
+    <text x="20" y="35" class="label">Server state</text>
+    <text x="20" y="60" class="desc">React Query / TanStack Query — cache, dedupe, background refetch, mutations</text>
+    <text x="520" y="45" font-size="24">🌐</text>
+  </g>
+
+  <g transform="translate(60, 140)">
+    <rect x="0" y="0" width="600" height="80" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" class="box" />
+    <text x="20" y="35" class="label">Global client state</text>
+    <text x="20" y="60" class="desc">Redux Toolkit (complex workflows) or Zustand (lightweight UI/global state)</text>
+    <text x="520" y="45" font-size="24">⚙️</text>
+  </g>
+
+  <g transform="translate(60, 240)">
+    <rect x="0" y="0" width="600" height="80" fill="#fff3e0" stroke="#ef6c00" stroke-width="2" class="box" />
+    <text x="20" y="35" class="label">Local UI state</text>
+    <text x="20" y="60" class="desc">useState / useReducer — form inputs, modals, hover, component focus</text>
+    <text x="520" y="45" font-size="24">🧩</text>
+  </g>
+
+  <g stroke="#656d76" stroke-width="2" stroke-dasharray="6,4" opacity="0.4">
+    <line x1="360" y1="125" x2="360" y2="140" />
+    <line x1="360" y1="225" x2="360" y2="240" />
+  </g>
+</svg>

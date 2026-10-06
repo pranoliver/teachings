@@ -1,450 +1,729 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python Fundamentals for Beginners</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/favicons/python.svg">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
-  <script>
-    tailwind.config = { darkMode: 'class' }
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Python Fundamentals for Beginners
+  </title>
+  <link href="../assets/favicons/python.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
   </script>
-  <style>
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-    .sr-only:focus { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 50; background: white; color: black; padding: 0.5rem 0.75rem; border-radius: 0.375rem; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
-    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
-    :root {
-      --brand-light: #2f81f7;
-      --brand-dark: #58a6ff;
-      --ink: #1f2328;
-      --muted: #656d76;
-      --panel: #f6f8fa;
-      --border: #d0d7de;
-      --success: #1a7f37;
-      --danger: #cf222e;
-      --warn: #9a6700;
-      --preview-bg: #ffffff;
-      --python-blue: #306998;
-      --python-yellow: #ffd43b;
-    }
-    html.dark {
-      --ink: #e6edf3;
-      --muted: #848d97;
-      --panel: #161b22;
-      --border: #30363d;
-      --success: #3fb950;
-      --danger: #f85149;
-      --warn: #d29922;
-      --preview-bg: #0d1117;
-    }
-    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
-    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
-    .brand { color: var(--brand-light); }
-    html.dark .brand { color: var(--brand-dark); }
-    .toc-link.active { background: rgba(47,129,247,0.12); border-left: 3px solid var(--brand-light); color: var(--brand-light); }
-    html.dark .toc-link.active { background: rgba(88,166,255,0.15); border-left-color: var(--brand-dark); color: var(--brand-dark); }
-    .card { border: 1px solid var(--border); background: var(--panel); }
-    .code-block { position: relative; }
-    .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--panel); color: var(--muted); opacity: 0; transition: opacity 0.15s; }
-    .code-block:hover .copy-btn { opacity: 1; }
-    .copy-btn.copied { color: var(--success); border-color: var(--success); }
-    .diagram { width: 100%; max-width: 720px; }
-    .quiz-opt.selected { border-color: var(--brand-light); background: rgba(47,129,247,0.08); }
-    html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba(88,166,255,0.12); }
-    .quiz-opt.correct { border-color: var(--success); background: rgba(26,127,55,0.08); }
-    .quiz-opt.wrong { border-color: var(--danger); background: rgba(207,34,46,0.08); }
-    .scroll-smooth { scroll-behavior: smooth; }
-    @media (max-width: 1024px) { #sidebar { transform: translateX(-100%); transition: transform .25s; } #sidebar.open { transform: translateX(0); } }
-    .kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:0.375rem; padding:0.125rem 0.375rem; font-family:ui-monospace,monospace; font-size:0.875rem; }
-    .preview-frame { border: 1px solid var(--border); background: var(--preview-bg); min-height: 160px; }
-    .playground-output { font-family: ui-monospace, monospace; font-size: 0.875rem; white-space: pre-wrap; }
-    .python-badge { background: var(--python-yellow); color: #323330; }
-  </style>
-</head>
-<body class="antialiased transition-colors duration-300">
-
-  <a href="#main" class="sr-only">Skip to content</a>
-
-  <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
-
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-python-basics">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
   <div class="flex min-h-screen">
-
-    <!-- Sidebar -->
-    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6">
-      <div class="flex items-center gap-3 mb-8">
-        <img src="../assets/favicons/python.svg" alt="Python" class="w-10 h-10">
-        <span class="text-xl font-bold">Python</span>
+   <!-- Sidebar -->
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Python" class="w-10 h-10" src="../assets/favicons/python.svg"/>
+     <span class="text-xl font-bold">
+      Python
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#what-is-python">
+      2. What is Python?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#install">
+      3. Installing &amp; Running Python
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#variables">
+      4. Variables &amp; Data Types
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#strings">
+      5. Strings, Numbers, Booleans
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#operators">
+      6. Operators
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#conditionals">
+      7. Conditionals
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#loops">
+      8. Loops
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#functions">
+      9. Functions
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#lists">
+      10. Lists &amp; Tuples
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dicts">
+      11. Dictionaries &amp; Sets
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#formatting">
+      12. String Formatting
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#files">
+      13. File Handling
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#errors">
+      14. Error Handling
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#modules">
+      15. Modules &amp; Packages
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#comprehensions">
+      16. List Comprehensions
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#lambda">
+      17. Lambda Functions
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#map-filter">
+      18. Map, Filter, Reduce
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#oop">
+      19. Object-Oriented Programming
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#inheritance">
+      20. Inheritance &amp; Polymorphism
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#iterators">
+      21. Iterators
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#generators">
+      22. Generators
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#decorators">
+      23. Decorators
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#context">
+      24. Context Managers
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#venv">
+      25. Virtual Environments
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#uv">
+      26. Using uv as a Package Manager
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      27. Build a Small Project
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#best-practices">
+      28. Best Practices
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <!-- Main content -->
+   <main class="flex-1 min-w-0" id="main">
+    <!-- Header -->
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Python Fundamentals
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <!-- 1. Introduction -->
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Welcome! This guide teaches Python from the very beginning through advanced concepts. By the end, you'll be able to write clean, powerful Python programs and understand professional patterns like decorators, generators, and object-oriented design.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         A computer with Python 3 installed
+        </li>
+        <li>
+         A text editor or IDE (VS Code, PyCharm, or Thonny)
+        </li>
+        <li>
+         No prior programming experience required
+        </li>
+       </ul>
       </div>
-      <nav id="toc" class="space-y-1 text-sm">
-        <a href="#intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">1. Introduction</a>
-        <a href="#what-is-python" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">2. What is Python?</a>
-        <a href="#install" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">3. Installing & Running Python</a>
-        <a href="#variables" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">4. Variables & Data Types</a>
-        <a href="#strings" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">5. Strings, Numbers, Booleans</a>
-        <a href="#operators" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">6. Operators</a>
-        <a href="#conditionals" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">7. Conditionals</a>
-        <a href="#loops" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">8. Loops</a>
-        <a href="#functions" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">9. Functions</a>
-        <a href="#lists" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">10. Lists & Tuples</a>
-        <a href="#dicts" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">11. Dictionaries & Sets</a>
-        <a href="#formatting" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">12. String Formatting</a>
-        <a href="#files" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">13. File Handling</a>
-        <a href="#errors" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">14. Error Handling</a>
-        <a href="#modules" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">15. Modules & Packages</a>
-        <a href="#comprehensions" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">16. List Comprehensions</a>
-        <a href="#lambda" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">17. Lambda Functions</a>
-        <a href="#map-filter" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">18. Map, Filter, Reduce</a>
-        <a href="#oop" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">19. Object-Oriented Programming</a>
-        <a href="#inheritance" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">20. Inheritance & Polymorphism</a>
-        <a href="#iterators" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">21. Iterators</a>
-        <a href="#generators" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">22. Generators</a>
-        <a href="#decorators" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">23. Decorators</a>
-        <a href="#context" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">24. Context Managers</a>
-        <a href="#venv" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">25. Virtual Environments</a>
-        <a href="#uv" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">26. Using uv as a Package Manager</a>
-        <a href="#project" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">27. Build a Small Project</a>
-        <a href="#best-practices" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">28. Best Practices</a>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Variables, data types, and control flow
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Functions, collections, and file handling
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Error handling and modules
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Advanced: lambdas, OOP, iterators, generators
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Decorators and context managers
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         A small capstone project
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Why Python?
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Readable syntax that looks almost like English
+        </li>
+        <li>
+         Used for web development, data science, automation, AI, and more
+        </li>
+        <li>
+         Huge community and excellent documentation
+        </li>
+        <li>
+         Works on every major operating system
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        More practice ideas
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Write a command-line calculator that handles +, &minus;, &times;, and &divide; with error checking.
+        </li>
+        <li>
+         Build a file organizer that sorts downloads by file extension.
+        </li>
+        <li>
+         Create a text-based adventure game with choices and multiple endings.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#what-is-python">
+        Next: What is Python? &rarr;
+       </a>
       </nav>
-      <div class="mt-8 pt-6 border-t border-[var(--border)]">
-        <p class="text-xs text-[var(--muted)]">Open in any browser. No build step required.</p>
+     </section>
+     <!-- 2. What is Python? -->
+     <section class="scroll-mt-24" id="what-is-python">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       What is Python?
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Python is a high-level, interpreted programming language. It is dynamically typed, meaning you don't have to declare variable types explicitly.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Compiled vs. Interpreted
+       </h3>
+       <svg aria-label="Diagram showing interpreted Python execution" class="diagram" viewBox="0 0 720 160">
+        <rect fill="#ffd43b" height="70" opacity="0.3" rx="12" stroke="#d29922" stroke-width="2" width="140" x="30" y="45">
+        </rect>
+        <text fill="#323330" font-size="13" font-weight="700" text-anchor="middle" x="100" y="85">
+         Source code
+        </text>
+        <path d="M180 80 L 240 80" marker-end="url(#arrow)" stroke="var(--border)" stroke-width="2">
+        </path>
+        <text fill="var(--muted)" font-size="11" text-anchor="middle" x="210" y="70">
+         Interpreter
+        </text>
+        <rect fill="#306998" height="70" opacity="0.2" rx="12" stroke="#306998" stroke-width="2" width="140" x="260" y="45">
+        </rect>
+        <text fill="#306998" font-size="13" font-weight="700" text-anchor="middle" x="330" y="85">
+         Python
+        </text>
+        <path d="M410 80 L 470 80" marker-end="url(#arrow)" stroke="var(--border)" stroke-width="2">
+        </path>
+        <text fill="var(--muted)" font-size="11" text-anchor="middle" x="440" y="70">
+         runs it
+        </text>
+        <rect fill="#3fb950" height="70" opacity="0.2" rx="12" stroke="#3fb950" stroke-width="2" width="140" x="490" y="45">
+        </rect>
+        <text fill="#1a7f37" font-size="13" font-weight="700" text-anchor="middle" x="560" y="85">
+         Output
+        </text>
+        <defs>
+         <marker id="arrow" markerHeight="10" markerUnits="strokeWidth" markerWidth="10" orient="auto" refX="8" refY="3">
+          <path d="M0,0 L0,6 L9,3 z" fill="var(--border)">
+          </path>
+         </marker>
+        </defs>
+       </svg>
       </div>
-    </aside>
-
-    <!-- Main content -->
-    <main id="main" class="flex-1 min-w-0">
-
-      <!-- Header -->
-      <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <button class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()" aria-label="Open menu">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <h1 class="text-lg sm:text-xl font-bold tracking-tight">Python Fundamentals</h1>
-        </div>
-        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
-          <svg id="moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
-          <svg id="sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         Python is primarily which kind of language?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         Compiled language
         </button>
-      </header>
-
-      <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
-
-        <!-- 1. Introduction -->
-        <section id="intro" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 1</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Welcome! This guide teaches Python from the very beginning through advanced concepts. By the end, you'll be able to write clean, powerful Python programs and understand professional patterns like decorators, generators, and object-oriented design.</p>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">Before you start</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>A computer with Python 3 installed</li>
-              <li>A text editor or IDE (VS Code, PyCharm, or Thonny)</li>
-              <li>No prior programming experience required</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">What you'll learn</h3>
-            <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Variables, data types, and control flow</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Functions, collections, and file handling</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Error handling and modules</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Advanced: lambdas, OOP, iterators, generators</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Decorators and context managers</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> A small capstone project</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Why Python?</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li>Readable syntax that looks almost like English</li>
-              <li>Used for web development, data science, automation, AI, and more</li>
-              <li>Huge community and excellent documentation</li>
-              <li>Works on every major operating system</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">More practice ideas</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Write a command-line calculator that handles +, −, ×, and ÷ with error checking.</li>
-              <li>Build a file organizer that sorts downloads by file extension.</li>
-              <li>Create a text-based adventure game with choices and multiple endings.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><span></span><a href="#what-is-python" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: What is Python? →</a></nav>
-        </section>
-
-        <!-- 2. What is Python? -->
-        <section id="what-is-python" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 2</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">What is Python?</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Python is a high-level, interpreted programming language. It is dynamically typed, meaning you don't have to declare variable types explicitly.</p>
-
-          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
-            <h3 class="text-xl font-semibold mb-4 w-full">Compiled vs. Interpreted</h3>
-            <svg class="diagram" viewBox="0 0 720 160" aria-label="Diagram showing interpreted Python execution">
-              <rect x="30" y="45" width="140" height="70" rx="12" fill="#ffd43b" opacity="0.3" stroke="#d29922" stroke-width="2"/>
-              <text x="100" y="85" text-anchor="middle" font-size="13" font-weight="700" fill="#323330">Source code</text>
-
-              <path d="M180 80 L 240 80" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
-              <text x="210" y="70" text-anchor="middle" font-size="11" fill="var(--muted)">Interpreter</text>
-
-              <rect x="260" y="45" width="140" height="70" rx="12" fill="#306998" opacity="0.2" stroke="#306998" stroke-width="2"/>
-              <text x="330" y="85" text-anchor="middle" font-size="13" font-weight="700" fill="#306998">Python</text>
-
-              <path d="M410 80 L 470 80" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
-              <text x="440" y="70" text-anchor="middle" font-size="11" fill="var(--muted)">runs it</text>
-
-              <rect x="490" y="45" width="140" height="70" rx="12" fill="#3fb950" opacity="0.2" stroke="#3fb950" stroke-width="2"/>
-              <text x="560" y="85" text-anchor="middle" font-size="13" font-weight="700" fill="#1a7f37">Output</text>
-
-              <defs>
-                <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="var(--border)"/></marker>
-              </defs>
-            </svg>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="B">
-              <p class="mb-3">Python is primarily which kind of language?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">Compiled language</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">Interpreted language</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">Machine language</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#install" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Installing Python →</a></nav>
-        </section>
-
-        <!-- 3. Installing Python -->
-        <section id="install" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 3</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Installing & Running Python</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Python comes pre-installed on many systems, but you should make sure you're using a recent version. The latest major version is Python 3.</p>
-
-          <div class="grid md:grid-cols-3 gap-4 mb-8">
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-2">Windows</h3>
-              <p class="text-sm text-[var(--muted)] mb-3">Download the installer from python.org and check "Add Python to PATH" during installation.</p>
-              <a href="https://python.org/downloads" target="_blank" class="text-sm brand font-medium hover:underline">Download Python →</a>
-            </div>
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-2">macOS</h3>
-              <p class="text-sm text-[var(--muted)] mb-3">Use Homebrew or download the installer.</p>
-              <code class="kbd">brew install python</code>
-            </div>
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-2">Linux</h3>
-              <p class="text-sm text-[var(--muted)] mb-3">Usually available from the package manager.</p>
-              <code class="kbd">sudo apt install python3</code>
-            </div>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># Check your Python version
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         Interpreted language
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         Machine language
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#install">
+        Next: Installing Python &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 3. Installing Python -->
+     <section class="scroll-mt-24" id="install">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Installing &amp; Running Python
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Python comes pre-installed on many systems, but you should make sure you're using a recent version. The latest major version is Python 3.
+      </p>
+      <div class="grid md:grid-cols-3 gap-4 mb-8">
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-2">
+         Windows
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-3">
+         Download the installer from python.org and check "Add Python to PATH" during installation.
+        </p>
+        <a class="text-sm brand font-medium hover:underline" href="https://python.org/downloads" target="_blank">
+         Download Python &rarr;
+        </a>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-2">
+         macOS
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-3">
+         Use Homebrew or download the installer.
+        </p>
+        <code class="kbd">
+         brew install python
+        </code>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-2">
+         Linux
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-3">
+         Usually available from the package manager.
+        </p>
+        <code class="kbd">
+         sudo apt install python3
+        </code>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Check your Python version
 python --version
 # or on some systems:
 python3 --version
-
 # Run a Python file
 python hello.py
-
 # Start the interactive shell
 python</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Open your terminal and run <code class="kbd">python --version</code> or <code class="kbd">python3 --version</code>. Do you see a version number?</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#what-is-python" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#variables" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Variables →</a></nav>
-        </section>
-
-        <!-- 4. Variables and Data Types -->
-        <section id="variables" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 4</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Variables & Data Types</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Variables are names that refer to values. In Python, you don't need to declare the type — Python figures it out.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Variables
-name = "Alex"      # string
-age = 25          # integer
-height = 1.75     # float
-is_student = True # boolean
-
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Open your terminal and run
+        <code class="kbd">
+         python --version
+        </code>
+        or
+        <code class="kbd">
+         python3 --version
+        </code>
+        . Do you see a version number?
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#what-is-python">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#variables">
+        Next: Variables &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 4. Variables and Data Types -->
+     <section class="scroll-mt-24" id="variables">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Variables &amp; Data Types
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Variables are names that refer to values. In Python, you don't need to declare the type &mdash; Python figures it out.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Variables
+name = "Alex"  # string
+age = 25  # integer
+height = 1.75  # float
+is_student = True  # boolean
 # Reassigning
 age = 26
-
 # Multiple assignment
 x, y, z = 1, 2, 3
-
 print(name, age, height, is_student)</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Common data types</h3>
-            <dl class="grid sm:grid-cols-2 gap-4 text-[var(--muted)]">
-              <div><dt class="font-semibold text-[var(--ink)]">int</dt><dd>Whole numbers: 1, -5, 1000</dd></div>
-              <div><dt class="font-semibold text-[var(--ink)]">float</dt><dd>Decimal numbers: 3.14, -0.5</dd></div>
-              <div><dt class="font-semibold text-[var(--ink)]">str</dt><dd>Text: "hello", 'world'</dd></div>
-              <div><dt class="font-semibold text-[var(--ink)]">bool</dt><dd>True or False</dd></div>
-            </dl>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#install" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#strings" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Strings & Numbers →</a></nav>
-        </section>
-
-        <!-- 5. Strings, Numbers, Booleans -->
-        <section id="strings" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 5</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Strings, Numbers, and Booleans</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Python makes it easy to work with text, numbers, and true/false values.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Strings
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Common data types
+       </h3>
+       <dl class="grid sm:grid-cols-2 gap-4 text-[var(--muted)]">
+        <div>
+         <dt class="font-semibold text-[var(--ink)]">
+          int
+         </dt>
+         <dd>
+          Whole numbers: 1, -5, 1000
+         </dd>
+        </div>
+        <div>
+         <dt class="font-semibold text-[var(--ink)]">
+          float
+         </dt>
+         <dd>
+          Decimal numbers: 3.14, -0.5
+         </dd>
+        </div>
+        <div>
+         <dt class="font-semibold text-[var(--ink)]">
+          str
+         </dt>
+         <dd>
+          Text: "hello", 'world'
+         </dd>
+        </div>
+        <div>
+         <dt class="font-semibold text-[var(--ink)]">
+          bool
+         </dt>
+         <dd>
+          True or False
+         </dd>
+        </div>
+       </dl>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#install">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#strings">
+        Next: Strings &amp; Numbers &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 5. Strings, Numbers, Booleans -->
+     <section class="scroll-mt-24" id="strings">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Strings, Numbers, and Booleans
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Python makes it easy to work with text, numbers, and true/false values.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Strings
 message = "Hello, Python!"
-print(message.upper())     # HELLO, PYTHON!
-print(message.lower())     # hello, python!
-print(len(message))        # 14
-
+print(message.upper())  # HELLO, PYTHON!
+print(message.lower())  # hello, python!
+print(len(message))  # 14
 # Numbers
-print(10 + 3)   # 13
-print(10 / 3)   # 3.333...
+print(10 + 3)  # 13
+print(10 / 3)  # 3.333...
 print(10 // 3)  # 3
-print(10 % 3)   # 1
-print(2 ** 3)   # 8
-
+print(10 % 3)  # 1
+print(2**3)  # 8
 # Booleans
-print(5 > 3)    # True
-print(5 == 3)   # False</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Try it yourself</h4>
-            <p class="text-[var(--muted)]">Create a variable with your name, then print it in uppercase and count its characters.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#variables" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#operators" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Operators →</a></nav>
-        </section>
-
-        <!-- 6. Operators -->
-        <section id="operators" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 6</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Operators</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Operators let you perform calculations, compare values, and combine conditions.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Arithmetic
+print(5 &gt; 3)  # True
+print(5 == 3)  # False</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Try it yourself
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create a variable with your name, then print it in uppercase and count its characters.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#variables">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#operators">
+        Next: Operators &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 6. Operators -->
+     <section class="scroll-mt-24" id="operators">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Operators
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Operators let you perform calculations, compare values, and combine conditions.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Arithmetic
 a = 10
 b = 3
-print(a + b)   # 13
-print(a - b)   # 7
-print(a * b)   # 30
-print(a / b)   # 3.333...
+print(a + b)  # 13
+print(a - b)  # 7
+print(a * b)  # 30
+print(a / b)  # 3.333...
 print(a // b)  # 3
-print(a % b)   # 1
-print(a ** b)  # 1000
-
+print(a % b)  # 1
+print(a**b)  # 1000
 # Comparison
-print(a > b)   # True
+print(a &gt; b)  # True
 print(a == b)  # False
 print(a != b)  # True
-
 # Logical
-print(a > 5 and b < 5)  # True
-print(a > 5 or b > 5)   # True
-print(not a > 5)        # False</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Special Python operators</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li><code class="kbd">//</code> floor division — drops the decimal</li>
-              <li><code class="kbd">**</code> exponentiation — power</li>
-              <li><code class="kbd">%</code> modulo — remainder after division</li>
-              <li><code class="kbd">in</code> membership check — useful for strings and lists</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#strings" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#conditionals" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Conditionals →</a></nav>
-        </section>
-
-        <!-- 7. Conditionals -->
-        <section id="conditionals" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 7</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Conditionals</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Conditionals let your code make choices.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">age = 18
-
-if age >= 21:
+print(a &gt; 5 and b &lt; 5)  # True
+print(a &gt; 5 or b &gt; 5)  # True
+print(not a &gt; 5)  # False</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Special Python operators
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          //
+         </code>
+         floor division &mdash; drops the decimal
+        </li>
+        <li>
+         <code class="kbd">
+          **
+         </code>
+         exponentiation &mdash; power
+        </li>
+        <li>
+         <code class="kbd">
+          %
+         </code>
+         modulo &mdash; remainder after division
+        </li>
+        <li>
+         <code class="kbd">
+          in
+         </code>
+         membership check &mdash; useful for strings and lists
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#strings">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#conditionals">
+        Next: Conditionals &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 7. Conditionals -->
+     <section class="scroll-mt-24" id="conditionals">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Conditionals
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Conditionals let your code make choices.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">age = 18
+if age &gt;= 21:
     print("You can drink alcohol in the US.")
-elif age >= 18:
+elif age &gt;= 18:
     print("You can vote.")
 else:
     print("You are still a minor.")
-
 # Ternary expression
-status = "adult" if age >= 18 else "minor"
+status = "adult" if age &gt;= 18 else "minor"
 print(status)</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="A">
-              <p class="mb-3">What keyword checks a second condition after an <code class="kbd">if</code> fails?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">elif</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">else</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">when</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#operators" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#loops" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Loops →</a></nav>
-        </section>
-
-        <!-- 8. Loops -->
-        <section id="loops" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 8</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Loops</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Loops repeat code. Python has <code class="kbd">for</code> loops for iterating and <code class="kbd">while</code> loops for conditions.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># for loop
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="A">
+        <p class="mb-3">
+         What keyword checks a second condition after an
+         <code class="kbd">
+          if
+         </code>
+         fails?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         elif
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         else
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         when
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#operators">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#loops">
+        Next: Loops &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 8. Loops -->
+     <section class="scroll-mt-24" id="loops">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Loops
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Loops repeat code. Python has
+       <code class="kbd">
+        for
+       </code>
+       loops for iterating and
+       <code class="kbd">
+        while
+       </code>
+       loops for conditions.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># for loop
 for i in range(5):
     print(i)
-
 # Loop over a list
 fruits = ["apple", "banana", "cherry"]
 for fruit in fruits:
     print(fruit)
-
 # while loop
 n = 0
-while n < 3:
+while n &lt; 3:
     print(n)
     n += 1
-
 # Loop control
 for num in range(10):
     if num == 5:
@@ -452,233 +731,346 @@ for num in range(10):
     if num % 2 == 0:
         continue
     print(num)</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Loop keywords</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li><code class="kbd">break</code> — exits the loop immediately</li>
-              <li><code class="kbd">continue</code> — skips to the next iteration</li>
-              <li><code class="kbd">else</code> on a loop — runs if the loop wasn't broken</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#conditionals" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#functions" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Functions →</a></nav>
-        </section>
-
-        <!-- 9. Functions -->
-        <section id="functions" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 9</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Functions</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Functions let you reuse code. Define them with <code class="kbd">def</code>.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Defining a function
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Loop keywords
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          break
+         </code>
+         &mdash; exits the loop immediately
+        </li>
+        <li>
+         <code class="kbd">
+          continue
+         </code>
+         &mdash; skips to the next iteration
+        </li>
+        <li>
+         <code class="kbd">
+          else
+         </code>
+         on a loop &mdash; runs if the loop wasn't broken
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#conditionals">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#functions">
+        Next: Functions &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 9. Functions -->
+     <section class="scroll-mt-24" id="functions">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Functions
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Functions let you reuse code. Define them with
+       <code class="kbd">
+        def
+       </code>
+       .
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Defining a function
 def greet(name):
     """Returns a greeting message."""
     return f"Hello, {name}!"
-
 # Calling a function
 message = greet("Alex")
 print(message)
-
 # Default arguments
 def power(base, exponent=2):
-    return base ** exponent
-
-print(power(3))     # 9
+    return base**exponent
+print(power(3))  # 9
 print(power(2, 3))  # 8
-
 # Keyword arguments
 print(power(exponent=3, base=2))  # 8</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Try it yourself</h4>
-            <p class="text-[var(--muted)]">Write a function that takes two numbers and returns their sum, difference, product, and quotient as a dictionary.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#loops" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#lists" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Lists & Tuples →</a></nav>
-        </section>
-
-        <!-- 10. Lists and Tuples -->
-        <section id="lists" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 10</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Lists & Tuples</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Lists are ordered, mutable collections. Tuples are ordered, immutable collections.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># List (mutable)
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Try it yourself
+       </h4>
+       <p class="text-[var(--muted)]">
+        Write a function that takes two numbers and returns their sum, difference, product, and quotient as a dictionary.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#loops">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#lists">
+        Next: Lists &amp; Tuples &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 10. Lists and Tuples -->
+     <section class="scroll-mt-24" id="lists">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Lists &amp; Tuples
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Lists are ordered, mutable collections. Tuples are ordered, immutable collections.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># List (mutable)
 fruits = ["apple", "banana", "cherry"]
 fruits.append("date")
 fruits[0] = "avocado"
 print(fruits)
-
 # Tuple (immutable)
 coordinates = (10, 20)
 # coordinates[0] = 15  # This would raise an error
-
 # Common list methods
 numbers = [3, 1, 4, 1, 5]
 numbers.sort()
 print(numbers)
 print(len(numbers))
 print(numbers.count(1))
-
 # Slicing
 items = [0, 1, 2, 3, 4, 5]
-print(items[1:4])   # [1, 2, 3]
-print(items[:3])     # [0, 1, 2]
-print(items[::-1])   # reversed</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="B">
-              <p class="mb-3">Which collection type is immutable?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">list</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">tuple</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">dictionary</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#functions" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#dicts" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Dictionaries & Sets →</a></nav>
-        </section>
-
-        <!-- 11. Dictionaries and Sets -->
-        <section id="dicts" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 11</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Dictionaries & Sets</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Dictionaries store key-value pairs. Sets store unique, unordered values.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Dictionary
-user = {
-    "name": "Alex",
-    "age": 25,
-    "city": "Paris"
-}
-
+print(items[1:4])  # [1, 2, 3]
+print(items[:3])  # [0, 1, 2]
+print(items[::-1])  # reversed</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         Which collection type is immutable?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         list
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         tuple
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         dictionary
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#functions">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#dicts">
+        Next: Dictionaries &amp; Sets &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 11. Dictionaries and Sets -->
+     <section class="scroll-mt-24" id="dicts">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 11
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Dictionaries &amp; Sets
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Dictionaries store key-value pairs. Sets store unique, unordered values.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Dictionary
+user = {"name": "Alex", "age": 25, "city": "Paris"}
 print(user["name"])
 user["age"] = 26
 user["country"] = "France"
-
 # Iterating
 for key, value in user.items():
     print(f"{key}: {value}")
-
 # Set
 numbers = {1, 2, 3, 3, 3}
 print(numbers)  # {1, 2, 3}
-
 numbers.add(4)
 numbers.remove(2)
 print(numbers)
-
 # Set operations
 a = {1, 2, 3}
 b = {2, 3, 4}
-print(a & b)  # intersection: {2, 3}
+print(a &amp; b)  # intersection: {2, 3}
 print(a | b)  # union: {1, 2, 3, 4}</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">When to use what</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li><strong>List</strong> — ordered items that may change</li>
-              <li><strong>Tuple</strong> — ordered items that should not change</li>
-              <li><strong>Dictionary</strong> — labeled data, fast lookups</li>
-              <li><strong>Set</strong> — unique values, membership tests</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#lists" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#formatting" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: String Formatting →</a></nav>
-        </section>
-
-        <!-- 12. String Formatting -->
-        <section id="formatting" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 12</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">String Formatting</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Python offers several ways to build strings with variables. F-strings are the most common modern approach.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">name = "Alex"
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        When to use what
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          List
+         </strong>
+         &mdash; ordered items that may change
+        </li>
+        <li>
+         <strong>
+          Tuple
+         </strong>
+         &mdash; ordered items that should not change
+        </li>
+        <li>
+         <strong>
+          Dictionary
+         </strong>
+         &mdash; labeled data, fast lookups
+        </li>
+        <li>
+         <strong>
+          Set
+         </strong>
+         &mdash; unique values, membership tests
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#lists">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#formatting">
+        Next: String Formatting &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 12. String Formatting -->
+     <section class="scroll-mt-24" id="formatting">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 12
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       String Formatting
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Python offers several ways to build strings with variables. F-strings are the most common modern approach.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">name = "Alex"
 age = 25
-
 # f-string (recommended)
 print(f"Hi, I'm {name} and I'm {age} years old.")
-
 # .format()
 print("Hi, I'm {} and I'm {} years old.".format(name, age))
-
 # Old style %
 print("Hi, I'm %s and I'm %d years old." % (name, age))
-
 # Formatting numbers
 pi = 3.14159265
 print(f"Pi to 2 decimals: {pi:.2f}")
-
 # Multiline f-string
 info = f"""
 Name: {name}
 Age: {age}
 """
 print(info)</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#dicts" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#files" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: File Handling →</a></nav>
-        </section>
-
-        <!-- 13. File Handling -->
-        <section id="files" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 13</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">File Handling</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Python makes reading and writing files straightforward with the <code class="kbd">open()</code> function and context managers.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Writing to a file
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dicts">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#files">
+        Next: File Handling &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 13. File Handling -->
+     <section class="scroll-mt-24" id="files">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 13
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       File Handling
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Python makes reading and writing files straightforward with the
+       <code class="kbd">
+        open()
+       </code>
+       function and context managers.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Writing to a file
 with open("hello.txt", "w") as file:
     file.write("Hello, Python!\n")
     file.write("This is a new line.")
-
 # Reading a file
 with open("hello.txt", "r") as file:
     content = file.read()
     print(content)
-
 # Reading line by line
 with open("hello.txt", "r") as file:
     for line in file:
         print(line.strip())
-
 # Appending to a file
 with open("hello.txt", "a") as file:
     file.write("\nAppended line.")</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Create a text file, write a few lines, then read it back and print each line.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#formatting" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#errors" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Error Handling →</a></nav>
-        </section>
-
-        <!-- 14. Error Handling -->
-        <section id="errors" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 14</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Error Handling</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Errors are a normal part of programming. Use <code class="kbd">try/except</code> blocks to handle them gracefully.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">try:
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create a text file, write a few lines, then read it back and print each line.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#formatting">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#errors">
+        Next: Error Handling &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 14. Error Handling -->
+     <section class="scroll-mt-24" id="errors">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 14
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Error Handling
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Errors are a normal part of programming. Use
+       <code class="kbd">
+        try/except
+       </code>
+       blocks to handle them gracefully.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">try:
     number = int(input("Enter a number: "))
     result = 10 / number
     print(result)
@@ -692,93 +1084,139 @@ else:
     print("Calculation succeeded.")
 finally:
     print("This always runs.")</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Best practice</h3>
-            <p class="text-[var(--muted)]">Catch specific exceptions when possible. Avoid bare <code class="kbd">except:</code> because it can hide bugs.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#files" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#modules" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Modules →</a></nav>
-        </section>
-
-        <!-- 15. Modules and Packages -->
-        <section id="modules" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 15</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Modules & Packages</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Modules are files with Python code you can reuse. Packages are folders of modules.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Import a standard library module
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Best practice
+       </h3>
+       <p class="text-[var(--muted)]">
+        Catch specific exceptions when possible. Avoid bare
+        <code class="kbd">
+         except:
+        </code>
+        because it can hide bugs.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#files">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#modules">
+        Next: Modules &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 15. Modules and Packages -->
+     <section class="scroll-mt-24" id="modules">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 15
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Modules &amp; Packages
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Modules are files with Python code you can reuse. Packages are folders of modules.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Import a standard library module
 import random
 print(random.randint(1, 10))
-
 # Import with an alias
 import datetime as dt
 print(dt.date.today())
-
 # Import specific items
 from math import sqrt, pi
 print(sqrt(16))
 print(pi)
-
 # Install third-party packages with pip
 # pip install requests
-
 # Then import them
 # import requests</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Try it yourself</h4>
-            <p class="text-[var(--muted)]">Use the <code class="kbd">random</code> module to pick a random item from a list of your favorite foods.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#errors" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#comprehensions" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: List Comprehensions →</a></nav>
-        </section>
-
-        <!-- 16. List Comprehensions -->
-        <section id="comprehensions" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 16</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">List Comprehensions</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">List comprehensions provide a concise way to create lists from existing iterables.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Traditional loop
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Try it yourself
+       </h4>
+       <p class="text-[var(--muted)]">
+        Use the
+        <code class="kbd">
+         random
+        </code>
+        module to pick a random item from a list of your favorite foods.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#errors">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#comprehensions">
+        Next: List Comprehensions &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 16. List Comprehensions -->
+     <section class="scroll-mt-24" id="comprehensions">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 16
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       List Comprehensions
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       List comprehensions provide a concise way to create lists from existing iterables.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Traditional loop
 squares = []
 for x in range(10):
-    squares.append(x ** 2)
-
+    squares.append(x**2)
 # List comprehension
-squares = [x ** 2 for x in range(10)]
+squares = [x**2 for x in range(10)]
 print(squares)
-
 # With a condition
 evens = [x for x in range(20) if x % 2 == 0]
 print(evens)
-
 # Dictionary comprehension
 word_lengths = {word: len(word) for word in ["apple", "banana", "kiwi"]}
 print(word_lengths)</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#modules" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#lambda" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Lambda Functions →</a></nav>
-        </section>
-
-        <!-- 17. Lambda Functions -->
-        <section id="lambda" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 17</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Lambda Functions</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Lambda functions are small, anonymous functions defined with the <code class="kbd">lambda</code> keyword.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># A simple lambda
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#modules">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#lambda">
+        Next: Lambda Functions &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 17. Lambda Functions -->
+     <section class="scroll-mt-24" id="lambda">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 17
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Lambda Functions
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Lambda functions are small, anonymous functions defined with the
+       <code class="kbd">
+        lambda
+       </code>
+       keyword.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># A simple lambda
 add = lambda a, b: a + b
 print(add(2, 3))  # 5
-
 # Lambdas are often used with sorted
 people = [
     {"name": "Alice", "age": 30},
@@ -786,223 +1224,333 @@ people = [
 ]
 sorted_people = sorted(people, key=lambda p: p["age"])
 print(sorted_people)
-
 # Map with lambda
 numbers = [1, 2, 3, 4]
 doubled = list(map(lambda x: x * 2, numbers))
 print(doubled)</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">When to use lambdas</h3>
-            <p class="text-[var(--muted)]">Use lambdas for short, throwaway functions. If the logic is complex, use a regular <code class="kbd">def</code> with a name.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#comprehensions" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#map-filter" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Map, Filter, Reduce →</a></nav>
-        </section>
-
-        <!-- 18. Map, Filter, Reduce -->
-        <section id="map-filter" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 18</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Map, Filter, and Reduce</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">These functional tools process collections without explicit loops.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">from functools import reduce
-
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        When to use lambdas
+       </h3>
+       <p class="text-[var(--muted)]">
+        Use lambdas for short, throwaway functions. If the logic is complex, use a regular
+        <code class="kbd">
+         def
+        </code>
+        with a name.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#comprehensions">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#map-filter">
+        Next: Map, Filter, Reduce &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 18. Map, Filter, Reduce -->
+     <section class="scroll-mt-24" id="map-filter">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 18
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Map, Filter, and Reduce
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       These functional tools process collections without explicit loops.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">from functools import reduce
 numbers = [1, 2, 3, 4, 5]
-
 # map: transform each item
 doubled = list(map(lambda x: x * 2, numbers))
 print(doubled)  # [2, 4, 6, 8, 10]
-
 # filter: keep items that match a condition
 evens = list(filter(lambda x: x % 2 == 0, numbers))
 print(evens)  # [2, 4]
-
 # reduce: combine all items into one value
 product = reduce(lambda a, b: a * b, numbers)
 print(product)  # 120</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Try it yourself</h4>
-            <p class="text-[var(--muted)]">Use <code class="kbd">filter</code> and <code class="kbd">map</code> to get the squares of only even numbers from a list.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#lambda" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#oop" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Object-Oriented Programming →</a></nav>
-        </section>
-
-        <!-- 19. Object-Oriented Programming -->
-        <section id="oop" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 19</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Object-Oriented Programming</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">OOP lets you model real-world things as objects with data (attributes) and behavior (methods).</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">class Dog:
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Try it yourself
+       </h4>
+       <p class="text-[var(--muted)]">
+        Use
+        <code class="kbd">
+         filter
+        </code>
+        and
+        <code class="kbd">
+         map
+        </code>
+        to get the squares of only even numbers from a list.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#lambda">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#oop">
+        Next: Object-Oriented Programming &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 19. Object-Oriented Programming -->
+     <section class="scroll-mt-24" id="oop">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 19
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Object-Oriented Programming
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       OOP lets you model real-world things as objects with data (attributes) and behavior (methods).
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">class Dog:
     species = "Canis familiaris"
-
     def __init__(self, name, age):
         self.name = name
         self.age = age
-
     def bark(self):
         return f"{self.name} says woof!"
-
     def birthday(self):
         self.age += 1
-
 # Creating objects
 buddy = Dog("Buddy", 3)
 print(buddy.name)
 print(buddy.bark())
-
 buddy.birthday()
 print(buddy.age)  # 4</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Key OOP concepts</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li><strong>Class</strong> — a blueprint for objects</li>
-              <li><strong>Instance</strong> — an object created from a class</li>
-              <li><strong>Attribute</strong> — data stored on an object</li>
-              <li><strong>Method</strong> — a function that belongs to a class</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#map-filter" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#inheritance" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Inheritance →</a></nav>
-        </section>
-
-        <!-- 20. Inheritance and Polymorphism -->
-        <section id="inheritance" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 20</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Inheritance & Polymorphism</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Inheritance lets a new class reuse and extend an existing class. Polymorphism means different classes can respond to the same method call in their own way.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">class Animal:
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Key OOP concepts
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Class
+         </strong>
+         &mdash; a blueprint for objects
+        </li>
+        <li>
+         <strong>
+          Instance
+         </strong>
+         &mdash; an object created from a class
+        </li>
+        <li>
+         <strong>
+          Attribute
+         </strong>
+         &mdash; data stored on an object
+        </li>
+        <li>
+         <strong>
+          Method
+         </strong>
+         &mdash; a function that belongs to a class
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#map-filter">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#inheritance">
+        Next: Inheritance &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 20. Inheritance and Polymorphism -->
+     <section class="scroll-mt-24" id="inheritance">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 20
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Inheritance &amp; Polymorphism
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Inheritance lets a new class reuse and extend an existing class. Polymorphism means different classes can respond to the same method call in their own way.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">class Animal:
     def __init__(self, name):
         self.name = name
-
     def speak(self):
         raise NotImplementedError("Subclasses must implement this")
-
 class Cat(Animal):
     def speak(self):
         return f"{self.name} says meow"
-
 class Dog(Animal):
     def speak(self):
         return f"{self.name} says woof"
-
 animals = [Cat("Whiskers"), Dog("Buddy")]
 for animal in animals:
     print(animal.speak())</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="C">
-              <p class="mb-3">What does inheritance let you do?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">Delete a class</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">Hide variables from other classes</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">Reuse and extend an existing class</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#oop" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#iterators" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Iterators →</a></nav>
-        </section>
-
-        <!-- 21. Iterators -->
-        <section id="iterators" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 21</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Iterators</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">An iterator is an object that produces values one at a time. Lists, tuples, dictionaries, and strings are all iterable.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Using iter() and next()
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="C">
+        <p class="mb-3">
+         What does inheritance let you do?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         Delete a class
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         Hide variables from other classes
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         Reuse and extend an existing class
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#oop">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#iterators">
+        Next: Iterators &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 21. Iterators -->
+     <section class="scroll-mt-24" id="iterators">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 21
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Iterators
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       An iterator is an object that produces values one at a time. Lists, tuples, dictionaries, and strings are all iterable.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Using iter() and next()
 fruits = ["apple", "banana", "cherry"]
 iterator = iter(fruits)
-
 print(next(iterator))  # apple
 print(next(iterator))  # banana
 print(next(iterator))  # cherry
-
 # Making your own iterator class
 class Countdown:
     def __init__(self, start):
         self.start = start
-
     def __iter__(self):
         return self
-
     def __next__(self):
-        if self.start <= 0:
+        if self.start &lt;= 0:
             raise StopIteration
         self.start -= 1
         return self.start + 1
-
 for num in Countdown(5):
     print(num)</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#inheritance" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#generators" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Generators →</a></nav>
-        </section>
-
-        <!-- 22. Generators -->
-        <section id="generators" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 22</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Generators</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Generators are functions that produce a sequence of values lazily, pausing between each one. They save memory for large datasets.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Generator function
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#inheritance">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#generators">
+        Next: Generators &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 22. Generators -->
+     <section class="scroll-mt-24" id="generators">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 22
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Generators
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Generators are functions that produce a sequence of values lazily, pausing between each one. They save memory for large datasets.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Generator function
 def count_up_to(n):
     count = 1
-    while count <= n:
+    while count &lt;= n:
         yield count
         count += 1
-
 for num in count_up_to(5):
     print(num)
-
 # Generator expression
-squares = (x ** 2 for x in range(1000000))
+squares = (x**2 for x in range(1000000))
 print(next(squares))  # 0
 print(next(squares))  # 1</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Why generators matter</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>They don't store all values in memory at once.</li>
-              <li>They are perfect for reading large files or infinite sequences.</li>
-              <li>They pause execution with <code class="kbd">yield</code> and resume on the next call.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#iterators" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#decorators" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Decorators →</a></nav>
-        </section>
-
-        <!-- 23. Decorators -->
-        <section id="decorators" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 23</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Decorators</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Decorators are functions that wrap other functions to add behavior. They are a powerful advanced Python feature.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">import functools
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Why generators matter
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         They don't store all values in memory at once.
+        </li>
+        <li>
+         They are perfect for reading large files or infinite sequences.
+        </li>
+        <li>
+         They pause execution with
+         <code class="kbd">
+          yield
+         </code>
+         and resume on the next call.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#iterators">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#decorators">
+        Next: Decorators &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 23. Decorators -->
+     <section class="scroll-mt-24" id="decorators">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 23
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Decorators
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Decorators are functions that wrap other functions to add behavior. They are a powerful advanced Python feature.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">import functools
 import time
-
 def timer(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -1012,284 +1560,523 @@ def timer(func):
         print(f"{func.__name__} took {elapsed:.4f} seconds")
         return result
     return wrapper
-
 @timer
 def slow_function():
     time.sleep(0.5)
     return "Done"
-
 slow_function()</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">How it works</h4>
-            <p class="text-[var(--muted)]"><code class="kbd">@timer</code> above a function is shorthand for <code class="kbd">slow_function = timer(slow_function)</code>. The wrapper adds timing without changing the original function.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#generators" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#context" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Context Managers →</a></nav>
-        </section>
-
-        <!-- 24. Context Managers -->
-        <section id="context" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 24</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Context Managers</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Context managers handle setup and cleanup automatically. You use them whenever you see <code class="kbd">with</code>.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python"># Built-in context manager
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        How it works
+       </h4>
+       <p class="text-[var(--muted)]">
+        <code class="kbd">
+         @timer
+        </code>
+        above a function is shorthand for
+        <code class="kbd">
+         slow_function = timer(slow_function)
+        </code>
+        . The wrapper adds timing without changing the original function.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#generators">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#context">
+        Next: Context Managers &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 24. Context Managers -->
+     <section class="scroll-mt-24" id="context">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 24
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Context Managers
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Context managers handle setup and cleanup automatically. You use them whenever you see
+       <code class="kbd">
+        with
+       </code>
+       .
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># Built-in context manager
 with open("data.txt", "w") as f:
     f.write("safe file handling")
 # File is automatically closed here
-
 # Custom context manager
 class Timer:
     def __enter__(self):
         self.start = time.time()
         return self
-
     def __exit__(self, exc_type, exc_val, exc_tb):
         elapsed = time.time() - self.start
         print(f"Elapsed: {elapsed:.4f}s")
         return False
-
 with Timer():
     time.sleep(0.3)
-
 # Using contextlib
 from contextlib import contextmanager
-
 @contextmanager
 def managed_resource():
     print("Setup")
     yield
     print("Cleanup")
-
 with managed_resource():
     print("Working")</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#decorators" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#venv" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Virtual Environments →</a></nav>
-        </section>
-
-        <!-- 25. Virtual Environments -->
-        <section id="venv" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 25</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Virtual Environments</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Virtual environments isolate project dependencies so different projects can use different package versions.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># Create a virtual environment
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#decorators">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#venv">
+        Next: Virtual Environments &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 25. Virtual Environments -->
+     <section class="scroll-mt-24" id="venv">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 25
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Virtual Environments
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Virtual environments isolate project dependencies so different projects can use different package versions.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Create a virtual environment
 python -m venv .venv
-
 # Activate it
 # Windows:
-.venv\Scripts\activate
+.venv\
+Scripts\
+activate
 # macOS/Linux:
 source .venv/bin/activate
-
 # Install packages
 pip install requests
-
 # Save dependencies
-pip freeze > requirements.txt
-
+pip freeze &gt; requirements.txt
 # Install from requirements
 pip install -r requirements.txt</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Why use virtual environments?</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Avoid conflicts between project dependencies.</li>
-              <li>Make projects reproducible.</li>
-              <li>Keep your system Python clean.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#context" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#uv" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Using uv →</a></nav>
-        </section>
-
-        <!-- 26. Using uv as a Package Manager -->
-        <section id="uv" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 26</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Using uv as a Package Manager</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Modern Python projects can use <strong>uv</strong>, a fast, all-in-one Python project manager written in Rust by Astral. It can manage Python versions, create virtual environments, install packages, lock dependencies, run scripts, and install command-line tools.</p>
-
-          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
-            <h3 class="text-xl font-semibold mb-4 w-full">Classic tools vs. uv's unified workflow</h3>
-            <svg class="diagram" viewBox="0 0 720 220" aria-label="Diagram comparing pip plus venv to the unified uv workflow">
-              <text x="180" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">Classic workflow</text>
-              <rect x="40" y="45" width="110" height="54" rx="10" fill="#ffd43b" opacity="0.3" stroke="#d29922" stroke-width="2"/>
-              <text x="95" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#323330">python -m venv</text>
-              <rect x="190" y="45" width="80" height="54" rx="10" fill="#306998" opacity="0.2" stroke="#306998" stroke-width="2"/>
-              <text x="230" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#306998">activate</text>
-              <rect x="300" y="45" width="80" height="54" rx="10" fill="#3fb950" opacity="0.2" stroke="#3fb950" stroke-width="2"/>
-              <text x="340" y="75" text-anchor="middle" font-size="12" font-weight="600" fill="#1a7f37">pip install</text>
-              <path d="M150 72 L190 72" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
-              <path d="M270 72 L300 72" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
-              <path d="M380 72 L420 72" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
-              <text x="450" y="80" text-anchor="start" font-size="12" fill="var(--muted)">+ separate tools for</text>
-              <text x="450" y="98" text-anchor="start" font-size="12" fill="var(--muted)">locking, running, Python versions</text>
-
-              <text x="540" y="28" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">uv workflow</text>
-              <rect x="450" y="140" width="180" height="64" rx="12" fill="#2f81f7" opacity="0.15" stroke="#2f81f7" stroke-width="2"/>
-              <text x="540" y="168" text-anchor="middle" font-size="13" font-weight="700" fill="#2f81f7">uv</text>
-              <text x="540" y="188" text-anchor="middle" font-size="11" fill="var(--muted)">venv • pip • run • sync • lock • tool</text>
-            </svg>
-            <p class="text-sm text-[var(--muted)] mt-4">This section is <strong>advanced</strong>. The classic <code class="kbd">pip</code> + <code class="kbd">venv</code> workflow you learned in the previous chapter still works everywhere.</p>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Install uv</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># Using pip (works on any Python installation)
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Why use virtual environments?
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Avoid conflicts between project dependencies.
+        </li>
+        <li>
+         Make projects reproducible.
+        </li>
+        <li>
+         Keep your system Python clean.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#context">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#uv">
+        Next: Using uv &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 26. Using uv as a Package Manager -->
+     <section class="scroll-mt-24" id="uv">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 26
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Using uv as a Package Manager
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Modern Python projects can use
+       <strong>
+        uv
+       </strong>
+       , a fast, all-in-one Python project manager written in Rust by Astral. It can manage Python versions, create virtual environments, install packages, lock dependencies, run scripts, and install command-line tools.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Classic tools vs. uv's unified workflow
+       </h3>
+       <svg aria-label="Diagram comparing pip plus venv to the unified uv workflow" class="diagram" viewBox="0 0 720 220">
+        <text fill="var(--ink)" font-size="14" font-weight="700" text-anchor="middle" x="180" y="28">
+         Classic workflow
+        </text>
+        <rect fill="#ffd43b" height="54" opacity="0.3" rx="10" stroke="#d29922" stroke-width="2" width="110" x="40" y="45">
+        </rect>
+        <text fill="#323330" font-size="12" font-weight="600" text-anchor="middle" x="95" y="75">
+         python -m venv
+        </text>
+        <rect fill="#306998" height="54" opacity="0.2" rx="10" stroke="#306998" stroke-width="2" width="80" x="190" y="45">
+        </rect>
+        <text fill="#306998" font-size="12" font-weight="600" text-anchor="middle" x="230" y="75">
+         activate
+        </text>
+        <rect fill="#3fb950" height="54" opacity="0.2" rx="10" stroke="#3fb950" stroke-width="2" width="80" x="300" y="45">
+        </rect>
+        <text fill="#1a7f37" font-size="12" font-weight="600" text-anchor="middle" x="340" y="75">
+         pip install
+        </text>
+        <path d="M150 72 L190 72" marker-end="url(#arrow)" stroke="var(--border)" stroke-width="2">
+        </path>
+        <path d="M270 72 L300 72" marker-end="url(#arrow)" stroke="var(--border)" stroke-width="2">
+        </path>
+        <path d="M380 72 L420 72" marker-end="url(#arrow)" stroke="var(--border)" stroke-width="2">
+        </path>
+        <text fill="var(--muted)" font-size="12" text-anchor="start" x="450" y="80">
+         + separate tools for
+        </text>
+        <text fill="var(--muted)" font-size="12" text-anchor="start" x="450" y="98">
+         locking, running, Python versions
+        </text>
+        <text fill="var(--ink)" font-size="14" font-weight="700" text-anchor="middle" x="540" y="28">
+         uv workflow
+        </text>
+        <rect fill="#2f81f7" height="64" opacity="0.15" rx="12" stroke="#2f81f7" stroke-width="2" width="180" x="450" y="140">
+        </rect>
+        <text fill="#2f81f7" font-size="13" font-weight="700" text-anchor="middle" x="540" y="168">
+         uv
+        </text>
+        <text fill="var(--muted)" font-size="11" text-anchor="middle" x="540" y="188">
+         venv &bull; pip &bull; run &bull; sync &bull; lock &bull; tool
+        </text>
+       </svg>
+       <p class="text-sm text-[var(--muted)] mt-4">
+        This section is
+        <strong>
+         advanced
+        </strong>
+        . The classic
+        <code class="kbd">
+         pip
+        </code>
+        +
+        <code class="kbd">
+         venv
+        </code>
+        workflow you learned in the previous chapter still works everywhere.
+       </p>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Install uv
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Using pip (works on any Python installation)
 pip install uv
-
-# Or use Astral's official installers
+# Or 
+use Astral's official installers
 # macOS / Linux:
 curl -LsSf https://astral.sh/uv/install.sh | sh
-
 # Windows PowerShell:
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"</code></pre>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Core uv workflows</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># Create a virtual environment (no manual activation needed)
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Core uv workflows
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Create a virtual environment (no manual activation needed)
 uv venv
-
 # Install packages
 uv pip install requests
-
 # Run a script inside the managed environment
-uv run python script.py
-
+uv run 
+python script.py
 # Add a dependency to pyproject.toml and install it
 uv add rich
-
 # Remove a dependency
 uv remove rich
-
 # Install exactly what pyproject.toml requires
 uv sync
-
 # Generate / update a lockfile for reproducible installs
 uv lock
-
 # Compile a requirements file from pyproject.toml
 uv pip compile pyproject.toml -o requirements.txt
-
 # Install and run an isolated CLI tool
 uvx ruff check .
 uv tool install ruff</code></pre>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Manage Python interpreters</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># See available Python versions
-uv python list
-
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Manage Python interpreters
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># See available Python versions
+uv 
+python list
 # Install a specific Python version
-uv python install 3.12
-
+uv 
+python install 3.12
 # Pin a project to a Python version
-uv python pin 3.12</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">Why use uv? Why keep pip/venv?</h3>
-            <div class="grid md:grid-cols-2 gap-6 text-[var(--muted)]">
-              <div>
-                <h4 class="font-semibold text-[var(--ink)] mb-2">uv advantages</h4>
-                <ul class="list-disc pl-5 space-y-1">
-                  <li>One tool replaces many: <code class="kbd">pip</code>, <code class="kbd">venv</code>, <code class="kbd">pip-tools</code>, <code class="kbd">virtualenv</code>, <code class="kbd">pipx</code>.</li>
-                  <li>Much faster package resolution and installation.</li>
-                  <li>Built-in lockfile for reproducible environments.</li>
-                  <li>Runs scripts and tools without manual activation.</li>
-                </ul>
-              </div>
-              <div>
-                <h4 class="font-semibold text-[var(--ink)] mb-2">When pip/venv still makes sense</h4>
-                <ul class="list-disc pl-5 space-y-1">
-                  <li>Teams or servers where only standard tools are allowed.</li>
-                  <li>Older projects already using <code class="kbd">requirements.txt</code> and <code class="kbd">pip</code>.</li>
-                  <li>Teaching or documenting the canonical Python workflow.</li>
-                  <li>You only need a tiny one-off package install.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-6">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Install <code class="kbd">uv</code>, create a new project folder, run <code class="kbd">uv venv</code>, and then run a simple Python file with <code class="kbd">uv run python hello.py</code>.</p>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="B">
-              <p class="mb-3">Which command runs a script inside the environment managed by <code class="kbd">uv</code>?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">uv python script.py</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">uv run python script.py</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">uv exec script.py</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#venv" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#project" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Build a Project →</a></nav>
-        </section>
-
-        <!-- 27. Build a Small Project -->
-        <section id="project" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 27</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Capstone Project: Smart Expense Tracker</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">This capstone pulls together everything you have learned: data structures, functions, file handling, error handling, and modular design. You will build a real, useful terminal application that can persist expenses, categorize them, set budgets, and export reports.</p>
-
-          <h3 class="text-xl font-semibold mb-3">What you will build</h3>
-          <p class="text-[var(--muted)] mb-4">A command-line expense tracker. Users can add expenses, list them, filter by category or date, see totals and budgets, update or delete entries, and export a monthly report to a CSV file.</p>
-
-          <h3 class="text-xl font-semibold mb-3">Requirements</h3>
-          <div class="card rounded-2xl p-6 mb-8">
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li><strong>Storage:</strong> Save expenses to a JSON file so data persists between runs.</li>
-              <li><strong>Expense fields:</strong> Each expense has an ID, date, description, category, and amount.</li>
-              <li><strong>Add:</strong> Add a new expense with a description, category, and amount. Auto-generate the ID and date if not provided.</li>
-              <li><strong>List:</strong> Display all expenses in a readable table with optional category filter.</li>
-              <li><strong>Update &amp; delete:</strong> Edit an expense by ID or remove it entirely.</li>
-              <li><strong>Budgets:</strong> Set a monthly budget per category. Warn when spending reaches 80% and error when it exceeds 100%.</li>
-              <li><strong>Summary:</strong> Show total spending, totals by category, and remaining budget.</li>
-              <li><strong>Export:</strong> Export expenses to a CSV file for spreadsheets.</li>
-              <li><strong>Validation:</strong> Handle invalid amounts, missing files, and bad user input gracefully.</li>
-            </ul>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Design overview</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-text">expense_tracker/
-├── main.py          # entry point and command loop
-├── storage.py       # load / save JSON data
-├── models.py        # Expense and Budget classes
-├── operations.py    # add, list, update, delete, summarize
-└── reports.py       # CSV export helpers</code></pre>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Full solution (modular files)</h3>
-          <p class="text-[var(--muted)] mb-4">The project is split into five small, focused files. You can either keep them separate or combine them into one file. The structure matches the design overview above.</p>
-
-          <h4 class="font-semibold mb-2">1. <code class="kbd">storage.py</code> — save and load JSON</h4>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">"""Storage helpers for the Smart Expense Tracker."""
-
+uv 
+python pin 3.12</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Why use uv? Why keep pip/venv?
+       </h3>
+       <div class="grid md:grid-cols-2 gap-6 text-[var(--muted)]">
+        <div>
+         <h4 class="font-semibold text-[var(--ink)] mb-2">
+          uv advantages
+         </h4>
+         <ul class="list-disc pl-5 space-y-1">
+          <li>
+           One tool replaces many:
+           <code class="kbd">
+            pip
+           </code>
+           ,
+           <code class="kbd">
+            venv
+           </code>
+           ,
+           <code class="kbd">
+            pip-tools
+           </code>
+           ,
+           <code class="kbd">
+            virtualenv
+           </code>
+           ,
+           <code class="kbd">
+            pipx
+           </code>
+           .
+          </li>
+          <li>
+           Much faster package resolution and installation.
+          </li>
+          <li>
+           Built-in lockfile for reproducible environments.
+          </li>
+          <li>
+           Runs scripts and tools without manual activation.
+          </li>
+         </ul>
+        </div>
+        <div>
+         <h4 class="font-semibold text-[var(--ink)] mb-2">
+          When pip/venv still makes sense
+         </h4>
+         <ul class="list-disc pl-5 space-y-1">
+          <li>
+           Teams or servers where only standard tools are allowed.
+          </li>
+          <li>
+           Older projects already using
+           <code class="kbd">
+            requirements.txt
+           </code>
+           and
+           <code class="kbd">
+            pip
+           </code>
+           .
+          </li>
+          <li>
+           Teaching or documenting the canonical Python workflow.
+          </li>
+          <li>
+           You only need a tiny one-off package install.
+          </li>
+         </ul>
+        </div>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-6">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Install
+        <code class="kbd">
+         uv
+        </code>
+        , create a new project folder, run
+        <code class="kbd">
+         uv venv
+        </code>
+        , and then run a simple Python file with
+        <code class="kbd">
+         uv run python hello.py
+        </code>
+        .
+       </p>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         Which command runs a script inside the environment managed by
+         <code class="kbd">
+          uv
+         </code>
+         ?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         uv python script.py
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         uv run python script.py
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         uv exec script.py
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#venv">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Build a Project &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 27. Build a Small Project -->
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 27
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone Project: Smart Expense Tracker
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       This capstone pulls together everything you have learned: data structures, functions, file handling, error handling, and modular design. You will build a real, useful terminal application that can persist expenses, categorize them, set budgets, and export reports.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       What you will build
+      </h3>
+      <p class="text-[var(--muted)] mb-4">
+       A command-line expense tracker. Users can add expenses, list them, filter by category or date, see totals and budgets, update or delete entries, and export a monthly report to a CSV file.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       Requirements
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Storage:
+         </strong>
+         Save expenses to a JSON file so data persists between runs.
+        </li>
+        <li>
+         <strong>
+          Expense fields:
+         </strong>
+         Each expense has an ID, date, description, category, and amount.
+        </li>
+        <li>
+         <strong>
+          Add:
+         </strong>
+         Add a new expense with a description, category, and amount. Auto-generate the ID and date if not provided.
+        </li>
+        <li>
+         <strong>
+          List:
+         </strong>
+         Display all expenses in a readable table with optional category filter.
+        </li>
+        <li>
+         <strong>
+          Update &amp; delete:
+         </strong>
+         Edit an expense by ID or remove it entirely.
+        </li>
+        <li>
+         <strong>
+          Budgets:
+         </strong>
+         Set a monthly budget per category. Warn when spending reaches 80% and error when it exceeds 100%.
+        </li>
+        <li>
+         <strong>
+          Summary:
+         </strong>
+         Show total spending, totals by category, and remaining budget.
+        </li>
+        <li>
+         <strong>
+          Export:
+         </strong>
+         Export expenses to a CSV file for spreadsheets.
+        </li>
+        <li>
+         <strong>
+          Validation:
+         </strong>
+         Handle invalid amounts, missing files, and bad user input gracefully.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Design overview
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-text">expense_tracker/
+&boxvr;&boxh;&boxh; main.py          # entry point and command loop
+&boxvr;&boxh;&boxh; storage.py       # load / save JSON data
+&boxvr;&boxh;&boxh; models.py        # Expense and Budget classes
+&boxvr;&boxh;&boxh; operations.py    # add, list, update, delete, summarize
+&boxur;&boxh;&boxh; reports.py       # CSV export helpers</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Full solution (modular files)
+      </h3>
+      <p class="text-[var(--muted)] mb-4">
+       The project is split into five small, focused files. You can either keep them separate or combine them into one file. The structure matches the design overview above.
+      </p>
+      <h4 class="font-semibold mb-2">
+       1.
+       <code class="kbd">
+        storage.py
+       </code>
+       &mdash; save and load JSON
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">"""Storage helpers for the Smart Expense Tracker."""
 import json
 import os
-
-
 def load_json(filename, default):
     """Load JSON from *filename* or return *default* if it does not exist."""
     if not os.path.exists(filename):
@@ -1300,30 +2087,32 @@ def load_json(filename, default):
     except (json.JSONDecodeError, OSError):
         print(f"Warning: {filename} could not be read. Starting fresh.")
         return default
-
-
 def save_json(filename, data):
     """Save *data* to *filename* as formatted JSON."""
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)</code></pre>
-          </div>
-
-          <h4 class="font-semibold mb-2">2. <code class="kbd">models.py</code> — data builders</h4>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">"""Data models and helpers for the Smart Expense Tracker."""
-
+      </div>
+      <h4 class="font-semibold mb-2">
+       2.
+       <code class="kbd">
+        models.py
+       </code>
+       &mdash; data builders
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">"""Data models and helpers for the Smart Expense Tracker."""
 from datetime import datetime
-
-
 def next_id(items):
     """Return the next available integer ID for a list of dict items."""
     if not items:
         return 1
     return max(item["id"] for item in items) + 1
-
-
-def make_expense(description, category, amount, date=None, expense_id=None, existing=None):
+def make_expense(
+    description, category, amount, date=None, expense_id=None, existing=None
+):
     """Create a validated expense dictionary."""
     if date is None:
         date = datetime.now().strftime("%Y-%m-%d")
@@ -1334,30 +2123,30 @@ def make_expense(description, category, amount, date=None, expense_id=None, exis
         "category": category,
         "amount": round(float(amount), 2),
     }</code></pre>
-          </div>
-
-          <h4 class="font-semibold mb-2">3. <code class="kbd">operations.py</code> — business logic</h4>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">"""Core business operations for the Smart Expense Tracker."""
-
+      </div>
+      <h4 class="font-semibold mb-2">
+       3.
+       <code class="kbd">
+        operations.py
+       </code>
+       &mdash; business logic
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">"""Core business operations for the Smart Expense Tracker."""
 from collections import defaultdict
 from expense_tracker.storage import save_json
 from expense_tracker.models import make_expense
-
-
 DATA_FILE = "expenses.json"
 BUDGET_FILE = "budgets.json"
-
-
 def _to_positive_float(value):
     """Convert *value* to a positive float, raising ValueError otherwise."""
     amount = float(value)
-    if amount <= 0:
+    if amount &lt;= 0:
         raise ValueError("Amount must be positive")
     return amount
-
-
 def add_expense(expenses, budgets, description, category, amount):
     """Add a new expense and persist it, then show budget warnings if any."""
     try:
@@ -1365,38 +2154,32 @@ def add_expense(expenses, budgets, description, category, amount):
     except ValueError as e:
         print(f"Invalid amount: {e}")
         return
-
     expense = make_expense(description, category, amount, existing=expenses)
     expenses.append(expense)
     save_json(DATA_FILE, expenses)
-
     budget = budgets.get(category)
     if budget:
         spent = sum(e["amount"] for e in expenses if e["category"] == category)
         percent = spent / budget * 100
-        if spent > budget:
+        if spent &gt; budget:
             print(f"⚠️  Over budget for {category}! Spent ${spent:.2f} / ${budget:.2f}")
-        elif percent >= 80:
+        elif percent &gt;= 80:
             print(f"⚠️  You have used {percent:.1f}% of your {category} budget.")
-
     print(f"Added expense #{expense['id']}: {description} (${amount:.2f}) [{category}]")
-
-
 def list_expenses(expenses, category=None):
     """Print expenses as a table, optionally filtered by category."""
     filtered = [e for e in expenses if category is None or e["category"] == category]
     if not filtered:
         print("No expenses found.")
         return
-
-    print(f"\n{'ID':<5}{'Date':<12}{'Category':<15}{'Description':<25}{'Amount':<10}")
+    print(f"\n{'ID':&lt;5}{'Date':&lt;12}{'Category':&lt;15}{'Description':&lt;25}{'Amount':&lt;10}")
     print("-" * 70)
     for e in filtered:
-        print(f"{e['id']:<5}{e['date']:<12}{e['category']:<15}{e['description']:<25}${e['amount']:<9.2f}")
+        print(
+            f"{e['id']:&lt;5}{e['date']:&lt;12}{e['category']:&lt;15}{e['description']:&lt;25}${e['amount']:&lt;9.2f}"
+        )
     print("-" * 70)
     print(f"Total: ${sum(e['amount'] for e in filtered):.2f}\n")
-
-
 def update_expense(expenses, expense_id, **changes):
     """Update one or more fields of the expense with the given ID."""
     for e in expenses:
@@ -1411,33 +2194,26 @@ def update_expense(expenses, expense_id, **changes):
             print(f"Updated expense #{expense_id}")
             return
     print(f"Expense #{expense_id} not found.")
-
-
 def delete_expense(expenses, expense_id):
     """Remove the expense with the given ID if it exists."""
     original_len = len(expenses)
     expenses[:] = [e for e in expenses if e["id"] != expense_id]
-    if len(expenses) < original_len:
+    if len(expenses) &lt; original_len:
         save_json(DATA_FILE, expenses)
         print(f"Deleted expense #{expense_id}")
     else:
         print(f"Expense #{expense_id} not found.")
-
-
 def summarize(expenses, budgets):
     """Show total spending, category totals, and remaining budgets."""
     if not expenses:
         print("No expenses to summarize.")
         return
-
     print("\n--- Spending Summary ---")
     total = sum(e["amount"] for e in expenses)
     print(f"Total spending: ${total:.2f}")
-
     by_category = defaultdict(float)
     for e in expenses:
         by_category[e["category"]] += e["amount"]
-
     print("\nBy category:")
     for category, spent in sorted(by_category.items()):
         budget = budgets.get(category)
@@ -1447,8 +2223,6 @@ def summarize(expenses, budgets):
             line += f" (budget ${budget:.2f}, remaining ${remaining:.2f})"
         print(line)
     print()
-
-
 def set_budget(budgets, category, amount):
     """Set a monthly budget for a category and persist it."""
     try:
@@ -1459,16 +2233,20 @@ def set_budget(budgets, category, amount):
     budgets[category] = round(amount, 2)
     save_json(BUDGET_FILE, budgets)
     print(f"Budget for {category} set to ${amount:.2f}")</code></pre>
-          </div>
-
-          <h4 class="font-semibold mb-2">4. <code class="kbd">reports.py</code> — CSV export</h4>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">"""Report generators for the Smart Expense Tracker."""
-
+      </div>
+      <h4 class="font-semibold mb-2">
+       4.
+       <code class="kbd">
+        reports.py
+       </code>
+       &mdash; CSV export
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">"""Report generators for the Smart Expense Tracker."""
 import csv
-
-
 def export_csv(expenses, filename="report.csv"):
     """Export *expenses* to a CSV file with the given *filename*."""
     if not expenses:
@@ -1481,8 +2259,6 @@ def export_csv(expenses, filename="report.csv"):
         writer.writeheader()
         writer.writerows(expenses)
     print(f"Exported {len(expenses)} expenses to {filename}")
-
-
 def monthly_summary(expenses):
     """Return a dictionary of {month: total} for all expenses."""
     totals = {}
@@ -1490,20 +2266,24 @@ def monthly_summary(expenses):
         month = e["date"][:7]  # YYYY-MM
         totals[month] = totals.get(month, 0.0) + e["amount"]
     return totals</code></pre>
-          </div>
-
-          <h4 class="font-semibold mb-2">5. <code class="kbd">main.py</code> — interactive menu</h4>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-python">"""Entry point for the Smart Expense Tracker.
-
+      </div>
+      <h4 class="font-semibold mb-2">
+       5.
+       <code class="kbd">
+        main.py
+       </code>
+       &mdash; interactive menu
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python">"""Entry point for the Smart Expense Tracker.
 Run from the project directory:
     python main.py
-
 Or as a module from the parent directory:
     python -m expense_tracker.main
 """
-
 from expense_tracker.storage import load_json
 from expense_tracker.operations import (
     add_expense,
@@ -1516,8 +2296,6 @@ from expense_tracker.operations import (
     BUDGET_FILE,
 )
 from expense_tracker.reports import export_csv
-
-
 def show_menu():
     print("\n=== Smart Expense Tracker ===")
     print("1. Add expense")
@@ -1528,41 +2306,37 @@ def show_menu():
     print("6. Show summary")
     print("7. Export to CSV")
     print("8. Quit")
-
-
 def get_input(prompt, required=True):
     while True:
         value = input(prompt).strip()
         if value or not required:
             return value
         print("This field is required.")
-
-
 def main():
     expenses = load_json(DATA_FILE, [])
     budgets = load_json(BUDGET_FILE, {})
-
     while True:
         show_menu()
         choice = input("Choose an option: ").strip()
-
         if choice == "1":
             description = get_input("Description: ")
             category = get_input("Category: ")
             amount = get_input("Amount: ")
             add_expense(expenses, budgets, description, category, amount)
-
         elif choice == "2":
-            category = input("Filter by category (press Enter for all): ").strip() or None
+            category = (
+                input("Filter by category (press Enter for all): ").strip() or None
+            )
             list_expenses(expenses, category)
-
         elif choice == "3":
             try:
                 expense_id = int(input("Expense ID to update: "))
             except ValueError:
                 print("ID must be a number.")
                 continue
-            description = input("New description (press Enter to keep): ").strip() or None
+            description = (
+                input("New description (press Enter to keep): ").strip() or None
+            )
             category = input("New category (press Enter to keep): ").strip() or None
             amount = input("New amount (press Enter to keep): ").strip() or None
             update_expense(
@@ -1572,7 +2346,6 @@ def main():
                 category=category,
                 amount=amount,
             )
-
         elif choice == "4":
             try:
                 expense_id = int(input("Expense ID to delete: "))
@@ -1580,46 +2353,70 @@ def main():
                 print("ID must be a number.")
                 continue
             delete_expense(expenses, expense_id)
-
         elif choice == "5":
             category = get_input("Category: ")
             amount = get_input("Budget amount: ")
             set_budget(budgets, category, amount)
-
         elif choice == "6":
             summarize(expenses, budgets)
-
         elif choice == "7":
-            filename = input("Export filename (default report.csv): ").strip() or "report.csv"
+            filename = (
+                input("Export filename (default report.csv): ").strip() or "report.csv"
+            )
             export_csv(expenses, filename)
-
         elif choice == "8":
             print("Goodbye!")
             break
-
         else:
             print("Invalid option. Please try again.")
-
-
 if __name__ == "__main__":
     main()</code></pre>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">How the code is organized</h3>
-          <div class="card rounded-2xl p-6 mb-8">
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li><strong>storage.py</strong> functions handle JSON read/write and protect against corrupt files.</li>
-              <li><strong>models.py</strong> helpers create expense dictionaries and auto-generate IDs and dates.</li>
-              <li><strong>operations.py</strong> contains the business logic: add, list, update, delete, summarize, and budget checks.</li>
-              <li><strong>reports.py</strong> exports data to CSV using the standard library.</li>
-              <li><strong>main.py</strong> runs the interactive loop and wires everything together.</li>
-            </ul>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Sample session</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-text">=== Smart Expense Tracker ===
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       How the code is organized
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          storage.py
+         </strong>
+         functions handle JSON read/write and protect against corrupt files.
+        </li>
+        <li>
+         <strong>
+          models.py
+         </strong>
+         helpers create expense dictionaries and auto-generate IDs and dates.
+        </li>
+        <li>
+         <strong>
+          operations.py
+         </strong>
+         contains the business logic: add, list, update, delete, summarize, and budget checks.
+        </li>
+        <li>
+         <strong>
+          reports.py
+         </strong>
+         exports data to CSV using the standard library.
+        </li>
+        <li>
+         <strong>
+          main.py
+         </strong>
+         runs the interactive loop and wires everything together.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Sample session
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-text">=== Smart Expense Tracker ===
 1. Add expense
 2. List expenses
 ...
@@ -1628,103 +2425,182 @@ Description: Coffee
 Category: Food
 Amount: 4.50
 Added expense #1: Coffee ($4.50) [Food]
-
 Choose an option: 6
-
 --- Spending Summary ---
 Total spending: $4.50
-
 By category:
   Food: $4.50 (budget $100.00, remaining $95.50)</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-6">
-            <h4 class="font-semibold mb-2">Capstone challenges</h4>
-            <p class="text-[var(--muted)] mb-3">Once the tracker works, extend it further:</p>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Add a search command to find expenses by description keyword.</li>
-              <li>Group expenses by month and show monthly totals.</li>
-              <li>Plot a simple bar chart of category spending with <code class="kbd">matplotlib</code> or text characters.</li>
-              <li>Import expenses from a CSV file instead of only exporting.</li>
-              <li>Split the single file into the separate modules shown in the design overview.</li>
-            </ul>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-          <h4 class="font-semibold mb-2">Checkpoint</h4>
-          <p class="text-[var(--muted)]">Create the <code class="kbd">expense_tracker/</code> folder with the five files above, run <code class="kbd">python main.py</code>, add at least three expenses in different categories, set a budget, and export the report to CSV.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#uv" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#best-practices" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Best Practices →</a></nav>
-        </section>
-
-        <!-- 28. Best Practices -->
-        <section id="best-practices" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 28</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Best Practices</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Writing clean Python code makes it easier to read, debug, and maintain.</p>
-
-          <div class="grid md:grid-cols-2 gap-6 mb-8">
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-3">Style guidelines</h3>
-              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
-                <li>Follow PEP 8 style guide.</li>
-                <li>Use lowercase_with_underscores for variables and functions.</li>
-                <li>Use CamelCase for class names.</li>
-                <li>Keep lines under 88 characters (Black formatter default).</li>
-              </ul>
-            </div>
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-3">Working habits</h3>
-              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
-                <li>Use virtual environments for every project.</li>
-                <li>Write small, focused functions.</li>
-                <li>Handle errors explicitly.</li>
-                <li>Use <code class="kbd">if __name__ == "__main__":</code> in scripts.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-10">
-            <h4 class="font-semibold mb-2">Final Quiz</h4>
-            <div class="quiz" data-answer="B">
-              <p class="mb-3">What keyword creates a generator function?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">return</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">yield</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">generate</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <div class="card rounded-2xl p-8 text-center">
-            <h3 class="text-2xl font-bold mb-3">Congratulations! 🎉</h3>
-            <p class="text-[var(--muted)] mb-5">You've covered Python from basics to advanced topics. Keep building projects — that's the best way to master it.</p>
-            <div class="flex justify-center gap-4 flex-wrap">
-              <a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">Restart tutorial</a>
-              <a href="https://docs.python.org/3/" target="_blank" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Official Python Docs →</a>
-            </div>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#project" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><span></span></nav>
-        </section>
-
       </div>
-
-      <!-- Footer -->
-      <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
-        <p>Made for teaching Python. Open directly in any browser.</p>
-      </footer>
-    </main>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-6">
+       <h4 class="font-semibold mb-2">
+        Capstone challenges
+       </h4>
+       <p class="text-[var(--muted)] mb-3">
+        Once the tracker works, extend it further:
+       </p>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Add a search command to find expenses by description keyword.
+        </li>
+        <li>
+         Group expenses by month and show monthly totals.
+        </li>
+        <li>
+         Plot a simple bar chart of category spending with
+         <code class="kbd">
+          matplotlib
+         </code>
+         or text characters.
+        </li>
+        <li>
+         Import expenses from a CSV file instead of only exporting.
+        </li>
+        <li>
+         Split the single file into the separate modules shown in the design overview.
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create the
+        <code class="kbd">
+         expense_tracker/
+        </code>
+        folder with the five files above, run
+        <code class="kbd">
+         python main.py
+        </code>
+        , add at least three expenses in different categories, set a budget, and export the report to CSV.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#uv">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#best-practices">
+        Next: Best Practices &rarr;
+       </a>
+      </nav>
+     </section>
+     <!-- 28. Best Practices -->
+     <section class="scroll-mt-24" id="best-practices">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 28
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Best Practices
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Writing clean Python code makes it easier to read, debug, and maintain.
+      </p>
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-3">
+         Style guidelines
+        </h3>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Follow PEP 8 style guide.
+         </li>
+         <li>
+          Use lowercase_with_underscores for variables and functions.
+         </li>
+         <li>
+          Use CamelCase for class names.
+         </li>
+         <li>
+          Keep lines under 88 characters (Black formatter default).
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-3">
+         Working habits
+        </h3>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Use virtual environments for every project.
+         </li>
+         <li>
+          Write small, focused functions.
+         </li>
+         <li>
+          Handle errors explicitly.
+         </li>
+         <li>
+          Use
+          <code class="kbd">
+           if __name__ == "__main__":
+          </code>
+          in scripts.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-10">
+       <h4 class="font-semibold mb-2">
+        Final Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         What keyword creates a generator function?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         return
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         yield
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         generate
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <div class="card rounded-2xl p-8 text-center">
+       <h3 class="text-2xl font-bold mb-3">
+        Congratulations! 🎉
+       </h3>
+       <p class="text-[var(--muted)] mb-5">
+        You've covered Python from basics to advanced topics. Keep building projects &mdash; that's the best way to master it.
+       </p>
+       <div class="flex justify-center gap-4 flex-wrap">
+        <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+         Restart tutorial
+        </a>
+        <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="https://docs.python.org/3/" target="_blank">
+         Official Python Docs &rarr;
+        </a>
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+    <!-- Footer -->
+    <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+     <p>
+      Made for teaching Python. Open directly in any browser.
+     </p>
+    </footer>
+   </main>
   </div>
-
   <script>
-    // Theme handling
+   // Theme handling
     const html = document.documentElement;
     const lightStylesheet = document.getElementById('hljs-light');
     const darkStylesheet = document.getElementById('hljs-dark');
     const moon = document.getElementById('moon');
     const sun = document.getElementById('sun');
-
     function applyTheme(theme) {
       html.classList.remove('light', 'dark');
       html.classList.add(theme);
@@ -1742,14 +2618,11 @@ By category:
       localStorage.setItem('python-tutorial-theme', theme);
       hljs.highlightAll();
     }
-
     document.getElementById('theme-toggle').addEventListener('click', () => {
       applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
     });
-
     const saved = localStorage.getItem('python-tutorial-theme');
     applyTheme(saved === 'dark' ? 'dark' : 'light');
-
     // Sidebar toggle
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
@@ -1757,17 +2630,14 @@ By category:
       sidebar.classList.toggle('open');
       overlay.classList.toggle('hidden');
     }
-
     document.querySelectorAll('#toc a').forEach(link => {
       link.addEventListener('click', () => {
         if (window.innerWidth < 1024) toggleSidebar();
       });
     });
-
     // Active TOC highlight on scroll
     const sections = document.querySelectorAll('section[id]');
     const tocLinks = document.querySelectorAll('.toc-link');
-
     function onScroll() {
       let current = '';
       sections.forEach(sec => {
@@ -1781,7 +2651,6 @@ By category:
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-
     // Copy code buttons
     async function copyCode(btn) {
       const code = btn.nextElementSibling.textContent;
@@ -1795,7 +2664,6 @@ By category:
         setTimeout(() => btn.textContent = 'Copy', 1500);
       }
     }
-
     // Quiz logic
     document.querySelectorAll('.quiz').forEach(quiz => {
       const answer = quiz.dataset.answer;
@@ -1820,9 +2688,8 @@ By category:
         });
       });
     });
-
     // Syntax highlighting
     hljs.highlightAll();
   </script>
-</body>
+ </body>
 </html>

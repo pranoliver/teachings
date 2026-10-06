@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 120" aria-label="Diagram showing pull request lifecycle" role="img"><title>Diagram showing pull request lifecycle</title>
+              <circle cx="60" cy="60" r="24" fill="rgba(47,129,247,0.15)" stroke="#6e40c9" stroke-width="2"/>
+              <text x="60" y="66" text-anchor="middle" font-size="12" fill="#1f2328">Branch</text>
+
+              <line x1="84" y1="60" x2="156" y2="60" stroke="#d0d7de" stroke-width="2"/>
+              <rect x="160" y="36" width="120" height="48" rx="8" fill="rgba(47,129,247,0.15)" stroke="#6e40c9" stroke-width="2"/>
+              <text x="220" y="65" text-anchor="middle" font-size="12" fill="#1f2328">Open PR</text>
+
+              <line x1="280" y1="60" x2="340" y2="60" stroke="#d0d7de" stroke-width="2"/>
+              <rect x="344" y="36" width="120" height="48" rx="8" fill="rgba(157,113,247,0.15)" stroke="#a371f7" stroke-width="2"/>
+              <text x="404" y="65" text-anchor="middle" font-size="12" fill="#1f2328">Review</text>
+
+              <line x1="464" y1="60" x2="524" y2="60" stroke="#d0d7de" stroke-width="2"/>
+              <circle cx="576" cy="60" r="24" fill="rgba(63,185,80,0.15)" stroke="#3fb950" stroke-width="2"/>
+              <text x="576" y="66" text-anchor="middle" font-size="12" fill="#1f2328">Merge</text>
+            </svg>

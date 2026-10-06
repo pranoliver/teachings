@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   MongoDB &amp; NoSQL: Documents, Aggregation, Scaling
+  </title>
+  <link href="../assets/favicons/mongodb.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-mongodb-nosql">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="MongoDB" class="w-10 h-10" src="../assets/favicons/mongodb.svg"/>
+     <span class="text-xl font-bold">
+      MongoDB
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#install">
+      2. Install &amp; Connect
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#documents">
+      3. Documents &amp; BSON
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#crud">
+      4. CRUD in the Shell
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#modeling">
+      5. Document Modeling
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#aggregation">
+      6. Aggregation Pipeline
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#indexing">
+      7. Indexing
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#scaling">
+      8. Replica Sets &amp; Sharding
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      9. Capstone: Food Delivery Analytics
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       MongoDB &amp; NoSQL: Documents, Aggregation, Scaling
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       MongoDB is the most popular document database. Instead of rows and tables, it stores JSON-like documents in flexible collections. This makes it a natural fit for product catalogs, content management, real-time analytics, mobile backends, and any workload where schemas evolve quickly.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with JavaScript objects and arrays.
+        </li>
+        <li>
+         Basic understanding of databases and queries.
+        </li>
+        <li>
+         Optional: some SQL to compare against.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Install MongoDB and use the shell
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Documents, BSON, and collections
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Complete CRUD with real data
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Embed vs reference decisions
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Aggregation pipelines
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Indexes, replica sets, and sharding
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Real-world use cases
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Netflix
+         </strong>
+         uses MongoDB for its content catalog and personalization metadata.
+        </li>
+        <li>
+         <strong>
+          UPS
+         </strong>
+         tracks packages and delivery routes with MongoDB.
+        </li>
+        <li>
+         <strong>
+          Forbes
+         </strong>
+         built a content management system on MongoDB to publish articles faster.
+        </li>
+        <li>
+         <strong>
+          Food delivery apps
+         </strong>
+         store real-time order status, menus, and driver locations in MongoDB.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#install">
+        Next: Install &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="install">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Install &amp; Connect
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       MongoDB runs locally, in Docker, or fully managed on MongoDB Atlas. For learning, Docker is the fastest repeatable path. Atlas is best if you want a shared cloud cluster in minutes.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Option A: Docker (recommended for local practice)
+docker run -d --name mongodb \
+-p 27017:27017 \
+-e MONGO_INITDB_ROOT_USERNAME=admin \
+-e MONGO_INITDB_ROOT_PASSWORD=secret \
+mongo:7
+# Option B: macOS with Homebrew
+brew tap mongodb/brew
+brew install mongodb-community
+brew services start mongodb-community
+# Option C: MongoDB Atlas (cloud)
+# Sign up at mongodb.com/atlas and create a free M0 cluster.
+# Whitelist your IP and copy the connection string.</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Connect with
+ mongosh
+mongosh "mongodb://admin:secret@localhost:27017"
+# Show databases and switch to a new one
+show dbs
+use food_delivery</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Run the Docker command, open
+        <code class="kbd">
+         mongosh
+        </code>
+        , and confirm you can switch to the
+        <code class="kbd">
+         food_delivery
+        </code>
+        database.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#documents">
+        Next: Documents &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="documents">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Documents &amp; BSON
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A MongoDB document looks like JSON but is stored as BSON (Binary JSON). BSON adds types like ObjectId, Date, Decimal128, and binary data, while keeping the document structure flexible and self-contained.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Relational tables vs MongoDB documents
+       </h3>
+       <img alt="Diagram comparing normalized SQL tables with an embedded MongoDB document" class="diagram" loading="lazy" src="../assets/diagrams/mongodb-nosql/relational-vs-document.svg"/>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        A BSON document with embedded arrays and objects
+       </h3>
+       <img alt="Diagram showing a MongoDB BSON document structure" class="diagram" loading="lazy" src="../assets/diagrams/mongodb-nosql/bson-document.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Sample
+restaurant document for a food delivery app
+{ _id: ObjectId("65a1b2c3d4e5f6a7b8c9d0e1"),
+name: "Biryani House",
+cuisine: "Indian",
+rating: 4.6,
+location: { city: "Mumbai",
+area: "Bandra" },
+menu: [ { itemId: 1,
+name: "Chicken Biryani",
+price: 320,
+tags: ["bestseller"]
+},
+{ itemId: 2,
+name: "Paneer Tikka",
+price: 240,
+tags: ["veg"]
+}
+],
+openNow: true,
+createdAt: ISODate("2024-01-15T10:30:00Z") }</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Key BSON types
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          ObjectId
+         </code>
+         &mdash; unique 12-byte identifier, automatically generated.
+        </li>
+        <li>
+         <code class="kbd">
+          ISODate
+         </code>
+         &mdash; proper date type, comparable and sortable.
+        </li>
+        <li>
+         <code class="kbd">
+          NumberDecimal
+         </code>
+         &mdash; exact precision for money.
+        </li>
+        <li>
+         <code class="kbd">
+          BinData
+         </code>
+         &mdash; images, PDFs, or other binary payloads.
+        </li>
+        <li>
+         <code class="kbd">
+          Array
+         </code>
+         and
+         <code class="kbd">
+          Object
+         </code>
+         &mdash; nest as deeply as your design requires.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#install">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#crud">
+        Next: CRUD &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="crud">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       CRUD in the Shell
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       CRUD means Create, Read, Update, Delete. These are the four operations you will use every day. The MongoDB shell syntax mirrors JavaScript, so if you know objects and arrays, you already know most of it.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// CREATE:
+insert one restaurant use food_delivery db.restaurants.insertOne({ name: "Burger Barn",
+cuisine: "American",
+rating: 4.2,
+location: { city: "Bangalore",
+area: "Koramangala" },
+menu: [ { itemId: 101,
+name: "Cheese Burger",
+price: 180 },
+{ itemId: 102,
+name: "Fries",
+price: 90 }
+],
+openNow: true,
+createdAt: new Date() }
+) // READ:
+find documents // All
+restaurants in Bangalore db.restaurants.find({ "location.city": "Bangalore" }
+) // Restaurants
+with rating &gt;= 4.5,
+limited to 5 results db.restaurants.find({ rating: { $gte: 4.5 }
+}).limit(5) // Projection:
+return only name and city db.restaurants.find( { "location.city": "Bangalore" },
+{ name: 1,
+"location.area": 1,
+_id: 0 }
+)</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// UPDATE:
+change a field and add a tag db.restaurants.updateOne( { name: "Burger Barn" },
+{ $set: { openNow: false },
+$push: { tags: "late-night" }
+} ) // DELETE:
+remove one restaurant by name db.restaurants.deleteOne({ name: "Burger Barn" }
+) // COUNT
+and EXIST // How
+many restaurants are open? db.restaurants.countDocuments({ openNow: true }
+) // Does
+any restaurant serve Italian cuisine? db.restaurants.exists({ cuisine: "Italian" }
+)</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Exercise: load the sample dataset
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Run these commands to insert realistic data you will use in later chapters.
+       </p>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-javascript">db.restaurants.insertMany([
+  {
+    name: "Biryani House",
+    cuisine: "Indian",
+    rating: 4.6,
+    location: { city: "Mumbai", area: "Bandra" },
+    menu: [{ itemId: 1, name: "Chicken Biryani", price: 320 }],
+    openNow: true,
+    createdAt: new Date("2024-01-10"),
+  },
+  {
+    name: "Pasta Place",
+    cuisine: "Italian",
+    rating: 4.3,
+    location: { city: "Mumbai", area: "Andheri" },
+    menu: [{ itemId: 2, name: "Penne Alfredo", price: 280 }],
+    openNow: false,
+    createdAt: new Date("2024-02-05"),
+  },
+  {
+    name: "Sushi Spot",
+    cuisine: "Japanese",
+    rating: 4.8,
+    location: { city: "Bangalore", area: "Indiranagar" },
+    menu: [{ itemId: 3, name: "Salmon Roll", price: 450 }],
+    openNow: true,
+    createdAt: new Date("2024-03-12"),
+  },
+  {
+    name: "Curry Corner",
+    cuisine: "Indian",
+    rating: 4.1,
+    location: { city: "Bangalore", area: "HSR Layout" },
+    menu: [{ itemId: 4, name: "Butter Chicken", price: 360 }],
+    openNow: true,
+    createdAt: new Date("2024-04-20"),
+  },
+]);</code></pre>
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#documents">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#modeling">
+        Next: Modeling &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="modeling">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Document Modeling
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The biggest design decision in MongoDB is whether to embed data in one document or store it in a separate collection and reference it. There is no universal rule &mdash; it depends on how data is read, updated, and how large it can grow.
+      </p>
+      <div class="grid sm:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Embed when
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Data is read together (one query fetches everything).
+         </li>
+         <li>
+          The embedded list is bounded and small.
+         </li>
+         <li>
+          No other documents need the same embedded data.
+         </li>
+         <li>
+          Example: a restaurant's menu items, a user's addresses.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Reference when
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Data changes often and independently.
+         </li>
+         <li>
+          The relationship is many-to-many.
+         </li>
+         <li>
+          The embedded list could grow unbounded.
+         </li>
+         <li>
+          Example: orders referencing users, reviews referencing restaurants.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Embedded
+design: restaurant owns its small menu
+{ _id: ObjectId("..."),
+name: "Biryani House",
+menu: [ { itemId: 1,
+name: "Chicken Biryani",
+price: 320 },
+{ itemId: 2,
+name: "Mutton Biryani",
+price: 420 }
+]
+} // Reference
+design: orders point to restaurants and users // orders
+collection
+{ _id: ObjectId("..."),
+restaurantId: ObjectId("restaurant_id_here"),
+userId: ObjectId("user_id_here"),
+items: [ { itemId: 1,
+name: "Chicken Biryani",
+price: 320,
+qty: 2 }
+],
+total: 640,
+status: "delivered",
+placedAt: ISODate("2024-06-01T19:30:00Z") } // $lookup
+is MongoDB's JOIN equivalent db.orders.aggregate([ { $match: { status: "delivered" }
+},
+{ $lookup: { from: "restaurants",
+localField: "restaurantId",
+foreignField: "_id",
+as: "restaurant" }
+},
+{ $unwind: "$restaurant" },
+{ $project: { "restaurant.name": 1,
+total: 1,
+placedAt: 1 }
+} ]
+)</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world modeling: food delivery
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Restaurants
+         </strong>
+         embed the current menu because customers always browse menu + restaurant together.
+        </li>
+        <li>
+         <strong>
+          Orders
+         </strong>
+         reference users and restaurants but embed ordered items, because an order snapshot must not change if menu prices change later.
+        </li>
+        <li>
+         <strong>
+          Reviews
+         </strong>
+         reference restaurants and users, but cache the username and restaurant name for read performance.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#crud">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#aggregation">
+        Next: Aggregation &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="aggregation">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Aggregation Pipeline
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The aggregation pipeline is MongoDB's data processing engine. Documents flow through stages: filter, group, sort, project, lookup, unwind, limit, and more. It is how you run analytics directly inside the database.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// First,
+load sample orders use food_delivery db.orders.insertMany([ { restaurantId: ObjectId("65a1b2c3d4e5f6a7b8c9d0e1"),
+userId: ObjectId("000000000000000000000001"),
+items: [{ name: "Chicken Biryani",
+price: 320,
+qty: 2 }
+],
+total: 640,
+status: "delivered",
+placedAt: ISODate("2024-06-01T19:00:00Z") },
+{ restaurantId: ObjectId("65a1b2c3d4e5f6a7b8c9d0e1"),
+userId: ObjectId("000000000000000000000002"),
+items: [{ name: "Mutton Biryani",
+price: 420,
+qty: 1 }
+],
+total: 420,
+status: "cancelled",
+placedAt: ISODate("2024-06-02T12:00:00Z") },
+{ restaurantId: ObjectId("65a1b2c3d4e5f6a7b8c9d0e2"),
+userId: ObjectId("000000000000000000000003"),
+items: [{ name: "Salmon Roll",
+price: 450,
+qty: 2 }
+],
+total: 900,
+status: "delivered",
+placedAt: ISODate("2024-06-03T20:30:00Z") }
+]
+)</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Average
+order total by status db.orders.aggregate([ { $group: { _id: "$status",
+avgTotal: { $avg: "$total" },
+count: { $sum: 1 }
+} },
+{ $sort: { avgTotal: -1 }
+} ]
+) // Revenue
+per restaurant for delivered orders in June 2024 db.orders.aggregate([ { $match: { status: "delivered",
+placedAt: { $gte: ISODate("2024-06-01"),
+$lt: ISODate("2024-07-01") }
+} },
+{ $group: { _id: "$restaurantId",
+revenue: { $sum: "$total" },
+orderCount: { $sum: 1 }
+} },
+{ $sort: { revenue: -1 }
+},
+{ $lookup: { from: "restaurants",
+localField: "_id",
+foreignField: "_id",
+as: "restaurant" }
+},
+{ $unwind: "$restaurant" },
+{ $project: { _id: 0,
+restaurantName: "$restaurant.name",
+revenue: 1,
+orderCount: 1 }
+} ]
+)</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Common aggregation stages
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <code class="kbd">
+          $match
+         </code>
+         &mdash; filter documents early to reduce work.
+        </li>
+        <li>
+         <code class="kbd">
+          $group
+         </code>
+         &mdash; summarize by a key with accumulators like $sum, $avg, $max.
+        </li>
+        <li>
+         <code class="kbd">
+          $sort
+         </code>
+         &mdash; order results; place before $limit when paginating.
+        </li>
+        <li>
+         <code class="kbd">
+          $project
+         </code>
+         /
+         <code class="kbd">
+          $unset
+         </code>
+         &mdash; include or exclude fields.
+        </li>
+        <li>
+         <code class="kbd">
+          $lookup
+         </code>
+         &mdash; left outer join to another collection.
+        </li>
+        <li>
+         <code class="kbd">
+          $unwind
+         </code>
+         &mdash; turn an array field into one document per element.
+        </li>
+        <li>
+         <code class="kbd">
+          $facet
+         </code>
+         &mdash; run multiple sub-pipelines in one query (e.g., results + total count).
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#modeling">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#indexing">
+        Next: Indexing &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="indexing">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Indexing
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Indexes make queries fast. Without them, MongoDB scans every document in a collection. With the right index, it jumps straight to the matching documents. The trade-off is write speed and disk space, but the read gains are usually enormous.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Create
+a single-field index on city for location-based searches db.restaurants.createIndex({ "location.city": 1 }
+) // Compound
+index: cuisine first,
+then rating (descending) db.restaurants.createIndex({ cuisine: 1,
+rating: -1 }
+) // Text
+index for menu search db.restaurants.createIndex({ "menu.name": "text",
+name: "text" }
+) // Find
+Italian restaurants with text search db.restaurants.find({ $text: { $search: "pasta" }
+}) // Partial
+index: only index high-value orders db.orders.createIndex( { placedAt: 1 },
+{ partialFilterExpression: { total: { $gte: 500 }
+} }
+)</code></pre>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Index types
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          <strong>
+           Single-field
+          </strong>
+          : one key, supports equality and range queries.
+         </li>
+         <li>
+          <strong>
+           Compound
+          </strong>
+          : multiple keys in order; field order matters.
+         </li>
+         <li>
+          <strong>
+           Text
+          </strong>
+          : full-text search across string fields.
+         </li>
+         <li>
+          <strong>
+           Multikey
+          </strong>
+          : automatic index on array values.
+         </li>
+         <li>
+          <strong>
+           Wildcard
+          </strong>
+          : index all subfields of an object or array.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Analyze with explain
+        </h3>
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-javascript">// Was
+an index used? db.restaurants.find({ cuisine: "Indian" }
+).explain("executionStats") // Look
+for: // executionStats.totalDocsExamined
+// executionStats.stage: "COLLSCAN" (bad,
+full collection scan) // executionStats.stage: "IXSCAN" (good,
+index scan)</code></pre>
+        </div>
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#aggregation">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#scaling">
+        Next: Scaling &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="scaling">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Replica Sets &amp; Sharding
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Production MongoDB deployments need two things: high availability and the ability to grow beyond one server. Replica sets handle failover. Sharding spreads data across many servers.
+      </p>
+      <div class="grid sm:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-2xl p-6 flex flex-col items-center">
+        <h3 class="text-xl font-semibold mb-4 w-full">
+         Replica set
+        </h3>
+        <img alt="Diagram of a MongoDB replica set with primary and secondary nodes" class="diagram" loading="lazy" src="../assets/diagrams/mongodb-nosql/replica-set.svg"/>
+       </div>
+       <div class="card rounded-2xl p-6 flex flex-col items-center">
+        <h3 class="text-xl font-semibold mb-4 w-full">
+         Sharding
+        </h3>
+        <img alt="Diagram of MongoDB sharding architecture with query router, config servers, and shards" class="diagram" loading="lazy" src="../assets/diagrams/mongodb-nosql/sharding.svg"/>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Start a minimal replica set locally for practice 
+mkdir -p /tmp/
+mongo-rs/{r0,r1,r2} 
+mongod --replSet rs0 --port 27017 --dbpath /tmp/
+mongo-rs/r0 --bind_ip localhost --fork --logpath /tmp/
+mongo-rs/r0.log 
+mongod --replSet rs0 --port 27018 --dbpath /tmp/
+mongo-rs/r1 --bind_ip localhost --fork --logpath /tmp/
+mongo-rs/r1.log 
+mongod --replSet rs0 --port 27019 --dbpath /tmp/
+mongo-rs/r2 --bind_ip localhost --fork --logpath /tmp/
+mongo-rs/r2.log
+ mongosh --port 27017 --eval 'rs.initiate({_id:"rs0", members:[{_id:0,host:"localhost:27017"},{_id:1,host:"localhost:27018"},{_id:2,host:"localhost:27019"}]})'</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        When to use what
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Standalone
+         </strong>
+         : local development only. Never use in production.
+        </li>
+        <li>
+         <strong>
+          Replica set (3+ nodes)
+         </strong>
+         : production default. Provides failover and read scaling.
+        </li>
+        <li>
+         <strong>
+          Sharded cluster
+         </strong>
+         : when a single replica set cannot hold your data or write throughput.
+        </li>
+        <li>
+         <strong>
+          Shard key choice
+         </strong>
+         : must distribute writes evenly and support common queries. Bad shard keys create hot shards.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#indexing">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Food Delivery Analytics
+      </h2>
+      <h3 class="text-xl font-semibold mb-3">
+       1. What is this project?
+      </h3>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a small analytics backend for a food delivery company. You will insert restaurants, orders, and customers, then run real aggregation queries that a product team would actually ask for.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       2. What it covers?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Create
+         <code class="kbd">
+          restaurants
+         </code>
+         ,
+         <code class="kbd">
+          orders
+         </code>
+         , and
+         <code class="kbd">
+          customers
+         </code>
+         collections.
+        </li>
+        <li>
+         Insert at least 10 restaurants with varied cuisine, city, rating, and embedded menus.
+        </li>
+        <li>
+         Insert at least 50 orders across different dates and statuses.
+        </li>
+        <li>
+         Build these reports with aggregation pipelines:
+         <ul class="list-disc pl-5 mt-1">
+          <li>
+           Top 3 restaurants by revenue this month.
+          </li>
+          <li>
+           Most popular cuisine by order count.
+          </li>
+          <li>
+           Average order value by city.
+          </li>
+          <li>
+           Orders placed per day for the last 7 days.
+          </li>
+         </ul>
+        </li>
+        <li>
+         Create indexes that support the report queries and verify with
+         <code class="kbd">
+          explain()
+         </code>
+         .
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       3. How it is done?
+      </h3>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Load the sample data from earlier chapters, then run aggregation pipelines directly inside MongoDB to compute revenue and daily order trends. The pipelines below are the starting point for the monthly and weekly reports.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Starter:
+top 3 restaurants by revenue this month const start = new Date();
+start.setDate(1);
+start.setHours(0,
+0,
+0,
+0);
+const end = new Date(start);
+end.setMonth(end.getMonth() + 1);
+db.orders.aggregate([ { $match: { status: "delivered",
+placedAt: { $gte: start,
+$lt: end }
+} },
+{ $group: { _id: "$restaurantId",
+revenue: { $sum: "$total" }
+} },
+{ $sort: { revenue: -1 }
+},
+{ $limit: 3 },
+{ $lookup: { from: "restaurants",
+localField: "_id",
+foreignField: "_id",
+as: "restaurant" }
+},
+{ $unwind: "$restaurant" },
+{ $project: { _id: 0,
+name: "$restaurant.name",
+revenue: 1 }
+} ]
+)</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Starter:
+orders per day for the last 7 days db.orders.aggregate([ { $match: { placedAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+} },
+{ $group: { _id: { $dateToString: { format: "%Y-%m-%d",
+date: "$placedAt" }
+},
+count: { $sum: 1 },
+revenue: { $sum: "$total" }
+} },
+{ $sort: { _id: 1 }
+} ]
+)</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       4. What did we learn from this capstone project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         MongoDB aggregation pipelines can compute revenue, popularity, and daily trends directly in the database.
+        </li>
+        <li>
+         Embedding menus inside restaurants reduces joins, while referencing users and restaurants in orders keeps order snapshots stable.
+        </li>
+        <li>
+         Indexes on
+         <code class="kbd">
+          restaurantId
+         </code>
+         ,
+         <code class="kbd">
+          status
+         </code>
+         , and
+         <code class="kbd">
+          placedAt
+         </code>
+         make analytics queries fast.
+        </li>
+        <li>
+         <code class="kbd">
+          explain()
+         </code>
+         confirms whether a query uses an index scan instead of a full collection scan.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       5. How can I enhance this project in the future?
+      </h3>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Add a text index and search restaurants by menu item name.
+        </li>
+        <li>
+         Use a $facet stage to return both top restaurants and total revenue in one query.
+        </li>
+        <li>
+         Export the aggregation results to a CSV using
+         <code class="kbd">
+          mongoexport
+         </code>
+         .
+        </li>
+        <li>
+         Add a geospatial index to query restaurants near a customer location.
+        </li>
+        <li>
+         Connect the aggregation output to a charting library for a live dashboard.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#scaling">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); const lightStylesheet = document.getElementById('hljs-light'); const darkStylesheet = document.getElementById('hljs-dark'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { lightStylesheet.disabled = true; darkStylesheet.disabled = false; moon.classList.add('hidden'); sun.classList.remove('hidden'); } else { lightStylesheet.disabled = false; darkStylesheet.disabled = true; moon.classList.remove('hidden'); sun.classList.add('hidden'); } localStorage.setItem('mongodb-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('mongodb-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menu-overlay'); sidebar.classList.toggle('open'); overlay.classList.toggle('hidden'); } function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code'); navigator.clipboard.writeText(code.innerText).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); } const sections = document.querySelectorAll('section[id]'); const tocLinks = document.querySelectorAll('.toc-link'); const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { tocLinks.forEach((link) => link.classList.remove('active')); const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (active) active.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach((section) => observer.observe(section)); document.querySelectorAll('.quiz').forEach((quiz) => { const correct = quiz.dataset.answer; const feedback = quiz.nextElementSibling; quiz.querySelectorAll('.quiz-opt').forEach((opt) => { opt.addEventListener('click', () => { quiz.querySelectorAll('.quiz-opt').forEach((o) => { o.classList.remove('selected', 'correct', 'wrong'); o.disabled = true; }); opt.classList.add('selected'); if (opt.dataset.val === correct) { opt.classList.add('correct'); feedback.textContent = 'Correct! ✅'; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]'; } else { opt.classList.add('wrong'); feedback.textContent = `Not quite. The correct answer is ${correct}.`; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]'; } }); }); }); hljs.highlightAll();
+  </script>
+ </body>
+</html>

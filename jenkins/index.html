@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Jenkins: CI/CD Pipelines, Plugins &amp; Automation
+  </title>
+  <link href="../assets/favicons/svg/Jenkins.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/groovy.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dockerfile.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-jenkins">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Jenkins" class="w-10 h-10" src="../assets/favicons/svg/Jenkins.svg"/>
+     <span class="text-xl font-bold">
+      Jenkins
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#why-jenkins">
+      2. Why Jenkins?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#install">
+      3. Installation
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#first-job">
+      4. Your First Job
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#pipelines">
+      5. Declarative Pipelines
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#multibranch">
+      6. Multibranch Pipelines
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#shared-libraries">
+      7. Shared Libraries
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#agents">
+      8. Agents &amp; Distributed Builds
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#plugins">
+      9. Plugins &amp; Security
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#docker">
+      10. Jenkins + Docker
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#production">
+      11. Production Hardening
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#troubleshooting">
+      12. Troubleshooting
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone">
+      13. Capstone Project
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#quiz">
+      14. Knowledge Check
+     </a>
+    </nav>
+   </aside>
+   <div class="flex-1 min-w-0">
+    <header class="lg:hidden flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--panel)] sticky top-0 z-30">
+     <button aria-label="Open menu" class="p-2 rounded-lg border border-[var(--border)]" onclick="toggleSidebar()">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+     <button aria-label="Toggle theme" class="p-2 rounded-lg border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <main class="max-w-4xl mx-auto px-6 py-10" id="main">
+     <section class="mb-16" id="intro">
+      <div class="flex items-center gap-4 mb-6">
+       <div class="p-3 rounded-2xl bg-[var(--card)] border border-[var(--border)]">
+        <img alt="Jenkins" class="w-14 h-14" src="../assets/favicons/svg/Jenkins.svg"/>
+       </div>
+       <div>
+        <p class="text-sm font-semibold text-[var(--brand-light)] uppercase tracking-wider">
+         DevOps Track
+        </p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold">
+         Jenkins
+        </h1>
+       </div>
+      </div>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-4">
+       Jenkins is the world's most popular open-source automation server. It helps teams build, test, and deploy software
+              continuously. This tutorial takes you from installation to production-grade CI/CD pipelines with real examples,
+              plugins, Docker agents, shared libraries, and a capstone project.
+      </p>
+      <p class="text-[var(--muted)] leading-relaxed">
+       By the end, you will be able to design a complete Jenkins-based delivery pipeline for a Node.js application,
+              including automated testing, security scanning, Docker image builds, and deployment stages.
+      </p>
+     </section>
+     <section class="mb-16" id="why-jenkins">
+      <h2 class="text-2xl font-bold mb-4">
+       Why Jenkins?
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Jenkins has been around since 2011 and remains dominant because of its huge plugin ecosystem, flexible pipelines,
+              and self-hosted option. It fits organizations that need full control over their CI/CD infrastructure.
+      </p>
+      <div class="grid sm:grid-cols-2 gap-4 mb-6">
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         1,800+ Plugins
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Integrate with GitHub, Docker, Kubernetes, AWS, Azure, SonarQube, Slack, and more.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Pipeline as Code
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Store build logic in a Jenkinsfile inside your repository alongside your application code.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Self-Hosted Control
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Run Jenkins on your own servers, control secrets, networking, and agent pools.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Distributed Builds
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Scale horizontally with agent nodes, Docker containers, or Kubernetes pods.
+        </p>
+       </div>
+      </div>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        Netflix uses Jenkins to run tens of thousands of builds per day. By distributing builds across agents and
+                treating pipelines as code, they keep thousands of microservices deployable while maintaining strict
+                compliance and audit requirements.
+       </p>
+      </div>
+     </section>
+     <section class="mb-16" id="install">
+      <h2 class="text-2xl font-bold mb-4">
+       Installing Jenkins
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Jenkins runs on Java. For this tutorial you will install it locally with Docker so the environment is reproducible.
+      </p>
+      <p class="font-semibold mb-2">
+       Option A: Docker (recommended)
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Create a Docker network for Jenkins
+docker network create jenkins
+# Run Jenkins with persistent volume
+docker run -d --name jenkins   --network jenkins   -p 8080:8080 -p 50000:50000   -v jenkins_home:/var/jenkins_home   -v /var/run/docker.sock:/var/run/docker.sock   jenkins/jenkins:lts-jdk17
+# Get the initial admin password
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Option B: Ubuntu/Debian package
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">sudo apt update
+sudo apt install openjdk-17-jre-headless -y
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee   /usr/share/keyrings/jenkins-keyring.asc &gt; /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]   https://pkg.jenkins.io/debian-stable binary/ | sudo tee   /etc/apt/sources.list.d/jenkins.list &gt; /dev/null
+sudo apt update
+sudo apt install jenkins -y
+sudo systemctl enable --now jenkins</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       First-time setup checklist
+      </p>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        Open
+        <code class="language-text">
+         http://localhost:8080
+        </code>
+        and paste the initial admin password.
+       </li>
+       <li>
+        Install the suggested plugins (Git, Pipeline, Docker, Blue Ocean).
+       </li>
+       <li>
+        Create the first admin user; do not leave authentication disabled.
+       </li>
+       <li>
+        Configure the Jenkins URL under Manage Jenkins &rarr; System.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="first-job">
+      <h2 class="text-2xl font-bold mb-4">
+       Your First Jenkins Job
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A Freestyle job is the simplest way to start. You point Jenkins at a Git repository, add build steps, and trigger on commits.
+      </p>
+      <p class="font-semibold mb-2">
+       Example: Freestyle job configuration
+      </p>
+      <ol class="list-decimal pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        New Item &rarr;
+        <strong>
+         hello-world
+        </strong>
+        &rarr; Freestyle project.
+       </li>
+       <li>
+        Source Code Management &rarr; Git &rarr; URL:
+        <code class="language-text">
+         https://github.com/your-org/hello-app.git
+        </code>
+        .
+       </li>
+       <li>
+        Branches to build:
+        <code class="language-text">
+         */main
+        </code>
+        .
+       </li>
+       <li>
+        Build Triggers &rarr; Poll SCM:
+        <code class="language-text">
+         H/5 * * * *
+        </code>
+        .
+       </li>
+       <li>
+        Build Steps &rarr; Execute shell:
+       </li>
+      </ol>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">#!/bin/bash
+set -e
+echo "Building commit ${GIT_COMMIT}"
+npm ci
+npm test
+npm run build</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Save and click
+       <strong>
+        Build Now
+       </strong>
+       . Jenkins clones the repo, runs the shell script, and reports success or failure
+              on the build page. Freestyle jobs are fine for simple tasks, but modern teams prefer Pipeline as Code.
+      </p>
+     </section>
+     <section class="mb-16" id="pipelines">
+      <h2 class="text-2xl font-bold mb-4">
+       Declarative Pipelines
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A Jenkinsfile defines a pipeline in Groovy syntax. Declarative pipelines are the easiest to read and maintain.
+              They include stages, steps, post-actions, and environment variables.
+      </p>
+      <p class="font-semibold mb-2">
+       Basic Jenkinsfile
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-groovy">pipeline {
+    agent any
+    environment {
+        NODE_VERSION = '20'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/your-org/hello-app.git'
+            }
+        }
+        stage('Install') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+    }
+    post {
+        always {
+            junit 'reports/**/*.xml'
+            cleanWs()
+        }
+        failure {
+            echo 'Pipeline failed. Notify the team.'
+        }
+    }
+}</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Conditional and parallel stages
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-groovy">pipeline {
+    agent any
+    stages {
+        stage('Test Matrix') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        sh 'npm run test:unit'
+                    }
+                }
+                stage('Integration Tests') {
+                    steps {
+                        sh 'npm run test:integration'
+                    }
+                }
+            }
+        }
+        stage('Deploy to Staging') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh 'scripts/deploy-staging.sh'
+            }
+        }
+    }
+}</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Use
+        <code class="language-text">
+         agent any
+        </code>
+        for the built-in node, or label specific agents for specialized builds.
+       </li>
+       <li>
+        Keep stages small and focused; each stage should represent one logical step.
+       </li>
+       <li>
+        Use
+        <code class="language-text">
+         post
+        </code>
+        to publish reports, clean workspaces, and notify channels.
+       </li>
+       <li>
+        Use
+        <code class="language-text">
+         when
+        </code>
+        to skip stages for pull requests or non-main branches.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="multibranch">
+      <h2 class="text-2xl font-bold mb-4">
+       Multibranch Pipelines
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A Multibranch Pipeline automatically discovers branches and pull requests in a repository and creates a separate
+              Jenkins job for each one. It is the standard way to run Pipeline as Code in Git-based workflows.
+      </p>
+      <p class="font-semibold mb-2">
+       Setup steps
+      </p>
+      <ol class="list-decimal pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        New Item &rarr;
+        <strong>
+         hello-app-multibranch
+        </strong>
+        &rarr; Multibranch Pipeline.
+       </li>
+       <li>
+        Branch Sources &rarr; GitHub &rarr; Repository HTTPS URL and credentials.
+       </li>
+       <li>
+        Scan Repository Triggers &rarr; Periodically if not otherwise run:
+        <code class="language-text">
+         1 minute
+        </code>
+        .
+       </li>
+       <li>
+        Add a Jenkinsfile to your repository root.
+       </li>
+      </ol>
+      <p class="font-semibold mb-2">
+       Jenkinsfile with PR-specific behavior
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-groovy">pipeline {
+    agent any
+    stages {
+        stage('Validate') {
+            steps {
+                sh 'npm ci'
+                sh 'npm run lint'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+        stage('Build Image') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
+            }
+            steps {
+                script {
+                    def image = docker.build("hello-app:${env.BUILD_NUMBER}")
+                    image.push()
+                }
+            }
+        }
+    }
+    post {
+        success {
+            script {
+                if (env.CHANGE_ID) {
+                    githubNotify status: 'SUCCESS', context: 'continuous-integration/jenkins'
+                }
+            }
+        }
+    }
+}</code></pre>
+      </div>
+     </section>
+     <section class="mb-16" id="shared-libraries">
+      <h2 class="text-2xl font-bold mb-4">
+       Shared Libraries
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Shared libraries let you reuse pipeline logic across many repositories. You write Groovy functions once and call
+              them from any Jenkinsfile.
+      </p>
+      <p class="font-semibold mb-2">
+       Library repository structure
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">jenkins-shared-library/
+&boxvr;&boxh;&boxh; vars/
+&boxv;   &boxvr;&boxh;&boxh; dockerBuild.groovy
+&boxv;   &boxvr;&boxh;&boxh; runTests.groovy
+&boxv;   &boxur;&boxh;&boxh; notifySlack.groovy
+&boxur;&boxh;&boxh; src/
+    &boxur;&boxh;&boxh; com/example/Utils.groovy</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       vars/dockerBuild.groovy
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-groovy">def call(Map config = [:]) {
+    def imageName = config.imageName ?: error('imageName is required')
+    def tag = config.tag ?: env.BUILD_NUMBER
+    stage('Build Docker Image') {
+        sh "docker build -t ${imageName}:${tag} ."
+    }
+    stage('Push') {
+        withCredentials([usernamePassword(
+            credentialsId: 'docker-hub',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+        )]) {
+            sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+            sh "docker push ${imageName}:${tag}"
+        }
+    }
+}</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Configure the library
+      </p>
+      <ol class="list-decimal pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        Manage Jenkins &rarr; System &rarr; Global Pipeline Libraries.
+       </li>
+       <li>
+        Name:
+        <code class="language-text">
+         my-shared-library
+        </code>
+        .
+       </li>
+       <li>
+        Default version:
+        <code class="language-text">
+         main
+        </code>
+        .
+       </li>
+       <li>
+        Retrieval method: Modern SCM &rarr; GitHub &rarr; repository URL.
+       </li>
+      </ol>
+      <p class="font-semibold mb-2">
+       Use it in a Jenkinsfile
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-groovy">@Library('my-shared-library') _
+pipeline {
+    agent any
+    stages {
+        stage('Build and Push') {
+            steps {
+                dockerBuild(imageName: 'myorg/hello-app')
+            }
+        }
+    }
+}</code></pre>
+      </div>
+     </section>
+     <section class="mb-16" id="agents">
+      <h2 class="text-2xl font-bold mb-4">
+       Agents &amp; Distributed Builds
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       The built-in controller should not run heavy builds. Agents execute pipeline steps on separate machines or containers,
+              improving security, isolation, and throughput.
+      </p>
+      <p class="font-semibold mb-2">
+       Launch a permanent agent
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># On the agent machine, create a jenkins user and directory
+sudo useradd -m -s /bin/bash jenkins
+sudo mkdir -p /var/jenkins-agent
+sudo chown jenkins:jenkins /var/jenkins-agent
+# Download the agent JAR from the controller
+sudo -u jenkins curl -o /var/jenkins-agent/agent.jar   http://jenkins.example.com:8080/jnlpJars/agent.jar
+# Connect to the controller with the secret shown in the node page
+sudo -u jenkins java -jar /var/jenkins-agent/agent.jar   -jnlpUrl http://jenkins.example.com:8080/computer/agent-1/jenkins-agent.jnlp   -secret @/var/jenkins-agent/secret-file   -workDir /var/jenkins-agent</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Use the agent in a pipeline
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-groovy">pipeline {
+    agent { label 'docker-agent' }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'docker build -t myapp:${BUILD_NUMBER} .'
+            }
+        }
+    }
+}</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Docker agent template
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-yaml"># docker-compose.agent.yml
+version: "3.8"
+services:
+  jenkins-agent:
+    image: jenkins/inbound-agent:latest-jdk17
+    environment:
+      - JENKINS_URL=http://jenkins:8080
+      - JENKINS_SECRET=<agent-secret>
+      - JENKINS_AGENT_NAME=docker-agent-1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock</agent-secret></code></pre>
+      </div>
+     </section>
+     <section class="mb-16" id="plugins">
+      <h2 class="text-2xl font-bold mb-4">
+       Plugins &amp; Security
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Plugins extend Jenkins, but they are also a major attack surface. Keep them updated, remove unused ones, and
+              follow the principle of least privilege.
+      </p>
+      <div class="overflow-x-auto rounded-xl border border-[var(--border)] mb-6">
+       <table class="w-full text-sm">
+        <thead class="bg-[var(--panel)]">
+         <tr>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Plugin
+          </th>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Purpose
+          </th>
+         </tr>
+        </thead>
+        <tbody class="divide-y divide-[var(--border)]">
+         <tr>
+          <td class="p-3 font-semibold">
+           Pipeline
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Jenkinsfile support and stage visualization.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           GitHub Branch Source
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Multibranch pipelines from GitHub repos and PRs.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           Docker Pipeline
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Build, run, and push Docker images from pipelines.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           Credentials Binding
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Inject secrets safely into builds.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           JUnit
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Publish test results and trends.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           SonarQube Scanner
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Static analysis and code quality gates.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           Slack Notification
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Post build results to Slack channels.
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+      <p class="font-semibold mb-2">
+       Store credentials securely
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-groovy">pipeline {
+    agent any
+    environment {
+        SONAR_TOKEN = credentials('sonar-token')
+    }
+    stages {
+        stage('Scan') {
+            steps {
+                sh 'npx sonarqube-scanner -Dsonar.login=$SONAR_TOKEN'
+            }
+        }
+    }
+}</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Run Jenkins with a dedicated non-root OS user and minimal file permissions.
+       </li>
+       <li>
+        Disable anonymous access and use LDAP, SSO, or matrix-based security.
+       </li>
+       <li>
+        Enable CSRF protection and Content Security Policy headers.
+       </li>
+       <li>
+        Audit plugins monthly; remove unused plugins to reduce attack surface.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="docker">
+      <h2 class="text-2xl font-bold mb-4">
+       Jenkins + Docker
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Running builds inside Docker containers guarantees reproducible environments. The Jenkins controller can spawn
+              agents as Docker containers and pipelines can build application images from Dockerfiles.
+      </p>
+      <p class="font-semibold mb-2">
+       Dockerfile for a custom agent
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-dockerfile"># Dockerfile.agent
+FROM jenkins/inbound-agent:latest-jdk17
+USER root
+RUN apt-get update &amp;&amp; apt-get install -y     docker.io     nodejs     npm     &amp;&amp; rm -rf /var/lib/apt/lists/*
+USER jenkins</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Build and push in a pipeline
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-groovy">pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/your-org/hello-app.git'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm ci'
+                sh 'npm test'
+            }
+        }
+        stage('Build Image') {
+            steps {
+                script {
+                    def image = docker.build("myorg/hello-app:${env.BUILD_NUMBER}")
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+                        image.push()
+                        image.push('latest')
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Docker-in-Docker warning
+      </p>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Mounting
+       <code class="language-text">
+        /var/run/docker.sock
+       </code>
+       is convenient but breaks container isolation.
+              For untrusted workloads, use Kaniko, BuildKit in rootless mode, or separate ephemeral VMs.
+      </p>
+     </section>
+     <section class="mb-16" id="production">
+      <h2 class="text-2xl font-bold mb-4">
+       Production Hardening
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A production Jenkins controller must be reliable, observable, and secure. Backups, monitoring, and access control
+              are non-negotiable.
+      </p>
+      <div class="grid sm:grid-cols-2 gap-4 mb-6">
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Backups
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Back up
+         <code class="language-text">
+          $JENKINS_HOME
+         </code>
+         daily. Test restores. Store secrets in a credential manager, not in job config XML.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Monitoring
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Export metrics with the Prometheus plugin. Alert on queue length, disk usage, failed builds, and plugin CVEs.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         RBAC
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Use the Role-based Authorization Strategy plugin. Developers see their jobs; admins manage the controller.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Updates
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Keep Jenkins core and plugins current. Run test upgrades in a staging controller first.
+        </p>
+       </div>
+      </div>
+      <p class="font-semibold mb-2">
+       Backup script
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">#!/bin/bash
+# jenkins-backup.sh
+JENKINS_HOME=/var/lib/jenkins
+BACKUP_DIR=/backups/jenkins/$(date +%Y%m%d_%H%M%S)
+mkdir -p "$BACKUP_DIR"
+tar --exclude='*/workspace/*' --exclude='*/builds/*'     -czf "$BACKUP_DIR/jenkins_home.tar.gz" -C "$JENKINS_HOME" .
+# Keep only the last 7 backups
+ls -1td /backups/jenkins/* | tail -n +8 | xargs -r rm -rf</code></pre>
+      </div>
+     </section>
+     <section class="mb-16" id="troubleshooting">
+      <h2 class="text-2xl font-bold mb-4">
+       Troubleshooting
+      </h2>
+      <div class="overflow-x-auto rounded-xl border border-[var(--border)]">
+       <table class="w-full text-sm">
+        <thead class="bg-[var(--panel)]">
+         <tr>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Symptom
+          </th>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Likely cause
+          </th>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Fix
+          </th>
+         </tr>
+        </thead>
+        <tbody class="divide-y divide-[var(--border)]">
+         <tr>
+          <td class="p-3">
+           Build fails on agent only
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Missing tool or different environment.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Use the same Docker image on all agents; lock tool versions.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           Disk full
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Workspace, artifacts, or logs accumulating.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Enable Discard old builds and use cleanWs() in pipelines.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           Plugins fail to load
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Version mismatch or dependency conflict.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Use the Plugin Version Pinning plugin and test updates.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3">
+           Pipeline hangs
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Input step waiting forever or agent disconnected.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Set timeouts on stages and agents; use timeout step.
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </section>
+     <section class="mb-16" id="capstone">
+      <h2 class="text-2xl font-bold mb-4">
+       Capstone Project: Full CI/CD for a Node.js API
+      </h2>
+      <h3 class="text-lg font-semibold mb-2">
+       1. What is this project?
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       You will set up a complete Jenkins-based CI/CD pipeline for a Node.js/Express API. The pipeline runs on every
+              commit, executes tests, performs security scanning, builds a Docker image, and deploys to a staging environment.
+              A production deployment stage requires manual approval.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       2. What it covers
+      </h3>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        Jenkins installation with Docker and a dedicated agent.
+       </li>
+       <li>
+        Multibranch pipeline scanning a GitHub repository.
+       </li>
+       <li>
+        Declarative Jenkinsfile with install, lint, test, and build stages.
+       </li>
+       <li>
+        Parallel unit and integration test execution.
+       </li>
+       <li>
+        Docker image build and push to a registry.
+       </li>
+       <li>
+        SonarQube static analysis and quality gate.
+       </li>
+       <li>
+        OWASP Dependency-Check for vulnerable libraries.
+       </li>
+       <li>
+        Deployment to staging with environment variables and secrets.
+       </li>
+       <li>
+        Manual approval gate before production deployment.
+       </li>
+       <li>
+        Slack notifications and JUnit test result publishing.
+       </li>
+      </ul>
+      <h3 class="text-lg font-semibold mb-2">
+       3. How it is done
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Project layout:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">node-api/
+&boxvr;&boxh;&boxh; Dockerfile
+&boxvr;&boxh;&boxh; docker-compose.yml
+&boxvr;&boxh;&boxh; Jenkinsfile
+&boxvr;&boxh;&boxh; package.json
+&boxvr;&boxh;&boxh; src/
+&boxv;   &boxur;&boxh;&boxh; server.js
+&boxvr;&boxh;&boxh; tests/
+&boxv;   &boxvr;&boxh;&boxh; unit/
+&boxv;   &boxur;&boxh;&boxh; integration/
+&boxur;&boxh;&boxh; scripts/
+    &boxvr;&boxh;&boxh; deploy-staging.sh
+    &boxur;&boxh;&boxh; deploy-production.sh</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 1 &mdash; install Jenkins and an agent:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Start the controller
+docker run -d --name jenkins   -p 8080:8080 -p 50000:50000   -v jenkins_home:/var/jenkins_home   -v /var/run/docker.sock:/var/run/docker.sock   jenkins/jenkins:lts-jdk17
+# Build and run a custom agent image
+docker build -t jenkins-node-agent -f Dockerfile.agent .
+docker run -d --name jenkins-agent   --network host   -v /var/run/docker.sock:/var/run/docker.sock   jenkins-node-agent   -url http://$(hostname -I | awk '{print $1}'):8080   -workDir /home/jenkins/agent   -secret <agent-secret>   -name node-agent-1</agent-secret></code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 2 &mdash; create the Jenkinsfile:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-groovy">pipeline {
+    agent { label 'node-agent' }
+    environment {
+        NODE_VERSION = '20'
+        IMAGE_NAME = 'myorg/node-api'
+        SONAR_TOKEN = credentials('sonar-token')
+        DOCKER_REGISTRY = 'https://index.docker.io/v1/'
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timeout(time: 30, unit: 'MINUTES')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Install &amp; Lint') {
+            steps {
+                sh 'npm ci'
+                sh 'npm run lint'
+            }
+        }
+        stage('Test') {
+            parallel {
+                stage('Unit') {
+                    steps {
+                        sh 'npm run test:unit -- --reporter=xunit --reporter-option=output=reports/unit.xml'
+                    }
+                }
+                stage('Integration') {
+                    steps {
+                        sh 'npm run test:integration -- --reporter=xunit --reporter-option=output=reports/integration.xml'
+                    }
+                }
+            }
+        }
+        stage('Security Scan') {
+            steps {
+                sh 'npm audit --audit-level=moderate'
+                sh 'npx dependency-check --project node-api --scan ./package-lock.json --out reports/dependency-check'
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube-server') {
+                    sh 'npx sonarqube-scanner -Dsonar.login=$SONAR_TOKEN'
+                }
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        stage('Build &amp; Push Image') {
+            when {
+                anyOf {
+                    branch 'main'
+                    branch 'develop'
+                }
+            }
+            steps {
+                script {
+                    def image = docker.build("${env.IMAGE_NAME}:${env.BUILD_NUMBER}")
+                    docker.withRegistry(env.DOCKER_REGISTRY, 'docker-hub-creds') {
+                        image.push()
+                        image.push(env.BRANCH_NAME == 'main' ? 'latest' : 'dev')
+                    }
+                }
+            }
+        }
+        stage('Deploy to Staging') {
+            when {
+                branch 'main'
+            }
+            steps {
+                withCredentials([string(credentialsId: 'staging-api-key', variable: 'API_KEY')]) {
+                    sh 'scripts/deploy-staging.sh ${BUILD_NUMBER} ${API_KEY}'
+                }
+            }
+        }
+        stage('Production Approval') {
+            when {
+                branch 'main'
+            }
+            steps {
+                input message: 'Deploy to production?', ok: 'Deploy'
+            }
+        }
+        stage('Deploy to Production') {
+            when {
+                branch 'main'
+            }
+            steps {
+                withCredentials([string(credentialsId: 'prod-api-key', variable: 'API_KEY')]) {
+                    sh 'scripts/deploy-production.sh ${BUILD_NUMBER} ${API_KEY}'
+                }
+            }
+        }
+    }
+    post {
+        always {
+            junit 'reports/**/*.xml'
+            publishHTML([
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'reports/dependency-check',
+                reportFiles: 'dependency-check-report.html',
+                reportName: 'Dependency Check Report'
+            ])
+            cleanWs()
+        }
+        success {
+            slackSend(color: 'good', message: "SUCCESS: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+        }
+        failure {
+            slackSend(color: 'danger', message: "FAILURE: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+        }
+    }
+}</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 3 &mdash; deployment scripts:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># scripts/deploy-staging.sh
+#!/bin/bash
+set -e
+BUILD_NUMBER=$1
+API_KEY=$2
+docker pull myorg/node-api:${BUILD_NUMBER}
+docker stop node-api-staging || true
+docker rm node-api-staging || true
+docker run -d --name node-api-staging   -e API_KEY=${API_KEY}   -p 8081:3000   myorg/node-api:${BUILD_NUMBER}
+# Health check
+curl -sf http://localhost:8081/health || exit 1
+echo "Staging deployment complete"</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 4 &mdash; required Jenkins configuration:
+      </p>
+      <ol class="list-decimal pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        Install plugins: Pipeline, GitHub Branch Source, Docker Pipeline, Credentials Binding, JUnit, SonarQube Scanner, OWASP Dependency-Check, Slack Notification, Role-based Authorization Strategy.
+       </li>
+       <li>
+        Create credentials:
+        <code class="language-text">
+         docker-hub-creds
+        </code>
+        ,
+        <code class="language-text">
+         sonar-token
+        </code>
+        ,
+        <code class="language-text">
+         staging-api-key
+        </code>
+        ,
+        <code class="language-text">
+         prod-api-key
+        </code>
+        .
+       </li>
+       <li>
+        Configure a SonarQube server under Manage Jenkins &rarr; System.
+       </li>
+       <li>
+        Add an agent with label
+        <code class="language-text">
+         node-agent
+        </code>
+        .
+       </li>
+       <li>
+        Create a Multibranch Pipeline pointing at your GitHub repository.
+       </li>
+      </ol>
+      <h3 class="text-lg font-semibold mb-2">
+       4. What did we learn from this capstone project?
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       A production CI/CD pipeline is more than running tests. It is a chain of verification, security, packaging,
+              deployment, and governance. Jenkins provides the building blocks, but the pipeline design must enforce quality
+              gates, protect secrets, and keep the controller secure. The capstone shows how every stage reinforces the next:
+              tests catch bugs early, security scans prevent vulnerable artifacts, and manual approvals control production risk.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       5. How can I enhance this project in the future?
+      </h3>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Replace Docker-in-Docker with Kaniko or BuildKit rootless builds for stronger isolation.
+       </li>
+       <li>
+        Add Kubernetes agents with the Kubernetes plugin for elastic scaling.
+       </li>
+       <li>
+        Implement configuration-as-code (JCasC) to version-control all Jenkins settings.
+       </li>
+       <li>
+        Add smoke tests and canary deployments with traffic splitting.
+       </li>
+       <li>
+        Integrate with a service mesh or feature flags for progressive rollouts.
+       </li>
+       <li>
+        Export pipeline metrics to Prometheus and build a Grafana CI/CD dashboard.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="quiz">
+      <h2 class="text-2xl font-bold mb-4">
+       Knowledge Check
+      </h2>
+      <div class="space-y-5">
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         1. Where should you store a Jenkinsfile?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          In the Jenkins controller under /var/lib/jenkins
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          In the root of the application repository
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          On a shared network drive
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         2. What is the best way to handle secrets in a Jenkins pipeline?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Store them as plain text environment variables in the Jenkinsfile
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          Use the Credentials plugin and inject them with withCredentials
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Commit them to GitHub and restrict the repository
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         3. Why should heavy builds run on agents instead of the controller?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          To improve security, isolation, and throughput
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Because the controller cannot run shell commands
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          To avoid installing the Git plugin
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         4. Which plugin lets you reuse Groovy pipeline code across jobs?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Blue Ocean
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          Pipeline: Shared Groovy Libraries
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Prometheus
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         5. What does a Multibranch Pipeline do automatically?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Backs up Jenkins configuration to Git
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          Discovers branches and pull requests and creates a job for each
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Installs plugins from a Jenkinsfile
+         </button>
+        </div>
+       </div>
+      </div>
+      <div class="mt-6 hidden p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]" id="quiz-summary">
+       <p class="font-bold">
+       </p>
+      </div>
+     </section>
+    </main>
+   </div>
+  </div>
+  <script>
+   const html = document.documentElement;
+      const moon = document.getElementById('moon');
+      const sun = document.getElementById('sun');
+      function applyTheme(theme) {
+        html.classList.remove('light', 'dark');
+        html.classList.add(theme);
+        const lightLink = document.getElementById('hljs-light');
+        const darkLink = document.getElementById('hljs-dark');
+        if (theme === 'dark') {
+          moon && moon.classList.add('hidden');
+          sun && sun.classList.remove('hidden');
+          lightLink.disabled = true;
+          darkLink.disabled = false;
+        } else {
+          moon && moon.classList.remove('hidden');
+          sun && sun.classList.add('hidden');
+          lightLink.disabled = false;
+          darkLink.disabled = true;
+        }
+        localStorage.setItem('tutorials-theme', theme);
+      }
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+        });
+      }
+      const saved = localStorage.getItem('tutorials-theme');
+      applyTheme(saved === 'dark' ? 'dark' : 'light');
+      function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('menu-overlay');
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('hidden');
+      }
+      function copyCode(btn) {
+        const code = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(code.innerText).then(() => {
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+          }, 1500);
+        });
+      }
+      const tocLinks = document.querySelectorAll('#toc a');
+      const sections = document.querySelectorAll('main section[id]');
+      function updateActive() {
+        let current = '';
+        sections.forEach((section) => {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 120) current = section.id;
+        });
+        tocLinks.forEach((link) => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+      }
+      window.addEventListener('scroll', updateActive);
+      updateActive();
+      document.querySelectorAll('.quiz-opt').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quiz-card');
+          card.querySelectorAll('.quiz-opt').forEach((b) => {
+            b.classList.remove('correct', 'wrong');
+            b.disabled = true;
+          });
+          if (btn.dataset.correct === 'true') {
+            btn.classList.add('correct');
+          } else {
+            btn.classList.add('wrong');
+            card.querySelector('[data-correct="true"]').classList.add('correct');
+          }
+          const total = document.querySelectorAll('.quiz-card').length;
+          const correct = document.querySelectorAll('.quiz-opt.correct').length;
+          const summary = document.getElementById('quiz-summary');
+          summary.classList.remove('hidden');
+          summary.querySelector('p').textContent = `Score: ${correct} / ${total}`;
+        });
+      });
+      hljs.highlightAll();
+  </script>
+ </body>
+</html>

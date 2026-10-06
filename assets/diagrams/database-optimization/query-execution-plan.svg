@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" role="img" style="font-family: Outfit, system-ui, -apple-system, sans-serif; text-rendering: geometricPrecision; shape-rendering: geometricPrecision;" preserveAspectRatio="xMidYMid meet">
+  <title>Diagram showing a query optimizer choosing between a slow sequential scan and a fast index scan</title>
+  <rect x="0" y="0" width="720" height="260" fill="#ffffff"/>
+  <text x="360" y="30" text-anchor="middle" dominant-baseline="middle" font-size="15" font-weight="700" fill="#1f2328">Query Planner: Sequential Scan vs Index Scan</text>  <rect x="80" y="70" width="130" height="60" rx="10" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+  <text x="145.0" y="100.0" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="600" fill="#656d76">SQL Query</text>
+  <text x="145.0" y="116.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">SELECT * FROM orders
+WHERE customer_id = 42</text>  <rect x="270" y="75" width="100" height="50" rx="10" fill="#fdf8ec" stroke="#9a6700" stroke-width="1.5"/>
+  <text x="320.0" y="100.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#9a6700">Optimizer</text>  <rect x="430" y="60" width="140" height="55" rx="10" fill="#fdecec" stroke="#cf222e" stroke-width="1.5"/>
+  <text x="500.0" y="87.5" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#cf222e">Seq Scan</text>
+  <text x="500.0" y="103.5" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">10M rows, 2.4s</text>  <rect x="430" y="135" width="140" height="55" rx="10" fill="#e8f9ee" stroke="#1a7f37" stroke-width="1.5"/>
+  <text x="500.0" y="162.5" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#1a7f37">Index Scan</text>
+  <text x="500.0" y="178.5" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">42 rows, 3ms</text>    <marker id="arr-64663" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#d0d7de"/>
+    </marker>
+  <line x1="210" y1="100" x2="270" y2="100" stroke="#d0d7de" stroke-width="1.5" marker-end="url(#arr-64663)" stroke-linecap="round"/>    <marker id="arr-29448" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#cf222e"/>
+    </marker>
+  <line x1="370" y1="100" x2="430" y2="87" stroke="#cf222e" stroke-width="1.5" marker-end="url(#arr-29448)" stroke-linecap="round"/>    <marker id="arr-60792" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#1a7f37"/>
+    </marker>
+  <line x1="370" y1="100" x2="430" y2="162" stroke="#1a7f37" stroke-width="1.5" marker-end="url(#arr-60792)" stroke-linecap="round"/>  <path d="M500 162 L 500 210 L 210 210 L 210 130" stroke="#1a7f37" stroke-width="2" fill="none" marker-end="url(#arr-11111)" stroke-linecap="round"/>
+  <text x="360" y="240" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="500" fill="#1a7f37">planner picks the cheapest plan based on statistics and indexes</text></svg>

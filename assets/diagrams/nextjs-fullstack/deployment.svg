@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" role="img" style="font-family: Outfit, system-ui, -apple-system, sans-serif; text-rendering: geometricPrecision; shape-rendering: geometricPrecision;" preserveAspectRatio="xMidYMid meet">
+  <title>Diagram of deploying a Next.js app to Vercel with preview and production environments</title>
+  <rect x="0" y="0" width="720" height="260" fill="#ffffff"/>
+  <text x="360" y="32" text-anchor="middle" dominant-baseline="middle" font-size="16" font-weight="700" fill="#1f2328">Deploy Next.js to Vercel</text>  <rect x="60" y="80" width="140" height="70" rx="10" fill="#f3f4f6" stroke="#000000" stroke-width="1.5"/>
+  <text x="130.0" y="109.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#000000">GitHub</text>
+  <text x="130.0" y="129.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">push code</text>    <marker id="arr-84292" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#000000"/>
+    </marker>
+  <line x1="200" y1="115" x2="270" y2="115" stroke="#000000" stroke-width="1.5" marker-end="url(#arr-84292)" stroke-linecap="round"/>
+  <text x="235.0" y="103.0" text-anchor="middle" font-size="10" fill="#848d97">trigger</text>  <rect x="270" y="80" width="180" height="70" rx="10" fill="#000000" stroke="#000000" stroke-width="1.5"/>
+  <text x="360.0" y="109.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#ffffff">Vercel Build</text>
+  <text x="360.0" y="129.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">build + test</text>    <marker id="arr-41457" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L7,3 z" fill="#000000"/>
+    </marker>
+  <line x1="450" y1="115" x2="520" y2="115" stroke="#000000" stroke-width="1.5" marker-end="url(#arr-41457)" stroke-linecap="round"/>
+  <text x="485.0" y="103.0" text-anchor="middle" font-size="10" fill="#848d97">deploy</text>  <rect x="520" y="80" width="140" height="70" rx="10" fill="#f3f4f6" stroke="#000000" stroke-width="1.5"/>
+  <text x="590.0" y="109.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#000000">Preview</text>
+  <text x="590.0" y="129.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">per branch</text>  <rect x="520" y="180" width="140" height="70" rx="10" fill="#f3f4f6" stroke="#000000" stroke-width="1.5"/>
+  <text x="590.0" y="209.0" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="600" fill="#000000">Production</text>
+  <text x="590.0" y="229.0" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#656d76">main branch</text>  <line x1="590" y1="150" x2="590" y2="180" stroke="#000000" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="360" y="235" text-anchor="middle" dominant-baseline="middle" font-size="11" font-weight="500" fill="#6b7280">every push gets a preview URL; merged PRs go to production</text></svg>

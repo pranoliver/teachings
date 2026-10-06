@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Secure Authentication: OAuth 2.0, SSO &amp; RBAC
+  </title>
+  <link href="../assets/favicons/secure-authentication.png" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-secure-authentication">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Secure auth" class="w-10 h-10" src="../assets/favicons/secure-authentication.png"/>
+     <span class="text-xl font-bold">
+      Secure Auth
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#identity">
+      2. Identity, Authentication &amp; Authorization
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#password-auth">
+      3. Password-Based Authentication
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#oauth">
+      4. OAuth 2.0 &amp; OpenID Connect
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#sso">
+      5. Single Sign-On (SSO)
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#mfa">
+      6. Multi-Factor Authentication
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#rbac">
+      7. Role-Based Access Control
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#abac">
+      8. Attribute-Based Access Control
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#tokens">
+      9. Tokens, Sessions &amp; Secure Storage
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="# breaches">
+      10. Real-World Breaches
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone">
+      11. Capstone Project
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#quiz">
+      12. Knowledge Check
+     </a>
+    </nav>
+   </aside>
+   <div class="flex-1 min-w-0">
+    <header class="lg:hidden flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--panel)] sticky top-0 z-30">
+     <button aria-label="Open menu" class="p-2 rounded-lg border border-[var(--border)]" onclick="toggleSidebar()">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+     <button aria-label="Toggle theme" class="p-2 rounded-lg border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <main class="max-w-4xl mx-auto px-6 py-10" id="main">
+     <section class="mb-16" id="intro">
+      <div class="flex items-center gap-4 mb-6">
+       <div class="p-3 rounded-2xl bg-[var(--card)] border border-[var(--border)]">
+        <img alt="Secure auth" class="w-14 h-14" src="../assets/favicons/secure-authentication.png"/>
+       </div>
+       <div>
+        <p class="text-sm font-semibold text-[var(--brand-light)] uppercase tracking-wider">
+         Security Track
+        </p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold">
+         Secure Authentication
+        </h1>
+       </div>
+      </div>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-4">
+       Authentication and authorization are the front gates of every application. When they fail, attackers walk in as
+              admins, users, or third-party services. This tutorial covers password auth, OAuth 2.0, OpenID Connect, SSO,
+              multi-factor authentication, role-based access control, and how real companies have learned these lessons the hard way.
+      </p>
+      <p class="text-[var(--muted)] leading-relaxed">
+       By the end, you will be able to design and implement a secure identity layer for a Node.js or Python application,
+              integrate social login, enforce fine-grained permissions, and pass a practical security capstone.
+      </p>
+     </section>
+     <section class="mb-16" id="identity">
+      <h2 class="text-2xl font-bold mb-4">
+       Identity, Authentication &amp; Authorization
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       These three terms are often mixed up but mean different things:
+      </p>
+      <div class="grid sm:grid-cols-3 gap-4 mb-6">
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Identity
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Who the user is: user ID, email, profile, groups, and organizational context.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Authentication
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         Proving identity: passwords, tokens, biometrics, OTPs, or identity-provider assertions.
+        </p>
+       </div>
+       <div class="p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]">
+        <h3 class="font-bold mb-2">
+         Authorization
+        </h3>
+        <p class="text-sm text-[var(--muted)]">
+         What the user may do: roles, permissions, scopes, and access-control policies.
+        </p>
+       </div>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed">
+       A secure system checks both:
+       <strong class="text-[var(--ink)]">
+        authentication
+       </strong>
+       first ("are you really Alice?"),
+              then
+       <strong class="text-[var(--ink)]">
+        authorization
+       </strong>
+       ("is Alice allowed to refund this payment?").
+      </p>
+     </section>
+     <section class="mb-16" id="password-auth">
+      <h2 class="text-2xl font-bold mb-4">
+       Password-Based Authentication
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Passwords are still the most common authentication factor. Their security depends on how they are hashed, how login
+              attempts are limited, and how sessions are issued after a successful login.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2012, LinkedIn lost 6.5 million password hashes. They used SHA1
+        <em>
+         without a salt
+        </em>
+        , allowing attackers to crack
+                millions of passwords within hours using rainbow tables. LinkedIn later revealed the total was closer to 167 million accounts.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Unsafe password storage
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ❌ VULNERABLE: SHA1 without salt
+import hashlib
+def store_password(password: str) -&gt; str:
+    return hashlib.sha1(password.encode()).hexdigest()
+# Attacker downloads leaked DB and cracks most hashes with precomputed tables.</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Secure password storage with Argon2
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ✅ SECURE: memory-hard hashing with salt
+from argon2 import PasswordHasher
+ph = PasswordHasher(time_cost=3, memory_cost=65536, parallelism=1)
+def store_password(password: str) -&gt; str:
+    return ph.hash(password)
+def verify_password(stored: str, provided: str) -&gt; bool:
+    try:
+        ph.verify(stored, provided)
+        return True
+    except Exception:
+        return False</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       Rate-limited login with account lockout
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE Express login flow
+const rateLimit = require("express-rate-limit");
+const RedisStore = require("rate-limit-redis");
+const loginLimiter = rateLimit({
+  store: new RedisStore({ client: redisClient }),
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  skipSuccessfulRequests: true,
+  message: { error: "Too many attempts. Try again later." },
+});
+app.post("/api/login", loginLimiter, async (req, res) =&gt; {
+  const user = await db.findUserByEmail(req.body.email);
+  if (!user || !(await verifyPassword(user.password_hash, req.body.password))) {
+    await audit.log({
+      event: "failed_login",
+      email: req.body.email,
+      ip: req.ip,
+    });
+    return res.status(401).json({ error: "Invalid credentials" });
+  }
+  if (user.failed_logins &gt;= 5) {
+    return res
+      .status(403)
+      .json({ error: "Account locked. Reset your password." });
+  }
+  const session = await createSession(user.id, req);
+  res.cookie("sid", session.id, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+  });
+  res.json({ ok: true });
+});</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Use memory-hard password hashes: Argon2id, bcrypt, or scrypt.
+       </li>
+       <li>
+        Rate-limit and lock out repeated failed attempts to stop brute force and credential stuffing.
+       </li>
+       <li>
+        Issue sessions as opaque tokens stored server-side; bind them to IP and user-agent fingerprints.
+       </li>
+       <li>
+        Never return stack traces, user-existence hints, or password requirements in login errors.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="oauth">
+      <h2 class="text-2xl font-bold mb-4">
+       OAuth 2.0 &amp; OpenID Connect
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       OAuth 2.0 lets a user grant a third-party application limited access to their resources without sharing their password.
+              OpenID Connect (OIDC) adds an identity layer on top, returning signed ID tokens that prove who the user is.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2018, Facebook's "Login with Facebook" feature leaked access tokens for 50 million accounts because a bug in the
+                "View As" feature generated tokens with excessive scopes. It showed how dangerous over-scoped tokens can be.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       OAuth 2.0 authorization-code flow (secure version)
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: authorization-code flow with PKCE
+const crypto = require("crypto");
+// Step 1: Generate PKCE parameters on the client
+const codeVerifier = crypto.randomBytes(32).toString("base64url");
+const codeChallenge = crypto
+  .createHash("sha256")
+  .update(codeVerifier)
+  .digest("base64url");
+const authorizeUrl =
+  "https://accounts.google.com/o/oauth2/v2/auth?" +
+  new URLSearchParams({
+    client_id: CLIENT_ID,
+    response_type: "code",
+    scope: "openid email profile",
+    redirect_uri: "https://app.example.com/callback",
+    state: crypto.randomBytes(16).toString("hex"),
+    code_challenge: codeChallenge,
+    code_challenge_method: "S256",
+  });
+// Step 2: Exchange code for tokens
+const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: new URLSearchParams({
+    client_id: CLIENT_ID,
+    client_secret: CLIENT_SECRET,
+    code: req.query.code,
+    grant_type: "authorization_code",
+    redirect_uri: "https://app.example.com/callback",
+    code_verifier: codeVerifier,
+  }),
+});</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       OIDC token verification in Node.js
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: verify ID token signature and claims
+const { jwtVerify, createRemoteJWKSet } = require("jose");
+const JWKS = createRemoteJWKSet(
+  new URL("https://login.example.com/.well-known/jwks.json"),
+);
+async function verifyIdToken(idToken, expectedIssuer, expectedClientId) {
+  const { payload } = await jwtVerify(idToken, JWKS, {
+    issuer: expectedIssuer,
+    audience: expectedClientId,
+    maxTokenAge: "1 hour",
+  });
+  return payload; // { sub, email, name, ... }
+}</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Always use PKCE for mobile and SPA OAuth flows to prevent authorization-code interception.
+       </li>
+       <li>
+        Validate ID token issuer, audience, expiry, and signature against the provider's JWKS.
+       </li>
+       <li>
+        Request the minimum scopes needed; over-scoped tokens increase breach blast radius.
+       </li>
+       <li>
+        Store client secrets in environment variables or a KMS, never in client bundles.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="sso">
+      <h2 class="text-2xl font-bold mb-4">
+       Single Sign-On (SSO)
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       SSO lets users log in once and access multiple applications. Enterprise SSO usually relies on SAML or OIDC, while
+              consumer SSO often uses OAuth/OIDC with Google, GitHub, or Microsoft.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2020, the SolarWinds supply-chain attack also compromised SAML signing keys, allowing attackers to forge
+                authentication tokens for Microsoft 365 and Azure AD customers. It demonstrated that SSO is only as strong as the
+                keys that sign its tokens.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       SAML response verification (Python)
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ✅ SECURE: verify SAML signature and conditions
+from onelogin.saml2.auth import OneLogin_Saml2_Auth
+def saml_callback(request):
+    auth = OneLogin_Saml2_Auth(request, custom_settings=saml_settings)
+    auth.process_response()
+    errors = auth.get_errors()
+    if errors:
+        raise AuthenticationError(errors)
+    if not auth.is_authenticated():
+        raise AuthenticationError("SAML assertion not authenticated")
+    if auth.get_issuer() != expected_issuer:
+        raise AuthenticationError("Wrong issuer")
+    email = auth.get_nameid()
+    groups = auth.get_attribute("groups")
+    return create_session(email, groups)</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Rotate SAML/OIDC signing keys regularly and monitor for unauthorized certificate changes.
+       </li>
+       <li>
+        Reject unsigned or badly signed SAML assertions; enforce strict issuer and audience validation.
+       </li>
+       <li>
+        Use SP-initiated flows with state parameters to prevent login CSRF.
+       </li>
+       <li>
+        Log every SSO event: success, failure, issuer, and destination application.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="mfa">
+      <h2 class="text-2xl font-bold mb-4">
+       Multi-Factor Authentication
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       MFA requires two or more factors: something you know (password), something you have (phone/security key),
+              or something you are (biometric). It stops most password-only attacks, including credential stuffing and phishing.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2019, Microsoft reported that 99.9% of automated attacks against their cloud accounts were blocked simply by
+                enabling MFA. Yet many breaches, including the 2020 Twitter admin-panel incident, succeeded because MFA was not
+                uniformly enforced or was bypassed through social engineering.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       TOTP verification in Python
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-python"># ✅ SECURE: time-based one-time password
+import pyotp
+import time
+def verify_totp(secret: str, code: str) -&gt; bool:
+    totp = pyotp.TOTP(secret)
+    # Allow a small clock skew window
+    return totp.verify(code, valid_window=1)
+# Store secret encrypted; never expose it after enrollment.</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       WebAuthn / passkey registration hint
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: prompt for phishing-resistant passkeys
+const options = await fetch("/auth/webauthn/register-options").then((r) =&gt;
+  r.json(),
+);
+const credential = await navigator.credentials.create({ publicKey: options });
+await fetch("/auth/webauthn/register", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(credential),
+});
+// Server verifies attestation, origin, challenge, and stores public key.</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Enforce MFA for all admin, finance, and sensitive operations.
+       </li>
+       <li>
+        Prefer phishing-resistant factors: WebAuthn / passkeys, followed by TOTP apps, then SMS as a last resort.
+       </li>
+       <li>
+        Rate-limit MFA attempts; do not leak whether the password was correct before MFA is checked.
+       </li>
+       <li>
+        Provide recovery codes only once and store them hashed, like passwords.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="rbac">
+      <h2 class="text-2xl font-bold mb-4">
+       Role-Based Access Control (RBAC)
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       RBAC assigns permissions to roles, and roles to users. It is simpler than custom checks in every endpoint and makes
+              audit and revocation easier. A typical application has roles like
+       <code class="language-text">
+        guest
+       </code>
+       ,
+       <code class="language-text">
+        user
+       </code>
+       ,
+       <code class="language-text">
+        manager
+       </code>
+       , and
+       <code class="language-text">
+        admin
+       </code>
+       .
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2019, Capital One's breach involved an IAM role with overly broad S3 permissions. The attacker did not need to
+                "hack" deeply because the role itself could list and read every bucket in the account. This is RBAC done wrong.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       RBAC middleware in Express
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: declarative role checks
+const ROLES = {
+  user: ["read:own_orders"],
+  manager: ["read:own_orders", "read:team_orders", "refund:orders"],
+  admin: ["read:all_orders", "refund:orders", "manage:users"],
+};
+function requirePermission(permission) {
+  return (req, res, next) =&gt; {
+    const userPerms = ROLES[req.user.role] || [];
+    if (!userPerms.includes(permission)) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+    next();
+  };
+}
+app.post(
+  "/api/orders/:id/refund",
+  authenticate,
+  requirePermission("refund:orders"),
+  refundController,
+);</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       RBAC in a SQL schema
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">-- ✅ Minimal RBAC tables
+CREATE TABLE roles (
+  id SERIAL PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL
+);
+CREATE TABLE permissions (
+  id SERIAL PRIMARY KEY,
+  name TEXT UNIQUE NOT NULL
+);
+CREATE TABLE role_permissions (
+  role_id INT REFERENCES roles(id) ON DELETE CASCADE,
+  permission_id INT REFERENCES permissions(id) ON DELETE CASCADE,
+  PRIMARY KEY (role_id, permission_id)
+);
+CREATE TABLE user_roles (
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  role_id INT REFERENCES roles(id) ON DELETE CASCADE,
+  PRIMARY KEY (user_id, role_id)
+);</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Grant roles the minimum permissions they need (principle of least privilege).
+       </li>
+       <li>
+        Centralize authorization logic so it cannot be skipped in one endpoint.
+       </li>
+       <li>
+        Re-check permissions server-side on every request, even for cached pages.
+       </li>
+       <li>
+        Review role assignments quarterly; remove stale admin grants.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="abac">
+      <h2 class="text-2xl font-bold mb-4">
+       Attribute-Based Access Control (ABAC)
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       ABAC makes decisions based on attributes of the user, resource, action, and environment. It supports fine-grained
+              policies such as "a manager can approve expenses under $1,000 only during business hours in their own department."
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        AWS IAM policies are a form of ABAC. The 2017 Accenture AWS exposure happened because an S3 bucket policy included
+                a wildcard principal, effectively letting anyone on the internet access sensitive data. The policy attributes were
+                too permissive.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       ABAC policy decision point
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: policy engine for document access
+function canViewDocument(user, doc, action) {
+  if (user.role === "admin") return true;
+  if (user.department !== doc.department) return false;
+  if (action === "read") return user.clearance &gt;= doc.classificationLevel;
+  if (action === "delete") return user.id === doc.ownerId;
+  return false;
+}
+app.get("/api/documents/:id", authenticate, async (req, res) =&gt; {
+  const doc = await db.findDocument(req.params.id);
+  if (!canViewDocument(req.user, doc, "read")) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+  res.json(doc);
+});</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Use ABAC when RBAC roles alone are too coarse-grained.
+       </li>
+       <li>
+        Keep policy decisions centralized and auditable.
+       </li>
+       <li>
+        Avoid wildcard permissions in IAM, firewalls, and API scopes.
+       </li>
+       <li>
+        Combine ABAC with RBAC for scalable permission management.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="tokens">
+      <h2 class="text-2xl font-bold mb-4">
+       Tokens, Sessions &amp; Secure Storage
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       After authentication, the server must prove the user's identity on subsequent requests. Common mechanisms are
+              session cookies, JWTs, and OAuth access tokens. Each has different security trade-offs.
+      </p>
+      <div class="p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)] mb-4">
+       <p class="text-sm font-semibold mb-2">
+        Real-world example
+       </p>
+       <p class="text-sm text-[var(--muted)]">
+        In 2018, Reddit disclosed a breach where attackers intercepted SMS-based 2FA and session tokens. The incident
+                showed that storing long-lived tokens without rotation or binding can let attackers stay inside a system for weeks.
+       </p>
+      </div>
+      <p class="font-semibold mb-2">
+       Secure session cookie configuration
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: httpOnly + Secure + SameSite cookie
+res.cookie("sessionId", session.id, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict",
+  maxAge: 24 * 60 * 60 * 1000,
+  domain: "app.example.com",
+});</code></pre>
+      </div>
+      <p class="font-semibold mb-2">
+       JWT with short expiry and refresh rotation
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// ✅ SECURE: access token = 15 min, refresh token = single-use
+const accessToken = jwt.sign({ sub: user.id, role: user.role }, ACCESS_SECRET, {
+  expiresIn: "15m",
+});
+const refreshToken = crypto.randomBytes(32).toString("hex");
+await db.storeRefreshToken({
+  tokenHash: sha256(refreshToken),
+  userId: user.id,
+  expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  used: false,
+});</code></pre>
+      </div>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Prefer opaque server-side sessions for high-security applications; JWTs are fine for stateless APIs if short-lived.
+       </li>
+       <li>
+        Never store secrets or tokens in localStorage; use httpOnly cookies.
+       </li>
+       <li>
+        Rotate refresh tokens on every use and revoke them on logout or password change.
+       </li>
+       <li>
+        Bind sessions to device fingerprints and re-authenticate on sensitive actions.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="breaches">
+      <h2 class="text-2xl font-bold mb-4">
+       Real-World Breaches in Authentication
+      </h2>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Authentication failures are a recurring theme in major breaches. The following table summarizes what went wrong
+              and what control could have prevented or reduced the impact.
+      </p>
+      <div class="overflow-x-auto rounded-xl border border-[var(--border)]">
+       <table class="w-full text-sm">
+        <thead class="bg-[var(--panel)]">
+         <tr>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Incident
+          </th>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Weakness
+          </th>
+          <th class="text-left p-3 border-b border-[var(--border)]">
+           Preventive control
+          </th>
+         </tr>
+        </thead>
+        <tbody class="divide-y divide-[var(--border)]">
+         <tr>
+          <td class="p-3 font-semibold">
+           LinkedIn (2012)
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           SHA1 without salt for password hashes.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Argon2id/bcrypt with unique per-user salt.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           Facebook tokens (2018)
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Over-scoped access tokens generated by View As bug.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Least-privilege scopes, token binding, and logging.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           SolarWinds / SAML (2020)
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Compromised SAML signing keys used to forge SSO tokens.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Key rotation, MFA on signing operations, and monitoring.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           Twitter admin panel (2020)
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           MFA bypassed via social engineering and broad admin access.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Phishing-resistant MFA, least-privilege admin roles, approval workflows.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           Capital One IAM role (2019)
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Overly permissive RBAC role could read all S3 buckets.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Least-privilege IAM policies, ABAC conditions, regular access reviews.
+          </td>
+         </tr>
+         <tr>
+          <td class="p-3 font-semibold">
+           Reddit session tokens (2018)
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Long-lived session tokens intercepted via SMS 2FA bypass.
+          </td>
+          <td class="p-3 text-[var(--muted)]">
+           Token rotation, binding, short expiry, and phishing-resistant MFA.
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </section>
+     <section class="mb-16" id="capstone">
+      <h2 class="text-2xl font-bold mb-4">
+       Capstone Project: Secure Identity Platform for a SaaS App
+      </h2>
+      <h3 class="text-lg font-semibold mb-2">
+       1. What is this project?
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       You will build a small but realistic identity platform for a fictitious SaaS product called
+       <strong>
+        SaaSify
+       </strong>
+       .
+              The platform supports password login, "Sign in with Google," TOTP MFA, role-based access control, and audit logging.
+              A set of failing security tests is provided; your goal is to make them pass.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       2. What it covers
+      </h3>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        Password authentication with Argon2id hashing, rate limiting, and account lockout.
+       </li>
+       <li>
+        OAuth 2.0 + OpenID Connect login with Google using authorization-code + PKCE.
+       </li>
+       <li>
+        TOTP MFA enrollment and verification with encrypted secrets.
+       </li>
+       <li>
+        RBAC with roles user, manager, admin, and permission middleware.
+       </li>
+       <li>
+        ABAC-style document access: same department + sufficient clearance.
+       </li>
+       <li>
+        Secure session cookies with httpOnly, Secure, SameSite=strict, and short expiry.
+       </li>
+       <li>
+        Token refresh rotation and revocation on logout/password change.
+       </li>
+       <li>
+        Audit logging for every login, role change, and sensitive action.
+       </li>
+      </ul>
+      <h3 class="text-lg font-semibold mb-2">
+       3. How it is done
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Project layout:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">secure-auth-capstone/
+&boxvr;&boxh;&boxh; src/
+&boxv;   &boxvr;&boxh;&boxh; server.js
+&boxv;   &boxvr;&boxh;&boxh; auth/
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; password.js      # Argon2 hash + verify
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; sessions.js      # opaque sessions + redis store
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; oauth.js         # Google OIDC flow
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; mfa.js           # TOTP
+&boxv;   &boxv;   &boxur;&boxh;&boxh; tokens.js        # JWT access + refresh rotation
+&boxv;   &boxvr;&boxh;&boxh; rbac/
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; roles.js         # permission definitions
+&boxv;   &boxv;   &boxur;&boxh;&boxh; middleware.js    # requirePermission / requireRole
+&boxv;   &boxvr;&boxh;&boxh; routes/
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; auth.js
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; documents.js     # ABAC protected
+&boxv;   &boxv;   &boxur;&boxh;&boxh; admin.js         # RBAC protected
+&boxv;   &boxvr;&boxh;&boxh; db.js
+&boxv;   &boxur;&boxh;&boxh; audit.js
+&boxvr;&boxh;&boxh; tests/
+&boxv;   &boxvr;&boxh;&boxh; password.test.js
+&boxv;   &boxvr;&boxh;&boxh; rbac.test.js
+&boxv;   &boxvr;&boxh;&boxh; abac.test.js
+&boxv;   &boxur;&boxh;&boxh; oauth.test.js
+&boxur;&boxh;&boxh; docker-compose.yml
+</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 1 &mdash; vulnerable starter:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// src/server.js &mdash; intentionally insecure starter
+const express = require("express");
+const app = express();
+app.use(express.json());
+app.post("/api/login", async (req, res) =&gt; {
+  const user = await db.findUserByEmail(req.body.email);
+  if (user &amp;&amp; user.password === req.body.password) {
+    res.json({ token: jwt.sign({ sub: user.id }, "hardcoded-secret") });
+  } else {
+    res.status(401).json({ error: "bad credentials" });
+  }
+});
+app.get("/api/admin/users", async (req, res) =&gt; {
+  const users = await db.getAllUsers();
+  res.json(users); // no auth check
+});
+app.listen(3000);</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 2 &mdash; hardening checklist:
+      </p>
+      <ol class="list-decimal pl-5 text-[var(--muted)] space-y-1 mb-4">
+       <li>
+        Replace cleartext passwords with Argon2id and add rate-limiting + lockout.
+       </li>
+       <li>
+        Add session middleware using Redis-backed opaque tokens bound to IP and user-agent.
+       </li>
+       <li>
+        Implement Google OAuth with PKCE, verify ID tokens with JWKS, and link accounts by email.
+       </li>
+       <li>
+        Add TOTP enrollment (QR code) and verification; encrypt secrets at rest.
+       </li>
+       <li>
+        Build RBAC middleware and protect admin routes with
+        <code>
+         admin
+        </code>
+        role.
+       </li>
+       <li>
+        Add ABAC checks on document routes: department match + clearance level.
+       </li>
+       <li>
+        Use httpOnly Secure SameSite cookies; implement refresh-token rotation.
+       </li>
+       <li>
+        Write audit events for login, logout, role changes, MFA enroll, and document access.
+       </li>
+      </ol>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 3 &mdash; sample tests that must pass:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// tests/rbac.test.js
+const request = require("supertest");
+const app = require("../src/server");
+describe("RBAC", () =&gt; {
+  it("blocks non-admin from listing users", async () =&gt; {
+    const user = await login("manager@example.com", "password");
+    const res = await request(app)
+      .get("/api/admin/users")
+      .set("Cookie", [`sid=${user.sessionId}`]);
+    expect(res.status).toBe(403);
+  });
+  it("allows admin to list users", async () =&gt; {
+    const admin = await login("admin@example.com", "password");
+    const res = await request(app)
+      .get("/api/admin/users")
+      .set("Cookie", [`sid=${admin.sessionId}`]);
+    expect(res.status).toBe(200);
+  });
+});</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// tests/abac.test.js
+describe("ABAC", () =&gt; {
+  it("blocks cross-department document reads", async () =&gt; {
+    const hrUser = await login("alice@hr.example.com", "password");
+    const res = await request(app)
+      .get("/api/documents/42") // engineering doc
+      .set("Cookie", [`sid=${hrUser.sessionId}`]);
+    expect(res.status).toBe(403);
+  });
+});</code></pre>
+      </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-2">
+       Step 4 &mdash; RBAC permission definitions:
+      </p>
+      <div class="code-block mb-6">
+       <button class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// src/rbac/roles.js
+const ROLES = {
+  user: ["documents:read:own"],
+  manager: [
+    "documents:read:own",
+    "documents:read:department",
+    "invoices:approve",
+  ],
+  admin: ["documents:read:all", "users:manage", "roles:assign", "audit:read"],
+};
+function hasPermission(role, permission) {
+  return ROLES[role]?.includes(permission) ?? false;
+}
+module.exports = { ROLES, hasPermission };</code></pre>
+      </div>
+      <h3 class="text-lg font-semibold mb-2">
+       4. What did we learn from this capstone project?
+      </h3>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       Authentication is a chain. A strong password hash is useless if sessions leak; OAuth is useless if tokens are
+              over-scoped; RBAC is useless if one endpoint forgets to check it. The capstone ties together every layer of identity
+              security and shows how to test each layer with automated security tests.
+      </p>
+      <h3 class="text-lg font-semibold mb-2">
+       5. How can I enhance this project in the future?
+      </h3>
+      <ul class="list-disc pl-5 text-[var(--muted)] space-y-1">
+       <li>
+        Add WebAuthn/passkey registration and login to replace TOTP.
+       </li>
+       <li>
+        Add SCIM provisioning so enterprise customers can sync users from their identity provider.
+       </li>
+       <li>
+        Implement just-in-time access requests with manager approval for sensitive admin actions.
+       </li>
+       <li>
+        Add brute-force detection with progressive delays and CAPTCHA integration.
+       </li>
+       <li>
+        Publish an OpenAPI spec and run OWASP ZAP against every authenticated endpoint.
+       </li>
+      </ul>
+     </section>
+     <section class="mb-16" id="quiz">
+      <h2 class="text-2xl font-bold mb-4">
+       Knowledge Check
+      </h2>
+      <div class="space-y-5">
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         1. Which password hashing algorithm is currently recommended?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          SHA-256 with a global salt
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          Argon2id, bcrypt, or scrypt with per-user salt
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          MD5 with a random prefix
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         2. What does PKCE prevent in OAuth 2.0?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          Authorization-code interception by malicious apps or proxies
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Brute-force attacks on the token endpoint
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          CSRF on the redirect_uri callback
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         3. Why is RBAC preferred over custom if-checks in every route?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          It runs faster in the database
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          Centralized policy reduces skipped checks and simplifies audits
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          It removes the need for authentication entirely
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         4. Which cookie flag best protects against XSS stealing a session?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          SameSite=lax
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          httpOnly + Secure + SameSite=strict
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Domain=*.example.com
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         5. In ABAC, which factor should be checked alongside user role?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Only the user's role matters in ABAC
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          Attributes such as department, clearance, resource ownership, and time
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          The user's browser User-Agent string only
+         </button>
+        </div>
+       </div>
+       <div class="quiz-card border border-[var(--border)] rounded-xl p-4 bg-[var(--panel)]">
+        <p class="font-semibold mb-3">
+         6. What is the safest MFA factor hierarchy?
+        </p>
+        <div class="space-y-2">
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          SMS &gt; TOTP app &gt; WebAuthn/passkeys
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition" data-correct="true">
+          WebAuthn/passkeys &gt; TOTP app &gt; SMS
+         </button>
+         <button class="quiz-opt w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] hover:border-[var(--brand-light)] transition">
+          Email OTP &gt; security questions &gt; SMS
+         </button>
+        </div>
+       </div>
+      </div>
+      <div class="mt-6 hidden p-4 rounded-xl border border-[var(--border)] bg-[var(--panel)]" id="quiz-summary">
+       <p class="font-bold">
+       </p>
+      </div>
+     </section>
+    </main>
+   </div>
+  </div>
+  <script>
+   const html = document.documentElement;
+      const moon = document.getElementById('moon');
+      const sun = document.getElementById('sun');
+      function applyTheme(theme) {
+        html.classList.remove('light', 'dark');
+        html.classList.add(theme);
+        const lightLink = document.getElementById('hljs-light');
+        const darkLink = document.getElementById('hljs-dark');
+        if (theme === 'dark') {
+          moon && moon.classList.add('hidden');
+          sun && sun.classList.remove('hidden');
+          lightLink.disabled = true;
+          darkLink.disabled = false;
+        } else {
+          moon && moon.classList.remove('hidden');
+          sun && sun.classList.add('hidden');
+          lightLink.disabled = false;
+          darkLink.disabled = true;
+        }
+        localStorage.setItem('tutorials-theme', theme);
+      }
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+        });
+      }
+      const saved = localStorage.getItem('tutorials-theme');
+      applyTheme(saved === 'dark' ? 'dark' : 'light');
+      function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('menu-overlay');
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('hidden');
+      }
+      function copyCode(btn) {
+        const code = btn.parentElement.querySelector('code');
+        navigator.clipboard.writeText(code.innerText).then(() => {
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'Copy';
+            btn.classList.remove('copied');
+          }, 1500);
+        });
+      }
+      const tocLinks = document.querySelectorAll('#toc a');
+      const sections = document.querySelectorAll('main section[id]');
+      function updateActive() {
+        let current = '';
+        sections.forEach((section) => {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 120) current = section.id;
+        });
+        tocLinks.forEach((link) => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+      }
+      window.addEventListener('scroll', updateActive);
+      updateActive();
+      document.querySelectorAll('.quiz-opt').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('.quiz-card');
+          card.querySelectorAll('.quiz-opt').forEach((b) => {
+            b.classList.remove('correct', 'wrong');
+            b.disabled = true;
+          });
+          if (btn.dataset.correct === 'true') {
+            btn.classList.add('correct');
+          } else {
+            btn.classList.add('wrong');
+            card.querySelector('[data-correct="true"]').classList.add('correct');
+          }
+          const total = document.querySelectorAll('.quiz-card').length;
+          const correct = document.querySelectorAll('.quiz-opt.correct').length;
+          const summary = document.getElementById('quiz-summary');
+          summary.classList.remove('hidden');
+          summary.querySelector('p').textContent = `Score: ${correct} / ${total}`;
+        });
+      });
+      hljs.highlightAll();
+  </script>
+ </body>
+</html>

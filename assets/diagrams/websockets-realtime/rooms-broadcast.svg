@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" role="img">
+  <title>Diagram showing clients in different rooms receiving targeted broadcasts</title>
+  <defs>
+    <marker id="rooms-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#656d76"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="720" height="220" fill="#ffffff"/>
+
+  <!-- Server -->
+  <rect x="300" y="20" width="120" height="60" rx="10" fill="#010101" fill-opacity="0.08" stroke="#010101" stroke-width="2"/>
+  <text x="360" y="45" text-anchor="middle" font-size="13" font-weight="700" fill="#010101" font-family="Outfit, system-ui, sans-serif">Socket.io Server</text>
+  <text x="360" y="64" text-anchor="middle" font-size="10" fill="#656d76" font-family="Outfit, system-ui, sans-serif">rooms isolate broadcasts</text>
+
+  <!-- Room A -->
+  <rect x="40" y="120" width="160" height="80" rx="10" fill="#2f81f7" fill-opacity="0.08" stroke="#2f81f7" stroke-width="2"/>
+  <text x="120" y="145" text-anchor="middle" font-size="12" font-weight="700" fill="#2f81f7" font-family="Outfit, system-ui, sans-serif">Room A</text>
+  <circle cx="80" cy="170" r="16" fill="#2f81f7" fill-opacity="0.2" stroke="#2f81f7" stroke-width="2"/>
+  <text x="80" y="175" text-anchor="middle" font-size="9" fill="#2f81f7" font-family="Outfit, system-ui, sans-serif">A1</text>
+  <circle cx="120" cy="170" r="16" fill="#2f81f7" fill-opacity="0.2" stroke="#2f81f7" stroke-width="2"/>
+  <text x="120" y="175" text-anchor="middle" font-size="9" fill="#2f81f7" font-family="Outfit, system-ui, sans-serif">A2</text>
+  <circle cx="160" cy="170" r="16" fill="#2f81f7" fill-opacity="0.2" stroke="#2f81f7" stroke-width="2"/>
+  <text x="160" y="175" text-anchor="middle" font-size="9" fill="#2f81f7" font-family="Outfit, system-ui, sans-serif">A3</text>
+
+  <!-- Room B -->
+  <rect x="280" y="120" width="160" height="80" rx="10" fill="#059669" fill-opacity="0.08" stroke="#059669" stroke-width="2"/>
+  <text x="360" y="145" text-anchor="middle" font-size="12" font-weight="700" fill="#059669" font-family="Outfit, system-ui, sans-serif">Room B</text>
+  <circle cx="320" cy="170" r="16" fill="#059669" fill-opacity="0.2" stroke="#059669" stroke-width="2"/>
+  <text x="320" y="175" text-anchor="middle" font-size="9" fill="#059669" font-family="Outfit, system-ui, sans-serif">B1</text>
+  <circle cx="360" cy="170" r="16" fill="#059669" fill-opacity="0.2" stroke="#059669" stroke-width="2"/>
+  <text x="360" y="175" text-anchor="middle" font-size="9" fill="#059669" font-family="Outfit, system-ui, sans-serif">B2</text>
+  <circle cx="400" cy="170" r="16" fill="#059669" fill-opacity="0.2" stroke="#059669" stroke-width="2"/>
+  <text x="400" y="175" text-anchor="middle" font-size="9" fill="#059669" font-family="Outfit, system-ui, sans-serif">B3</text>
+
+  <!-- Room C -->
+  <rect x="520" y="120" width="160" height="80" rx="10" fill="#ea580c" fill-opacity="0.08" stroke="#ea580c" stroke-width="2"/>
+  <text x="600" y="145" text-anchor="middle" font-size="12" font-weight="700" fill="#ea580c" font-family="Outfit, system-ui, sans-serif">Room C</text>
+  <circle cx="560" cy="170" r="16" fill="#ea580c" fill-opacity="0.2" stroke="#ea580c" stroke-width="2"/>
+  <text x="560" y="175" text-anchor="middle" font-size="9" fill="#ea580c" font-family="Outfit, system-ui, sans-serif">C1</text>
+  <circle cx="600" cy="170" r="16" fill="#ea580c" fill-opacity="0.2" stroke="#ea580c" stroke-width="2"/>
+  <text x="600" y="175" text-anchor="middle" font-size="9" fill="#ea580c" font-family="Outfit, system-ui, sans-serif">C2</text>
+  <circle cx="640" cy="170" r="16" fill="#ea580c" fill-opacity="0.2" stroke="#ea580c" stroke-width="2"/>
+  <text x="640" y="175" text-anchor="middle" font-size="9" fill="#ea580c" font-family="Outfit, system-ui, sans-serif">C3</text>
+
+  <!-- Broadcast arrows -->
+  <path d="M340 80 L 120 120" stroke="#2f81f7" stroke-width="2" marker-end="url(#rooms-arrow)"/>
+  <path d="M360 80 L 360 120" stroke="#059669" stroke-width="2" marker-end="url(#rooms-arrow)"/>
+  <path d="M380 80 L 600 120" stroke="#ea580c" stroke-width="2" marker-end="url(#rooms-arrow)"/>
+  <text x="195" y="108" text-anchor="middle" font-size="9" fill="#2f81f7" font-family="Outfit, system-ui, sans-serif">emit to Room A</text>
+  <text x="430" y="108" text-anchor="middle" font-size="9" fill="#059669" font-family="Outfit, system-ui, sans-serif">emit to Room B</text>
+  <text x="530" y="108" text-anchor="middle" font-size="9" fill="#ea580c" font-family="Outfit, system-ui, sans-serif">emit to Room C</text>
+</svg>

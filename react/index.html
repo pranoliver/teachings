@@ -1,738 +1,1153 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>React: Modern Frontend Development</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/favicons/react.svg">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
-  <script>
-    tailwind.config = { darkMode: 'class' }
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   React: Modern Frontend Development
+  </title>
+  <link href="../assets/favicons/react.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
   </script>
-  <style>
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-    .sr-only:focus { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 50; background: white; color: black; padding: 0.5rem 0.75rem; border-radius: 0.375rem; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
-    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
-    :root {
-      --brand-light: #61DAFB;
-      --brand-dark: #61DAFB;
-      --ink: #1f2328;
-      --muted: #656d76;
-      --panel: #f6f8fa;
-      --border: #d0d7de;
-      --success: #1a7f37;
-      --danger: #cf222e;
-      --warn: #9a6700;
-    }
-    html.dark {
-      --ink: #e6edf3;
-      --muted: #848d97;
-      --panel: #161b22;
-      --border: #30363d;
-      --success: #3fb950;
-      --danger: #f85149;
-      --warn: #d29922;
-    }
-    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
-    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
-    .brand { color: var(--brand-light); }
-    html.dark .brand { color: var(--brand-dark); }
-    .toc-link.active { background: rgba(97,218,251,0.12); border-left: 3px solid var(--brand-light); color: var(--brand-light); }
-    html.dark .toc-link.active { background: rgba(97,218,251,0.15); border-left-color: var(--brand-dark); color: var(--brand-dark); }
-    .card { border: 1px solid var(--border); background: var(--panel); }
-    .code-block { position: relative; }
-    .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--panel); color: var(--muted); opacity: 0; transition: opacity 0.15s; }
-    .code-block:hover .copy-btn { opacity: 1; }
-    .copy-btn.copied { color: var(--success); border-color: var(--success); }
-    .diagram { width: 100%; max-width: 720px; }
-    .quiz-opt.selected { border-color: var(--brand-light); background: rgba(97,218,251,0.08); }
-    html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba(97,218,251,0.12); }
-    .quiz-opt.correct { border-color: var(--success); background: rgba(26,127,55,0.08); }
-    .quiz-opt.wrong { border-color: var(--danger); background: rgba(207,34,46,0.08); }
-    .scroll-smooth { scroll-behavior: smooth; }
-    @media (max-width: 1024px) { #sidebar { transform: translateX(-100%); transition: transform .25s; } #sidebar.open { transform: translateX(0); } }
-    .kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:0.375rem; padding:0.125rem 0.375rem; font-family:ui-monospace,monospace; font-size:0.875rem; }
-    .preview-frame { border: 1px solid var(--border); background: #ffffff; min-height: 120px; }
-    .react-badge { background: #20232a; color: #61DAFB; }
-    html.dark .react-badge { background: #20232a; color: #61DAFB; }
-  </style>
-</head>
-<body class="antialiased transition-colors duration-300">
-
-  <a href="#main" class="sr-only">Skip to content</a>
-
-  <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
-
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-react">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
   <div class="flex min-h-screen">
-
-    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6">
-      <div class="flex items-center gap-3 mb-8">
-        <img src="../assets/favicons/react.svg" alt="React" class="w-10 h-10">
-        <span class="text-xl font-bold">React</span>
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="React" class="w-10 h-10" src="../assets/favicons/react.svg"/>
+     <span class="text-xl font-bold">
+      React
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#what-is-react">
+      2. What is React?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      3. Setting Up a Project
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#jsx">
+      4. JSX
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#components">
+      5. Components
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#props">
+      6. Props
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#state">
+      7. State with useState
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#events">
+      8. Handling Events
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#effects">
+      9. Side Effects with useEffect
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#lists">
+      10. Rendering Lists
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#forms">
+      11. Forms &amp; Controlled Inputs
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#conditional">
+      12. Conditional Rendering
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#lifting">
+      13. Lifting State Up
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#router">
+      14. React Router
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#context">
+      15. Context API
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      16. Capstone: Task Board
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#best-practices">
+      17. Best Practices
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       React: Modern Frontend Development
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       React is the most widely used library for building user interfaces. This guide teaches you how to think in components, manage state, handle side effects, and build a complete task-board application.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Solid HTML and CSS fundamentals
+        </li>
+        <li>
+         JavaScript essentials: variables, functions, arrays, objects, and events
+        </li>
+        <li>
+         Node.js installed for running the Vite development server
+        </li>
+       </ul>
       </div>
-      <nav id="toc" class="space-y-1 text-sm">
-        <a href="#intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">1. Introduction</a>
-        <a href="#what-is-react" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">2. What is React?</a>
-        <a href="#setup" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">3. Setting Up a Project</a>
-        <a href="#jsx" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">4. JSX</a>
-        <a href="#components" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">5. Components</a>
-        <a href="#props" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">6. Props</a>
-        <a href="#state" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">7. State with useState</a>
-        <a href="#events" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">8. Handling Events</a>
-        <a href="#effects" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">9. Side Effects with useEffect</a>
-        <a href="#lists" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">10. Rendering Lists</a>
-        <a href="#forms" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">11. Forms & Controlled Inputs</a>
-        <a href="#conditional" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">12. Conditional Rendering</a>
-        <a href="#lifting" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">13. Lifting State Up</a>
-        <a href="#router" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">14. React Router</a>
-        <a href="#context" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">15. Context API</a>
-        <a href="#project" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">16. Capstone: Task Board</a>
-        <a href="#best-practices" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">17. Best Practices</a>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         JSX and component-based architecture
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Props, state, and event handling
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Hooks: useState and useEffect
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Lists, forms, and conditional UI
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Lifting state and the Context API
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Routing with React Router
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        More practice ideas
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Build a recipe app with a list view, detail view, and ingredient checklist.
+        </li>
+        <li>
+         Create a habit tracker with daily checkboxes and a streak counter.
+        </li>
+        <li>
+         Make a searchable movie or book list that fetches data from a public API.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#what-is-react">
+        Next: What is React? &rarr;
+       </a>
       </nav>
-      <div class="mt-8 pt-6 border-t border-[var(--border)]">
-        <p class="text-xs text-[var(--muted)]">Open in any browser. No build step required.</p>
+     </section>
+     <section class="scroll-mt-24" id="what-is-react">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       What is React?
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       React is a JavaScript library for building user interfaces. It lets you describe UI as a function of state. When state changes, React efficiently updates only the parts of the page that need to change.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Declarative vs. Imperative UI
+       </h3>
+       <svg aria-label="Diagram showing state changing the UI declaratively" class="diagram" viewBox="0 0 720 140">
+        <rect fill="#61DAFB" height="70" opacity="0.2" rx="10" stroke="#61DAFB" stroke-width="2" width="120" x="30" y="35">
+        </rect>
+        <text fill="#20232a" font-size="12" font-weight="700" text-anchor="middle" x="90" y="75">
+         State
+        </text>
+        <path d="M150 70 L 240 70" marker-end="url(#arrow)" stroke="var(--border)" stroke-width="2">
+        </path>
+        <text fill="var(--muted)" font-size="11" text-anchor="middle" x="195" y="60">
+         describes
+        </text>
+        <rect fill="#20232a" height="70" opacity="0.9" rx="10" stroke="#61DAFB" stroke-width="2" width="200" x="260" y="35">
+        </rect>
+        <text fill="#61DAFB" font-size="13" font-weight="700" text-anchor="middle" x="360" y="70">
+         React Component
+        </text>
+        <text fill="#ffffff" font-size="11" text-anchor="middle" x="360" y="88">
+         function of state
+        </text>
+        <path d="M460 70 L 550 70" marker-end="url(#arrow)" stroke="var(--border)" stroke-width="2">
+        </path>
+        <text fill="var(--muted)" font-size="11" text-anchor="middle" x="505" y="60">
+         renders
+        </text>
+        <rect fill="#3fb950" height="70" opacity="0.2" rx="10" stroke="#3fb950" stroke-width="2" width="120" x="570" y="35">
+        </rect>
+        <text fill="#1a7f37" font-size="12" font-weight="700" text-anchor="middle" x="630" y="75">
+         UI
+        </text>
+        <defs>
+         <marker id="arrow" markerHeight="10" markerUnits="strokeWidth" markerWidth="10" orient="auto" refX="8" refY="3">
+          <path d="M0,0 L0,6 L9,3 z" fill="var(--border)">
+          </path>
+         </marker>
+        </defs>
+       </svg>
       </div>
-    </aside>
-
-    <main id="main" class="flex-1 min-w-0">
-
-      <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <button class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()" aria-label="Open menu">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <h1 class="text-lg sm:text-xl font-bold tracking-tight">React: Modern Frontend Development</h1>
-        </div>
-        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
-          <svg id="moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
-          <svg id="sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </button>
-      </header>
-
-      <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
-
-        <section id="intro" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 1</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">React is the most widely used library for building user interfaces. This guide teaches you how to think in components, manage state, handle side effects, and build a complete task-board application.</p>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">Before you start</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Solid HTML and CSS fundamentals</li>
-              <li>JavaScript essentials: variables, functions, arrays, objects, and events</li>
-              <li>Node.js installed for running the Vite development server</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">What you'll learn</h3>
-            <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> JSX and component-based architecture</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Props, state, and event handling</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Hooks: useState and useEffect</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Lists, forms, and conditional UI</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Lifting state and the Context API</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Routing with React Router</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">More practice ideas</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Build a recipe app with a list view, detail view, and ingredient checklist.</li>
-              <li>Create a habit tracker with daily checkboxes and a streak counter.</li>
-              <li>Make a searchable movie or book list that fetches data from a public API.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><span></span><a href="#what-is-react" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: What is React? →</a></nav>
-        </section>
-
-        <section id="what-is-react" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 2</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">What is React?</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">React is a JavaScript library for building user interfaces. It lets you describe UI as a function of state. When state changes, React efficiently updates only the parts of the page that need to change.</p>
-
-          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
-            <h3 class="text-xl font-semibold mb-4 w-full">Declarative vs. Imperative UI</h3>
-            <svg class="diagram" viewBox="0 0 720 140" aria-label="Diagram showing state changing the UI declaratively">
-              <rect x="30" y="35" width="120" height="70" rx="10" fill="#61DAFB" opacity="0.2" stroke="#61DAFB" stroke-width="2"/>
-              <text x="90" y="75" text-anchor="middle" font-size="12" font-weight="700" fill="#20232a">State</text>
-
-              <path d="M150 70 L 240 70" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
-              <text x="195" y="60" text-anchor="middle" font-size="11" fill="var(--muted)">describes</text>
-
-              <rect x="260" y="35" width="200" height="70" rx="10" fill="#20232a" opacity="0.9" stroke="#61DAFB" stroke-width="2"/>
-              <text x="360" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#61DAFB">React Component</text>
-              <text x="360" y="88" text-anchor="middle" font-size="11" fill="#ffffff">function of state</text>
-
-              <path d="M460 70 L 550 70" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
-              <text x="505" y="60" text-anchor="middle" font-size="11" fill="var(--muted)">renders</text>
-
-              <rect x="570" y="35" width="120" height="70" rx="10" fill="#3fb950" opacity="0.2" stroke="#3fb950" stroke-width="2"/>
-              <text x="630" y="75" text-anchor="middle" font-size="12" font-weight="700" fill="#1a7f37">UI</text>
-
-              <defs>
-                <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="var(--border)"/></marker>
-              </defs>
-            </svg>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Core ideas</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li><strong>Components:</strong> Small, reusable pieces of UI.</li>
-              <li><strong>Declarative:</strong> You say what the UI should look like for each state.</li>
-              <li><strong>One-way data flow:</strong> Data moves from parent to child through props.</li>
-              <li><strong>Virtual DOM:</strong> React compares updates and applies minimal changes to the real DOM.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#setup" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Setting Up →</a></nav>
-        </section>
-
-        <section id="setup" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 3</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Setting Up a React Project</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">The modern way to create a React app is with Vite. It is fast, lightweight, and produces optimized production builds.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># Create a new React project with Vite
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Core ideas
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Components:
+         </strong>
+         Small, reusable pieces of UI.
+        </li>
+        <li>
+         <strong>
+          Declarative:
+         </strong>
+         You say what the UI should look like for each state.
+        </li>
+        <li>
+         <strong>
+          One-way data flow:
+         </strong>
+         Data moves from parent to child through props.
+        </li>
+        <li>
+         <strong>
+          Virtual DOM:
+         </strong>
+         React compares updates and applies minimal changes to the real DOM.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#setup">
+        Next: Setting Up &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="setup">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Setting Up a React Project
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The modern way to create a React app is with Vite. It is fast, lightweight, and produces optimized production builds.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Create a new React project with Vite
 npm create vite@latest my-react-app -- --template react
-
 # Enter the project folder
 cd my-react-app
-
 # Install dependencies
 npm install
-
 # Start the development server
 npm run dev
-
 # Build for production
 npm run build</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">Default Vite project structure</h3>
-            <div class="code-block">
-              <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-              <pre><code class="language-text">my-react-app/
-├── index.html          # entry HTML
-├── src/
-│   ├── App.jsx         # root component
-│   ├── main.jsx        # mounts App into the DOM
-│   └── index.css       # global styles
-├── package.json
-└── vite.config.js</code></pre>
-            </div>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Run the Vite setup commands, then open <code class="kbd">http://localhost:5173</code> and confirm you see the default React welcome page.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#what-is-react" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#jsx" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: JSX →</a></nav>
-        </section>
-
-        <section id="jsx" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 4</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">JSX</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">JSX is a syntax extension that lets you write HTML-like code inside JavaScript. It is not HTML — it compiles to regular JavaScript function calls.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// JSX looks like HTML but lives in JavaScript
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Default Vite project structure
+       </h3>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-text">my-react-app/
+&boxvr;&boxh;&boxh; index.html          # entry HTML
+&boxvr;&boxh;&boxh; src/
+&boxv;   &boxvr;&boxh;&boxh; App.jsx         # root component
+&boxv;   &boxvr;&boxh;&boxh; main.jsx        # mounts App into the DOM
+&boxv;   &boxur;&boxh;&boxh; index.css       # global styles
+&boxvr;&boxh;&boxh; package.json
+&boxur;&boxh;&boxh; vite.config.js</code></pre>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Run the Vite setup commands, then open
+        <code class="kbd">
+         http://localhost:5173
+        </code>
+        and confirm you see the default React welcome page.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#what-is-react">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#jsx">
+        Next: JSX &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="jsx">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       JSX
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       JSX is a syntax extension that lets you write HTML-like code inside JavaScript. It is not HTML &mdash; it compiles to regular JavaScript function calls.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// JSX looks like HTML but lives in JavaScript
 function Welcome() {
   const name = "Alex";
   return (
-    <div className="greeting">
+    <div classname="greeting">
       <h1>Hello, {name}!</h1>
       <p>Today is {new Date().toLocaleDateString()}</p>
     </div>
   );
 }</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">JSX rules</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Return a single root element, or use a fragment <code class="kbd">&lt;&gt;...&lt;/&gt;</code>.</li>
-              <li>Use <code class="kbd">className</code> instead of <code class="kbd">class</code>.</li>
-              <li>Use <code class="kbd">htmlFor</code> instead of <code class="kbd">for</code>.</li>
-              <li>Curly braces <code class="kbd">{}</code> embed JavaScript expressions.</li>
-              <li>All tags must be closed: <code class="kbd">&lt;img /&gt;</code>, <code class="kbd">&lt;br /&gt;</code>.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#setup" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#components" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Components →</a></nav>
-        </section>
-
-        <section id="components" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 5</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Components</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Components are the building blocks of a React app. They can be functions or classes. Modern React uses function components with hooks.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// A simple function component
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        JSX rules
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Return a single root element, or use a fragment
+         <code class="kbd">
+          &lt;&gt;...&lt;/&gt;
+         </code>
+         .
+        </li>
+        <li>
+         Use
+         <code class="kbd">
+          className
+         </code>
+         instead of
+         <code class="kbd">
+          class
+         </code>
+         .
+        </li>
+        <li>
+         Use
+         <code class="kbd">
+          htmlFor
+         </code>
+         instead of
+         <code class="kbd">
+          for
+         </code>
+         .
+        </li>
+        <li>
+         Curly braces
+         <code class="kbd">
+          {}
+         </code>
+         embed JavaScript expressions.
+        </li>
+        <li>
+         All tags must be closed:
+         <code class="kbd">
+          &lt;img /&gt;
+         </code>
+         ,
+         <code class="kbd">
+          &lt;br /&gt;
+         </code>
+         .
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#components">
+        Next: Components &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="components">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Components
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Components are the building blocks of a React app. They can be functions or classes. Modern React uses function components with hooks.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// A simple function component
 function Button({ text, onClick }) {
   return (
-    <button onClick={onClick} className="btn">
+    <button classname="btn" onclick="{onClick}">
       {text}
     </button>
   );
 }
-
 // Using it inside another component
 function App() {
   return (
-    <div className="app">
+    <div classname="app">
       <h1>My App</h1>
-      <Button text="Click me" onClick={() => alert("Clicked!")} />
-    </div>
+      <button =="" onclick="{()" text="Click me"> alert("Clicked!")} /&gt;
+    </button></div>
   );
 }</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Component tips</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Name components with PascalCase, e.g. <code class="kbd">UserCard</code>.</li>
-              <li>Keep components small and focused on one responsibility.</li>
-              <li>Prefer composition over inheritance.</li>
-              <li>Extract repeated UI into its own component.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#jsx" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#props" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Props →</a></nav>
-        </section>
-
-        <section id="props" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 6</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Props</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Props are how parents pass data to children. They are read-only: a component must never modify its own props.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// Parent passes data down
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Component tips
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Name components with PascalCase, e.g.
+         <code class="kbd">
+          UserCard
+         </code>
+         .
+        </li>
+        <li>
+         Keep components small and focused on one responsibility.
+        </li>
+        <li>
+         Prefer composition over inheritance.
+        </li>
+        <li>
+         Extract repeated UI into its own component.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#jsx">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#props">
+        Next: Props &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="props">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Props
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Props are how parents pass data to children. They are read-only: a component must never modify its own props.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Parent passes data down
 function App() {
-  return <UserCard name="Alice" role="Developer" />;
+  return <usercard name="Alice" role="Developer">;
 }
-
 // Child receives and renders props
 function UserCard({ name, role }) {
   return (
-    <div className="card">
+    <div classname="card">
       <h3>{name}</h3>
       <p>{role}</p>
     </div>
   );
 }
-
 // Default props
 function Greeting({ name = "Guest" }) {
   return <p>Hello, {name}!</p>;
-}</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="B">
-              <p class="mb-3">What is true about React props?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">Props can be modified by the child component.</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">Props are read-only and passed from parent to child.</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">Props are only available in class components.</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#components" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#state" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: State →</a></nav>
-        </section>
-
-        <section id="state" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 7</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">State with useState</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">State lets a component remember information between renders. The <code class="kbd">useState</code> hook returns the current value and a function to update it.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">import { useState } from "react";
-
+}</usercard></code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         What is true about React props?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         Props can be modified by the child component.
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         Props are read-only and passed from parent to child.
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         Props are only available in class components.
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#components">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#state">
+        Next: State &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="state">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       State with useState
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       State lets a component remember information between renders. The
+       <code class="kbd">
+        useState
+       </code>
+       hook returns the current value and a function to update it.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">import { useState } from "react";
 function Counter() {
   const [count, setCount] = useState(0);
-
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
-      <button onClick={() => setCount(0)}>Reset</button>
+      <button =="" onclick="{()"> setCount(count + 1)}&gt;Increment</button>
+      <button =="" onclick="{()"> setCount(0)}&gt;Reset</button>
     </div>
   );
 }</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Important state rules</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Never mutate state directly — always use the setter.</li>
-              <li>State updates can be asynchronous and batched.</li>
-              <li>For objects and arrays, create a new copy when updating.</li>
-              <li>When the new state depends on the old one, use the functional updater form.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#props" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#events" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Events →</a></nav>
-        </section>
-
-        <section id="events" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 8</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Handling Events</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">React events are named with camelCase and receive handler functions. You can pass data to handlers using arrow functions.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">function FormButton() {
-  const handleClick = (event) => {
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Important state rules
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Never mutate state directly &mdash; always use the setter.
+        </li>
+        <li>
+         State updates can be asynchronous and batched.
+        </li>
+        <li>
+         For objects and arrays, create a new copy when updating.
+        </li>
+        <li>
+         When the new state depends on the old one, use the functional updater form.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#props">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#events">
+        Next: Events &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="events">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Handling Events
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       React events are named with camelCase and receive handler functions. You can pass data to handlers using arrow functions.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">function FormButton() {
+  const handleClick = (event) =&gt; {
     event.preventDefault();
     console.log("Button clicked");
   };
-
-  return <button onClick={handleClick}>Submit</button>;
+  return <button onclick="{handleClick}">Submit</button>;
 }
-
 function ItemList({ items }) {
   return (
     <ul>
-      {items.map((item) => (
-        <li key={item.id}>
+      {items.map((item) =&gt; (
+        <li key="{item.id}">
           {item.name}
-          <button onClick={() => handleDelete(item.id)}>Delete</button>
+          <button =="" onclick="{()"> handleDelete(item.id)}&gt;Delete</button>
         </li>
       ))}
     </ul>
   );
 }</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#state" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#effects" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: useEffect →</a></nav>
-        </section>
-
-        <section id="effects" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 9</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Side Effects with useEffect</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Side effects are things React does not handle itself: fetching data, subscriptions, timers, or manually touching the DOM. Use the <code class="kbd">useEffect</code> hook for these.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">import { useState, useEffect } from "react";
-
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#state">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#effects">
+        Next: useEffect &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="effects">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Side Effects with useEffect
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Side effects are things React does not handle itself: fetching data, subscriptions, timers, or manually touching the DOM. Use the
+       <code class="kbd">
+        useEffect
+       </code>
+       hook for these.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">import { useState, useEffect } from "react";
 function UserList() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
+  useEffect(() =&gt; {
     async function fetchUsers() {
       const response = await fetch("https://jsonplaceholder.typicode.com/users");
       const data = await response.json();
       setUsers(data);
       setLoading(false);
     }
-
     fetchUsers();
   }, []); // empty dependency array = run once on mount
-
   if (loading) return <p>Loading...</p>;
-
   return (
     <ul>
-      {users.map((user) => (
-        <li key={user.id}>{user.name}</li>
+      {users.map((user) =&gt; (
+        <li key="{user.id}">{user.name}</li>
       ))}
     </ul>
   );
 }</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Dependency array rules</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li><code class="kbd">useEffect(fn)</code> — runs after every render.</li>
-              <li><code class="kbd">useEffect(fn, [])</code> — runs once after mount.</li>
-              <li><code class="kbd">useEffect(fn, [x, y])</code> — runs when <code class="kbd">x</code> or <code class="kbd">y</code> changes.</li>
-              <li>Return a cleanup function when subscribing or setting timers.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#events" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#lists" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Lists →</a></nav>
-        </section>
-
-        <section id="lists" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 10</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Rendering Lists</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Use JavaScript's <code class="kbd">map</code> to turn arrays into JSX. Every list item needs a stable <code class="kbd">key</code> prop so React can track elements efficiently.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const todos = [
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Dependency array rules
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <code class="kbd">
+          useEffect(fn)
+         </code>
+         &mdash; runs after every render.
+        </li>
+        <li>
+         <code class="kbd">
+          useEffect(fn, [])
+         </code>
+         &mdash; runs once after mount.
+        </li>
+        <li>
+         <code class="kbd">
+          useEffect(fn, [x, y])
+         </code>
+         &mdash; runs when
+         <code class="kbd">
+          x
+         </code>
+         or
+         <code class="kbd">
+          y
+         </code>
+         changes.
+        </li>
+        <li>
+         Return a cleanup function when subscribing or setting timers.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#events">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#lists">
+        Next: Lists &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="lists">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Rendering Lists
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Use JavaScript's
+       <code class="kbd">
+        map
+       </code>
+       to turn arrays into JSX. Every list item needs a stable
+       <code class="kbd">
+        key
+       </code>
+       prop so React can track elements efficiently.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const todos = [
   { id: 1, text: "Learn JSX" },
   { id: 2, text: "Build a component" },
   { id: 3, text: "Master useState" },
 ];
-
 function TodoList() {
   return (
     <ul>
-      {todos.map((todo) => (
-        <li key={todo.id}>{todo.text}</li>
+      {todos.map((todo) =&gt; (
+        <li key="{todo.id}">{todo.text}</li>
       ))}
     </ul>
   );
 }</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="A">
-              <p class="mb-3">Why do list items need a key prop?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">So React can identify which items changed.</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">To style the list item.</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">Because map requires it.</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#effects" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#forms" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Forms →</a></nav>
-        </section>
-
-        <section id="forms" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 11</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Forms & Controlled Inputs</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">A controlled input stores its value in React state. This gives you full control over validation, formatting, and submission.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">import { useState } from "react";
-
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="A">
+        <p class="mb-3">
+         Why do list items need a key prop?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         So React can identify which items changed.
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         To style the list item.
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         Because map requires it.
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#effects">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#forms">
+        Next: Forms &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="forms">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 11
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Forms &amp; Controlled Inputs
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A controlled input stores its value in React state. This gives you full control over validation, formatting, and submission.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">import { useState } from "react";
 function SignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   function handleSubmit(event) {
     event.preventDefault();
     console.log("Submitting", { email, password });
   }
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form onsubmit="{handleSubmit}">
       <label>
         Email:
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <input =="" onchange="{(e)" type="email" value="{email}"/> setEmail(e.target.value)}
+        /&gt;
       </label>
       <label>
         Password:
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <input =="" onchange="{(e)" type="password" value="{password}"/> setPassword(e.target.value)}
+        /&gt;
       </label>
       <button type="submit">Sign up</button>
     </form>
   );
 }</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#lists" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#conditional" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Conditional UI →</a></nav>
-        </section>
-
-        <section id="conditional" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 12</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Conditional Rendering</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">React lets you decide what to render based on state or props. Use <code class="kbd">if</code>, ternaries, or the logical AND operator.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">function Greeting({ isLoggedIn, name }) {
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#lists">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#conditional">
+        Next: Conditional UI &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="conditional">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 12
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Conditional Rendering
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       React lets you decide what to render based on state or props. Use
+       <code class="kbd">
+        if
+       </code>
+       , ternaries, or the logical AND operator.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">function Greeting({ isLoggedIn, name }) {
   if (!isLoggedIn) {
     return <a href="/login">Please log in</a>;
   }
-
   return (
     <div>
       <h1>Welcome back, {name}!</h1>
-      {name === "admin" && <p>You have admin privileges.</p>}
+      {name === "admin" &amp;&amp; <p>You have admin privileges.</p>}
     </div>
   );
 }
-
 // Inline ternary
 function Status({ error }) {
   return <p>{error ? `Error: ${error}` : "All systems go"}</p>;
 }</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#forms" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#lifting" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Lifting State →</a></nav>
-        </section>
-
-        <section id="lifting" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 13</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Lifting State Up</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">When multiple components need to share the same state, move that state to their closest common parent and pass it down as props.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">import { useState } from "react";
-
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#forms">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#lifting">
+        Next: Lifting State &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="lifting">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 13
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Lifting State Up
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       When multiple components need to share the same state, move that state to their closest common parent and pass it down as props.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">import { useState } from "react";
 function Parent() {
   const [count, setCount] = useState(0);
-
   return (
     <div>
-      <Display count={count} />
-      <Controls count={count} setCount={setCount} />
-    </div>
+      <display count="{count}">
+      <controls count="{count}" setcount="{setCount}">
+    </controls></display></div>
   );
 }
-
 function Display({ count }) {
   return <p>Current count: {count}</p>;
 }
-
 function Controls({ count, setCount }) {
   return (
     <div>
-      <button onClick={() => setCount(count + 1)}>+</button>
-      <button onClick={() => setCount(count - 1)}>-</button>
+      <button =="" onclick="{()"> setCount(count + 1)}&gt;+</button>
+      <button =="" onclick="{()"> setCount(count - 1)}&gt;-</button>
     </div>
   );
 }</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#conditional" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#router" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: React Router →</a></nav>
-        </section>
-
-        <section id="router" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 14</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">React Router</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Single-page apps need client-side routing. React Router maps URLs to components without full page reloads.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash">npm install react-router-dom</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#conditional">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#router">
+        Next: React Router &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="router">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 14
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       React Router
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Single-page apps need client-side routing. React Router maps URLs to components without full page reloads.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install react-router-dom</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 function App() {
   return (
-    <BrowserRouter>
+    <browserrouter>
       <nav>
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
+        <link to="/"/>Home
+        <link to="/about"/>About
       </nav>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+      <routes>
+        <route element="{&lt;Home" path="/">} /&gt;
+        <route element="{&lt;About" path="/about">} /&gt;
+        <route element="{&lt;NotFound" path="*">} /&gt;
+      </route></route></route></routes>
+    </browserrouter>
   );
 }</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#lifting" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#context" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Context API →</a></nav>
-        </section>
-
-        <section id="context" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 15</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Context API</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Context lets you share data across the component tree without prop drilling. Use it for themes, authentication, user preferences, and global state that changes rarely.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">import { createContext, useContext, useState } from "react";
-
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#lifting">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#context">
+        Next: Context API &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="context">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 15
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Context API
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Context lets you share data across the component tree without prop drilling. Use it for themes, authentication, user preferences, and global state that changes rarely.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">import { createContext, useContext, useState } from "react";
 const ThemeContext = createContext(null);
-
 function ThemeProvider({ children }) {
   const [theme, setTheme] = useState("light");
-
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <themecontext.provider settheme="" theme,="" value="{{" }}="">
       {children}
-    </ThemeContext.Provider>
+    </themecontext.provider>
   );
 }
-
 function ThemedButton() {
   const { theme, setTheme } = useContext(ThemeContext);
-
   return (
-    <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+    <button =="" onclick="{()"> setTheme(theme === "light" ? "dark" : "light")}&gt;
       Switch to {theme === "light" ? "dark" : "light"} mode
     </button>
   );
 }</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="C">
-              <p class="mb-3">When should you use React Context?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">To replace useState in every component.</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">To make components render faster.</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">To share global data without prop drilling.</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#router" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#project" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Task Board →</a></nav>
-        </section>
-
-        <section id="project" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 16</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Capstone: Task Board</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Build a Kanban-style task board with columns for Todo, In Progress, and Done. Tasks can be added, moved between columns, and deleted.</p>
-
-          <h3 class="text-xl font-semibold mb-3">Requirements</h3>
-          <div class="card rounded-2xl p-6 mb-8">
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li><strong>Columns:</strong> Todo, In Progress, Done.</li>
-              <li><strong>Add task:</strong> Enter a title and pick a column.</li>
-              <li><strong>Move task:</strong> Buttons to advance or move back a task.</li>
-              <li><strong>Delete task:</strong> Remove a task from any column.</li>
-              <li><strong>State:</strong> All task data lives in the top-level App component.</li>
-            </ul>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Full solution</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">import { useState } from "react";
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="C">
+        <p class="mb-3">
+         When should you use React Context?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         To replace useState in every component.
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         To make components render faster.
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         To share global data without prop drilling.
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#router">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Task Board &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 16
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Task Board
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a Kanban-style task board with columns for Todo, In Progress, and Done. Tasks can be added, moved between columns, and deleted.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       Requirements
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Columns:
+         </strong>
+         Todo, In Progress, Done.
+        </li>
+        <li>
+         <strong>
+          Add task:
+         </strong>
+         Enter a title and pick a column.
+        </li>
+        <li>
+         <strong>
+          Move task:
+         </strong>
+         Buttons to advance or move back a task.
+        </li>
+        <li>
+         <strong>
+          Delete task:
+         </strong>
+         Remove a task from any column.
+        </li>
+        <li>
+         <strong>
+          State:
+         </strong>
+         All task data lives in the top-level App component.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Full solution
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">import { useState } from "react";
 import "./App.css";
-
 const COLUMNS = ["Todo", "In Progress", "Done"];
 const NEXT = { Todo: "In Progress", "In Progress": "Done", Done: "Done" };
 const PREV = { Todo: "Todo", "In Progress": "Todo", Done: "In Progress" };
-
 function App() {
   const [tasks, setTasks] = useState([
     { id: 1, title: "Learn JSX", status: "Done" },
@@ -741,7 +1156,6 @@ function App() {
   ]);
   const [newTask, setNewTask] = useState("");
   const [column, setColumn] = useState("Todo");
-
   function addTask(event) {
     event.preventDefault();
     if (!newTask.trim()) return;
@@ -753,57 +1167,48 @@ function App() {
     setTasks([...tasks, task]);
     setNewTask("");
   }
-
   function moveTask(id, direction) {
     setTasks(
-      tasks.map((task) =>
+      tasks.map((task) =&gt;
         task.id === id
           ? { ...task, status: direction === "next" ? NEXT[task.status] : PREV[task.status] }
           : task
       )
     );
   }
-
   function deleteTask(id) {
-    setTasks(tasks.filter((task) => task.id !== id));
+    setTasks(tasks.filter((task) =&gt; task.id !== id));
   }
-
   return (
-    <div className="app">
+    <div classname="app">
       <h1>Task Board</h1>
-
-      <form onSubmit={addTask} className="task-form">
-        <input
-          type="text"
-          placeholder="New task..."
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-        />
-        <select value={column} onChange={(e) => setColumn(e.target.value)}>
-          {COLUMNS.map((col) => (
-            <option key={col} value={col}>{col}</option>
+      <form classname="task-form" onsubmit="{addTask}">
+        <input =="" onchange="{(e)" placeholder="New task..." type="text" value="{newTask}"/> setNewTask(e.target.value)}
+        /&gt;
+        <select =="" onchange="{(e)" value="{column}"> setColumn(e.target.value)}&gt;
+          {COLUMNS.map((col) =&gt; (
+            <option key="{col}" value="{col}">{col}</option>
           ))}
         </select>
         <button type="submit">Add</button>
       </form>
-
-      <div className="board">
-        {COLUMNS.map((col) => (
-          <div key={col} className="column">
+      <div classname="board">
+        {COLUMNS.map((col) =&gt; (
+          <div classname="column" key="{col}">
             <h2>{col}</h2>
             {tasks
-              .filter((task) => task.status === col)
-              .map((task) => (
-                <div key={task.id} className="task-card">
+              .filter((task) =&gt; task.status === col)
+              .map((task) =&gt; (
+                <div classname="task-card" key="{task.id}">
                   <p>{task.title}</p>
-                  <div className="actions">
-                    <button onClick={() => moveTask(task.id, "prev")} disabled={task.status === "Todo"}>
-                      ←
+                  <div classname="actions">
+                    <button =="" onclick="{()"> moveTask(task.id, "prev")} disabled={task.status === "Todo"}&gt;
+                      &larr;
                     </button>
-                    <button onClick={() => moveTask(task.id, "next")} disabled={task.status === "Done"}>
-                      →
+                    <button =="" onclick="{()"> moveTask(task.id, "next")} disabled={task.status === "Done"}&gt;
+                      &rarr;
                     </button>
-                    <button onClick={() => deleteTask(task.id)}>🗑</button>
+                    <button =="" onclick="{()"> deleteTask(task.id)}&gt;🗑</button>
                   </div>
                 </div>
               ))}
@@ -813,44 +1218,39 @@ function App() {
     </div>
   );
 }
-
 export default App;</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-css">/* App.css */
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-css">/* App.css */
 .app {
   font-family: system-ui, sans-serif;
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
 }
-
 .task-form {
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
 }
-
 .task-form input,
 .task-form select {
   padding: 8px;
 }
-
 .board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
-
 .column {
   background: #f3f4f6;
   border-radius: 8px;
   padding: 12px;
   min-height: 200px;
 }
-
 .task-card {
   background: white;
   border: 1px solid #e5e7eb;
@@ -858,97 +1258,190 @@ export default App;</code></pre>
   padding: 10px;
   margin-bottom: 8px;
 }
-
 .actions {
   display: flex;
   gap: 4px;
   margin-top: 8px;
 }</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Create the Task Board app with Vite, add a few tasks, move them between columns, and delete one.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#context" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#best-practices" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Best Practices →</a></nav>
-        </section>
-
-        <section id="best-practices" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 17</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Best Practices</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Writing clean React code makes apps easier to maintain, test, and scale.</p>
-
-          <div class="grid md:grid-cols-2 gap-6 mb-8">
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-3">Component design</h3>
-              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
-                <li>Keep components small and focused.</li>
-                <li>Prefer props over global state.</li>
-                <li>Use descriptive prop and state names.</li>
-                <li>Extract repeated logic into custom hooks.</li>
-              </ul>
-            </div>
-            <div class="card rounded-xl p-5">
-              <h3 class="font-semibold mb-3">Performance</h3>
-              <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
-                <li>Always provide stable keys in lists.</li>
-                <li>Memoize expensive computations with <code class="kbd">useMemo</code>.</li>
-                <li>Avoid inline function definitions in render for heavy subtrees.</li>
-                <li>Split code with lazy loading when apps grow.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-10">
-            <h3 class="text-xl font-semibold mb-3">Next steps</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Explore <strong>custom hooks</strong> to share logic between components.</li>
-              <li>Learn a state library like <strong>Zustand</strong> or <strong>Redux</strong> for larger apps.</li>
-              <li>Add <strong>React Query</strong> or <strong>SWR</strong> for server state management.</li>
-              <li>Write tests with <strong>Vitest</strong> and <strong>React Testing Library</strong>.</li>
-            </ul>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-10">
-            <h4 class="font-semibold mb-2">Final Quiz</h4>
-            <div class="quiz" data-answer="B">
-              <p class="mb-3">Which hook is used for side effects like data fetching?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">useState</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">useEffect</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">useContext</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <div class="card rounded-2xl p-8 text-center">
-            <h3 class="text-2xl font-bold mb-3">Congratulations! 🎉</h3>
-            <p class="text-[var(--muted)] mb-5">You now have a solid foundation in React. Keep building projects — that's the best way to master it.</p>
-            <div class="flex justify-center gap-4 flex-wrap">
-              <a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">Restart tutorial</a>
-              <a href="https://react.dev" target="_blank" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Official React Docs →</a>
-            </div>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#project" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><span></span></nav>
-        </section>
-
       </div>
-
-      <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
-        <p>Made for teaching React. Open directly in any browser.</p>
-      </footer>
-    </main>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create the Task Board app with Vite, add a few tasks, move them between columns, and delete one.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#context">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#best-practices">
+        Next: Best Practices &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="best-practices">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 17
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Best Practices
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Writing clean React code makes apps easier to maintain, test, and scale.
+      </p>
+      <div class="grid md:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-3">
+         Component design
+        </h3>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Keep components small and focused.
+         </li>
+         <li>
+          Prefer props over global state.
+         </li>
+         <li>
+          Use descriptive prop and state names.
+         </li>
+         <li>
+          Extract repeated logic into custom hooks.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-xl p-5">
+        <h3 class="font-semibold mb-3">
+         Performance
+        </h3>
+        <ul class="text-sm text-[var(--muted)] list-disc pl-5 space-y-1">
+         <li>
+          Always provide stable keys in lists.
+         </li>
+         <li>
+          Memoize expensive computations with
+          <code class="kbd">
+           useMemo
+          </code>
+          .
+         </li>
+         <li>
+          Avoid inline function definitions in render for heavy subtrees.
+         </li>
+         <li>
+          Split code with lazy loading when apps grow.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-10">
+       <h3 class="text-xl font-semibold mb-3">
+        Next steps
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Explore
+         <strong>
+          custom hooks
+         </strong>
+         to share logic between components.
+        </li>
+        <li>
+         Learn a state library like
+         <strong>
+          Zustand
+         </strong>
+         or
+         <strong>
+          Redux
+         </strong>
+         for larger apps.
+        </li>
+        <li>
+         Add
+         <strong>
+          React Query
+         </strong>
+         or
+         <strong>
+          SWR
+         </strong>
+         for server state management.
+        </li>
+        <li>
+         Write tests with
+         <strong>
+          Vitest
+         </strong>
+         and
+         <strong>
+          React Testing Library
+         </strong>
+         .
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-10">
+       <h4 class="font-semibold mb-2">
+        Final Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         Which hook is used for side effects like data fetching?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         useState
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         useEffect
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         useContext
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <div class="card rounded-2xl p-8 text-center">
+       <h3 class="text-2xl font-bold mb-3">
+        Congratulations! 🎉
+       </h3>
+       <p class="text-[var(--muted)] mb-5">
+        You now have a solid foundation in React. Keep building projects &mdash; that's the best way to master it.
+       </p>
+       <div class="flex justify-center gap-4 flex-wrap">
+        <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+         Restart tutorial
+        </a>
+        <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="https://react.dev" target="_blank">
+         Official React Docs &rarr;
+        </a>
+       </div>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+    <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+     <p>
+      Made for teaching React. Open directly in any browser.
+     </p>
+    </footer>
+   </main>
   </div>
-
   <script>
-    // Theme handling
+   // Theme handling
     const html = document.documentElement;
     const lightStylesheet = document.getElementById('hljs-light');
     const darkStylesheet = document.getElementById('hljs-dark');
     const moon = document.getElementById('moon');
     const sun = document.getElementById('sun');
-
     function applyTheme(theme) {
       html.classList.remove('light', 'dark');
       html.classList.add(theme);
@@ -965,14 +1458,11 @@ export default App;</code></pre>
       }
       localStorage.setItem('react-theme', theme);
     }
-
     document.getElementById('theme-toggle').addEventListener('click', () => {
       applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
     });
-
     const saved = localStorage.getItem('react-theme');
     applyTheme(saved === 'dark' ? 'dark' : 'light');
-
     // Sidebar toggle
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
@@ -980,7 +1470,6 @@ export default App;</code></pre>
       sidebar.classList.toggle('open');
       overlay.classList.toggle('hidden');
     }
-
     // Copy code
     function copyCode(btn) {
       const code = btn.nextElementSibling.querySelector('code');
@@ -993,7 +1482,6 @@ export default App;</code></pre>
         }, 1500);
       });
     }
-
     // Active TOC link
     const sections = document.querySelectorAll('section[id]');
     const tocLinks = document.querySelectorAll('.toc-link');
@@ -1006,9 +1494,7 @@ export default App;</code></pre>
         }
       });
     }, { rootMargin: '-20% 0px -60% 0px' });
-
     sections.forEach((section) => observer.observe(section));
-
     // Quiz logic
     document.querySelectorAll('.quiz').forEach((quiz) => {
       const correct = quiz.dataset.answer;
@@ -1032,9 +1518,8 @@ export default App;</code></pre>
         });
       });
     });
-
     // Syntax highlighting
     hljs.highlightAll();
   </script>
-</body>
+ </body>
 </html>

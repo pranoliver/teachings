@@ -1,317 +1,454 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Node.js &amp; Express: Backend Development</title>
-  <link rel="icon" type="image/svg+xml" href="../assets/favicons/node.svg">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" disabled>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
-  <script>
-    tailwind.config = { darkMode: 'class' }
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Node.js &amp; Express: Backend Development
+  </title>
+  <link href="../assets/favicons/node.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
   </script>
-  <style>
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-    .sr-only:focus { position: absolute; top: 0.5rem; left: 0.5rem; z-index: 50; background: white; color: black; padding: 0.5rem 0.75rem; border-radius: 0.375rem; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
-    a:focus-visible, button:focus-visible { outline: 2px solid var(--brand-light); outline-offset: 2px; }
-    :root {
-      --brand-light: #339933;
-      --brand-dark: #4fa94f;
-      --ink: #1f2328;
-      --muted: #656d76;
-      --panel: #f6f8fa;
-      --border: #d0d7de;
-      --success: #1a7f37;
-      --danger: #cf222e;
-      --warn: #9a6700;
-    }
-    html.dark {
-      --ink: #e6edf3;
-      --muted: #848d97;
-      --panel: #161b22;
-      --border: #30363d;
-      --success: #3fb950;
-      --danger: #f85149;
-      --warn: #d29922;
-    }
-    body { font-family: 'Outfit', system-ui, sans-serif; color: var(--ink); background: var(--panel); }
-    h1, h2, h3, h4 { font-weight: 700; letter-spacing: -0.01em; }
-    .brand { color: var(--brand-light); }
-    html.dark .brand { color: var(--brand-dark); }
-    .toc-link.active { background: rgba(51,153,51,0.12); border-left: 3px solid var(--brand-light); color: var(--brand-light); }
-    html.dark .toc-link.active { background: rgba(79,169,79,0.15); border-left-color: var(--brand-dark); color: var(--brand-dark); }
-    .card { border: 1px solid var(--border); background: var(--panel); }
-    .code-block { position: relative; }
-    .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.375rem; border: 1px solid var(--border); background: var(--panel); color: var(--muted); opacity: 0; transition: opacity 0.15s; }
-    .code-block:hover .copy-btn { opacity: 1; }
-    .copy-btn.copied { color: var(--success); border-color: var(--success); }
-    .diagram { width: 100%; max-width: 720px; }
-    .quiz-opt.selected { border-color: var(--brand-light); background: rgba(51,153,51,0.08); }
-    html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba(79,169,79,0.12); }
-    .quiz-opt.correct { border-color: var(--success); background: rgba(26,127,55,0.08); }
-    .quiz-opt.wrong { border-color: var(--danger); background: rgba(207,34,46,0.08); }
-    .scroll-smooth { scroll-behavior: smooth; }
-    @media (max-width: 1024px) { #sidebar { transform: translateX(-100%); transition: transform .25s; } #sidebar.open { transform: translateX(0); } }
-    .kbd { border:1px solid var(--border); border-bottom-width:2px; border-radius:0.375rem; padding:0.125rem 0.375rem; font-family:ui-monospace,monospace; font-size:0.875rem; }
-    .node-badge { background: #339933; color: white; }
-  </style>
-</head>
-<body class="antialiased transition-colors duration-300">
-
-  <a href="#main" class="sr-only">Skip to content</a>
-
-  <div id="menu-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
-
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-nodejs-express">
+  <a class="sr-only" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
   <div class="flex min-h-screen">
-
-    <aside id="sidebar" class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6">
-      <div class="flex items-center gap-3 mb-8">
-        <img src="../assets/favicons/node.svg" alt="Node.js" class="w-10 h-10">
-        <span class="text-xl font-bold">Node.js</span>
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Node.js" class="w-10 h-10" src="../assets/favicons/node.svg"/>
+     <span class="text-xl font-bold">
+      Node.js
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#why-node">
+      2. Why Node.js?
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      3. Setup &amp; First Script
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#modules">
+      4. Modules &amp; npm
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#async">
+      5. Asynchronous JavaScript
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#express">
+      6. Express Basics
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#routing">
+      7. Routing
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#middleware">
+      8. Middleware
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#database">
+      9. Connecting a Database
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#crud">
+      10. Full CRUD API
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#validation">
+      11. Validation &amp; Error Handling
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#auth">
+      12. Authentication with JWT
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#testing">
+      13. Testing APIs
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#deployment">
+      14. Deployment
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      15. Capstone: Task API
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Node.js &amp; Express: Backend Development
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Node.js lets you run JavaScript on the server. Combined with Express, it is one of the fastest ways to build REST APIs, real-time services, and full-stack web applications.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         JavaScript fundamentals (variables, functions, objects)
+        </li>
+        <li>
+         Basic HTML/CSS is helpful but not required
+        </li>
+        <li>
+         Node.js installed on your machine
+        </li>
+       </ul>
       </div>
-      <nav id="toc" class="space-y-1 text-sm">
-        <a href="#intro" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">1. Introduction</a>
-        <a href="#why-node" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">2. Why Node.js?</a>
-        <a href="#setup" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">3. Setup &amp; First Script</a>
-        <a href="#modules" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">4. Modules &amp; npm</a>
-        <a href="#async" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">5. Asynchronous JavaScript</a>
-        <a href="#express" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">6. Express Basics</a>
-        <a href="#routing" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">7. Routing</a>
-        <a href="#middleware" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">8. Middleware</a>
-        <a href="#database" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">9. Connecting a Database</a>
-        <a href="#crud" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">10. Full CRUD API</a>
-        <a href="#validation" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">11. Validation &amp; Error Handling</a>
-        <a href="#auth" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">12. Authentication with JWT</a>
-        <a href="#testing" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">13. Testing APIs</a>
-        <a href="#deployment" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">14. Deployment</a>
-        <a href="#project" class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition">15. Capstone: Task API</a>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Node.js runtime and event loop
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Modules, npm, and project structure
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Asynchronous JavaScript patterns
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Express routing and middleware
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Database integration with PostgreSQL
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         JWT authentication and testing
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        More practice ideas
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Create an Express API for a simple bookstore with books, authors, and genres.
+        </li>
+        <li>
+         Build a URL shortener that generates short codes and redirects to long URLs.
+        </li>
+        <li>
+         Make a tiny weather proxy that calls an external API and caches responses.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#why-node">
+        Next: Why Node.js? &rarr;
+       </a>
       </nav>
-      <div class="mt-8 pt-6 border-t border-[var(--border)]">
-        <p class="text-xs text-[var(--muted)]">Open in any browser. No build step required.</p>
+     </section>
+     <section class="scroll-mt-24" id="why-node">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Why Node.js?
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Node.js uses Chrome's V8 engine to execute JavaScript outside the browser. Its event-driven, non-blocking I/O model makes it efficient for I/O-heavy workloads like APIs and real-time chat.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Node.js request flow
+       </h3>
+       <svg aria-label="Diagram showing client request to event loop to worker threads" class="diagram" viewBox="0 0 720 140">
+        <rect fill="#339933" height="80" opacity="0.2" rx="10" stroke="#339933" stroke-width="2" width="120" x="30" y="30">
+        </rect>
+        <text fill="#339933" font-size="12" font-weight="700" text-anchor="middle" x="90" y="65">
+         Client
+        </text>
+        <text fill="var(--muted)" font-size="10" text-anchor="middle" x="90" y="85">
+         HTTP request
+        </text>
+        <path d="M150 70 L 240 70" marker-end="url(#arrow)" stroke="var(--border)" stroke-width="2">
+        </path>
+        <rect fill="#339933" height="80" opacity="0.2" rx="10" stroke="#339933" stroke-width="2" width="200" x="260" y="30">
+        </rect>
+        <text fill="#339933" font-size="13" font-weight="700" text-anchor="middle" x="360" y="60">
+         Event Loop
+        </text>
+        <text fill="var(--muted)" font-size="11" text-anchor="middle" x="360" y="85">
+         non-blocking I/O
+        </text>
+        <path d="M460 70 L 550 70" marker-end="url(#arrow)" stroke="var(--border)" stroke-width="2">
+        </path>
+        <rect fill="#339933" height="80" opacity="0.2" rx="10" stroke="#339933" stroke-width="2" width="120" x="570" y="30">
+        </rect>
+        <text fill="#339933" font-size="12" font-weight="700" text-anchor="middle" x="630" y="65">
+         Response
+        </text>
+        <text fill="var(--muted)" font-size="10" text-anchor="middle" x="630" y="85">
+         JSON / HTML
+        </text>
+        <defs>
+         <marker id="arrow" markerHeight="10" markerUnits="strokeWidth" markerWidth="10" orient="auto" refX="8" refY="3">
+          <path d="M0,0 L0,6 L9,3 z" fill="var(--border)">
+          </path>
+         </marker>
+        </defs>
+       </svg>
       </div>
-    </aside>
-
-    <main id="main" class="flex-1 min-w-0">
-
-      <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <button class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()" aria-label="Open menu">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <h1 class="text-lg sm:text-xl font-bold tracking-tight">Node.js &amp; Express: Backend Development</h1>
-        </div>
-        <button id="theme-toggle" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" aria-label="Toggle theme">
-          <svg id="moon" class="w-5 h-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
-          <svg id="sun" class="w-5 h-5 hidden" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </button>
-      </header>
-
-      <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
-
-        <section id="intro" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 1</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Introduction</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Node.js lets you run JavaScript on the server. Combined with Express, it is one of the fastest ways to build REST APIs, real-time services, and full-stack web applications.</p>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">Before you start</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>JavaScript fundamentals (variables, functions, objects)</li>
-              <li>Basic HTML/CSS is helpful but not required</li>
-              <li>Node.js installed on your machine</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">What you'll learn</h3>
-            <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Node.js runtime and event loop</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Modules, npm, and project structure</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Asynchronous JavaScript patterns</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Express routing and middleware</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> Database integration with PostgreSQL</li>
-              <li class="flex items-start gap-2"><span class="brand text-lg">✓</span> JWT authentication and testing</li>
-            </ul>
-          </div>
-
-          <div class="card rounded-2xl p-6 mb-8">
-            <h3 class="text-xl font-semibold mb-3">More practice ideas</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Create an Express API for a simple bookstore with books, authors, and genres.</li>
-              <li>Build a URL shortener that generates short codes and redirects to long URLs.</li>
-              <li>Make a tiny weather proxy that calls an external API and caches responses.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><span></span><a href="#why-node" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Why Node.js? →</a></nav>
-        </section>
-
-        <section id="why-node" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 2</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Why Node.js?</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Node.js uses Chrome's V8 engine to execute JavaScript outside the browser. Its event-driven, non-blocking I/O model makes it efficient for I/O-heavy workloads like APIs and real-time chat.</p>
-
-          <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
-            <h3 class="text-xl font-semibold mb-4 w-full">Node.js request flow</h3>
-            <svg class="diagram" viewBox="0 0 720 140" aria-label="Diagram showing client request to event loop to worker threads">
-              <rect x="30" y="30" width="120" height="80" rx="10" fill="#339933" opacity="0.2" stroke="#339933" stroke-width="2"/>
-              <text x="90" y="65" text-anchor="middle" font-size="12" font-weight="700" fill="#339933">Client</text>
-              <text x="90" y="85" text-anchor="middle" font-size="10" fill="var(--muted)">HTTP request</text>
-
-              <path d="M150 70 L 240 70" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
-
-              <rect x="260" y="30" width="200" height="80" rx="10" fill="#339933" opacity="0.2" stroke="#339933" stroke-width="2"/>
-              <text x="360" y="60" text-anchor="middle" font-size="13" font-weight="700" fill="#339933">Event Loop</text>
-              <text x="360" y="85" text-anchor="middle" font-size="11" fill="var(--muted)">non-blocking I/O</text>
-
-              <path d="M460 70 L 550 70" stroke="var(--border)" stroke-width="2" marker-end="url(#arrow)"/>
-
-              <rect x="570" y="30" width="120" height="80" rx="10" fill="#339933" opacity="0.2" stroke="#339933" stroke-width="2"/>
-              <text x="630" y="65" text-anchor="middle" font-size="12" font-weight="700" fill="#339933">Response</text>
-              <text x="630" y="85" text-anchor="middle" font-size="10" fill="var(--muted)">JSON / HTML</text>
-
-              <defs>
-                <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="var(--border)"/></marker>
-              </defs>
-            </svg>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">When to use Node.js</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li>REST and GraphQL APIs.</li>
-              <li>Real-time applications (WebSocket, chat, live dashboards).</li>
-              <li>Serverless functions and microservices.</li>
-              <li>Command-line tools and build scripts.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#intro" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#setup" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Setup →</a></nav>
-        </section>
-
-        <section id="setup" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 3</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Setup &amp; First Script</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Install Node.js from the official website or use a version manager. Then create your first script.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># Check installation
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        When to use Node.js
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         REST and GraphQL APIs.
+        </li>
+        <li>
+         Real-time applications (WebSocket, chat, live dashboards).
+        </li>
+        <li>
+         Serverless functions and microservices.
+        </li>
+        <li>
+         Command-line tools and build scripts.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#setup">
+        Next: Setup &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="setup">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Setup &amp; First Script
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Install Node.js from the official website or use a version manager. Then create your first script.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Check installation
 node --version
 npm --version
-
 # Create a project folder
-mkdir my-node-app
-cd my-node-app
+mkdir my-
+node-app
+cd my-
+node-app
 npm init -y
-
 # Create a script
 # server.js
 node server.js</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// server.js
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// server.js
 const http = require("http");
-
-const server = http.createServer((req, res) => {
+const server = http.createServer((req, res) =&gt; {
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify({ message: "Hello from Node.js!" }));
 });
-
-server.listen(3000, () => {
+server.listen(3000, () =&gt; {
   console.log("Server running on http://localhost:3000");
 });</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Run the script and visit <code class="kbd">http://localhost:3000</code>. You should see a JSON response.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#why-node" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#modules" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Modules →</a></nav>
-        </section>
-
-        <section id="modules" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 4</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Modules &amp; npm</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Node.js uses a module system to organize code. The Node Package Manager (npm) lets you install and share reusable libraries.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// utils.js
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Run the script and visit
+        <code class="kbd">
+         http://localhost:3000
+        </code>
+        . You should see a JSON response.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#why-node">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#modules">
+        Next: Modules &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="modules">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Modules &amp; npm
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Node.js uses a module system to organize code. The Node Package Manager (npm) lets you install and share reusable libraries.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// utils.js
 function greet(name) {
   return `Hello, ${name}!`;
 }
-
 module.exports = { greet };
-
 // app.js
 const { greet } = require("./utils");
 console.log(greet("Node"));
-
 // ES modules alternative (requires "type": "module" in package.json)
 // export function greet(name) { return `Hello, ${name}!`; }
-// import { greet } from "./utils.js"; </code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># Install a package locally
-npm install express
-
+// import { greet } from "./utils.js";</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Install a package locally
+npm install 
+express
 # Install a development dependency
 npm install --save-dev nodemon
-
 # Run scripts defined in package.json
 npm start
 npm run dev
-
 # List installed packages
 npm list</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="B">
-              <p class="mb-3">Which command installs a package as a development-only dependency?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">npm install express</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">npm install --save-dev nodemon</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">npm list</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#setup" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#async" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Async JS →</a></nav>
-        </section>
-
-        <section id="async" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 5</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Asynchronous JavaScript</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Node.js is built around asynchronous operations. Understanding callbacks, promises, and async/await is essential for clean server code.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const fs = require("fs").promises;
-
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="B">
+        <p class="mb-3">
+         Which command installs a package as a development-only dependency?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         npm install express
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         npm install --save-dev nodemon
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         npm list
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#async">
+        Next: Async JS &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="async">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Asynchronous JavaScript
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Node.js is built around asynchronous operations. Understanding callbacks, promises, and async/await is essential for clean server code.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const fs = require("fs").promises;
 // Callbacks
-fs.readFile("file.txt", "utf8", (err, data) => {
+fs.readFile("file.txt", "utf8", (err, data) =&gt; {
   if (err) return console.error(err);
   console.log(data);
 });
-
 // Promises
 fs.readFile("file.txt", "utf8")
-  .then((data) => console.log(data))
-  .catch((err) => console.error(err));
-
+  .then((data) =&gt; console.log(data))
+  .catch((err) =&gt; console.error(err));
 // Async/await (preferred)
 async function readFile() {
   try {
@@ -321,217 +458,322 @@ async function readFile() {
     console.error(err);
   }
 }
-
 readFile();</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Node.js async patterns</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Prefer <code class="kbd">async/await</code> for readability.</li>
-              <li>Always handle errors with <code class="kbd">try/catch</code>.</li>
-              <li>Avoid callback pyramids of doom.</li>
-              <li>Use <code class="kbd">Promise.all()</code> to run independent async tasks in parallel.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#modules" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#express" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Express →</a></nav>
-        </section>
-
-        <section id="express" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 6</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Express Basics</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Express is a minimal web framework for Node.js. It handles routing, middleware, requests, and responses so you can focus on application logic.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash">npm install express
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Node.js async patterns
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Prefer
+         <code class="kbd">
+          async/await
+         </code>
+         for readability.
+        </li>
+        <li>
+         Always handle errors with
+         <code class="kbd">
+          try/catch
+         </code>
+         .
+        </li>
+        <li>
+         Avoid callback pyramids of doom.
+        </li>
+        <li>
+         Use
+         <code class="kbd">
+          Promise.all()
+         </code>
+         to run independent async tasks in parallel.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#modules">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#express">
+        Next: Express &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="express">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Express Basics
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Express is a minimal web framework for Node.js. It handles routing, middleware, requests, and responses so you can focus on application logic.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install express
 npm install --save-dev nodemon</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// app.js
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// app.js
 const express = require("express");
 const app = express();
-
 // Middleware to parse JSON bodies
 app.use(express.json());
-
-app.get("/", (req, res) => {
+app.get("/", (req, res) =&gt; {
   res.json({ message: "Welcome to Express!" });
 });
-
-app.listen(3000, () => {
+app.listen(3000, () =&gt; {
   console.log("Server is running on http://localhost:3000");
 });</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-json">{
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-json">{
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
   }
 }</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Install Express, create <code class="kbd">app.js</code>, run <code class="kbd">npm run dev</code>, and test the root endpoint.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#async" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#routing" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Routing →</a></nav>
-        </section>
-
-        <section id="routing" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 7</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Routing</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Routes define how the server responds to different URLs and HTTP methods. Organize related routes with Express routers.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const express = require("express");
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Install Express, create
+        <code class="kbd">
+         app.js
+        </code>
+        , run
+        <code class="kbd">
+         npm run dev
+        </code>
+        , and test the root endpoint.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#async">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#routing">
+        Next: Routing &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="routing">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Routing
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Routes define how the server responds to different URLs and HTTP methods. Organize related routes with Express routers.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const express = require("express");
 const app = express();
 app.use(express.json());
-
 // Basic CRUD routes for users
-app.get("/users", (req, res) => {
+app.get("/users", (req, res) =&gt; {
   res.json([{ id: 1, name: "Alice" }]);
 });
-
-app.get("/users/:id", (req, res) => {
+app.get("/users/:id", (req, res) =&gt; {
   res.json({ id: req.params.id, name: "Alice" });
 });
-
-app.post("/users", (req, res) => {
+app.post("/users", (req, res) =&gt; {
   const { name } = req.body;
   res.status(201).json({ id: 2, name });
 });
-
-app.put("/users/:id", (req, res) => {
+app.put("/users/:id", (req, res) =&gt; {
   res.json({ id: req.params.id, name: req.body.name });
 });
-
-app.delete("/users/:id", (req, res) => {
+app.delete("/users/:id", (req, res) =&gt; {
   res.status(204).send();
 });
-
 // Query parameters
-app.get("/search", (req, res) => {
+app.get("/search", (req, res) =&gt; {
   const { q } = req.query;
   res.json({ query: q });
 });
-
 app.listen(3000);</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">HTTP methods</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li><strong>GET:</strong> Read data.</li>
-              <li><strong>POST:</strong> Create data.</li>
-              <li><strong>PUT:</strong> Replace data.</li>
-              <li><strong>PATCH:</strong> Partial update.</li>
-              <li><strong>DELETE:</strong> Remove data.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#express" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#middleware" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Middleware →</a></nav>
-        </section>
-
-        <section id="middleware" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 8</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Middleware</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Middleware functions run during request processing. They can modify requests, log activity, authenticate users, or handle errors.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const express = require("express");
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        HTTP methods
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          GET:
+         </strong>
+         Read data.
+        </li>
+        <li>
+         <strong>
+          POST:
+         </strong>
+         Create data.
+        </li>
+        <li>
+         <strong>
+          PUT:
+         </strong>
+         Replace data.
+        </li>
+        <li>
+         <strong>
+          PATCH:
+         </strong>
+         Partial update.
+        </li>
+        <li>
+         <strong>
+          DELETE:
+         </strong>
+         Remove data.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#express">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#middleware">
+        Next: Middleware &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="middleware">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Middleware
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Middleware functions run during request processing. They can modify requests, log activity, authenticate users, or handle errors.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const express = require("express");
 const app = express();
-
 // Custom logger middleware
 function logger(req, res, next) {
   console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
   next();
 }
 app.use(logger);
-
 // Error-handling middleware
 function errorHandler(err, req, res, next) {
   console.error(err.stack);
   res.status(500).json({ error: err.message || "Internal Server Error" });
 }
-
-app.get("/", (req, res) => {
+app.get("/", (req, res) =&gt; {
   res.json({ ok: true });
 });
-
-app.get("/error", (req, res, next) => {
+app.get("/error", (req, res, next) =&gt; {
   next(new Error("Something went wrong"));
 });
-
 app.use(errorHandler);
-
 app.listen(3000);</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Quick Quiz</h4>
-            <div class="quiz" data-answer="C">
-              <p class="mb-3">Which function passes control to the next middleware in Express?</p>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">continue()</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">proceed()</button>
-              <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">next()</button>
-            </div>
-            <p class="quiz-feedback mt-3 font-medium"></p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#routing" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#database" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Database →</a></nav>
-        </section>
-
-        <section id="database" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 9</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Connecting a Database</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Real backends persist data. We will use PostgreSQL with the lightweight <code class="kbd">pg</code> driver and environment variables for configuration.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash">npm install pg
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Quick Quiz
+       </h4>
+       <div class="quiz" data-answer="C">
+        <p class="mb-3">
+         Which function passes control to the next middleware in Express?
+        </p>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="A">
+         continue()
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)] mb-2" data-val="B">
+         proceed()
+        </button>
+        <button class="quiz-opt block w-full text-left px-4 py-3 rounded-lg border border-[var(--border)]" data-val="C">
+         next()
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#routing">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#database">
+        Next: Database &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="database">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Connecting a Database
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Real backends persist data. We will use PostgreSQL with the lightweight
+       <code class="kbd">
+        pg
+       </code>
+       driver and environment variables for configuration.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install pg
 npm install dotenv</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// db.js
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// db.js
 require("dotenv").config();
 const { Pool } = require("pg");
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
-
 module.exports = {
-  query: (text, params) => pool.query(text, params),
+  query: (text, params) =&gt; pool.query(text, params),
 };</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-text"># .env
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-text"># .env
 DATABASE_URL=postgres://store_admin:secret123@localhost:5432/online_store</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// app.js
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// app.js
 const express = require("express");
 const db = require("./db");
 const app = express();
 app.use(express.json());
-
-app.get("/products", async (req, res, next) => {
+app.get("/products", async (req, res, next) =&gt; {
   try {
     const { rows } = await db.query("SELECT * FROM products");
     res.json(rows);
@@ -539,114 +781,144 @@ app.get("/products", async (req, res, next) => {
     next(err);
   }
 });
-
 app.listen(3000);</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#middleware" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#crud" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Full CRUD →</a></nav>
-        </section>
-
-        <section id="crud" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 10</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Full CRUD API</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Combine Express routing with database queries to build a complete REST API for a resource.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const express = require("express");
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#middleware">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#crud">
+        Next: Full CRUD &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="crud">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Full CRUD API
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Combine Express routing with database queries to build a complete REST API for a resource.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const express = require("express");
 const db = require("./db");
 const router = express.Router();
-
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res, next) =&gt; {
   try {
     const { rows } = await db.query("SELECT * FROM products ORDER BY id");
     res.json(rows);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", async (req, res, next) =&gt; {
   try {
-    const { rows } = await db.query("SELECT * FROM products WHERE id = $1", [req.params.id]);
+    const { rows } = await db.query("SELECT * FROM products WHERE id = $1", [
+      req.params.id,
+    ]);
     if (rows.length === 0) return res.status(404).json({ error: "Not found" });
     res.json(rows[0]);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
-router.post("/", async (req, res, next) => {
+router.post("/", async (req, res, next) =&gt; {
   try {
     const { name, price, stock_quantity, category_id } = req.body;
     const { rows } = await db.query(
       "INSERT INTO products (name, price, stock_quantity, category_id) VALUES ($1, $2, $3, $4) RETURNING *",
-      [name, price, stock_quantity, category_id]
+      [name, price, stock_quantity, category_id],
     );
     res.status(201).json(rows[0]);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", async (req, res, next) =&gt; {
   try {
     const { name, price, stock_quantity, category_id } = req.body;
     const { rows } = await db.query(
       "UPDATE products SET name = $1, price = $2, stock_quantity = $3, category_id = $4 WHERE id = $5 RETURNING *",
-      [name, price, stock_quantity, category_id, req.params.id]
+      [name, price, stock_quantity, category_id, req.params.id],
     );
     res.json(rows[0]);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", async (req, res, next) =&gt; {
   try {
     await db.query("DELETE FROM products WHERE id = $1", [req.params.id]);
     res.status(204).send();
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
 module.exports = router;</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// app.js
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// app.js
 const express = require("express");
 const productsRouter = require("./routes/products");
 const app = express();
 app.use(express.json());
-
 app.use("/products", productsRouter);
-
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) =&gt; {
   console.error(err);
   res.status(500).json({ error: err.message });
 });
-
 app.listen(3000);</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#database" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#validation" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Validation →</a></nav>
-        </section>
-
-        <section id="validation" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 11</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Validation &amp; Error Handling</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Never trust user input. Validate request data before touching the database and return helpful error responses.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash">npm install express-validator</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const { body, validationResult } = require("express-validator");
-
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#database">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#validation">
+        Next: Validation &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="validation">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 11
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Validation &amp; Error Handling
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Never trust user input. Validate request data before touching the database and return helpful error responses.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install express-validator</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const { body, validationResult } = require("express-validator");
 function validateProduct(req, res, next) {
   return [
     body("name").notEmpty().withMessage("Name is required"),
-    body("price").isFloat({ min: 0 }).withMessage("Price must be a positive number"),
-    body("stock_quantity").isInt({ min: 0 }).withMessage("Stock must be a non-negative integer"),
+    body("price")
+      .isFloat({ min: 0 })
+      .withMessage("Price must be a positive number"),
+    body("stock_quantity")
+      .isInt({ min: 0 })
+      .withMessage("Stock must be a non-negative integer"),
   ];
 }
-
 function handleValidationErrors(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -654,121 +926,170 @@ function handleValidationErrors(req, res, next) {
   }
   next();
 }
-
-router.post("/", validateProduct(), handleValidationErrors, async (req, res, next) => {
-  // create product...
-});</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Validation best practices</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
-              <li>Validate types, lengths, and ranges.</li>
-              <li>Sanitize strings to prevent injection and XSS.</li>
-              <li>Return 400 Bad Request for client errors.</li>
-              <li>Use a centralized error handler for unexpected errors.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#crud" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#auth" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Authentication →</a></nav>
-        </section>
-
-        <section id="auth" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 12</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Authentication with JWT</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">JSON Web Tokens (JWT) are a common way to authenticate API users. After login, the client sends the token in the Authorization header.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash">npm install jsonwebtoken bcryptjs</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">const jwt = require("jsonwebtoken");
+router.post(
+  "/",
+  validateProduct(),
+  handleValidationErrors,
+  async (req, res, next) =&gt; {
+    // create product...
+  },
+);</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Validation best practices
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Validate types, lengths, and ranges.
+        </li>
+        <li>
+         Sanitize strings to prevent injection and XSS.
+        </li>
+        <li>
+         Return 400 Bad Request for client errors.
+        </li>
+        <li>
+         Use a centralized error handler for unexpected errors.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#crud">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#auth">
+        Next: Authentication &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="auth">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 12
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Authentication with JWT
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       JSON Web Tokens (JWT) are a common way to authenticate API users. After login, the client sends the token in the Authorization header.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install jsonwebtoken bcryptjs</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const JWT_SECRET = process.env.JWT_SECRET || "change-me";
-
 function generateToken(user) {
-  return jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+  return jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+    expiresIn: "1h",
+  });
 }
-
 function authenticateToken(req, res, next) {
   const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = authHeader &amp;&amp; authHeader.split(" ")[1];
   if (!token) return res.status(401).json({ error: "Access denied" });
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
+  jwt.verify(token, JWT_SECRET, (err, user) =&gt; {
     if (err) return res.status(403).json({ error: "Invalid token" });
     req.user = user;
     next();
   });
 }
-
 // Login route example
-app.post("/login", async (req, res, next) => {
+app.post("/login", async (req, res, next) =&gt; {
   const { email, password } = req.body;
   // fetch user hash from DB, compare with bcrypt
   const token = generateToken({ id: 1, email });
   res.json({ token });
 });
-
 // Protected route
-app.get("/profile", authenticateToken, (req, res) => {
+app.get("/profile", authenticateToken, (req, res) =&gt; {
   res.json({ user: req.user });
 });</code></pre>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#validation" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#testing" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Testing →</a></nav>
-        </section>
-
-        <section id="testing" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 13</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Testing APIs</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Automated tests catch regressions and document how your API behaves. We will use Jest and Supertest.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash">npm install --save-dev jest supertest
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#validation">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#testing">
+        Next: Testing &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="testing">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 13
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Testing APIs
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Automated tests catch regressions and document how your API behaves. We will use Jest and Supertest.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash">npm install --save-dev jest supertest
 npx jest --init</code></pre>
-          </div>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// tests/products.test.js
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// tests/products.test.js
 const request = require("supertest");
 const express = require("express");
 const productsRouter = require("../routes/products");
-
 const app = express();
 app.use(express.json());
 app.use("/products", productsRouter);
-
-describe("GET /products", () => {
-  it("returns a list of products", async () => {
+describe("GET /products", () =&gt; {
+  it("returns a list of products", async () =&gt; {
     const res = await request(app).get("/products");
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
 });</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Write a test that creates a product via POST and verifies the returned object contains the correct name and price.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#auth" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#deployment" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Deployment →</a></nav>
-        </section>
-
-        <section id="deployment" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 14</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Deployment</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Node.js apps can run anywhere JavaScript runs. Common deployment targets include cloud platforms, containers, and VPS servers.</p>
-
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-dockerfile"># Dockerfile
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Write a test that creates a product via POST and verifies the returned object contains the correct name and price.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#auth">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#deployment">
+        Next: Deployment &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="deployment">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 14
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Deployment
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Node.js apps can run anywhere JavaScript runs. Common deployment targets include cloud platforms, containers, and VPS servers.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-dockerfile"># Dockerfile
 FROM node:20-alpine
 WORKDIR /app
 COPY package*.json ./
@@ -776,42 +1097,124 @@ RUN npm ci --only=production
 COPY . .
 EXPOSE 3000
 CMD ["node", "app.js"]</code></pre>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-semibold mb-3">Deployment options</h3>
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li><strong>Railway, Render, Fly.io:</strong> Quick deployments from Git.</li>
-              <li><strong>Heroku:</strong> Classic PaaS with add-ons.</li>
-              <li><strong>AWS/GCP/Azure:</strong> Scalable cloud services.</li>
-              <li><strong>Docker + VPS:</strong> Full control over environment.</li>
-            </ul>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#testing" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><a href="#project" class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition">Next: Capstone →</a></nav>
-        </section>
-
-        <section id="project" class="scroll-mt-24">
-          <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">Chapter 15</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">Capstone: Task API</h2>
-          <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">Build a complete REST API for managing tasks. The API supports creating, reading, updating, deleting, and filtering tasks, backed by PostgreSQL.</p>
-
-          <h3 class="text-xl font-semibold mb-3">Requirements</h3>
-          <div class="card rounded-2xl p-6 mb-8">
-            <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
-              <li><strong>Schema:</strong> A <code class="kbd">tasks</code> table with id, title, description, status, priority, due_date, and created_at.</li>
-              <li><strong>CRUD:</strong> Full endpoints for tasks.</li>
-              <li><strong>Filtering:</strong> Filter by status and priority via query parameters.</li>
-              <li><strong>Validation:</strong> Title is required; status must be one of <code class="kbd">todo</code>, <code class="kbd">in_progress</code>, <code class="kbd">done</code>.</li>
-              <li><strong>Persistence:</strong> Store tasks in PostgreSQL.</li>
-              <li><strong>Testing:</strong> At least one test for creating and listing tasks.</li>
-            </ul>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Schema</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-sql">CREATE TABLE tasks (
+      </div>
+      <div class="card rounded-2xl p-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Deployment options
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Railway, Render, Fly.io:
+         </strong>
+         Quick deployments from Git.
+        </li>
+        <li>
+         <strong>
+          Heroku:
+         </strong>
+         Classic PaaS with add-ons.
+        </li>
+        <li>
+         <strong>
+          AWS/GCP/Azure:
+         </strong>
+         Scalable cloud services.
+        </li>
+        <li>
+         <strong>
+          Docker + VPS:
+         </strong>
+         Full control over environment.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#testing">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 15
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Task API
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a complete REST API for managing tasks. The API supports creating, reading, updating, deleting, and filtering tasks, backed by PostgreSQL.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       Requirements
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Schema:
+         </strong>
+         A
+         <code class="kbd">
+          tasks
+         </code>
+         table with id, title, description, status, priority, due_date, and created_at.
+        </li>
+        <li>
+         <strong>
+          CRUD:
+         </strong>
+         Full endpoints for tasks.
+        </li>
+        <li>
+         <strong>
+          Filtering:
+         </strong>
+         Filter by status and priority via query parameters.
+        </li>
+        <li>
+         <strong>
+          Validation:
+         </strong>
+         Title is required; status must be one of
+         <code class="kbd">
+          todo
+         </code>
+         ,
+         <code class="kbd">
+          in_progress
+         </code>
+         ,
+         <code class="kbd">
+          done
+         </code>
+         .
+        </li>
+        <li>
+         <strong>
+          Persistence:
+         </strong>
+         Store tasks in PostgreSQL.
+        </li>
+        <li>
+         <strong>
+          Testing:
+         </strong>
+         At least one test for creating and listing tasks.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Schema
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-sql">CREATE TABLE tasks (
   id SERIAL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
   description TEXT,
@@ -820,178 +1223,197 @@ CMD ["node", "app.js"]</code></pre>
   due_date DATE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );</code></pre>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Routes</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// routes/tasks.js
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Routes
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// routes/tasks.js
 const express = require("express");
 const db = require("../db");
 const router = express.Router();
-
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res, next) =&gt; {
   try {
     const { status, priority } = req.query;
     let sql = "SELECT * FROM tasks WHERE 1=1";
     const params = [];
-    if (status) { sql += " AND status = $1"; params.push(status); }
-    if (priority) { sql += ` AND priority = $${params.length + 1}`; params.push(priority); }
+    if (status) {
+      sql += " AND status = $1";
+      params.push(status);
+    }
+    if (priority) {
+      sql += ` AND priority = $${params.length + 1}`;
+      params.push(priority);
+    }
     sql += " ORDER BY created_at DESC";
     const { rows } = await db.query(sql, params);
     res.json(rows);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", async (req, res, next) =&gt; {
   try {
-    const { rows } = await db.query("SELECT * FROM tasks WHERE id = $1", [req.params.id]);
-    if (rows.length === 0) return res.status(404).json({ error: "Task not found" });
+    const { rows } = await db.query("SELECT * FROM tasks WHERE id = $1", [
+      req.params.id,
+    ]);
+    if (rows.length === 0)
+      return res.status(404).json({ error: "Task not found" });
     res.json(rows[0]);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
-router.post("/", async (req, res, next) => {
+router.post("/", async (req, res, next) =&gt; {
   try {
     const { title, description, status, priority, due_date } = req.body;
     if (!title) return res.status(400).json({ error: "Title is required" });
     const { rows } = await db.query(
       "INSERT INTO tasks (title, description, status, priority, due_date) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [title, description, status || "todo", priority || "medium", due_date]
+      [title, description, status || "todo", priority || "medium", due_date],
     );
     res.status(201).json(rows[0]);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", async (req, res, next) =&gt; {
   try {
     const { title, description, status, priority, due_date } = req.body;
     const { rows } = await db.query(
       "UPDATE tasks SET title = $1, description = $2, status = $3, priority = $4, due_date = $5 WHERE id = $6 RETURNING *",
-      [title, description, status, priority, due_date, req.params.id]
+      [title, description, status, priority, due_date, req.params.id],
     );
     res.json(rows[0]);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", async (req, res, next) =&gt; {
   try {
     await db.query("DELETE FROM tasks WHERE id = $1", [req.params.id]);
     res.status(204).send();
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 });
-
 module.exports = router;</code></pre>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Entry point</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-javascript">// app.js
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Entry point
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// app.js
 require("dotenv").config();
 const express = require("express");
 const tasksRouter = require("./routes/tasks");
-
 const app = express();
 app.use(express.json());
-
 app.use("/tasks", tasksRouter);
-
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) =&gt; {
   console.error(err);
   res.status(500).json({ error: err.message });
 });
-
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));</code></pre>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Run the project</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># 1. Create the database and tasks table
+app.listen(PORT, () =&gt; console.log(`Server running on port ${PORT}`));</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Run the project
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># 1. Create the database and tasks table
 psql -U postgres -d your_database -f schema.sql
-
 # 2. Install dependencies
 npm install
-
 # 3. Create a .env file
 # .env
 DATABASE_URL=postgres://user:password@localhost:5432/your_database
 PORT=3000
-
 # 4. Start the server
 npm start
-
 # For development with auto-reload
 npm run dev</code></pre>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Test with curl</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># Create a task
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Test with curl
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Create a task
 curl -X POST http://localhost:3000/tasks \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Plan lesson","description":"Outline Node.js topics","priority":"high","due_date":"2026-10-10"}'
-
+-H "Content-Type: application/json" \
+-d '{"title":"Plan lesson","description":"Outline Node.js topics","priority":"high","due_date":"2026-10-10"}'
 # List all tasks
 curl http://localhost:3000/tasks
-
 # Filter by status
 curl "http://localhost:3000/tasks?status=todo"
-
 # Get a single task (replace 1 with the actual id)
 curl http://localhost:3000/tasks/1
-
 # Update a task
 curl -X PUT http://localhost:3000/tasks/1 \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Plan lesson","description":"Outline Node.js topics","status":"in_progress","priority":"high","due_date":"2026-10-10"}'
-
+-H "Content-Type: application/json" \
+-d '{"title":"Plan lesson","description":"Outline Node.js topics","status":"in_progress","priority":"high","due_date":"2026-10-10"}'
 # Delete a task
 curl -X DELETE http://localhost:3000/tasks/1</code></pre>
-          </div>
-
-          <h3 class="text-xl font-semibold mb-3">Run automated tests</h3>
-          <div class="code-block mb-6">
-            <button class="copy-btn" onclick="copyCode(this)" aria-label="Copy code">Copy</button>
-            <pre><code class="language-bash"># Add a test script to package.json
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       Run automated tests
+      </h3>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-bash"># Add a test script to package.json
 # "scripts": {
 #   "test": "jest"
 # }
-
 # Run tests
 npm test
-
 # Run tests in watch mode during development
 npm test -- --watch</code></pre>
-          </div>
-
-          <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
-            <h4 class="font-semibold mb-2">Checkpoint</h4>
-            <p class="text-[var(--muted)]">Create the tasks table, wire up the routes, run the server, create a few tasks with curl, filter by status, then write and run a Jest test for the POST /tasks endpoint.</p>
-          </div>
-
-          <nav class="flex justify-between mt-10"><a href="#deployment" class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition">← Previous</a><span></span></nav>
-        </section>
-
       </div>
-
-      <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
-        <p>Made for teaching Node.js and Express. Open directly in any browser.</p>
-      </footer>
-    </main>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Create the tasks table, wire up the routes, run the server, create a few tasks with curl, filter by status, then write and run a Jest test for the POST /tasks endpoint.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#deployment">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+    <footer class="border-t border-[var(--border)] px-6 py-8 text-center text-sm text-[var(--muted)]">
+     <p>
+      Made for teaching Node.js and Express. Open directly in any browser.
+     </p>
+    </footer>
+   </main>
   </div>
-
   <script>
-    // Theme handling
+   // Theme handling
     const html = document.documentElement;
     const lightStylesheet = document.getElementById('hljs-light');
     const darkStylesheet = document.getElementById('hljs-dark');
     const moon = document.getElementById('moon');
     const sun = document.getElementById('sun');
-
     function applyTheme(theme) {
       html.classList.remove('light', 'dark');
       html.classList.add(theme);
@@ -1008,14 +1430,11 @@ npm test -- --watch</code></pre>
       }
       localStorage.setItem('node-theme', theme);
     }
-
     document.getElementById('theme-toggle').addEventListener('click', () => {
       applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
     });
-
     const saved = localStorage.getItem('node-theme');
     applyTheme(saved === 'dark' ? 'dark' : 'light');
-
     // Sidebar toggle
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
@@ -1023,7 +1442,6 @@ npm test -- --watch</code></pre>
       sidebar.classList.toggle('open');
       overlay.classList.toggle('hidden');
     }
-
     // Copy code
     function copyCode(btn) {
       const code = btn.nextElementSibling.querySelector('code');
@@ -1036,7 +1454,6 @@ npm test -- --watch</code></pre>
         }, 1500);
       });
     }
-
     // Active TOC link
     const sections = document.querySelectorAll('section[id]');
     const tocLinks = document.querySelectorAll('.toc-link');
@@ -1049,9 +1466,7 @@ npm test -- --watch</code></pre>
         }
       });
     }, { rootMargin: '-20% 0px -60% 0px' });
-
     sections.forEach((section) => observer.observe(section));
-
     // Quiz logic
     document.querySelectorAll('.quiz').forEach((quiz) => {
       const correct = quiz.dataset.answer;
@@ -1075,9 +1490,8 @@ npm test -- --watch</code></pre>
         });
       });
     });
-
     // Syntax highlighting
     hljs.highlightAll();
   </script>
-</body>
+ </body>
 </html>

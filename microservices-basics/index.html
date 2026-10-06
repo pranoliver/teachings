@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Microservices Basics: Service Boundaries &amp; Communication
+  </title>
+  <link href="../assets/favicons/microservices.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-microservices-basics">
+  <a class="sr-only" href="#main" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <img alt="Microservices" class="w-10 h-10" src="../assets/favicons/microservices.svg"/>
+     <span class="text-xl font-bold">
+      Microservices
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#monolith-vs-microservices">
+      2. Monolith vs Microservices
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#service-boundaries">
+      3. Designing Service Boundaries
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#communication">
+      4. Inter-Service Communication
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#data">
+      5. Data Ownership
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#gateway">
+      6. API Gateway
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#resilience">
+      7. Resilience Patterns
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#saga">
+      8. Distributed Transactions
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#observability">
+      9. Observability
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#project">
+      10. Capstone: Food Delivery System
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Microservices Basics: Service Boundaries &amp; Communication
+      </h1>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 1
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Microservices are an architectural style where an application is built as a suite of small, independent services. Each service owns a bounded piece of business capability, runs in its own process, and communicates over a network. This tutorial focuses on the two decisions that matter most: where to draw service boundaries and how services should talk to each other.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Before you start
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Comfortable with Node.js and Express.
+        </li>
+        <li>
+         Understand HTTP, REST, and JSON.
+        </li>
+        <li>
+         Basic knowledge of Docker and databases.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you'll learn
+       </h3>
+       <ul class="grid sm:grid-cols-2 gap-3 text-[var(--muted)]">
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         When to choose microservices over monoliths
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         How to draw service boundaries by capability
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Synchronous vs asynchronous communication
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         API gateway, service discovery, and resilience
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Distributed transactions with sagas
+        </li>
+        <li class="flex items-start gap-2">
+         <span class="brand text-lg">
+          &checkmark;
+         </span>
+         Real-world food delivery capstone
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Real-world systems built this way
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Amazon
+         </strong>
+         split its retail system into services so teams could deploy independently.
+        </li>
+        <li>
+         <strong>
+          Netflix
+         </strong>
+         runs hundreds of microservices for playback, recommendations, billing, and search.
+        </li>
+        <li>
+         <strong>
+          Uber
+         </strong>
+         moved from a single monolith to services for dispatch, payments, maps, and pricing.
+        </li>
+        <li>
+         <strong>
+          Food delivery apps
+         </strong>
+         (DoorDash, Deliveroo) separate order, restaurant, delivery, and payment services.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <span>
+       </span>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#monolith-vs-microservices">
+        Next: Monolith vs Microservices &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="monolith-vs-microservices">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 2
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Monolith vs Microservices
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Most successful products start as monoliths. A monolith is simpler to build, test, and deploy. Microservices become valuable when the team or the system grows large enough that coordination costs outweigh the operational overhead of distribution.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Monolith vs microservices
+       </h3>
+       <img alt="Diagram comparing a single monolithic deployable unit with multiple independent microservices" class="diagram" loading="lazy" src="../assets/diagrams/microservices-basics/monolith-vs-microservices.svg"/>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         When monoliths win
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Small team, unclear product boundaries.
+         </li>
+         <li>
+          Need fast iteration and simple debugging.
+         </li>
+         <li>
+          No requirement for independent scaling of parts.
+         </li>
+         <li>
+          Can still be modular inside one codebase.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         When microservices win
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Multiple teams need independent release cadence.
+         </li>
+         <li>
+          Different parts scale differently (CPU vs memory vs I/O).
+         </li>
+         <li>
+          Need to use different databases per capability.
+         </li>
+         <li>
+          Failure must be contained to one area of the product.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5 mb-8">
+       <h4 class="font-semibold mb-2">
+        Warning signs of premature splitting
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Services are split by technical layer (frontend service, backend service) instead of business capability.
+        </li>
+        <li>
+         Every feature change touches five repositories.
+        </li>
+        <li>
+         Local development requires a Kubernetes cluster.
+        </li>
+        <li>
+         Network failures are more common than business-logic bugs.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Quiz: Microservices are always more scalable than monoliths.
+       </h3>
+       <div class="quiz space-y-2" data-answer="False">
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-val="True">
+         True
+        </button>
+        <button class="quiz-opt w-full text-left px-4 py-3 rounded-xl border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" data-val="False">
+         False
+        </button>
+       </div>
+       <p class="quiz-feedback mt-3 font-medium text-[var(--muted)]">
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#service-boundaries">
+        Next: Boundaries &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="service-boundaries">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Designing Service Boundaries
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A service boundary defines what a service owns and what it does not. Good boundaries reduce coupling, make failures local, and let teams work independently. The most common mistake is splitting too finely.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Rules of thumb
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Bounded context
+         </strong>
+         : group code that changes for the same business reason. An "Order" means something different to the warehouse than to payments.
+        </li>
+        <li>
+         <strong>
+          Single responsibility
+         </strong>
+         : a service should do one thing a customer would recognize, such as "take payments" or "send notifications".
+        </li>
+        <li>
+         <strong>
+          Independent deployability
+         </strong>
+         : if two services always must deploy together, they may be one service.
+        </li>
+        <li>
+         <strong>
+          Database per service
+         </strong>
+         : services do not share tables. They share data by API or events.
+        </li>
+       </ul>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-javascript">// BAD:
+thin CRUD services // UserService,
+OrderService,
+ProductService // all
+called directly by the frontend // GOOD:
+capability-aligned services // Orders
+service: owns order lifecycle // Payments
+service: owns charging cards + refunds // Fulfillment
+service: owns warehouse + shipping // Notifications
+service: owns email,
+SMS,
+push</code></pre>
+       </div>
+       <div class="code-block">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+         Copy
+        </button>
+        <pre><code class="language-javascript">// Domain
+event examples for an e-commerce platform OrderPlaced
+{ orderId,
+items,
+customerId }
+PaymentProcessed
+{ orderId,
+paymentId,
+status }
+InventoryReserved
+{ orderId,
+sku,
+quantity }
+OrderShipped
+{ orderId,
+trackingNumber }
+NotificationSent
+{ userId,
+channel,
+message }</code></pre>
+       </div>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Exercise: split a food delivery app
+       </h4>
+       <p class="text-[var(--muted)]">
+        Given features like restaurant menus, cart, payments, driver assignment, real-time tracking, and ratings, list the services you would create. Try to name them by capability, not by data entity.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#monolith-vs-microservices">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#communication">
+        Next: Communication &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="communication">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Inter-Service Communication
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Services communicate in two fundamental ways. Synchronous calls are simple but create coupling. Asynchronous messaging decouples services in time and scale.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Synchronous vs asynchronous communication
+       </h3>
+       <img alt="Diagram showing REST calls between services and an event bus with message broker" class="diagram" loading="lazy" src="../assets/diagrams/microservices-basics/inter-service-communication.svg"/>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Synchronous: REST / gRPC / GraphQL
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Caller waits for the response.
+         </li>
+         <li>
+          Simple request/response semantics.
+         </li>
+         <li>
+          Can create long dependency chains.
+         </li>
+         <li>
+          Best for read operations and auth checks.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Asynchronous: events / message broker
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          Caller publishes event and moves on.
+         </li>
+         <li>
+          Consumers process at their own pace.
+         </li>
+         <li>
+          Needs durable queue and retry logic.
+         </li>
+         <li>
+          Best for writes, notifications, and long jobs.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Synchronous
+HTTP call between Node.js services const axios = require('axios');
+async function getUserProfile(userId)
+{ const
+{ data } = await axios.get( `${process.env.USERS_SERVICE_URL}/users/${userId}`,
+{ timeout: 2000 }
+);
+return data;
+} // Caller
+handles failure directly app.get('/orders/:id',
+async (req,
+res) =&gt; { const order = await db.findOrder(req.params.id);
+try
+{ order.customer = await getUserProfile(order.customerId);
+res.json(order);
+}
+catch (err)
+{ res.status(503).json({ error: 'user service unavailable' }
+);
+}
+});</code></pre>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Asynchronous
+event publishing const amqp = require('amqplib');
+async function publishOrderPlaced(order)
+{ const conn = await amqp.connect(process.env.RABBITMQ_URL);
+const channel = await conn.createChannel();
+await channel.assertExchange('orders', 'topic',
+{ durable: true }
+);
+channel.publish('orders', 'order.placed',
+Buffer.from(JSON.stringify({ orderId: order.id,
+items: order.items,
+customerId: order.customerId,
+placedAt: new Date().toISOString() }
+)));
+} // Payments
+service consumes the event async function consumeOrderPlaced()
+{ const conn = await amqp.connect(process.env.RABBITMQ_URL);
+const channel = await conn.createChannel();
+await channel.assertQueue('payments.process');
+await channel.bindQueue('payments.process', 'orders', 'order.placed');
+channel.consume('payments.process',
+async (msg) =&gt; { const event = JSON.parse(msg.content.toString());
+await processPayment(event);
+channel.ack(msg);
+}
+);
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Choosing the right pattern
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>
+          Synchronous
+         </strong>
+         : user login, profile lookup, feature flags, aggregation for reads.
+        </li>
+        <li>
+         <strong>
+          Asynchronous
+         </strong>
+         : order placed &rarr; charge &rarr; reserve stock &rarr; ship &rarr; notify.
+        </li>
+        <li>
+         <strong>
+          Never
+         </strong>
+         : chain more than three synchronous calls in a critical path.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#service-boundaries">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#data">
+        Next: Data Ownership &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="data">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Data Ownership
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       In a microservice architecture, data is not shared through a single database. Each service owns its data and exposes it through an API or events. This is the most important rule for keeping services loosely coupled.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Database per service
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         The
+         <strong>
+          Orders
+         </strong>
+         service owns the
+         <code class="kbd">
+          orders
+         </code>
+         table.
+        </li>
+        <li>
+         The
+         <strong>
+          Users
+         </strong>
+         service owns the
+         <code class="kbd">
+          users
+         </code>
+         table.
+        </li>
+        <li>
+         The
+         <strong>
+          Inventory
+         </strong>
+         service owns the
+         <code class="kbd">
+          stock
+         </code>
+         table.
+        </li>
+        <li>
+         If Orders needs a user's name, it asks the Users service or caches a read-only copy.
+        </li>
+       </ul>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Anti-pattern:
+shared table // SELECT *
+FROM users // order
+service reading user table directly // Correct:
+service owns its data,
+exposes API // Orders
+service calls Users service via HTTP or listens to UserUpdated events // Event-sourced
+example: Inventory publishes stock changes async function reserveStock(orderId,
+items)
+{ for (const item of items)
+{ const row = await db.stock.findByPk(item.sku);
+if (row.quantity &lt; item.qty) throw new Error('out of stock');
+await row.decrement('quantity',
+{ by: item.qty }
+);
+}
+await publish('inventory.reserved',
+{ orderId,
+items }
+);
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Eventual consistency
+       </h4>
+       <p class="text-[var(--muted)]">
+        When services use events, data becomes temporarily inconsistent. An order may exist before payment is confirmed. That is normal. Design your UX around states and retries, not global locks.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#communication">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#gateway">
+        Next: API Gateway &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="gateway">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 6
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       API Gateway
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       An API gateway is a single entry point for clients. It handles cross-cutting concerns so individual services do not have to repeat them. It can also aggregate calls to reduce chatty client traffic.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Gateway routing and concerns
+       </h3>
+       <img alt="Diagram of an API gateway handling auth, rate limiting, and routing to microservices" class="diagram" loading="lazy" src="../assets/diagrams/microservices-basics/api-gateway.svg"/>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Lightweight
+Express gateway example const express = require('express');
+const
+{ createProxyMiddleware } = require('http-proxy-middleware');
+const jwt = require('jsonwebtoken');
+const app = express();
+function authenticate(req,
+res,
+next)
+{ const token = req.headers.authorization?.split(' ')[1]
+;
+try
+{ req.user = jwt.verify(token,
+process.env.JWT_SECRET);
+next();
+}
+catch
+{ res.status(401).json({ error: 'Unauthorized' }
+);
+}
+} app.use('/orders',
+authenticate,
+createProxyMiddleware({ target: process.env.ORDERS_SERVICE_URL,
+changeOrigin: true }
+));
+app.use('/payments',
+authenticate,
+createProxyMiddleware({ target: process.env.PAYMENTS_SERVICE_URL,
+changeOrigin: true }
+));
+app.listen(8080);</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Gateway responsibilities
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Authentication
+         </strong>
+         : validate JWT or session tokens at the edge.
+        </li>
+        <li>
+         <strong>
+          Rate limiting
+         </strong>
+         : prevent abuse before it reaches services.
+        </li>
+        <li>
+         <strong>
+          SSL termination
+         </strong>
+         : handle TLS at the edge.
+        </li>
+        <li>
+         <strong>
+          Routing
+         </strong>
+         : map public URLs to internal service URLs.
+        </li>
+        <li>
+         <strong>
+          Request aggregation
+         </strong>
+         : combine several service calls for the client.
+        </li>
+        <li>
+         <strong>
+          Protocol translation
+         </strong>
+         : REST in, gRPC out to services.
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Real-world products
+       </h4>
+       <p class="text-[var(--muted)]">
+        Kong, NGINX, Envoy, Traefik, and AWS API Gateway are common gateway tools. In Kubernetes, an Ingress controller often plays the gateway role, while a service mesh (Istio, Linkerd) adds mTLS and traffic policies between services.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#data">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#resilience">
+        Next: Resilience &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="resilience">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 7
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Resilience Patterns
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Networks are unreliable. Microservices multiply the chance of failure because every service call crosses the network. Resilience patterns keep a local failure from becoming a system-wide outage.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Circuit breaker protects callers
+       </h3>
+       <img alt="Diagram of a circuit breaker stopping requests to a failing payment service and returning a fallback" class="diagram" loading="lazy" src="../assets/diagrams/microservices-basics/circuit-breaker.svg"/>
+      </div>
+      <div class="space-y-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Patterns
+        </h3>
+        <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+         <li>
+          <strong>
+           Circuit breaker
+          </strong>
+          : stop calling a failing service for a while.
+         </li>
+         <li>
+          <strong>
+           Retry with backoff
+          </strong>
+          : retry transient failures, but not blindly.
+         </li>
+         <li>
+          <strong>
+           Timeout
+          </strong>
+          : fail fast instead of waiting forever.
+         </li>
+         <li>
+          <strong>
+           Fallback
+          </strong>
+          : return cached or degraded data.
+         </li>
+         <li>
+          <strong>
+           Bulkhead
+          </strong>
+          : isolate resources so one slowdown does not starve others.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Example: simple timeout + fallback
+        </h3>
+        <div class="code-block">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+          Copy
+         </button>
+         <pre><code class="language-javascript">async function getUserWithFallback(userId)
+{ try
+{ const
+{ data } = await axios.get( `${USERS_URL}/users/${userId}`,
+{ timeout: 500 }
+);
+return data;
+}
+catch (err)
+{ // Return
+stale cache or placeholder return cache.get(`user:${userId}`) || { id: userId,
+name: 'Guest' }
+;
+}
+}</code></pre>
+        </div>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Circuit
+breaker sketch (state machine) class CircuitBreaker
+{ constructor(fn,
+{ failureThreshold,
+resetTimeout }
+)
+{ this.fn = fn;
+this.failureThreshold = failureThreshold;
+this.resetTimeout = resetTimeout;
+this.state = 'CLOSED';
+// CLOSED,
+OPEN,
+HALF_OPEN this.failures = 0;
+this.nextTry = Date.now();
+}
+async call(...args)
+{ if (this.state === 'OPEN')
+{ if (Date.now() &lt; this.nextTry) throw new Error('circuit open');
+this.state = 'HALF_OPEN';
+}
+try
+{ const result = await this.fn(...args);
+this.success();
+return result;
+}
+catch (err)
+{ this.failure();
+throw err;
+}
+} success()
+{ this.failures = 0;
+this.state = 'CLOSED';
+}
+failure()
+{ this.failures++;
+if (this.failures &gt;= this.failureThreshold)
+{ this.state = 'OPEN';
+this.nextTry = Date.now() + this.resetTimeout;
+}
+} }</code></pre>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#gateway">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#saga">
+        Next: Sagas &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="saga">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 8
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Distributed Transactions
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       You cannot run a single SQL transaction across microservices. A saga coordinates a long-running business process as a sequence of local transactions, with compensating actions if a step fails.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8 flex flex-col items-center">
+       <h3 class="text-xl font-semibold mb-4 w-full">
+        Saga with compensating transactions
+       </h3>
+       <img alt="Diagram showing order, payment, and inventory saga steps and rollback compensations" class="diagram" loading="lazy" src="../assets/diagrams/microservices-basics/saga-pattern.svg"/>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Saga choreography vs orchestration
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Choreography
+         </strong>
+         : each service reacts to events from others. Simpler at first, harder to trace.
+        </li>
+        <li>
+         <strong>
+          Orchestration
+         </strong>
+         : a central saga coordinator tells each service what to do. Easier to reason about, but the orchestrator is a new component.
+        </li>
+       </ul>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Choreography
+saga: services listen to each other's events // OrderPlaced &rarr;
+PaymentProcessed &rarr; InventoryReserved &rarr; OrderConfirmed // Order
+service async function placeOrder(order)
+{ const created = await db.orders.create(order);
+await eventBus.publish('OrderPlaced',
+{ orderId: created.id,
+items: created.items,
+total: created.total }
+);
+} // Payment
+service async function onOrderPlaced(event)
+{ try
+{ const payment = await chargeCard(event);
+await eventBus.publish('PaymentProcessed',
+{ orderId: event.orderId,
+paymentId: payment.id }
+);
+}
+catch (err)
+{ await eventBus.publish('PaymentFailed',
+{ orderId: event.orderId }
+);
+}
+} // Inventory
+service async function onPaymentProcessed(event)
+{ try
+{ await reserveStock(event.orderId);
+await eventBus.publish('InventoryReserved',
+{ orderId: event.orderId }
+);
+}
+catch (err)
+{ await eventBus.publish('InventoryReservationFailed',
+{ orderId: event.orderId }
+);
+}
+} // Compensation
+handlers async function onPaymentFailed(event)
+{ await db.orders.update( { status: 'cancelled' },
+{ where: { id: event.orderId }
+} );
+}
+async function onInventoryReservationFailed(event)
+{ const order = await db.orders.findByPk(event.orderId);
+await refundPayment(order.paymentId);
+await db.orders.update( { status: 'cancelled' },
+{ where: { id: event.orderId }
+} );
+}</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Design checklist
+       </h4>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Every action has an idempotent compensating action.
+        </li>
+        <li>
+         Events are durable and at-least-once delivered.
+        </li>
+        <li>
+         Consumers are idempotent because the same event may arrive twice.
+        </li>
+        <li>
+         Human visibility: log every saga step and its current state.
+        </li>
+       </ul>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#resilience">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#observability">
+        Next: Observability &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="observability">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 9
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Observability
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       When a request crosses five services, logging into each server to debug is impractical. Observability gives you a shared view: logs, metrics, and traces.
+      </p>
+      <div class="grid sm:grid-cols-3 gap-6 mb-8">
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Logs
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-2">
+         Structured records of events, errors, and decisions.
+        </p>
+        <ul class="text-[var(--muted)] text-sm list-disc pl-5 space-y-1">
+         <li>
+          Use JSON format.
+         </li>
+         <li>
+          Include
+          <code class="kbd">
+           trace_id
+          </code>
+          in every log line.
+         </li>
+         <li>
+          Centralize with ELK, Loki, or Datadog.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Metrics
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-2">
+         Numbers over time: request rate, latency, errors.
+        </p>
+        <ul class="text-[var(--muted)] text-sm list-disc pl-5 space-y-1">
+         <li>
+          Track the "golden signals": latency, traffic, errors, saturation.
+         </li>
+         <li>
+          Use Prometheus + Grafana or cloud monitoring.
+         </li>
+        </ul>
+       </div>
+       <div class="card rounded-2xl p-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Traces
+        </h3>
+        <p class="text-sm text-[var(--muted)] mb-2">
+         Follow a single request across services.
+        </p>
+        <ul class="text-[var(--muted)] text-sm list-disc pl-5 space-y-1">
+         <li>
+          Generate a
+          <code class="kbd">
+           trace_id
+          </code>
+          at the gateway.
+         </li>
+         <li>
+          Propagate it in HTTP headers.
+         </li>
+         <li>
+          Visualize with Jaeger, Zipkin, or Tempo.
+         </li>
+        </ul>
+       </div>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Propagating
+trace context between services async function callInventory(order,
+traceId)
+{ const
+{ data } = await axios.post( `${INVENTORY_URL}/reserve`,
+{ orderId: order.id,
+items: order.items },
+{ headers: { 'X-Trace-Id': traceId, 'X-Request-Id': generateId() },
+timeout: 1000 }
+);
+return data;
+} // Logging
+with trace context app.use((req,
+res,
+next) =&gt; { req.traceId = req.headers
+['x-trace-id'] || generateId();
+logger.info({ traceId: req.traceId,
+path: req.path }, 'request started');
+next();
+}
+);</code></pre>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Why it matters
+       </h4>
+       <p class="text-[var(--muted)]">
+        A distributed system fails in ways no single test can predict. Observability turns "the site is slow" into "orders service is timing out on inventory calls for premium users between 14:00 and 14:15".
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#saga">
+        &larr; Previous
+       </a>
+       <a class="px-5 py-2.5 rounded-lg bg-[var(--brand-light)] text-white font-medium hover:opacity-90 transition" href="#project">
+        Next: Capstone &rarr;
+       </a>
+      </nav>
+     </section>
+     <section class="scroll-mt-24" id="project">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       Chapter 10
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Food Delivery System
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Build a simplified food delivery backend with four services, an API gateway, and an event broker. The focus is on boundaries and communication, not UI.
+      </p>
+      <h3 class="text-xl font-semibold mb-3">
+       1. What is this project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <p class="text-[var(--muted)] leading-relaxed">
+        This capstone is a
+        <strong>
+         simplified food delivery backend
+        </strong>
+        built as a microservices system. Customers browse restaurants and place orders through an API gateway, while dedicated services handle orders, payments, delivery, and restaurant data. Services communicate both synchronously through the gateway and asynchronously via events, so the system stays loosely coupled even when workflows span multiple services.
+       </p>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       2. What it covers?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          Service boundaries
+         </strong>
+         : splitting the domain by capability, not by data entity.
+        </li>
+        <li>
+         <strong>
+          API gateway
+         </strong>
+         : authenticating users and aggregating responses from services.
+        </li>
+        <li>
+         <strong>
+          Synchronous communication
+         </strong>
+         : REST calls with timeouts and fallbacks.
+        </li>
+        <li>
+         <strong>
+          Asynchronous communication
+         </strong>
+         : publishing and consuming domain events.
+        </li>
+        <li>
+         <strong>
+          Saga pattern
+         </strong>
+         : coordinating order, payment, and delivery through events and compensations.
+        </li>
+        <li>
+         <strong>
+          Observability
+         </strong>
+         : propagating trace IDs across service calls.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       3. How it is done?
+      </h3>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The backend is composed of a gateway plus four capability-aligned services. The gateway routes client requests and aggregates order status, while each service owns its data and reacts to events from the shared event broker.
+      </p>
+      <h4 class="text-lg font-semibold mb-3">
+       Architecture overview
+      </h4>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         <strong>
+          API Gateway
+         </strong>
+         : Express app that authenticates users and routes to services.
+        </li>
+        <li>
+         <strong>
+          Restaurants service
+         </strong>
+         : menus, availability, opening hours.
+        </li>
+        <li>
+         <strong>
+          Orders service
+         </strong>
+         : cart, pricing, order lifecycle.
+        </li>
+        <li>
+         <strong>
+          Payments service
+         </strong>
+         : charge cards, refunds.
+        </li>
+        <li>
+         <strong>
+          Delivery service
+         </strong>
+         : driver assignment, ETA, order tracking.
+        </li>
+        <li>
+         <strong>
+          Event broker
+         </strong>
+         : RabbitMQ or Redis Streams for async events.
+        </li>
+       </ul>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Gateway aggregation
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Gateway:
+aggregate order status from multiple services app.get('/orders/:id/status',
+async (req,
+res) =&gt; { const traceId = req.headers
+['x-trace-id'] || generateId();
+const
+[order,
+payment,
+delivery] = await Promise.all([ callService('orders', `/orders/${req.params.id}`,
+traceId),
+callService('payments', `/payments?orderId=${req.params.id}`,
+traceId),
+callService('delivery', `/deliveries?orderId=${req.params.id}`,
+traceId).catch(() =&gt; null) ]
+);
+res.json({ orderId: order.id,
+status: order.status,
+paymentStatus: payment?.status || 'unknown',
+driver: delivery?.driverName || null,
+etaMinutes: delivery?.etaMinutes || null }
+);
+}
+);
+async function callService(name,
+path,
+traceId)
+{ const url = process.env
+[`${name.toUpperCase()}
+_URL`]
+;
+const
+{ data } = await axios.get(`${url}${path}`,
+{ headers: { 'X-Trace-Id': traceId },
+timeout: 1000 }
+);
+return data;
+}</code></pre>
+      </div>
+      <h4 class="text-lg font-semibold mb-3">
+       Orders service publishes events
+      </h4>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">
+        Copy
+       </button>
+       <pre><code class="language-javascript">// Orders
+service: publish event and own order data async function placeOrder(req,
+res)
+{ const order = await db.orders.create({ customerId: req.user.id,
+restaurantId: req.body.restaurantId,
+items: req.body.items,
+total: calculateTotal(req.body.items),
+status: 'pending' }
+);
+await eventBus.publish('OrderPlaced',
+{ orderId: order.id,
+customerId: order.customerId,
+total: order.total,
+placedAt: new Date().toISOString() }
+);
+res.status(201).json(order);
+}</code></pre>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       4. What did we learn from this capstone project?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Microservices should be split by business capability so each service owns one thing.
+        </li>
+        <li>
+         An API gateway hides internal services and reduces chattiness for clients.
+        </li>
+        <li>
+         Event-driven workflows keep services decoupled in time and failure.
+        </li>
+        <li>
+         Sagas with compensating actions replace distributed SQL transactions.
+        </li>
+        <li>
+         Trace IDs make it possible to follow a single request across multiple services.
+        </li>
+       </ul>
+      </div>
+      <h3 class="text-xl font-semibold mb-3">
+       5. How can I enhance this project in the future?
+      </h3>
+      <div class="card rounded-2xl p-6 mb-8">
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-2">
+        <li>
+         Add a notifications service that listens to events and sends email or SMS.
+        </li>
+        <li>
+         Add Redis caching for restaurant menus and aggregated order status.
+        </li>
+        <li>
+         Deploy each service with Docker Compose and add health checks.
+        </li>
+        <li>
+         Generate and visualize traces in Jaeger or Zipkin.
+        </li>
+        <li>
+         Introduce a saga orchestrator for complex order fulfillment workflows.
+        </li>
+       </ul>
+      </div>
+      <div class="bg-[var(--panel)] border border-[var(--border)] rounded-xl p-5">
+       <h4 class="font-semibold mb-2">
+        Checkpoint
+       </h4>
+       <p class="text-[var(--muted)]">
+        Model the four services, implement the gateway status endpoint with a timeout fallback, and publish or consume at least one domain event between the orders and payments services.
+       </p>
+      </div>
+      <nav class="flex justify-between mt-10">
+       <a class="px-5 py-2.5 rounded-lg border border-[var(--border)] font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" href="#observability">
+        &larr; Previous
+       </a>
+       <span>
+       </span>
+      </nav>
+     </section>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); const lightStylesheet = document.getElementById('hljs-light'); const darkStylesheet = document.getElementById('hljs-dark'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { lightStylesheet.disabled = true; darkStylesheet.disabled = false; moon.classList.add('hidden'); sun.classList.remove('hidden'); } else { lightStylesheet.disabled = false; darkStylesheet.disabled = true; moon.classList.remove('hidden'); sun.classList.add('hidden'); } localStorage.setItem('microservices-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('microservices-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('menu-overlay'); sidebar.classList.toggle('open'); overlay.classList.toggle('hidden'); } function copyCode(btn) { const code = btn.nextElementSibling.querySelector('code'); navigator.clipboard.writeText(code.innerText).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); } const sections = document.querySelectorAll('section[id]'); const tocLinks = document.querySelectorAll('.toc-link'); const observer = new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) { tocLinks.forEach((link) => link.classList.remove('active')); const active = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (active) active.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach((section) => observer.observe(section)); document.querySelectorAll('.quiz').forEach((quiz) => { const correct = quiz.dataset.answer; const feedback = quiz.nextElementSibling; quiz.querySelectorAll('.quiz-opt').forEach((opt) => { opt.addEventListener('click', () => { quiz.querySelectorAll('.quiz-opt').forEach((o) => { o.classList.remove('selected', 'correct', 'wrong'); o.disabled = true; }); opt.classList.add('selected'); if (opt.dataset.val === correct) { opt.classList.add('correct'); feedback.textContent = 'Correct! ✅'; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--success)]'; } else { opt.classList.add('wrong'); feedback.textContent = `Not quite. The correct answer is ${correct}.`; feedback.className = 'quiz-feedback mt-3 font-medium text-[var(--danger)]'; } }); }); }); hljs.highlightAll();
+  </script>
+ </body>
+</html>
