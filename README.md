@@ -104,16 +104,6 @@ Then visit: [http://localhost:8000](http://localhost:8000)
 | AI-4 | 🎯 [Fine-Tuning LLMs](ai-fine-tuning/) | LoRA/QLoRA, dataset formatting, training loop, evaluation, GGUF export, Ollama serving, and a side-by-side Streamlit chat comparison using the Nimbus support dataset. | [Open tutorial](ai-fine-tuning/index.html) |
 | AI-5 | 🤖 [AI Agents](ai-agents/) | LangGraph multi-agent systems with tool-calling agents, specialist routing, supervisor approval gates, MCP servers, and a Streamlit Nimbus support command center. | [Open tutorial](ai-agents/index.html) |
 
-### Coming Soon
-
-| Topic | Description |
-|-------|-------------|
-| RAG | Retrieval-Augmented Generation: embeddings, vector databases, chunking, and similarity search. |
-| AI Agents | Autonomous systems that use tools, memory, and planning to complete multi-step tasks. |
-| Fine-Tuning | Customize base models for specific domains using LoRA, QLoRA, datasets, and evaluation. |
-| Agent Harness / Orchestration | Production-ready multi-agent workflows, tracing, guardrails, and observability. |
-| AI Agents | Autonomous systems that use tools, memory, and planning to complete multi-step tasks. |
-
 ## 🛠️ How to Use
 
 ### ✅ Option 1: Open directly in a browser
