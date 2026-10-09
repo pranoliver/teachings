@@ -3,7 +3,7 @@
 A collection of beginner-friendly interactive technology tutorials. Each tutorial is a self-contained HTML page with copyable code blocks, quizzes, diagrams, and capstone projects.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Tutorials](https://img.shields.io/badge/tutorials-31-green.svg)
+![Tutorials](https://img.shields.io/badge/tutorials-34-green.svg)
 ![HTML](https://img.shields.io/badge/HTML-5-orange?logo=html5)
 ![CSS](https://img.shields.io/badge/CSS-3-blue?logo=css3)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-yellow?logo=javascript)
@@ -100,6 +100,9 @@ Then visit: [http://localhost:8000](http://localhost:8000)
 |---|-----------|----------------|---------|
 | AI-1 | 🔥 [Machine Learning with Python](machine-learning-python/) | scikit-learn, PyTorch, classification, regression, CNNs, pipelines, experiment tracking, and a predictive maintenance capstone. | [Open tutorial](machine-learning-python/index.html) |
 | AI-2 | 🤖 [Large Language Models (LLMs)](llms/) | Prompt engineering, tokenization, context windows, model selection, OpenAI/Anthropic APIs, local models with Ollama (`kimi-k2.7-code:cloud`), agents, safety, and a DraftSmith writing assistant capstone with Streamlit UI. | [Open tutorial](llms/index.html) |
+| AI-3 | 🔍 [RAG: Document Q&A](ai-rag-retrieval/) | Chunking, embeddings, ChromaDB vector store, retrieval, reranking, evaluation, and a Streamlit support assistant for Nimbus Cloud Solutions with 100 FAQ entries. | [Open tutorial](ai-rag-retrieval/index.html) |
+| AI-4 | 🎯 [Fine-Tuning LLMs](ai-fine-tuning/) | LoRA/QLoRA, dataset formatting, training loop, evaluation, GGUF export, Ollama serving, and a side-by-side Streamlit chat comparison using the Nimbus support dataset. | [Open tutorial](ai-fine-tuning/index.html) |
+| AI-5 | 🤖 [AI Agents](ai-agents/) | LangGraph multi-agent systems with tool-calling agents, specialist routing, supervisor approval gates, MCP servers, and a Streamlit Nimbus support command center. | [Open tutorial](ai-agents/index.html) |
 
 ### Coming Soon
 
@@ -109,6 +112,7 @@ Then visit: [http://localhost:8000](http://localhost:8000)
 | AI Agents | Autonomous systems that use tools, memory, and planning to complete multi-step tasks. |
 | Fine-Tuning | Customize base models for specific domains using LoRA, QLoRA, datasets, and evaluation. |
 | Agent Harness / Orchestration | Production-ready multi-agent workflows, tracing, guardrails, and observability. |
+| AI Agents | Autonomous systems that use tools, memory, and planning to complete multi-step tasks. |
 
 ## 🛠️ How to Use
 
@@ -163,7 +167,7 @@ Then open `http://localhost:8000` in your browser.
 ## 🗺️ Recommended Learning Paths
 
 - 🎨 **Frontend developer:** Linux → HTML/CSS → Web Accessibility → JavaScript → React → State Management → TypeScript → Next.js → GitHub
-- 🤖 **AI / ML engineer:** Python → Machine Learning with Python → Large Language Models (LLMs)
+- 🤖 **AI / ML engineer:** Python → Machine Learning with Python → Large Language Models (LLMs) → RAG: Document Q&A → Fine-Tuning LLMs → AI Agents
 - 🖥️ **Backend developer:** Linux → JavaScript → Python → Node.js & Express → WebSockets → SQL → GraphQL → Graph Databases → Redis & Caching → MongoDB & NoSQL → Database Optimization → TypeScript → Docker → Kubernetes → DevOps → Microservices
 - 🌟 **Full-stack developer:** Follow the numbered order from #1 to #29, then explore the AI / ML / LLM Track.
 - ⚙️ **DevOps / Platform engineer:** Linux → Git & GitHub → SQL → Redis → MongoDB → Database Optimization → Docker → Kubernetes → Node.js → WebSockets → TypeScript → Next.js → DevOps CI/CD → Microservices
@@ -225,6 +229,9 @@ tutorials/
 └── jira/                  # 📋 Jira
 └── machine-learning-python/  # 🔥 Machine Learning with Python (AI / ML / LLM Track)
 └── llms/                   # 🤖 Large Language Models (AI / ML / LLM Track)
+└── ai-rag-retrieval/       # 🔍 RAG: Document Q&A (AI / ML / LLM Track)
+└── ai-fine-tuning/         # 🎯 Fine-Tuning LLMs (AI / ML / LLM Track)
+└── ai-agents/              # 🤖 AI Agents (AI / ML / LLM Track)
 ```
 
 ## 🤝 Adding More Tutorials

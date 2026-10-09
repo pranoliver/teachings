@@ -125,7 +125,19 @@
        HTML &amp; CSS Fundamentals
       </h1>
      </div>
-     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+           
+      <div class="hidden sm:flex items-center gap-2 progress-controls" id="progress-controls">
+        <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-start">Start</button>
+        <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-complete">Mark Complete</button>
+        <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-reset">Reset</button>
+      </div>
+      
+      <div class="sm:hidden flex items-center gap-2 progress-controls" id="progress-controls-mobile">
+        <button class="px-2 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-start-mobile">Start</button>
+        <button class="px-2 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-complete-mobile">Complete</button>
+        <button class="px-2 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-reset-mobile">Reset</button>
+      </div>
+      <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
       <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
        </path>
@@ -2205,14 +2217,30 @@ footer {
         moon.classList.remove('hidden');
         sun.classList.add('hidden');
       }
-      localStorage.setItem('htmlcss-tutorial-theme', theme);
+      localStorage.setItem('tutorials-theme', theme);
       hljs.highlightAll();
     }
     document.getElementById('theme-toggle').addEventListener('click', () => {
       applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
     });
-    const saved = localStorage.getItem('htmlcss-tutorial-theme');
+    const saved = localStorage.getItem('tutorials-theme');
     applyTheme(saved === 'dark' ? 'dark' : 'light');
+    // Progress tracking
+    function setStatus(status) {
+      localStorage.setItem('tutorial-html-css-status', status);
+      updateButtons();
+    }
+    function updateButtons() {
+      const status = localStorage.getItem('tutorial-html-css-status') || 'not-started';
+      const startBtns = document.querySelectorAll('[id^="btn-start"]');
+      const completeBtns = document.querySelectorAll('[id^="btn-complete"]');
+      startBtns.forEach(btn => { btn.textContent = status === 'in-progress' ? 'In Progress' : 'Start'; });
+      completeBtns.forEach(btn => { btn.textContent = status === 'completed' ? 'Completed' : 'Mark Complete'; });
+    }
+    document.querySelectorAll('[id^="btn-start"]').forEach(btn => btn.addEventListener('click', () => setStatus('in-progress')));
+    document.querySelectorAll('[id^="btn-complete"]').forEach(btn => btn.addEventListener('click', () => setStatus('completed')));
+    document.querySelectorAll('[id^="btn-reset"]').forEach(btn => btn.addEventListener('click', () => { localStorage.removeItem('tutorial-html-css-status'); updateButtons(); }));
+    updateButtons();
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       const overlay = document.getElementById('menu-overlay');

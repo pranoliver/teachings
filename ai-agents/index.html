@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   AI Agents: Multi-Agent Systems with LangGraph, Ollama &amp; Streamlit
+  </title>
+  <link href="../assets/favicons/ai-agents.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-ai-agents">
+  <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--ai)] to-[var(--frontend)] flex items-center justify-center text-white font-bold text-lg">A</div>
+     <span class="text-xl font-bold">
+      AI Agents
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      2. Environment Setup
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#concepts">
+      3. Agent Concepts
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dataset">
+      4. Nimbus Routing Dataset
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#single-agent">
+      5. Single Tool-Calling Agent
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#multi-agent">
+      6. Multi-Agent LangGraph
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#supervisor">
+      7. Supervisor & Human-in-the-Loop
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#mcp">
+      8. MCP: Portable Tools
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#mcp-client">
+      9. MCP Client over SSE
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#tracing">
+      10. Evaluation & Tracing
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone">
+      11. Capstone: Nimbus Support Command Center
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#quiz">
+      12. Knowledge Check
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       AI Agents: Multi-Agent Systems
+      </h1>
+     </div>
+     <div class="hidden sm:flex items-center gap-2 progress-controls" id="progress-controls">
+      <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-start">Start</button>
+      <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-complete">Mark Complete</button>
+      <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-reset">Reset</button>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       AI-5
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction to AI Agents
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A single large language model can answer questions, but it struggles to reason, act, and verify across many specialized domains. An
+       <strong>AI agent system</strong>
+       breaks work into smaller pieces: a router decides who should act, specialist agents call tools, and a supervisor verifies each step. In this tutorial you will build a multi-agent support system for
+       <strong>Nimbus Cloud Solutions</strong>
+       using LangGraph, local Ollama models, and Streamlit.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you will build
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         A single tool-calling agent that can look up account balances.
+        </li>
+        <li>
+         A LangGraph multi-agent pipeline with router, billing, technical, security, and escalation agents.
+        </li>
+        <li>
+         A supervisor approval gate between every stage.
+        </li>
+        <li>
+         An MCP server that exposes the same tools to any client.
+        </li>
+        <li>
+         A Streamlit command center where you can watch agents route and act in real time.
+        </li>
+       </ul>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="setup">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Environment Setup
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Every project in this tutorial uses
+       <strong>uv</strong>
+       for environment and dependency management, Ollama for local LLMs, and LangGraph for agent workflows.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        1. Install Ollama and the chat model
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">ollama pull kimi-k2.7-code:cloud</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        2. Create the project with uv
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">uv init nimbus-agents
+cd nimbus-agents
+uv venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        3. Install packages
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">uv add langchain langchain-community langgraph ollama streamlit mcp pydantic</code></pre>
+       </div>
+       <p class="text-sm text-[var(--muted)]">
+        On Apple Silicon you may need to install or upgrade PyTorch separately if you add GPU-backed models later.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="concepts">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Agent Concepts
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Before wiring agents together, it helps to agree on a few terms. These definitions match the LangGraph way of thinking.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Agent, tool, graph, node
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>Agent</strong>
+         : an LLM with a system prompt and access to tools.
+        </li>
+        <li>
+         <strong>Tool</strong>
+         : a typed Python function the LLM can decide to call.
+        </li>
+        <li>
+         <strong>Graph</strong>
+         : a state machine that describes which node runs next.
+        </li>
+        <li>
+         <strong>Node</strong>
+         : one step in the graph. It can be an agent, a tool, or a supervisor gate.
+        </li>
+        <li>
+         <strong>State</strong>
+         : a shared object passed between nodes, usually containing messages.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Why multi-agent?
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed">
+        One giant prompt trying to handle billing, security, and troubleshooting at the same time is fragile. Specialist agents keep each prompt focused, which improves reliability, makes failures easier to debug, and lets you update one part without breaking the rest.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="dataset">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       The Nimbus Routing Dataset
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       We generated 70 realistic support queries for Nimbus Cloud Solutions. Each query has a target category and expected intent. The router agent learns from this data to send the user to the right specialist.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+       <pre><code class="language-json">[
+  {
+    "query": "Why was I charged twice this month?",
+    "category": "billing",
+    "expected_intent": "billing_dispute"
+  },
+  {
+    "query": "My API requests are returning 429.",
+    "category": "technical",
+    "expected_intent": "rate_limit_issue"
+  },
+  {
+    "query": "I think my API key was leaked. What do I do?",
+    "category": "security",
+    "expected_intent": "credential_breach"
+  }
+]</code></pre>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6 border-l-4 border-[var(--ai)]">
+       <p class="text-[var(--muted)] leading-relaxed mb-3">
+        The snippet above shows only 3 example entries. The full dataset contains
+        <strong>70 routing examples</strong>
+        across billing, technical, security, account, and escalation categories.
+       </p>
+       <a class="inline-flex items-center px-4 py-2 rounded-xl bg-[var(--ai)] text-white text-sm font-semibold hover:opacity-90 transition" download="nimbus_agent_queries.json" href="nimbus_agent_queries.json" type="application/json">
+        Download nimbus_agent_queries.json (70 examples)
+       </a>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Load the dataset
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-load-dataset">import json
+
+with open("nimbus_agent_queries.json", "r", encoding="utf-8") as f:
+    queries = json.load(f)
+
+print(f"Loaded {len(queries)} routing examples")
+for item in queries[:5]:
+    print(item["query"], "→", item["category"])</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">load_dataset.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run load_dataset.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="single-agent">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Single Tool-Calling Agent
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The simplest agent has one tool and one job. We will build a Nimbus balance assistant: it reads the user's question, decides whether to call
+       <code class="bg-[var(--panel)] px-1 rounded">get_account_balance</code>
+       , and returns the result.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Define tools
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-tools">from langchain_core.tools import tool
+
+@tool
+def get_account_balance(account_name: str) -> float:
+    """Return the current balance of a Nimbus account."""
+    balances = {
+        "checking": 12500.00,
+        "savings": 48200.50,
+        "investment": 103450.75,
+    }
+    return balances.get(account_name.lower(), 0.0)
+
+@tool
+def list_accounts() -> list:
+    """List all Nimbus account names."""
+    return ["checking", "savings", "investment"]
+
+@tool
+def get_invoice_status(invoice_id: str) -> str:
+    """Return the status of a billing invoice."""
+    return f"Invoice {invoice_id} is paid."
+
+tools = [get_account_balance, list_accounts, get_invoice_status]</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">tools.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run tools.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Bind tools to a model
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-single-agent">from langchain_ollama import ChatOllama
+from langchain_core.messages import HumanMessage
+
+llm = ChatOllama(model="kimi-k2.7-code:cloud", temperature=0)
+llm_with_tools = llm.bind_tools(tools)
+
+response = llm_with_tools.invoke([
+    HumanMessage(content="What is my savings balance?")
+])
+
+print(response.content)
+print(response.tool_calls)</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">single_agent.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run single_agent.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Execute tool calls
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-tool-executor">from langchain_core.messages import ToolMessage
+
+name_to_tool = {t.name: t for t in tools}
+
+messages = [HumanMessage(content="What is my checking balance?")]
+response = llm_with_tools.invoke(messages)
+messages.append(response)
+
+for call in response.tool_calls:
+    selected = name_to_tool[call["name"]]
+    result = selected.invoke(call["args"])
+    messages.append(ToolMessage(content=str(result), tool_call_id=call["id"]))
+
+final = llm_with_tools.invoke(messages)
+print(final.content)</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">tool_executor.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run tool_executor.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="multi-agent">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Multi-Agent LangGraph
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       In a multi-agent system, each agent is a node in a graph. One agent routes the request, then control passes to a specialist. Specialists can call tools and return structured responses. LangGraph manages the state and edges for us.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Define state and router
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-router">from typing import TypedDict, Annotated, Sequence
+from langchain_core.messages import BaseMessage
+import operator
+
+class AgentState(TypedDict):
+    messages: Annotated[Sequence[BaseMessage], operator.add]
+    category: str
+    next: str
+
+CATEGORIES = ["billing", "technical", "security", "account", "escalation"]
+
+llm = ChatOllama(model="kimi-k2.7-code:cloud", temperature=0)
+
+def router_node(state: AgentState):
+    prompt = f"""You are a support triage router for Nimbus Cloud Solutions.
+Classify the user query into exactly one of these categories: {', '.join(CATEGORIES)}.
+Return only the category name, nothing else.
+
+User query: {state['messages'][-1].content}"""
+    response = llm.invoke(prompt)
+    category = response.content.strip().lower()
+    if category not in CATEGORIES:
+        category = "escalation"
+    return {"category": category, "next": category}</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">router.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run router.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Specialist agents
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-specialists">from langchain_core.messages import AIMessage
+
+SPECIALIST_PROMPTS = {
+    "billing": "You are a Nimbus billing specialist. Be concise, friendly, and accurate.",
+    "technical": "You are a Nimbus technical support engineer. Be concise, friendly, and accurate.",
+    "security": "You are a Nimbus security specialist. Be cautious, concise, and accurate.",
+    "account": "You are a Nimbus account specialist. Be concise, friendly, and accurate.",
+    "escalation": "You are an escalation handler. Acknowledge the issue and promise human follow-up within 24 hours.",
+}
+
+def make_specialist_node(category: str):
+    def specialist_node(state: AgentState):
+        prompt = SPECIALIST_PROMPTS[category]
+        query = state["messages"][-1].content
+        response = llm.invoke([
+            ("system", prompt),
+            ("human", query),
+        ])
+        return {"messages": [AIMessage(content=f"[{category.upper()}] {response.content}")]}
+    return specialist_node
+
+billing_node = make_specialist_node("billing")
+technical_node = make_specialist_node("technical")
+security_node = make_specialist_node("security")
+account_node = make_specialist_node("account")
+escalation_node = make_specialist_node("escalation")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">specialists.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run specialists.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Wire the graph
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-graph">from langgraph.graph import StateGraph, END
+
+builder = StateGraph(AgentState)
+builder.add_node("router", router_node)
+builder.add_node("billing", billing_node)
+builder.add_node("technical", technical_node)
+builder.add_node("security", security_node)
+builder.add_node("account", account_node)
+builder.add_node("escalation", escalation_node)
+
+builder.set_entry_point("router")
+for cat in CATEGORIES:
+    builder.add_edge("router", cat)
+for cat in CATEGORIES:
+    builder.add_edge(cat, END)
+
+graph = builder.compile()
+
+result = graph.invoke({"messages": [HumanMessage(content="Why was I charged twice?")]})
+for msg in result["messages"]:
+    print(msg.content)</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">multi_agent.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run multi_agent.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="supervisor">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Supervisor & Human-in-the-Loop
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Not every agent decision should run unsupervised. A supervisor pauses the graph after a high-impact step, shows the current state, asks for approval, and logs the decision before continuing.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Supervisor as a LangGraph interrupt
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-supervisor">from langgraph.types import interrupt
+import json
+
+def supervisor_node(state: AgentState):
+    last = state["messages"][-1]
+    payload = {
+        "stage": state.get("category", "unknown"),
+        "agent_output": last.content,
+    }
+    print(json.dumps(payload, indent=2))
+
+    # Interrupt and wait for human input
+    action = interrupt({
+        "question": f"Approve {payload['stage']} response?",
+        "payload": payload,
+    })
+
+    if action.get("approved"):
+        return {"messages": [AIMessage(content=f"Supervisor approved {payload['stage']}.")]}
+    else:
+        return {"messages": [AIMessage(content=f"Supervisor rejected {payload['stage']}. Escalating.")], "next": "escalation"}
+
+# Resume with Command(resume={"approved": True})
+from langgraph.types import Command
+
+# graph.invoke(..., config={...})  # starts
+# graph.invoke(Command(resume={"approved": True}), config={...})  # resumes
+</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">supervisor.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run supervisor.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Compliance validator
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-compliance">forbidden_topics = ["password", "secret", "credential"]
+
+def compliance_node(state: AgentState):
+    text = state["messages"][-1].content.lower()
+    for topic in forbidden_topics:
+        if topic in text and state.get("category") != "security":
+            return {
+                "messages": [AIMessage(content="Compliance check failed: sensitive topic handled by non-security agent. Escalating.")],
+                "next": "escalation",
+            }
+    return {"messages": [AIMessage(content="Compliance check passed.")]}</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">compliance.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run compliance.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="mcp">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       MCP: Portable Tools
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The Model Context Protocol (MCP) separates tools from applications. You can expose Nimbus tools as an MCP server and let any client consume them. This makes your agent tools reusable across chat clients, IDEs, and dashboards.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Expose tools as an MCP server
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-mcp-server">from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP("nimbus-tools")
+
+@mcp.tool()
+def get_account_balance(account_name: str) -> float:
+    """Return the current balance of a Nimbus account."""
+    balances = {"checking": 12500.00, "savings": 48200.50, "investment": 103450.75}
+    return balances.get(account_name.lower(), 0.0)
+
+@mcp.tool()
+def list_accounts() -> list:
+    """List all Nimbus account names."""
+    return ["checking", "savings", "investment"]
+
+if __name__ == "__main__":
+    mcp.run(transport="sse")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">mcp_server.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run mcp_server.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Why expose tools over MCP?
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed">
+        An MCP server decouples your business tools from any single agent framework. The same
+        <code class="bg-[var(--panel)] px-1 rounded">get_account_balance</code>
+        tool can be consumed by a LangGraph agent, a Claude Desktop plugin, an IDE assistant, or a custom dashboard. The next section shows a realistic client that connects over SSE.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="mcp-client">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       MCP Client over SSE
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A production MCP client connects to a running server over HTTP, lists the available tools, and invokes them. This section uses Server-Sent Events (SSE) transport, which is the easiest way to connect a long-lived MCP server to a remote client.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        1. Start the MCP server
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash"># Terminal 1
+uv run mcp_server.py</code></pre>
+       </div>
+       <p class="text-sm text-[var(--muted)]">
+        By default FastMCP with
+        <code class="bg-[var(--panel)] px-1 rounded">transport="sse"</code>
+        serves on
+        <code class="bg-[var(--panel)] px-1 rounded">http://127.0.0.1:8000/sse</code>
+        . Keep this terminal open.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        2. Discover and call tools from a Python client
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Create
+        <code class="bg-[var(--panel)] px-1 rounded">mcp_sse_client.py</code>
+        . It lists tools, prints their schemas, calls
+        <code class="bg-[var(--panel)] px-1 rounded">get_account_balance</code>
+        and
+        <code class="bg-[var(--panel)] px-1 rounded">get_recent_tickets</code>
+        , and handles errors gracefully.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-mcp-client">import asyncio
+import json
+from mcp import ClientSession
+from mcp.client.sse import sse_client
+
+SSE_URL = "http://127.0.0.1:8000/sse"
+
+async def main():
+    async with sse_client(SSE_URL) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+
+            tools = await session.list_tools()
+            print(f"Connected. {len(tools.tools)} tools available:")
+            for tool in tools.tools:
+                print(f"  - {tool.name}: {tool.description}")
+
+            balance = await session.call_tool(
+                "get_account_balance", arguments={"account_name": "savings"}
+            )
+            print("\nBalance result:")
+            print(json.dumps(balance.model_dump(), indent=2))
+
+            tickets = await session.call_tool(
+                "get_recent_tickets", arguments={"category": "security", "limit": 3}
+            )
+            print("\nRecent security tickets:")
+            print(json.dumps(tickets.model_dump(), indent=2))
+
+            try:
+                await session.call_tool("nonexistent_tool", arguments={})
+            except Exception as e:
+                print(f"\nExpected error for unknown tool: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">mcp_sse_client.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run mcp_sse_client.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        3. Connect the client to an LLM
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        The next step is to let an LLM choose which MCP tool to call. The client fetches the tool list, converts each schema to a LangChain tool, and passes them to an Ollama model.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-mcp-llm">import asyncio
+from langchain_ollama import ChatOllama
+from langchain_core.messages import HumanMessage
+from mcp import ClientSession
+from mcp.client.sse import sse_client
+
+SSE_URL = "http://127.0.0.1:8000/sse"
+
+async def mcp_agent(query: str):
+    async with sse_client(SSE_URL) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+            tools_response = await session.list_tools()
+
+            # Build simple LangChain-style tools from MCP definitions
+            langchain_tools = []
+            for tool_info in tools_response.tools:
+                def make_call(name):
+                    async def call(args):
+                        result = await session.call_tool(name, arguments=args)
+                        return str(result)
+                    return call
+
+                from langchain_core.tools import StructuredTool
+                langchain_tools.append(
+                    StructuredTool.from_function(
+                        func=make_call(tool_info.name),
+                        name=tool_info.name,
+                        description=tool_info.description or "",
+                    )
+                )
+
+            llm = ChatOllama(model="kimi-k2.7-code:cloud", temperature=0).bind_tools(langchain_tools)
+            messages = [HumanMessage(content=query)]
+            response = llm.invoke(messages)
+
+            if response.tool_calls:
+                for call in response.tool_calls:
+                    tool = next(t for t in langchain_tools if t.name == call["name"])
+                    result = await tool.ainvoke(call["args"])
+                    messages.append(result)
+                response = llm.invoke(messages)
+
+            return response.content
+
+# asyncio.run(mcp_agent("What is my savings balance?"))</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">mcp_llm_client.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run mcp_llm_client.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="tracing">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Evaluation &amp; Tracing
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Agents make a chain of decisions: route, act, validate, approve. When something goes wrong you need to see what happened. This section adds a local JSON tracer and a simple evaluator so you can measure routing accuracy, tool correctness, and end-to-end answer quality without relying on a paid service.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        1. Trace every graph run to a local JSONL file
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-tracer">import json
+import time
+from pathlib import Path
+from langchain_core.callbacks.base import BaseCallbackHandler
+
+TRACE_FILE = Path("nimbus_agent_traces.jsonl")
+
+class LocalTracer(BaseCallbackHandler):
+    """Append a JSON line for every LLM start/end and tool call."""
+
+    def _append(self, event_type, data):
+        line = {"timestamp": time.time(), "event": event_type, **data}
+        with open(TRACE_FILE, "a", encoding="utf-8") as f:
+            f.write(json.dumps(line, default=str) + "\n")
+
+    def on_llm_start(self, serialized, prompts, **kwargs):
+        self._append("llm_start", {"prompts": prompts})
+
+    def on_llm_end(self, response, **kwargs):
+        generations = [g.text for g in response.generations[0]]
+        self._append("llm_end", {"generations": generations})
+
+    def on_tool_start(self, serialized, input_str, **kwargs):
+        self._append("tool_start", {"tool": serialized.get("name"), "input": input_str})
+
+    def on_tool_end(self, output, **kwargs):
+        self._append("tool_end", {"output": str(output)})</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">tracer.py</code> and import it into <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">graph.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        2. Wire the tracer into the LangGraph agent
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Pass the tracer as a callback to the LLM so every prompt, response, and tool call is recorded automatically.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-tracer-wire">from tracer import LocalTracer
+
+callbacks = [LocalTracer()]
+llm = ChatOllama(model="kimi-k2.7-code:cloud", temperature=0, callbacks=callbacks)
+llm_tools = llm.bind_tools(NIMBUS_TOOLS)
+
+# When you invoke the graph, add the same callbacks list:
+# graph.invoke({"messages": [HumanMessage(content=query)]}, config={"callbacks": callbacks})</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Add to <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">graph.py</code> after the existing imports
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        3. Evaluate routing accuracy on the dataset
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Run the router against the 70-example dataset and compare predicted categories with the ground truth. This gives you a concrete accuracy score and a confusion report.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-eval-router">import json
+from collections import Counter, defaultdict
+from graph import router_node
+from langchain_core.messages import HumanMessage
+
+with open("nimbus_agent_queries.json", "r", encoding="utf-8") as f:
+    dataset = json.load(f)
+
+correct = 0
+counts = defaultdict(Counter)
+
+for item in dataset:
+    state = {"messages": [HumanMessage(content=item["query"])]}
+    result = router_node(state)
+    predicted = result["category"]
+    expected = item["category"]
+    counts[expected][predicted] += 1
+    if predicted == expected:
+        correct += 1
+
+accuracy = correct / len(dataset)
+print(f"Router accuracy: {accuracy:.1%} ({correct}/{len(dataset)})")
+print("\nConfusion matrix (expected -> predicted):")
+for expected in sorted(counts):
+    row = dict(counts[expected])
+    print(f"  {expected:12}: {row}")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">evaluate_router.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run evaluate_router.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        4. Evaluate end-to-end answers with an LLM judge
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        An LLM judge compares each final answer against a rubric: accuracy, tone, and whether the right category was used. This is cheaper than human evaluation and easy to iterate on.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-eval-judge">import json
+from langchain_ollama import ChatOllama
+from langchain_core.messages import HumanMessage
+from graph import graph, CATEGORIES
+
+judge = ChatOllama(model="kimi-k2.7-code:cloud", temperature=0)
+
+def judge_answer(query, answer, expected_category):
+    prompt = f"""You are an evaluation judge for a Nimbus Cloud Solutions support agent.
+Rate the answer on a scale of 1 to 5 for:
+1. Accuracy (does it answer the question?)
+2. Tone (is it concise, friendly, professional?)
+3. Category fit (is it appropriate for {expected_category}?)
+
+Query: {query}
+Expected category: {expected_category}
+Answer: {answer}
+
+Return ONLY a JSON object with keys accuracy, tone, category_fit, and overall."""
+    response = judge.invoke([HumanMessage(content=prompt)])
+    try:
+        return json.loads(response.content.strip())
+    except json.JSONDecodeError:
+        return {"raw": response.content, "error": "parse_failed"}
+
+sample = [
+    {"query": "Why was I charged twice?", "category": "billing"},
+    {"query": "My API returns 429.", "category": "technical"},
+    {"query": "My API key was leaked.", "category": "security"},
+]
+
+for item in sample:
+    result = graph.invoke({"messages": [HumanMessage(content=item["query"])]})
+    final = result["messages"][-1].content
+    scores = judge_answer(item["query"], final, item["category"])
+    print(f"Q: {item['query']}\nScores: {scores}\n")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">evaluate_answers.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run evaluate_answers.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        5. Optional: connect to LangSmith
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        If you create a free LangSmith account, set two environment variables and LangGraph will send traces automatically. This gives you a visual graph view, latency metrics, and feedback buttons.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">export LANGCHAIN_TRACING_V2="true"
+export LANGCHAIN_API_KEY="ls-your-key-here"
+export LANGCHAIN_PROJECT="nimbus-agents"
+
+uv run streamlit run app.py</code></pre>
+       </div>
+       <p class="text-sm text-[var(--muted)]">
+        The local tracer in step 1 is a zero-cost fallback. LangSmith is optional and only needed when you want a hosted UI for team debugging.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="capstone">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Nimbus Support Command Center
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The capstone is a 6-phase project that produces a runnable Streamlit dashboard. Every phase includes a complete, copyable file and a
+       <code class="bg-[var(--panel)] px-1 rounded">uv run</code>
+       command. You will build: reusable tools, a single tool-calling agent, a multi-agent LangGraph, a supervisor approval gate, an MCP server, and a Streamlit command center that exposes all of it.
+      </p>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 1: Project scaffolding with uv
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Open a terminal, create a dedicated folder, and set up a uv-managed virtual environment with all required packages.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">uv init nimbus-agents
+cd nimbus-agents
+uv venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Download the Nimbus routing dataset
+# (Download button is in Section 4 of this tutorial)
+cp /path/to/downloads/nimbus_agent_queries.json ./nimbus_agent_queries.json
+
+uv add langchain langchain-community langgraph ollama streamlit mcp pydantic
+ollama pull kimi-k2.7-code:cloud</code></pre>
+       </div>
+       <p class="text-sm text-[var(--muted)]">
+        Save every script below in this folder. Run each one with
+        <code class="bg-[var(--panel)] px-1 rounded">uv run filename.py</code>
+        .
+       </p>
+      </div>
+
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 2: Reusable Nimbus tools
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Create
+        <code class="bg-[var(--panel)] px-1 rounded">tools.py</code>
+        . This file is used by the single agent, the multi-agent graph, and the MCP server. Keeping tools in one module means you never duplicate business logic.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-capstone-tools">from langchain_core.tools import tool
+
+ACCOUNTS_DB = {
+    "checking": {"balance": 12500.00, "status": "active"},
+    "savings": {"balance": 48200.50, "status": "active"},
+    "investment": {"balance": 103450.75, "status": "active"},
+}
+
+TICKETS_DB = [
+    {"id": "T-1001", "category": "billing", "status": "open", "summary": "Double charge on invoice"},
+    {"id": "T-1002", "category": "technical", "status": "resolved", "summary": "429 rate limit errors"},
+    {"id": "T-1003", "category": "security", "status": "open", "summary": "API key exposed in log"},
+]
+
+@tool
+def get_account_balance(account_name: str) -> dict:
+    """Return the current balance and status of a Nimbus account."""
+    name = account_name.lower().strip()
+    if name not in ACCOUNTS_DB:
+        return {"error": f"Account '{account_name}' not found. Valid accounts: {list(ACCOUNTS_DB)}"}
+    return {"account": name, **ACCOUNTS_DB[name]}
+
+@tool
+def list_accounts() -> list:
+    """List all Nimbus account names."""
+    return list(ACCOUNTS_DB.keys())
+
+@tool
+def check_invoice_status(invoice_id: str) -> str:
+    """Return the payment status of a billing invoice."""
+    return f"Invoice {invoice_id.upper()} is paid and closed."
+
+@tool
+def get_recent_tickets(category: str = "all", limit: int = 5) -> list:
+    """Return recent support tickets, optionally filtered by category."""
+    category = category.lower().strip()
+    tickets = TICKETS_DB if category == "all" else [t for t in TICKETS_DB if t["category"] == category]
+    return tickets[:limit]
+
+@tool
+def rotate_api_key(account_name: str) -> dict:
+    """Rotate the API key for an account and return a confirmation."""
+    name = account_name.lower().strip()
+    if name not in ACCOUNTS_DB:
+        return {"error": f"Account '{account_name}' not found."}
+    return {"account": name, "action": "api_key_rotated", "new_key_prefix": "nb_live_..."}
+
+NIMBUS_TOOLS = [get_account_balance, list_accounts, check_invoice_status, get_recent_tickets, rotate_api_key]</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">tools.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run tools.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 3: Single tool-calling agent
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Before adding routing, prove the LLM can call a tool on its own. The
+        <code class="bg-[var(--panel)] px-1 rounded">single_agent.py</code>
+        script binds the tools from Phase 2 to an Ollama chat model and executes any tool calls.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-capstone-single">from langchain_ollama import ChatOllama
+from langchain_core.messages import HumanMessage, ToolMessage
+from tools import NIMBUS_TOOLS
+
+llm = ChatOllama(model="kimi-k2.7-code:cloud", temperature=0).bind_tools(NIMBUS_TOOLS)
+name_to_tool = {t.name: t for t in NIMBUS_TOOLS}
+
+query = "What is the balance of my savings account?"
+messages = [HumanMessage(content=query)]
+
+# First model call: decide if a tool is needed
+response = llm.invoke(messages)
+messages.append(response)
+
+# Execute every tool call the model requested
+for call in response.tool_calls:
+    selected = name_to_tool[call["name"]]
+    result = selected.invoke(call["args"])
+    messages.append(ToolMessage(content=str(result), tool_call_id=call["id"]))
+
+# Final answer
+final = llm.invoke(messages)
+print("Tool calls:", response.tool_calls)
+print("Answer:", final.content)</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">single_agent.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run single_agent.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 4: Multi-agent LangGraph
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Create
+        <code class="bg-[var(--panel)] px-1 rounded">graph.py</code>
+        with a router, specialist agents for each category, a compliance validator, and a supervisor interrupt. This is the engine that the Streamlit dashboard will drive.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-capstone-graph">from typing import Annotated, Sequence
+from typing_extensions import TypedDict
+from langchain_core.messages import BaseMessage, HumanMessage, AIMessage, ToolMessage
+from langchain_core.tools import tool
+from langchain_ollama import ChatOllama
+from langgraph.graph import StateGraph, END
+from langgraph.types import interrupt, Command
+import operator
+
+from tools import NIMBUS_TOOLS, name_to_tool
+
+CATEGORIES = ["billing", "technical", "security", "account", "escalation"]
+
+class AgentState(TypedDict):
+    messages: Annotated[Sequence[BaseMessage], operator.add]
+    category: str
+    next: str
+    approved: bool
+
+llm = ChatOllama(model="kimi-k2.7-code:cloud", temperature=0)
+llm_tools = llm.bind_tools(NIMBUS_TOOLS)
+
+SPECIALIST_PROMPTS = {
+    "billing": "You are a Nimbus billing specialist. Be concise, friendly, and accurate. Use tools when needed.",
+    "technical": "You are a Nimbus technical support engineer. Be concise, friendly, and accurate. Use tools when needed.",
+    "security": "You are a Nimbus security specialist. Be cautious, concise, and accurate. Rotate API keys if a credential is exposed.",
+    "account": "You are a Nimbus account specialist. Be concise, friendly, and accurate. Use tools when needed.",
+    "escalation": "You are an escalation handler. Acknowledge the issue and promise human follow-up within 24 hours.",
+}
+
+def router_node(state: AgentState):
+    query = state["messages"][-1].content
+    prompt = (
+        "You are a support triage router for Nimbus Cloud Solutions.\n"
+        f"Classify the query into exactly one of: {', '.join(CATEGORIES)}.\n"
+        "Return only the category name, nothing else.\n\n"
+        f"User query: {query}"
+    )
+    response = llm.invoke(prompt)
+    category = response.content.strip().lower()
+    if category not in CATEGORIES:
+        category = "escalation"
+    return {"category": category, "next": category}
+
+def make_specialist_node(category: str):
+    def specialist_node(state: AgentState):
+        prompt = SPECIALIST_PROMPTS[category]
+        messages = [("system", prompt)] + state["messages"]
+        response = llm_tools.invoke(messages)
+        return {"messages": [response]}
+    return specialist_node
+
+def compliance_node(state: AgentState):
+    text = state["messages"][-1].content.lower()
+    sensitive = ["password", "secret", "credential", "api key"]
+    if any(topic in text for topic in sensitive) and state.get("category") != "security":
+        return {
+            "messages": [AIMessage(content="Compliance check failed: sensitive topic handled outside security. Escalating.")],
+            "next": "escalation",
+        }
+    return {"messages": [AIMessage(content="Compliance check passed.")], "next": "supervisor"}
+
+def supervisor_node(state: AgentState):
+    last = state["messages"][-1]
+    payload = {
+        "stage": state.get("category", "unknown"),
+        "output": last.content,
+    }
+    action = interrupt({"question": f"Approve {payload['stage']} response?", "payload": payload})
+    if action.get("approved"):
+        return {"messages": [AIMessage(content=f"Supervisor approved {payload['stage']} response.")], "approved": True}
+    return {"messages": [AIMessage(content="Supervisor rejected response. Escalating.")], "next": "escalation", "approved": False}
+
+def escalate_node(state: AgentState):
+    return {"messages": [AIMessage(content="This has been escalated to a human agent. Reference: NIMBUS-HUMAN-001.")]}
+
+builder = StateGraph(AgentState)
+builder.add_node("router", router_node)
+for cat in CATEGORIES:
+    builder.add_node(cat, make_specialist_node(cat))
+builder.add_node("compliance", compliance_node)
+builder.add_node("supervisor", supervisor_node)
+builder.add_node("escalation", escalate_node)
+
+builder.set_entry_point("router")
+for cat in CATEGORIES:
+    builder.add_conditional_edges("router", lambda s, c=cat: c, [cat])
+
+for cat in CATEGORIES:
+    builder.add_edge(cat, "compliance")
+
+builder.add_conditional_edges(
+    "compliance",
+    lambda s: "escalation" if s.get("next") == "escalation" else "supervisor",
+    {"escalation": "escalation", "supervisor": "supervisor"},
+)
+builder.add_conditional_edges(
+    "supervisor",
+    lambda s: "escalation" if s.get("next") == "escalation" else END,
+    {"escalation": "escalation", END: END},
+)
+builder.add_edge("escalation", END)
+
+graph = builder.compile()
+
+if __name__ == "__main__":
+    result = graph.invoke({"messages": [HumanMessage(content="Why was I charged twice this month?")]})
+    for msg in result["messages"]:
+        print(f"[{msg.type}]: {msg.content[:200]}")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">graph.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run graph.py</code>
+         </p>
+        </div>
+       </div>
+       <p class="text-sm text-[var(--muted)] mt-4">
+        The first time you run this the graph will interrupt at the supervisor. Resume with
+        <code class="bg-[var(--panel)] px-1 rounded">graph.invoke(Command(resume={"approved": True}), config={"configurable": {"thread_id": "1"}})</code>
+        from a Python REPL, or handle the interrupt in the Streamlit app as shown in Phase 6.
+       </p>
+      </div>
+
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 5: MCP server for portable tools
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Create
+        <code class="bg-[var(--panel)] px-1 rounded">mcp_server.py</code>
+        to expose the same Nimbus tools over the Model Context Protocol. Any MCP client can now call them without knowing LangChain.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-capstone-mcp">from mcp.server.fastmcp import FastMCP
+from tools import (
+    get_account_balance,
+    list_accounts,
+    check_invoice_status,
+    get_recent_tickets,
+    rotate_api_key,
+)
+
+mcp = FastMCP("nimbus-tools")
+
+mcp.add_tool(get_account_balance)
+mcp.add_tool(list_accounts)
+mcp.add_tool(check_invoice_status)
+mcp.add_tool(get_recent_tickets)
+mcp.add_tool(rotate_api_key)
+
+if __name__ == "__main__":
+    mcp.run(transport="sse")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">mcp_server.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run mcp_server.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 6: Full Streamlit command center
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Create
+        <code class="bg-[var(--panel)] px-1 rounded">app.py</code>
+        . It imports the reusable tools, single agent, and compiled graph from the previous phases, adds tabs for chat, trace, single-agent demo, and MCP tools, and handles the supervisor interrupt with a Streamlit approval button.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python" id="code-capstone-app">import streamlit as st
+from langchain_core.messages import HumanMessage
+from langgraph.types import Command
+
+from tools import NIMBUS_TOOLS, get_account_balance, list_accounts, check_invoice_status
+from single_agent import llm_tools, name_to_tool
+from graph import graph, CATEGORIES
+
+st.set_page_config(page_title="Nimbus Support Command Center", layout="wide")
+st.title("Nimbus Support Command Center")
+st.caption("Multi-agent support with routing, tools, supervisor approval, and MCP.")
+
+if "thread_id" not in st.session_state:
+    st.session_state.thread_id = "streamlit-1"
+if "pending_interrupt" not in st.session_state:
+    st.session_state.pending_interrupt = None
+if "trace" not in st.session_state:
+    st.session_state.trace = []
+
+tab_chat, tab_single, tab_trace, tab_mcp = st.tabs(
+    ["Multi-Agent Chat", "Single Agent", "Agent Trace", "MCP / Tools"]
+)
+
+with tab_chat:
+    query = st.text_input(
+        "Ask Nimbus support:",
+        "Why was I charged twice this month?",
+        key="chat_query",
+    )
+    col_run, col_approve = st.columns([1, 1])
+    with col_run:
+        run_pressed = st.button("Run agents", key="run_agents")
+    with col_approve:
+        approve_pressed = st.button("Approve supervisor", key="approve_supervisor")
+
+    config = {"configurable": {"thread_id": st.session_state.thread_id}}
+
+    if run_pressed:
+        with st.spinner("Routing and acting..."):
+            result = graph.invoke(
+                {"messages": [HumanMessage(content=query)]},
+                config=config,
+            )
+            if hasattr(result, "__next__"):
+                try:
+                    result = next(result)
+                except StopIteration:
+                    result = {}
+            st.session_state.trace = result.get("messages", [])
+            st.session_state.pending_interrupt = result.get("__interrupt__")
+
+    if st.session_state.pending_interrupt:
+        st.warning("Supervisor approval required before continuing.")
+        if approve_pressed:
+            with st.spinner("Resuming with supervisor approval..."):
+                resumed = graph.invoke(
+                    Command(resume={"approved": True}),
+                    config=config,
+                )
+                st.session_state.trace = resumed.get("messages", st.session_state.trace)
+                st.session_state.pending_interrupt = None
+                st.success("Supervisor approved.")
+
+    for msg in st.session_state.trace:
+        role = "user" if msg.type == "human" else "assistant"
+        with st.chat_message(role):
+            st.write(msg.content)
+
+    if st.session_state.trace:
+        last = st.session_state.trace[-1]
+        st.json({"last_role": last.type, "last_content_preview": last.content[:200]})
+
+with tab_single:
+    single_query = st.text_input(
+        "Ask the single tool-calling agent:",
+        "What is my checking balance?",
+        key="single_query",
+    )
+    if st.button("Run single agent", key="run_single"):
+        messages = [HumanMessage(content=single_query)]
+        response = llm_tools.invoke(messages)
+        messages.append(response)
+        for call in response.tool_calls:
+            tool = name_to_tool[call["name"]]
+            result = tool.invoke(call["args"])
+            messages.append(ToolMessage(content=str(result), tool_call_id=call["id"]))
+        final = llm_tools.invoke(messages)
+        st.success(final.content)
+        with st.expander("Tool calls"):
+            st.json(response.tool_calls)
+
+with tab_trace:
+    st.write("Inspect the full message history produced by the multi-agent graph.")
+    for i, msg in enumerate(st.session_state.trace, 1):
+        st.write(f"{i}. **{msg.type}**: {msg.content[:300]}")
+
+with tab_mcp:
+    st.subheader("Direct tool calls")
+    account = st.selectbox("Account", list_accounts(), key="mcp_account")
+    if st.button("Get balance", key="mcp_balance"):
+        st.json(get_account_balance(account))
+    invoice = st.text_input("Invoice ID", "INV-2024-001", key="mcp_invoice")
+    if st.button("Check invoice", key="mcp_invoice_btn"):
+        st.write(check_invoice_status(invoice))
+
+st.markdown("""
+**What to try:**
+- Billing: "Why was I charged twice this month?"
+- Technical: "My API requests return 429."
+- Security: "My API key was leaked."
+- Escalation: "I want to speak to a human."
+""")</code></pre>
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">app.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run streamlit run app.py</code>
+         </p>
+        </div>
+       </div>
+      </div>
+
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 7: Run and test the command center
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash"># Terminal 1: start the MCP server (optional)
+uv run mcp_server.py
+
+# Terminal 2: launch the Streamlit dashboard
+uv run streamlit run app.py</code></pre>
+       </div>
+       <p class="text-[var(--muted)]">
+        Open the URL shown in the terminal. Try at least one query from each category: billing, technical, security, account, and escalation. Watch the router pick the right specialist, the compliance validator guard sensitive topics, and the supervisor pause before finalizing high-stakes answers.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="quiz">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Knowledge Check
+      </h2>
+      <form class="space-y-6" id="quiz-form">
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         1. What is the main advantage of multi-agent systems over one giant prompt?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">They use more tokens per request</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Specialist prompts are easier to debug, test, and update</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">They eliminate the need for any LLM</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q1" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">They always run faster than a single model call</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         2. In LangGraph, what is a node?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">A database table</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">A CSS selector</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">One step in the graph, such as an agent or tool</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q2" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">A model hyperparameter</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         3. What does LangGraph use to pause execution and wait for human input?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">interrupt and Command(resume=...)</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">A global variable</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">A database trigger</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q3" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">A webhook to a separate service</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="d">
+        <p class="font-semibold mb-3">
+         4. Which component decides which specialist agent handles a user query?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">The compliance validator</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">The MCP server</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">The Streamlit UI</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q4" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">The router agent</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         5. What is the role of tools in an agent system?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">To replace the LLM entirely</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">To let the LLM perform actions like lookups or calculations</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">To render the user interface</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q5" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">To store the training dataset</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         6. What does MCP stand for?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Model Context Protocol</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Multi-Cloud Platform</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Machine Code Parser</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q6" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Model Control Plane</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         7. In this tutorial, what is the purpose of the supervisor node?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">To generate embeddings for documents</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">To render the Streamlit dashboard</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">To pause the pipeline and ask for human approval</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q7" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">To train the base model</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         8. Which library is used as the agent workflow framework?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">CrewAI</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">LangGraph</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">AutoGen</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q8" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Django</span>
+        </label>
+       </div>
+       <button class="px-6 py-3 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition" type="submit">
+        Check Answers
+       </button>
+       <div class="hidden mt-4 p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)]" id="quiz-result">
+       </div>
+      </form>
+     </section>
+
+     <footer class="border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--muted)]">
+      <p class="mb-2">
+       Open directly in any browser. No build step required.
+      </p>
+     </footer>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement;
+   const moon = document.getElementById('moon');
+   const sun = document.getElementById('sun');
+   function applyTheme(theme) {
+     html.classList.remove('light', 'dark');
+     html.classList.add(theme);
+     const lightLink = document.getElementById('hljs-light');
+     const darkLink = document.getElementById('hljs-dark');
+     if (theme === 'dark') {
+       moon.classList.add('hidden');
+       sun.classList.remove('hidden');
+       if (lightLink) lightLink.disabled = true;
+       if (darkLink) darkLink.disabled = false;
+     } else {
+       moon.classList.remove('hidden');
+       sun.classList.add('hidden');
+       if (lightLink) lightLink.disabled = false;
+       if (darkLink) darkLink.disabled = true;
+     }
+     localStorage.setItem('tutorials-theme', theme);
+   }
+   document.getElementById('theme-toggle').addEventListener('click', () => {
+     applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+   });
+   const saved = localStorage.getItem('tutorials-theme');
+   applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+   function toggleSidebar() {
+     const sidebar = document.getElementById('sidebar');
+     const overlay = document.getElementById('menu-overlay');
+     const isOpen = sidebar.classList.toggle('-translate-x-0');
+     sidebar.classList.toggle('-translate-x-full', !isOpen);
+     overlay.classList.toggle('hidden', !isOpen);
+   }
+   document.getElementById('sidebar').classList.add('-translate-x-full', 'lg:translate-x-0');
+
+   function setStatus(status) {
+     localStorage.setItem('tutorial-ai-agents-status', status);
+     updateButtons();
+   }
+   function updateButtons() {
+     const status = localStorage.getItem('tutorial-ai-agents-status') || 'not-started';
+     document.getElementById('btn-start').textContent = status === 'in-progress' ? 'In Progress' : 'Start';
+     document.getElementById('btn-complete').textContent = status === 'completed' ? 'Completed' : 'Mark Complete';
+   }
+   document.getElementById('btn-start').addEventListener('click', () => setStatus('in-progress'));
+   document.getElementById('btn-complete').addEventListener('click', () => setStatus('completed'));
+   document.getElementById('btn-reset').addEventListener('click', () => {
+     localStorage.removeItem('tutorial-ai-agents-status');
+     updateButtons();
+   });
+   updateButtons();
+
+   document.querySelectorAll('.copy-btn').forEach((btn) => {
+     btn.addEventListener('click', async () => {
+       const code = btn.nextElementSibling.querySelector('code').textContent;
+       await navigator.clipboard.writeText(code);
+       const original = btn.textContent;
+       btn.textContent = 'Copied!';
+       setTimeout(() => btn.textContent = original, 1500);
+     });
+   });
+
+   document.getElementById('quiz-form').addEventListener('submit', (e) => {
+     e.preventDefault();
+     let correct = 0;
+     const total = document.querySelectorAll('.quiz-item').length;
+     document.querySelectorAll('.quiz-item').forEach((item) => {
+       const answer = item.querySelector('input:checked')?.value;
+       const right = item.dataset.correct;
+       item.classList.remove('border-[var(--success)]', 'border-[var(--warn)]');
+       if (answer === right) {
+         correct++;
+         item.classList.add('border-[var(--success)]');
+       } else {
+         item.classList.add('border-[var(--warn)]');
+       }
+     });
+     const result = document.getElementById('quiz-result');
+     result.classList.remove('hidden');
+     result.innerHTML = `<strong>${correct}/${total}</strong> correct. ${correct === total ? 'Excellent work!' : 'Review the highlighted questions and try again.'}`;
+     if (correct === total) {
+       setStatus('completed');
+     }
+   });
+
+   const tocLinks = document.querySelectorAll('.toc-link');
+   const sections = Array.from(tocLinks).map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+   const observer = new IntersectionObserver((entries) => {
+     entries.forEach((entry) => {
+       if (entry.isIntersecting) {
+         const id = entry.target.id;
+         tocLinks.forEach((link) => {
+           link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+         });
+       }
+     });
+   }, { rootMargin: '-20% 0px -60% 0px' });
+   sections.forEach((s) => observer.observe(s));
+
+   hljs.highlightAll();
+  </script>
+ </body>
+</html>

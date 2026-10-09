@@ -1,0 +1,352 @@
+[
+  {
+    "query": "Why was I charged twice this month?",
+    "category": "billing",
+    "expected_intent": "billing_dispute"
+  },
+  {
+    "query": "How do I update my credit card?",
+    "category": "billing",
+    "expected_intent": "payment_update"
+  },
+  {
+    "query": "Can I get a refund for last month?",
+    "category": "billing",
+    "expected_intent": "refund_request"
+  },
+  {
+    "query": "Where can I download my invoice?",
+    "category": "billing",
+    "expected_intent": "invoice_download"
+  },
+  {
+    "query": "My annual billing date is wrong.",
+    "category": "billing",
+    "expected_intent": "billing_cycle_issue"
+  },
+  {
+    "query": "How do I cancel my subscription?",
+    "category": "billing",
+    "expected_intent": "cancellation"
+  },
+  {
+    "query": "What happens if I downgrade from Team to Pro?",
+    "category": "billing",
+    "expected_intent": "plan_change"
+  },
+  {
+    "query": "Can I switch from monthly to annual billing?",
+    "category": "billing",
+    "expected_intent": "billing_cycle_change"
+  },
+  {
+    "query": "I was charged after I cancelled.",
+    "category": "billing",
+    "expected_intent": "billing_dispute"
+  },
+  {
+    "query": "How do I add seats to my Team plan?",
+    "category": "billing",
+    "expected_intent": "seat_change"
+  },
+  {
+    "query": "Why is my bill higher than expected?",
+    "category": "billing",
+    "expected_intent": "usage_inquiry"
+  },
+  {
+    "query": "Do you offer nonprofit discounts?",
+    "category": "billing",
+    "expected_intent": "discount_inquiry"
+  },
+  {
+    "query": "How do I set a spending cap?",
+    "category": "billing",
+    "expected_intent": "spending_control"
+  },
+  {
+    "query": "What currency am I billed in?",
+    "category": "billing",
+    "expected_intent": "billing_currency"
+  },
+  {
+    "query": "Can I pay by invoice instead of credit card?",
+    "category": "billing",
+    "expected_intent": "payment_method_change"
+  },
+  {
+    "query": "My API requests are returning 429.",
+    "category": "technical",
+    "expected_intent": "rate_limit_issue"
+  },
+  {
+    "query": "How do I rotate my API key?",
+    "category": "technical",
+    "expected_intent": "api_key_rotation"
+  },
+  {
+    "query": "The dashboard is showing a 500 error.",
+    "category": "technical",
+    "expected_intent": "platform_error"
+  },
+  {
+    "query": "My deployment is stuck in pending.",
+    "category": "technical",
+    "expected_intent": "deployment_issue"
+  },
+  {
+    "query": "How do I stream chat completions?",
+    "category": "technical",
+    "expected_intent": "api_usage"
+  },
+  {
+    "query": "Can I deploy a custom model container?",
+    "category": "technical",
+    "expected_intent": "custom_container"
+  },
+  {
+    "query": "Where do I find my workspace ID?",
+    "category": "technical",
+    "expected_intent": "account_lookup"
+  },
+  {
+    "query": "How do I check the status page?",
+    "category": "technical",
+    "expected_intent": "status_inquiry"
+  },
+  {
+    "query": "My batch job failed. What should I check?",
+    "category": "technical",
+    "expected_intent": "job_failure"
+  },
+  {
+    "query": "How do I set up webhooks?",
+    "category": "technical",
+    "expected_intent": "webhook_setup"
+  },
+  {
+    "query": "What SDKs do you support?",
+    "category": "technical",
+    "expected_intent": "sdk_inquiry"
+  },
+  {
+    "query": "Can I use Nimbus with LangChain?",
+    "category": "technical",
+    "expected_intent": "integration_inquiry"
+  },
+  {
+    "query": "How do I enable audit logging?",
+    "category": "technical",
+    "expected_intent": "audit_logging"
+  },
+  {
+    "query": "My model responses are too slow.",
+    "category": "technical",
+    "expected_intent": "latency_issue"
+  },
+  {
+    "query": "How do I upload a dataset via the API?",
+    "category": "technical",
+    "expected_intent": "api_usage"
+  },
+  {
+    "query": "I think my API key was leaked. What do I do?",
+    "category": "security",
+    "expected_intent": "credential_breach"
+  },
+  {
+    "query": "How do I enforce MFA for my team?",
+    "category": "security",
+    "expected_intent": "mfa_enforcement"
+  },
+  {
+    "query": "Can I restrict data egress to approved regions?",
+    "category": "security",
+    "expected_intent": "egress_control"
+  },
+  {
+    "query": "How do I report a security vulnerability?",
+    "category": "security",
+    "expected_intent": "vulnerability_report"
+  },
+  {
+    "query": "Do you support private endpoints?",
+    "category": "security",
+    "expected_intent": "private_endpoint"
+  },
+  {
+    "query": "Where can I download your SOC 2 report?",
+    "category": "security",
+    "expected_intent": "compliance_report"
+  },
+  {
+    "query": "How is data encrypted at rest?",
+    "category": "security",
+    "expected_intent": "encryption_inquiry"
+  },
+  {
+    "query": "Can I sign a BAA for HIPAA?",
+    "category": "security",
+    "expected_intent": "baa_request"
+  },
+  {
+    "query": "How do I export audit logs?",
+    "category": "security",
+    "expected_intent": "audit_export"
+  },
+  {
+    "query": "Who has access to my model training data?",
+    "category": "security",
+    "expected_intent": "data_access_inquiry"
+  },
+  {
+    "query": "Can I disable password login and force SSO?",
+    "category": "security",
+    "expected_intent": "sso_enforcement"
+  },
+  {
+    "query": "What is your data retention policy?",
+    "category": "security",
+    "expected_intent": "retention_policy"
+  },
+  {
+    "query": "How do I remove a former employee?",
+    "category": "security",
+    "expected_intent": "user_removal"
+  },
+  {
+    "query": "Is Nimbus GDPR compliant?",
+    "category": "security",
+    "expected_intent": "gdpr_inquiry"
+  },
+  {
+    "query": "Can I get a penetration test report?",
+    "category": "security",
+    "expected_intent": "pentest_report"
+  },
+  {
+    "query": "How do I reset my password?",
+    "category": "account",
+    "expected_intent": "password_reset"
+  },
+  {
+    "query": "How do I invite a new team member?",
+    "category": "account",
+    "expected_intent": "member_invite"
+  },
+  {
+    "query": "What is the difference between Admin and Editor?",
+    "category": "account",
+    "expected_intent": "role_explanation"
+  },
+  {
+    "query": "How do I change my workspace name?",
+    "category": "account",
+    "expected_intent": "workspace_rename"
+  },
+  {
+    "query": "Can I merge two workspaces?",
+    "category": "account",
+    "expected_intent": "workspace_merge"
+  },
+  {
+    "query": "How do I delete my account?",
+    "category": "account",
+    "expected_intent": "account_deletion"
+  },
+  {
+    "query": "My verification email never arrived.",
+    "category": "account",
+    "expected_intent": "email_issue"
+  },
+  {
+    "query": "How do I set up SSO?",
+    "category": "account",
+    "expected_intent": "sso_setup"
+  },
+  {
+    "query": "Can I transfer workspace ownership?",
+    "category": "account",
+    "expected_intent": "ownership_transfer"
+  },
+  {
+    "query": "How do I view my activity log?",
+    "category": "account",
+    "expected_intent": "activity_log"
+  },
+  {
+    "query": "What browsers do you support?",
+    "category": "account",
+    "expected_intent": "browser_support"
+  },
+  {
+    "query": "How do I contact support?",
+    "category": "account",
+    "expected_intent": "support_contact"
+  },
+  {
+    "query": "Where are release notes published?",
+    "category": "account",
+    "expected_intent": "release_notes"
+  },
+  {
+    "query": "How do I update my profile email?",
+    "category": "account",
+    "expected_intent": "email_update"
+  },
+  {
+    "query": "Can I have multiple workspaces on the Free plan?",
+    "category": "account",
+    "expected_intent": "workspace_limit"
+  },
+  {
+    "query": "I am unhappy with Nimbus and want to speak to a human.",
+    "category": "escalation",
+    "expected_intent": "human_handoff"
+  },
+  {
+    "query": "Your product is broken and I want a refund.",
+    "category": "escalation",
+    "expected_intent": "escalated_complaint"
+  },
+  {
+    "query": "I need legal documents for procurement.",
+    "category": "escalation",
+    "expected_intent": "legal_request"
+  },
+  {
+    "query": "Can someone call me?",
+    "category": "escalation",
+    "expected_intent": "phone_request"
+  },
+  {
+    "query": "I want to partner with Nimbus.",
+    "category": "escalation",
+    "expected_intent": "partnership_request"
+  },
+  {
+    "query": "My issue is not listed in your help center.",
+    "category": "escalation",
+    "expected_intent": "unknown_issue"
+  },
+  {
+    "query": "I need a custom Enterprise contract.",
+    "category": "escalation",
+    "expected_intent": "enterprise_sales"
+  },
+  {
+    "query": "I am a journalist and have questions.",
+    "category": "escalation",
+    "expected_intent": "press_inquiry"
+  },
+  {
+    "query": "This chatbot is not helping.",
+    "category": "escalation",
+    "expected_intent": "human_handoff"
+  },
+  {
+    "query": "I want to file a complaint.",
+    "category": "escalation",
+    "expected_intent": "escalated_complaint"
+  }
+]

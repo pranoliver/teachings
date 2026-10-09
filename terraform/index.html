@@ -92,7 +92,19 @@
        Terraform: Infrastructure as Code
       </h1>
      </div>
-     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+           
+      <div class="hidden sm:flex items-center gap-2 progress-controls" id="progress-controls">
+        <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-start">Start</button>
+        <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-complete">Mark Complete</button>
+        <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-reset">Reset</button>
+      </div>
+      
+      <div class="sm:hidden flex items-center gap-2 progress-controls" id="progress-controls-mobile">
+        <button class="px-2 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-start-mobile">Start</button>
+        <button class="px-2 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-complete-mobile">Complete</button>
+        <button class="px-2 py-1.5 rounded-lg border border-[var(--border)] text-xs font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-reset-mobile">Reset</button>
+      </div>
+      <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
       <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
        </path>
@@ -970,7 +982,23 @@ terraform apply -var-file="prod.tfvars"</code></pre>
    </main>
   </div>
   <script>
-   function toggleSidebar() { const s = document.getElementById('sidebar'); const o = document.getElementById('menu-overlay'); s.classList.toggle('open'); o.classList.toggle('hidden'); } const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { moon.classList.add('hidden'); sun.classList.remove('hidden'); document.getElementById('hljs-light').disabled = true; document.getElementById('hljs-dark').disabled = false; } else { moon.classList.remove('hidden'); sun.classList.add('hidden'); document.getElementById('hljs-light').disabled = false; document.getElementById('hljs-dark').disabled = true; } localStorage.setItem('tutorials-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('tutorials-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light'); document.querySelectorAll('.copy-btn').forEach(btn => { btn.addEventListener('click', () => { const code = btn.parentElement.querySelector('code').textContent; navigator.clipboard.writeText(code).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); }); }); document.querySelectorAll('[data-quiz]').forEach(q => { const opts = q.querySelectorAll('.quiz-opt'); const fb = q.querySelector('.quiz-feedback'); opts.forEach(opt => { opt.addEventListener('click', () => { if (q.dataset.locked) return; q.dataset.locked = 'true'; opts.forEach(o => o.classList.remove('selected')); opt.classList.add('selected'); const correct = opt.dataset.correct === 'true'; if (correct) { opt.classList.add('correct'); fb.textContent = 'Correct!'; fb.classList.add('text-[var(--success)]'); } else { opt.classList.add('wrong'); q.querySelector('[data-correct="true"]').classList.add('correct'); fb.textContent = 'Not quite. The correct answer is highlighted.'; fb.classList.add('text-[var(--danger)]'); } fb.classList.remove('hidden'); }); }); }); const tocLinks = document.querySelectorAll('.toc-link'); const sections = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean); const obs = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { tocLinks.forEach(l => l.classList.remove('active')); const link = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (link) link.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach(s => obs.observe(s));
+   function toggleSidebar() { const s = document.getElementById('sidebar'); const o = document.getElementById('menu-overlay'); s.classList.toggle('open'); o.classList.toggle('hidden'); } const html = document.documentElement; const moon = document.getElementById('moon'); const sun = document.getElementById('sun'); function applyTheme(theme) { html.classList.remove('light', 'dark'); html.classList.add(theme); if (theme === 'dark') { moon.classList.add('hidden'); sun.classList.remove('hidden'); document.getElementById('hljs-light').disabled = true; document.getElementById('hljs-dark').disabled = false; } else { moon.classList.remove('hidden'); sun.classList.add('hidden'); document.getElementById('hljs-light').disabled = false; document.getElementById('hljs-dark').disabled = true; } localStorage.setItem('tutorials-theme', theme); } document.getElementById('theme-toggle').addEventListener('click', () => { applyTheme(html.classList.contains('dark') ? 'light' : 'dark'); }); const saved = localStorage.getItem('tutorials-theme'); applyTheme(saved === 'dark' ? 'dark' : 'light');
+    // Progress tracking
+    function setStatus(status) {
+      localStorage.setItem('tutorial-terraform-status', status);
+      updateButtons();
+    }
+    function updateButtons() {
+      const status = localStorage.getItem('tutorial-terraform-status') || 'not-started';
+      const startBtns = document.querySelectorAll('[id^="btn-start"]');
+      const completeBtns = document.querySelectorAll('[id^="btn-complete"]');
+      startBtns.forEach(btn => { btn.textContent = status === 'in-progress' ? 'In Progress' : 'Start'; });
+      completeBtns.forEach(btn => { btn.textContent = status === 'completed' ? 'Completed' : 'Mark Complete'; });
+    }
+    document.querySelectorAll('[id^="btn-start"]').forEach(btn => btn.addEventListener('click', () => setStatus('in-progress')));
+    document.querySelectorAll('[id^="btn-complete"]').forEach(btn => btn.addEventListener('click', () => setStatus('completed')));
+    document.querySelectorAll('[id^="btn-reset"]').forEach(btn => btn.addEventListener('click', () => { localStorage.removeItem('tutorial-terraform-status'); updateButtons(); }));
+    updateButtons(); document.querySelectorAll('.copy-btn').forEach(btn => { btn.addEventListener('click', () => { const code = btn.parentElement.querySelector('code').textContent; navigator.clipboard.writeText(code).then(() => { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500); }); }); }); document.querySelectorAll('[data-quiz]').forEach(q => { const opts = q.querySelectorAll('.quiz-opt'); const fb = q.querySelector('.quiz-feedback'); opts.forEach(opt => { opt.addEventListener('click', () => { if (q.dataset.locked) return; q.dataset.locked = 'true'; opts.forEach(o => o.classList.remove('selected')); opt.classList.add('selected'); const correct = opt.dataset.correct === 'true'; if (correct) { opt.classList.add('correct'); fb.textContent = 'Correct!'; fb.classList.add('text-[var(--success)]'); } else { opt.classList.add('wrong'); q.querySelector('[data-correct="true"]').classList.add('correct'); fb.textContent = 'Not quite. The correct answer is highlighted.'; fb.classList.add('text-[var(--danger)]'); } fb.classList.remove('hidden'); }); }); }); const tocLinks = document.querySelectorAll('.toc-link'); const sections = Array.from(tocLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean); const obs = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { tocLinks.forEach(l => l.classList.remove('active')); const link = document.querySelector(`.toc-link[href="#${entry.target.id}"]`); if (link) link.classList.add('active'); } }); }, { rootMargin: '-20% 0px -60% 0px' }); sections.forEach(s => obs.observe(s));
   </script>
  </body>
 </html>

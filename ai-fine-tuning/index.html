@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Fine-Tuning LLMs with LoRA, Ollama &amp; Streamlit
+  </title>
+  <link href="../assets/favicons/ai-fine-tuning.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-ai-fine-tuning">
+  <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--ai)] to-[var(--frontend)] flex items-center justify-center text-white font-bold text-lg">FT</div>
+     <span class="text-xl font-bold">
+      Fine-Tuning
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      2. Environment Setup
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dataset">
+      3. The Nimbus Support Dataset
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#format">
+      4. Conversation Formatting
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#lora">
+      5. LoRA / QLoRA Concepts
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#training">
+      6. Training Loop
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#evaluation">
+      7. Evaluation
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#ollama">
+      8. Loading with Ollama
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone">
+      9. Capstone: Streamlit Chat Comparison
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#quiz">
+      10. Knowledge Check
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Fine-Tuning Large Language Models
+      </h1>
+     </div>
+     <div class="hidden sm:flex items-center gap-2 progress-controls" id="progress-controls">
+      <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-start">Start</button>
+      <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-complete">Mark Complete</button>
+      <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-reset">Reset</button>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       AI-4
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction to Fine-Tuning
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Fine-tuning adapts a language model to a specific task, tone, or format without training a model from scratch. In this tutorial you will fine-tune a small local model to answer support questions in the style of
+       <strong>Nimbus Cloud Solutions</strong>
+       : concise, friendly, and consistent. We use LoRA so training is fast and memory-efficient, and we deploy the result through Ollama.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        RAG vs. fine-tuning
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>RAG</strong>
+         gives the model facts from documents.
+        </li>
+        <li>
+         <strong>Fine-tuning</strong>
+         shapes how the model writes and behaves.
+        </li>
+        <li>
+         They work together: use RAG for current facts and a fine-tuned model for brand voice.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you will build
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed">
+        A Streamlit chatbot that compares the base model against your fine-tuned model side by side. You will see how fine-tuning makes answers shorter, more consistent, and aligned with Nimbus support style.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="setup">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Environment Setup
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Fine-tuning needs more packages than RAG, but everything still runs locally. Apple Silicon, a modest NVIDIA GPU, or even CPU works for the small LoRA run we demonstrate.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        1. Install Ollama and the base model
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">ollama pull llama3.1:8b
+# or
+ollama pull qwen2.5:7b</code></pre>
+       </div>
+       <p class="text-sm text-[var(--muted)]">
+        A 7B–8B parameter model is small enough to fine-tune and serve locally. You can also continue with
+        <code class="bg-[var(--panel)] px-1 rounded">kimi-k2.7-code:cloud</code>
+        if it supports Modelfile-based GGUF serving.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        2. Create a project folder with uv
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">uv init nimbus-finetune
+cd nimbus-finetune
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        3. Install Python packages
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">uv add torch transformers datasets peft accelerate bitsandbytes trl ollama streamlit tqdm</code></pre>
+       </div>
+       <p class="text-sm text-[var(--muted)]">
+        On Apple Silicon replace
+        <code class="bg-[var(--panel)] px-1 rounded">bitsandbytes</code>
+        with device placement to MPS. CPU-only training is supported but slow.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="dataset">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       The Nimbus Support Dataset
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       We generated 100 support-style conversations for the fictional Nimbus Cloud Solutions. Each example has a system prompt, a user question, and an assistant answer written in the Nimbus support tone: brief, friendly, and accurate.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+       <pre><code class="language-json">{
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are a helpful Nimbus Cloud Solutions support assistant. Answer briefly, accurately, and in a friendly tone."
+    },
+    {
+      "role": "user",
+      "content": "How do I create a Nimbus account?"
+    },
+    {
+      "role": "assistant",
+      "content": "Head to the Nimbus sign-up page, enter your work email, and confirm the verification message. Then create your workspace."
+    }
+  ]
+}</code></pre>
+      </div>
+       <div class="card rounded-2xl p-6 mb-6 border-l-4 border-[var(--ai)]">
+        <p class="text-[var(--muted)] leading-relaxed mb-3">
+         The snippet above shows only 1 example conversation. The full dataset contains
+         <strong>101 support conversation examples</strong>
+         with system, user, and assistant messages formatted for fine-tuning.
+        </p>
+        <a class="inline-flex items-center px-4 py-2 rounded-xl bg-[var(--ai)] text-white text-sm font-semibold hover:opacity-90 transition" download="nimbus_support_ft.jsonl" href="nimbus_support_ft.jsonl"
+          type="application/jsonl">
+         Download nimbus_support_ft.jsonl (101 examples)
+        </a>
+       </div>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Save the full dataset as
+        <code class="bg-[var(--panel)] px-1 rounded">nimbus_support_ft.jsonl</code>
+        with one JSON object per line. The training script reads it with the Hugging Face
+        <code class="bg-[var(--panel)] px-1 rounded">datasets</code>
+        library.
+       </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Load and split
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">from datasets import load_dataset
+
+dataset = load_dataset("json", data_files="nimbus_support_ft.jsonl", split="train")
+dataset = dataset.train_test_split(test_size=0.1, seed=42)
+train = dataset["train"]
+val = dataset["test"]
+print(f"Train: {len(train)}, Validation: {len(val)}")</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">load_dataset.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run load_dataset.py</code>
+         </p>
+        </div></div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="format">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Conversation Formatting
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Models do not understand JSON. We must turn each conversation into a single text string using a chat template. Modern instruction-tuned models expect special tokens around user and assistant turns.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+       <pre><code class="language-python">from transformers import AutoTokenizer
+
+model_name = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+def format_messages(example):
+    text = tokenizer.apply_chat_template(
+        example["messages"], tokenize=False, add_generation_prompt=False
+    )
+    return {"text": text}
+
+train_formatted = train.map(format_messages)
+print(train_formatted[0]["text"][:300])</code></pre>
+      
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">format_messages.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run format_messages.py</code>
+         </p>
+        </div>
+       </div>
+      <p class="text-[var(--muted)] leading-relaxed mb-4">
+       If you use a local GGUF through Ollama later, make sure the base model you download matches the chat template used during training, or responses may look malformed.
+      </p>
+     </section>
+
+     <section class="scroll-mt-24" id="lora">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       LoRA / QLoRA Concepts
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Fine-tuning every weight of an 8B model would need hundreds of gigabytes of GPU memory. LoRA freezes the base weights and trains small adapter layers inserted into the attention blocks. QLoRA goes further by loading the base model in 4-bit precision.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Key hyperparameters
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>r</strong>
+         (rank): how much capacity each adapter has. Common values are 8, 16, or 32.
+        </li>
+        <li>
+         <strong>alpha</strong>
+         : scaling factor for the adapter output. Often set to 2 * r.
+        </li>
+        <li>
+         <strong>lora_dropout</strong>
+         : regularization to avoid overfitting. 0.05 is a typical starting point.
+        </li>
+        <li>
+         <strong>target_modules</strong>
+         : which layers get adapters. Usually q_proj and v_proj.
+        </li>
+       </ul>
+      </div>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+       <pre><code class="language-python">from peft import LoraConfig, get_peft_model
+
+lora_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM",
+)
+
+model = get_peft_model(base_model, lora_config)
+model.print_trainable_parameters()</code></pre>
+      
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">lora_config.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run lora_config.py</code>
+         </p>
+        </div>
+       </div>
+     </section>
+
+     <section class="scroll-mt-24" id="training">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Training Loop
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       The training loop minimizes the cross-entropy loss on the assistant tokens in each conversation. We use the TRL library's SFTTrainer because it handles chat templates, padding, and packing automatically.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+       <pre><code class="language-python">import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
+from peft import LoraConfig
+from trl import SFTTrainer
+
+model_name = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+
+# Load base model in 4-bit for QLoRA
+from transformers import BitsAndBytesConfig
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.bfloat16,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+)
+
+base_model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    quantization_config=bnb_config,
+    device_map="auto",
+    torch_dtype=torch.bfloat16,
+)
+
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+tokenizer.padding_side = "right"
+
+lora_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    target_modules=["q_proj", "v_proj", "k_proj", "o_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM",
+)
+
+training_args = TrainingArguments(
+    output_dir="nimbus-lora",
+    num_train_epochs=3,
+    per_device_train_batch_size=1,
+    gradient_accumulation_steps=4,
+    optim="paged_adamw_8bit",
+    learning_rate=2e-4,
+    logging_steps=10,
+    eval_strategy="epoch",
+    save_strategy="epoch",
+    bf16=torch.cuda.is_bf16_supported(),
+    fp16=not torch.cuda.is_bf16_supported(),
+)
+
+trainer = SFTTrainer(
+    model=base_model,
+    train_dataset=train_formatted,
+    eval_dataset=val.map(format_messages),
+    peft_config=lora_config,
+    tokenizer=tokenizer,
+    args=training_args,
+    dataset_text_field="text",
+    max_seq_length=512,
+)
+
+trainer.train()
+trainer.save_model("nimbus-lora-final")</code></pre>
+      
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">train.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run train.py</code>
+         </p>
+        </div>
+       </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Apple Silicon / CPU note
+       </h3>
+       <p class="text-[var(--muted)]">
+        On Apple Silicon, set
+        <code class="bg-[var(--panel)] px-1 rounded">device_map={"": "mps"}</code>
+        and remove the BitsAndBytesConfig. On CPU, training is possible but a single epoch can take hours. Reduce epochs to 1 and the dataset to 50 examples for a quick proof of concept.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="evaluation">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Evaluation
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       After training, evaluate whether the fine-tuned model actually learned the Nimbus support style. We compare outputs from the base and fine-tuned models on held-out questions.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+       <pre><code class="language-python">from peft import PeftModel
+
+# Merge adapter into base model for easier inference
+merged = PeftModel.from_pretrained(base_model, "nimbus-lora-final")
+merged = merged.merge_and_unload()
+merged.save_pretrained("nimbus-merged")
+tokenizer.save_pretrained("nimbus-merged")
+
+# Generate a test response
+def generate(model, prompt, max_new_tokens=120):
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    outputs = model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False)
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+test_prompt = "How do I reset my password?"
+print(generate(merged, f"User: {test_prompt}\nAssistant:"))</code></pre>
+      
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">merge_model.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run merge_model.py</code>
+         </p>
+        </div>
+       </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Metrics to watch
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         <strong>Validation loss</strong>
+         : should decrease and stabilize.
+        </li>
+        <li>
+         <strong>Output style</strong>
+         : answers should be concise, friendly, and include Nimbus-specific details.
+        </li>
+        <li>
+         <strong>Consistency</strong>
+         : repeated questions should produce similar structure.
+        </li>
+       </ul>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="ollama">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Loading with Ollama
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Ollama runs GGUF models through a simple Modelfile. After merging the adapter, export the model to GGUF with llama.cpp, then create an Ollama model.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Export to GGUF
+       </h3>
+        <div class="code-block mb-4">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-bash"># Install llama.cpp conversion tools if needed
+uv add llama-cpp-python
+
+# Convert the merged HF model to GGUF (Q4_K_M is a good default)
+uv run python convert_hf_to_gguf.py nimbus-merged --outfile nimbus-q4.gguf --outtype q4_k_m</code></pre>
+        
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">format_messages.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run format_messages.py</code>
+         </p>
+        
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">lora_config.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run lora_config.py</code>
+         </p>
+        
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">train.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run train.py</code>
+         </p>
+        
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">merge_model.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run merge_model.py</code>
+         </p>
+        </div></div></div></div></div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Create an Ollama Modelfile
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-dockerfile">FROM ./nimbus-q4.gguf
+
+PARAMETER temperature 0.3
+PARAMETER top_p 0.9
+
+SYSTEM """You are a helpful Nimbus Cloud Solutions support assistant.
+Answer briefly, accurately, and in a friendly tone."""
+
+TEMPLATE """{{- if .System }}{{ .System }}{{ end }}
+{{- range .Messages }}
+{{- if eq .Role "user" }}User: {{ .Content }}
+{{- else if eq .Role "assistant" }}Assistant: {{ .Content }}
+{{- end }}
+{{- end }}Assistant:"""</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Build and run
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">ollama create nimbus-support -f Modelfile
+ollama run nimbus-support
+
+# In another terminal, test it (Ollama is installed system-wide, so call it directly)
+ollama generate nimbus-support "How do I create a Nimbus account?"</code></pre>
+       </div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="capstone">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Streamlit Chat Comparison
+      </h2>
+       <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+        The capstone is a 5-phase project that creates a side-by-side chat comparison. All commands below use
+        <strong>uv</strong>
+        for environment and dependency management. Users can type a Nimbus support question and see how the base model and the fine-tuned model respond differently.
+       </p>
+       <div class="card rounded-2xl p-6 mb-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Phase 1: Project setup with uv
+        </h3>
+        <p class="text-[var(--muted)] mb-4">
+         Open a terminal, create a dedicated folder, and set up a uv-managed virtual environment with all required packages.
+        </p>
+        <div class="code-block mb-4">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-bash">uv init nimbus-finetune
+cd nimbus-finetune
+uv venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Download the Nimbus support fine-tuning dataset
+# (Download button is in Section 3 of this tutorial)
+cp /path/to/downloads/nimbus_support_ft.jsonl ./nimbus_support_ft.jsonl
+
+uv add torch transformers datasets peft accelerate bitsandbytes trl ollama streamlit tqdm
+
+# Pull the base model in Ollama
+ollama pull llama3.1:8b</code></pre>
+        </div>
+        <p class="text-sm text-[var(--muted)]">
+         Save the training script and Streamlit app in this folder. Run training with
+         <code class="bg-[var(--panel)] px-1 rounded">uv run python train.py</code>
+         .
+        </p>
+       </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 2: Prepare the comparison prompt
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Use the same user question and system prompt for both models so the only variable is the model.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 3: Generation helpers
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Write a helper function that calls Ollama with a model name, prompt, and system message, then returns the generated text.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 4: Streamlit layout
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Create two columns: left for the base model
+         <code class="bg-[var(--panel)] px-1 rounded">llama3.1:8b</code>
+         and right for the fine-tuned model
+         <code class="bg-[var(--panel)] px-1 rounded">nimbus-support</code>
+         .
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 5: Full app code
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">import streamlit as st
+import ollama
+
+BASE_MODEL = "llama3.1:8b"
+FT_MODEL = "nimbus-support"
+SYSTEM = (
+    "You are a helpful Nimbus Cloud Solutions support assistant. "
+    "Answer briefly, accurately, and in a friendly tone."
+)
+
+st.set_page_config(page_title="Nimbus Fine-Tuning Demo", layout="wide")
+st.title("Nimbus Support: Base vs. Fine-Tuned Model")
+st.caption("Compare the base Llama 3.1 model with the Nimbus-tuned model.")
+
+
+def generate(model, question):
+    response = ollama.generate(
+        model=model,
+        system=SYSTEM,
+        prompt=question,
+        options={"temperature": 0.3, "top_p": 0.9},
+    )
+    return response["response"]
+
+
+question = st.text_input(
+    "Ask a Nimbus support question:",
+    "What happens if I exceed my API limit?",
+)
+
+if st.button("Compare models"):
+    col1, col2 = st.columns(2)
+    with st.spinner("Generating answers..."):
+        base_answer = generate(BASE_MODEL, question)
+        ft_answer = generate(FT_MODEL, question)
+
+    with col1:
+        st.header("Base Model")
+        st.write(base_answer)
+
+    with col2:
+        st.header("Fine-Tuned Model")
+        st.success(ft_answer)
+
+st.markdown("""
+**What to look for:**
+- The fine-tuned model should answer in the Nimbus style and include specific Nimbus facts.
+- The base model may give a generic answer or ask for clarification.
+""")</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">compare.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run compare.py</code>
+         </p>
+        </div></div>
+      </div>
+       <div class="card rounded-2xl p-6 mb-8">
+        <h3 class="text-xl font-semibold mb-3">
+         Phase 6: Run the capstone with uv
+        </h3>
+        <p class="text-[var(--muted)] mb-4">
+         Use <code class="bg-[var(--panel)] px-1 rounded">uv run</code> to launch Streamlit so the correct environment is always used, even if you forget to activate the virtual environment.
+        </p>
+        <div class="code-block mb-4">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-bash">uv run streamlit run compare.py</code></pre>
+        </div>
+        <p class="text-[var(--muted)]">
+         Before running the app, make sure the fine-tuned model is available in Ollama:
+         <code class="bg-[var(--panel)] px-1 rounded">ollama create nimbus-support -f Modelfile</code>.
+        </p>
+       </div>
+     </section>
+
+     <section class="scroll-mt-24" id="quiz">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Knowledge Check
+      </h2>
+      <form class="space-y-6" id="quiz-form">
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         1. What does fine-tuning change in a model?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">The retrieval database only</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Some or all of the model weights to adapt behavior</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">The operating system settings</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q1" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">The embedding dimension only</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         2. What does LoRA stand for?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Large Online Retrieval Assistant</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Loss-Optimized Regression Algorithm</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Low-Rank Adaptation</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q2" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Layered Output Reduction Array</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         3. Why is QLoRA memory efficient?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">It loads the base model in 4-bit precision and trains small adapters</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">It deletes gradients after every step</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">It uses only the embedding layer</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q3" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">It runs on a remote server for free</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="d">
+        <p class="font-semibold mb-3">
+         4. In a fine-tuning dataset, what should the assistant message contain?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Only a numeric reward score</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">The embedding vector of the question</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">The raw HTML of a webpage</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q4" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">The desired response in the target style</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         5. What is a typical value for LoRA rank r?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">1,024</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">8, 16, or 32</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">1,000,000</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q5" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">The full model size</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         6. Which library is used for supervised fine-tuning in this tutorial?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">TRL's SFTTrainer</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">PyTorch Lightning</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Keras</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q6" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Ray Tune</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         7. What file format does Ollama use for local models?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">ONNX only</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">PyTorch .pt</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">GGUF</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q7" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">JSON only</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         8. Fine-tuning is best suited for which goal?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Answering from documents that change every hour</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Adapting response style, tone, or task behavior</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Storing vector embeddings</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q8" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Rendering charts from CSV files</span>
+        </label>
+       </div>
+       <button class="px-6 py-3 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition" type="submit">
+        Check Answers
+       </button>
+       <div class="hidden mt-4 p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)]" id="quiz-result">
+       </div>
+      </form>
+     </section>
+
+     <footer class="border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--muted)]">
+      <p class="mb-2">
+       Open directly in any browser. No build step required.
+      </p>
+     </footer>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement;
+   const moon = document.getElementById('moon');
+   const sun = document.getElementById('sun');
+   function applyTheme(theme) {
+     html.classList.remove('light', 'dark');
+     html.classList.add(theme);
+     const lightLink = document.getElementById('hljs-light');
+     const darkLink = document.getElementById('hljs-dark');
+     if (theme === 'dark') {
+       moon.classList.add('hidden');
+       sun.classList.remove('hidden');
+       if (lightLink) lightLink.disabled = true;
+       if (darkLink) darkLink.disabled = false;
+     } else {
+       moon.classList.remove('hidden');
+       sun.classList.add('hidden');
+       if (lightLink) lightLink.disabled = false;
+       if (darkLink) darkLink.disabled = true;
+     }
+     localStorage.setItem('tutorials-theme', theme);
+   }
+   document.getElementById('theme-toggle').addEventListener('click', () => {
+     applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+   });
+   const saved = localStorage.getItem('tutorials-theme');
+   applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+   function toggleSidebar() {
+     const sidebar = document.getElementById('sidebar');
+     const overlay = document.getElementById('menu-overlay');
+     const isOpen = sidebar.classList.toggle('-translate-x-0');
+     sidebar.classList.toggle('-translate-x-full', !isOpen);
+     overlay.classList.toggle('hidden', !isOpen);
+   }
+   document.getElementById('sidebar').classList.add('-translate-x-full', 'lg:translate-x-0');
+
+   function setStatus(status) {
+     localStorage.setItem('tutorial-ai-fine-tuning-status', status);
+     updateButtons();
+   }
+   function updateButtons() {
+     const status = localStorage.getItem('tutorial-ai-fine-tuning-status') || 'not-started';
+     document.getElementById('btn-start').textContent = status === 'in-progress' ? 'In Progress' : 'Start';
+     document.getElementById('btn-complete').textContent = status === 'completed' ? 'Completed' : 'Mark Complete';
+   }
+   document.getElementById('btn-start').addEventListener('click', () => setStatus('in-progress'));
+   document.getElementById('btn-complete').addEventListener('click', () => setStatus('completed'));
+   document.getElementById('btn-reset').addEventListener('click', () => {
+     localStorage.removeItem('tutorial-ai-fine-tuning-status');
+     updateButtons();
+   });
+   updateButtons();
+
+   document.querySelectorAll('.copy-btn').forEach((btn) => {
+     btn.addEventListener('click', async () => {
+       const code = btn.nextElementSibling.querySelector('code').textContent;
+       await navigator.clipboard.writeText(code);
+       const original = btn.textContent;
+       btn.textContent = 'Copied!';
+       setTimeout(() => btn.textContent = original, 1500);
+     });
+   });
+
+   document.getElementById('quiz-form').addEventListener('submit', (e) => {
+     e.preventDefault();
+     let correct = 0;
+     const total = document.querySelectorAll('.quiz-item').length;
+     document.querySelectorAll('.quiz-item').forEach((item) => {
+       const answer = item.querySelector('input:checked')?.value;
+       const right = item.dataset.correct;
+       item.classList.remove('border-[var(--success)]', 'border-[var(--warn)]');
+       if (answer === right) {
+         correct++;
+         item.classList.add('border-[var(--success)]');
+       } else {
+         item.classList.add('border-[var(--warn)]');
+       }
+     });
+     const result = document.getElementById('quiz-result');
+     result.classList.remove('hidden');
+     result.innerHTML = `<strong>${correct}/${total}</strong> correct. ${correct === total ? 'Excellent work!' : 'Review the highlighted questions and try again.'}`;
+     if (correct === total) {
+       setStatus('completed');
+     }
+   });
+
+   const tocLinks = document.querySelectorAll('.toc-link');
+   const sections = Array.from(tocLinks).map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+   const observer = new IntersectionObserver((entries) => {
+     entries.forEach((entry) => {
+       if (entry.isIntersecting) {
+         const id = entry.target.id;
+         tocLinks.forEach((link) => {
+           link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+         });
+       }
+     });
+   }, { rootMargin: '-20% 0px -60% 0px' });
+   sections.forEach((s) => observer.observe(s));
+
+   hljs.highlightAll();
+  </script>
+ </body>
+</html>

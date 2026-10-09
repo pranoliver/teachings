@@ -130,6 +130,9 @@ html.dark .quiz-opt.selected { border-color: var(--brand-dark); background: rgba
 .brand-jira { --brand-light: #0052cc; --brand-dark: #2684ff; }
 .brand-machine-learning-python { --brand-light: #ee4c2c; --brand-dark: #ff8a65; }
 .brand-llms { --brand-light: #10a37f; --brand-dark: #34d399; }
+.brand-ai-rag-retrieval { --brand-light: #9333ea; --brand-dark: #a855f7; }
+.brand-ai-fine-tuning { --brand-light: #ec4899; --brand-dark: #f472b6; }
+.brand-ai-agents { --brand-light: #9333ea; --brand-dark: #a855f7; }
 
 /* Tutorial-specific badges */
 .linux-badge { background: #333; color: #FCC624; }

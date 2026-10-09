@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   RAG: Build a Document Q&amp;A System with Ollama, ChromaDB & Streamlit
+  </title>
+  <link href="../assets/favicons/ai-rag-retrieval.svg" rel="icon" type="image/svg+xml"/>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="hljs-light" rel="stylesheet"/>
+  <link disabled="" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-dark" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js">
+  </script>
+  <script>
+   tailwind.config = { darkMode: 'class' }
+  </script>
+  <link href="../assets/styles.css" rel="stylesheet"/>
+ </head>
+ <body class="antialiased transition-colors duration-300 brand-ai-rag-retrieval">
+  <a class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:text-black focus:px-3 focus:py-2 focus:rounded" href="#main">
+   Skip to content
+  </a>
+  <div class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" id="menu-overlay" onclick="toggleSidebar()">
+  </div>
+  <div class="flex min-h-screen">
+   <aside class="fixed lg:sticky top-0 left-0 h-screen w-72 border-r border-[var(--border)] bg-[var(--panel)] z-40 overflow-y-auto p-6" id="sidebar">
+    <div class="flex items-center gap-3 mb-8">
+     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--ai)] to-[var(--foundation)] flex items-center justify-center text-white font-bold text-lg">R</div>
+     <span class="text-xl font-bold">
+      RAG
+     </span>
+    </div>
+    <nav class="space-y-1 text-sm" id="toc">
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#intro">
+      1. Introduction
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#setup">
+      2. Environment Setup
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#dataset">
+      3. The Nimbus FAQ Dataset
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#chunking">
+      4. Chunking Strategies
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#embeddings">
+      5. Embeddings with Ollama
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#chromadb">
+      6. Vector Store with ChromaDB
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#retrieval">
+      7. Retrieval & Prompt Templates
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#reranking">
+      8. Reranking & Evaluation
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#capstone">
+      9. Capstone: Streamlit Support Assistant
+     </a>
+     <a class="toc-link block px-3 py-2 rounded-md text-[var(--muted)] hover:bg-black/5 dark:hover:bg-white/5 transition" href="#quiz">
+      10. Knowledge Check
+     </a>
+    </nav>
+    <div class="mt-8 pt-6 border-t border-[var(--border)]">
+     <p class="text-xs text-[var(--muted)]">
+      Open in any browser. No build step required.
+     </p>
+    </div>
+   </aside>
+   <main class="flex-1 min-w-0" id="main">
+    <header class="sticky top-0 z-20 border-b border-[var(--border)] bg-[var(--panel)]/90 backdrop-blur px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-3">
+      <button aria-label="Open menu" class="lg:hidden p-2 rounded-md border border-[var(--border)]" onclick="toggleSidebar()">
+       <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round">
+        </path>
+       </svg>
+      </button>
+      <h1 class="text-lg sm:text-xl font-bold tracking-tight">
+       Retrieval-Augmented Generation (RAG)
+      </h1>
+     </div>
+     <div class="hidden sm:flex items-center gap-2 progress-controls" id="progress-controls">
+      <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-start">Start</button>
+      <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-complete">Mark Complete</button>
+      <button class="px-3 py-1.5 rounded-lg border border-[var(--border)] text-sm font-medium hover:bg-black/5 dark:hover:bg-white/5 transition" id="btn-reset">Reset</button>
+     </div>
+     <button aria-label="Toggle theme" class="p-2 rounded-full border border-[var(--border)] hover:bg-black/5 dark:hover:bg-white/5 transition" id="theme-toggle">
+      <svg aria-hidden="true" class="w-5 h-5" fill="none" id="moon" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+      <svg aria-hidden="true" class="w-5 h-5 hidden" fill="none" id="sun" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+       <circle cx="12" cy="12" r="5">
+       </circle>
+       <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke-linecap="round" stroke-linejoin="round">
+       </path>
+      </svg>
+     </button>
+    </header>
+    <div class="max-w-4xl mx-auto px-6 py-10 space-y-20">
+     <section class="scroll-mt-24" id="intro">
+      <p class="text-sm font-semibold brand uppercase tracking-wider mb-2">
+       AI-3
+      </p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Introduction to RAG
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Retrieval-Augmented Generation (RAG) gives a language model access to knowledge it was never trained on. Instead of memorizing facts, the model retrieves relevant chunks from your documents and uses them to answer accurately. In this tutorial you will build a real support assistant for a fictional company called
+       <strong>Nimbus Cloud Solutions</strong>
+       using local tools: Ollama for embeddings and generation, ChromaDB for vector storage, and Streamlit for the user interface.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Why RAG matters
+       </h3>
+       <ul class="text-[var(--muted)] list-disc pl-5 space-y-1">
+        <li>
+         Reduces hallucinations by grounding answers in real documents.
+        </li>
+        <li>
+         Lets you update knowledge without retraining a model.
+        </li>
+        <li>
+         Keeps private data local instead of sending it to third-party APIs.
+        </li>
+        <li>
+         Works with affordable hardware using open-source models.
+        </li>
+       </ul>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        What you will build
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed">
+        A Streamlit application that answers 100 realistic questions about Nimbus Cloud Solutions. You can toggle RAG on and off to see the difference between a model guessing from its training data and a model answering from retrieved FAQ chunks.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="setup">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Environment Setup
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Everything in this tutorial runs locally. You need Python 3.10 or newer, a working Ollama installation, and a handful of Python packages.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        1. Install Ollama
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Download Ollama from
+        <a class="text-[var(--brand-light)] hover:underline" href="https://ollama.com" target="_blank">ollama.com</a>
+        and start it. Then pull the embedding model and the chat model.
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">ollama pull nomic-embed-text:latest
+ollama pull kimi-k2.7-code:cloud</code></pre>
+       </div>
+       <p class="text-sm text-[var(--muted)]">
+        Verify both models are available with
+        <code class="bg-[var(--panel)] px-1 rounded">ollama list</code>
+        .
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        2. Create a project folder with uv
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">uv init nimbus-rag
+cd nimbus-rag
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate</code></pre>
+       </div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        3. Install Python packages
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-bash">uv add ollama chromadb streamlit sentence-transformers pandas tqdm</code></pre>
+       </div>
+       <p class="text-sm text-[var(--muted)]">
+        We keep sentence-transformers as a fallback in case Ollama is unavailable.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="dataset">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       The Nimbus FAQ Dataset
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       A good RAG system starts with good data. We generated 100 realistic question-and-answer pairs covering onboarding, billing, API usage, security, models, and troubleshooting. Each entry is stored as a JSON object with
+       <code class="bg-[var(--panel)] px-1 rounded">question</code>
+       and
+       <code class="bg-[var(--panel)] px-1 rounded">answer</code>
+       fields.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+       <pre><code class="language-json">[
+  {
+    "question": "How do I create a Nimbus account?",
+    "answer": "Visit the Nimbus sign-up page, enter your work email, and verify your inbox. After verification you can create your first workspace."
+  },
+  {
+    "question": "What plans does Nimbus offer?",
+    "answer": "Nimbus offers Free, Pro ($49/user/month), Team ($99/user/month), and Enterprise (custom pricing) plans."
+  },
+  {
+    "question": "Is data encrypted at rest?",
+    "answer": "Yes. All customer data is encrypted at rest using AES-256. Encryption keys are managed in a hardware security module."
+  }
+]</code></pre>
+      </div>
+       <div class="card rounded-2xl p-6 mb-6 border-l-4 border-[var(--ai)]">
+        <p class="text-[var(--muted)] leading-relaxed mb-3">
+         The snippet above shows only 3 example entries. The full dataset contains
+         <strong>100 question-and-answer pairs</strong>
+         covering onboarding, billing, API, security, models, and troubleshooting.
+        </p>
+        <a class="inline-flex items-center px-4 py-2 rounded-xl bg-[var(--ai)] text-white text-sm font-semibold hover:opacity-90 transition" download="nimbus_faq.json" href="nimbus_faq.json"
+          type="application/json">
+         Download nimbus_faq.json (100 entries)
+        </a>
+       </div>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Save the full dataset as
+        <code class="bg-[var(--panel)] px-1 rounded">nimbus_faq.json</code>
+        in your project folder. The tutorial capstone uses all 100 entries.
+       </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Load the dataset
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">import json
+
+with open("nimbus_faq.json", "r", encoding="utf-8") as f:
+    faq = json.load(f)
+
+print(f"Loaded {len(faq)} FAQ entries")
+for item in faq[:3]:
+    print(item["question"])</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">load_faq.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run load_faq.py</code>
+         </p>
+        </div></div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="chunking">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Chunking Strategies
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Chunking splits documents into pieces that fit the embedding model and can be retrieved independently. For FAQ data, each question-answer pair is naturally a chunk. For longer documents you need to choose chunk size, overlap, and boundaries carefully.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        FAQ-style chunks
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        Since our dataset already has short question-answer pairs, the simplest strategy is to create one chunk per pair, formatted as:
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">documents = []
+for item in faq:
+    text = f"Question: {item['question']}\nAnswer: {item['answer']}"
+    documents.append({
+        "id": item["question"],
+        "text": text,
+        "metadata": {"category": item.get("category", "general")}
+    })
+
+print(documents[0]["text"])</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">prepare_chunks.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run prepare_chunks.py</code>
+         </p>
+        </div></div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Long-document chunks
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        For PDFs or web pages, split by paragraphs or fixed token windows with overlap:
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">def chunk_text(text, chunk_size=300, overlap=50):
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = start + chunk_size
+        chunks.append(text[start:end])
+        start = end - overlap
+    return chunks</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">chunk_text.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run chunk_text.py</code>
+         </p>
+        </div>
+       </div>
+       <p class="text-sm text-[var(--muted)]">
+        Larger chunks preserve context but may dilute retrieval precision. Smaller chunks are precise but can lose surrounding context. Overlap helps recover boundary information.
+       </p>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="embeddings">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Embeddings with Ollama
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       An embedding turns text into a vector of numbers so that similar texts end up close together in vector space. We will use
+       <code class="bg-[var(--panel)] px-1 rounded">nomic-embed-text</code>
+       through Ollama because it is local, free, and fast.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+       <pre><code class="language-python">import ollama
+
+def embed(texts, model="nomic-embed-text:latest"):
+    response = ollama.embed(model=model, input=texts)
+    return response["embeddings"]
+
+sample = ["How do I reset my password?", "What payment methods are accepted?"]
+vectors = embed(sample)
+print(f"Vector count: {len(vectors)}, dimensions: {len(vectors[0])}")</code></pre>
+      
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">embed_demo.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run embed_demo.py</code>
+         </p>
+        </div>
+       </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Embeddings quality check
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        You can verify that similar questions produce similar vectors using cosine similarity:
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">import numpy as np
+
+def cosine_similarity(a, b):
+    return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+
+v1 = embed(["How do I create a Nimbus account?"])[0]
+v2 = embed(["How can I sign up for Nimbus?"])[0]
+v3 = embed(["What is the API rate limit?"])[0]
+
+print(cosine_similarity(v1, v2))  # high
+print(cosine_similarity(v1, v3))  # low</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">chunk_text.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run chunk_text.py</code>
+         </p>
+        
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">similarity_demo.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run similarity_demo.py</code>
+         </p>
+        
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">embed_demo.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run embed_demo.py</code>
+         </p>
+        </div></div></div></div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="chromadb">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Vector Store with ChromaDB
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       ChromaDB is a local vector database. It stores documents, their embeddings, and metadata, then performs fast similarity searches. Because it persists to disk, you can build the index once and reuse it across sessions.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Create and populate the collection
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">import chromadb
+from chromadb.config import Settings
+
+client = chromadb.PersistentClient(
+    path="chroma_db",
+    settings=Settings(anonymized_telemetry=False)
+)
+
+collection = client.get_or_create_collection(name="nimbus_faq")
+
+# Add documents in batches
+batch_size = 20
+for i in range(0, len(documents), batch_size):
+    batch = documents[i:i + batch_size]
+    ids = [d["id"] for d in batch]
+    texts = [d["text"] for d in batch]
+    metadatas = [d["metadata"] for d in batch]
+    embeddings = embed(texts)
+
+    collection.add(
+        ids=ids,
+        documents=texts,
+        embeddings=embeddings,
+        metadatas=metadatas
+    )
+
+print(f"Stored {collection.count()} chunks in ChromaDB")</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">build_index.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run build_index.py</code>
+         </p>
+        </div></div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Query the collection
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">query = "How do I invite colleagues?"
+query_embedding = embed([query])[0]
+
+results = collection.query(
+    query_embeddings=[query_embedding],
+    n_results=3,
+    include=["documents", "distances", "metadatas"]
+)
+
+for doc, dist in zip(results["documents"][0], results["distances"][0]):
+    print(f"Distance: {dist:.3f}\n{doc}\n---")</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">query_index.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run query_index.py</code>
+         </p>
+        </div></div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="retrieval">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Retrieval & Prompt Templates
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Once you can retrieve relevant chunks, you inject them into a prompt. This is the core of RAG: the model reads the retrieved context before generating an answer.
+      </p>
+      <div class="code-block mb-6">
+       <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+       <pre><code class="language-python">PROMPT_TEMPLATE = """You are a helpful Nimbus Cloud Solutions support assistant.
+Use ONLY the following context to answer the user's question.
+If the context does not contain enough information, say you don't know.
+
+Context:
+{context}
+
+User question: {question}
+
+Answer:"""
+
+def answer_with_rag(question, k=3, model="kimi-k2.7-code:cloud"):
+    query_embedding = embed([question])[0]
+    results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=k,
+        include=["documents"]
+    )
+    context = "\n\n".join(results["documents"][0])
+    prompt = PROMPT_TEMPLATE.format(context=context, question=question)
+    response = ollama.generate(model=model, prompt=prompt)
+    return response["response"], context</code></pre>
+      
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">rag_answer.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run rag_answer.py</code>
+         </p>
+        </div>
+       </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Compare with and without RAG
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">question = "What happens if I exceed my API limit?"
+
+# Without RAG
+base = ollama.generate(model="kimi-k2.7-code:cloud", prompt=question)
+print("No RAG:", base["response"])
+
+# With RAG
+rag_answer, ctx = answer_with_rag(question)
+print("RAG:", rag_answer)
+print("Context used:\n", ctx[:500])</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">rag_answer.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run rag_answer.py</code>
+         </p>
+        
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">compare_rag.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run compare_rag.py</code>
+         </p>
+        </div></div></div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="reranking">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Reranking & Evaluation
+      </h2>
+      <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+       Vector search returns chunks that are semantically similar to the query, but not always the most useful ones. A reranker scores each retrieved chunk specifically for the query and reorders them. We will also add a simple evaluation harness to measure answer faithfulness.
+      </p>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Add a lightweight reranker
+       </h3>
+       <p class="text-[var(--muted)] leading-relaxed mb-4">
+        We use a cross-encoder style similarity by embedding both query and chunk, then sorting by cosine similarity. For production use, replace this with a dedicated cross-encoder like
+        <code class="bg-[var(--panel)] px-1 rounded">BAAI/bge-reranker-base</code>
+        .
+       </p>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">def rerank(question, retrieved_docs):
+    question_vec = embed([question])[0]
+    scored = []
+    for doc in retrieved_docs:
+        doc_vec = embed([doc])[0]
+        score = cosine_similarity(question_vec, doc_vec)
+        scored.append((score, doc))
+    scored.sort(reverse=True)
+    return [doc for _, doc in scored]
+
+# Usage: rerank(question, results["documents"][0])</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">rerank.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run rerank.py</code>
+         </p>
+        </div></div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Evaluate with sample questions
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">test_questions = [
+    "How do I create a Nimbus account?",
+    "What plans does Nimbus offer?",
+    "Is data encrypted at rest?",
+    "How do I improve retrieval accuracy?"
+]
+
+for q in test_questions:
+    answer, _ = answer_with_rag(q)
+    print(f"Q: {q}\nA: {answer}\n")</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">evaluate.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run evaluate.py</code>
+         </p>
+        </div></div>
+      </div>
+     </section>
+
+     <section class="scroll-mt-24" id="capstone">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Capstone: Streamlit Support Assistant
+      </h2>
+       <p class="text-lg text-[var(--muted)] leading-relaxed mb-6">
+        The capstone is a 5-phase project that produces a runnable Streamlit app. All commands below use
+        <strong>uv</strong>
+        for environment and dependency management. Save all code in
+        <code class="bg-[var(--panel)] px-1 rounded">app.py</code>
+        and run the app with
+        <code class="bg-[var(--panel)] px-1 rounded">uv run streamlit run app.py</code>
+        .
+       </p>
+       <div class="card rounded-2xl p-6 mb-6">
+        <h3 class="text-xl font-semibold mb-3">
+         Phase 1: Project scaffolding with uv
+        </h3>
+        <p class="text-[var(--muted)] mb-4">
+         Open a terminal, create a dedicated folder, and set up a uv-managed virtual environment with all required packages.
+        </p>
+        <div class="code-block mb-4">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-bash">uv init nimbus-rag
+cd nimbus-rag
+uv venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Download the Nimbus FAQ dataset
+# (Download button is in Section 3 of this tutorial)
+cp /path/to/downloads/nimbus_faq.json ./nimbus_faq.json
+
+uv add ollama chromadb streamlit sentence-transformers pandas tqdm</code></pre>
+        </div>
+        <p class="text-sm text-[var(--muted)]">
+         Create an empty
+         <code class="bg-[var(--panel)] px-1 rounded">chroma_db</code>
+         folder for the vector store.
+        </p>
+       </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 2: Build the index
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Write a script that loads
+        <code class="bg-[var(--panel)] px-1 rounded">nimbus_faq.json</code>
+        , formats chunks, computes embeddings with Ollama, and stores them in ChromaDB.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 3: Retrieval pipeline
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Implement a function that takes a user question, embeds it, queries ChromaDB for the top 5 chunks, optionally reranks them, and formats the context.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-6">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 4: Generation and UI
+       </h3>
+       <p class="text-[var(--muted)] mb-4">
+        Build a Streamlit interface with a text input, a "Use RAG" toggle, and two output panels: one for the plain model answer and one for the RAG-grounded answer.
+       </p>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+       <h3 class="text-xl font-semibold mb-3">
+        Phase 5: Full app code
+       </h3>
+       <div class="code-block mb-4">
+        <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <pre><code class="language-python">import json
+import streamlit as st
+import chromadb
+from chromadb.config import Settings
+import ollama
+import numpy as np
+
+EMBED_MODEL = "nomic-embed-text:latest"
+LLM_MODEL = "kimi-k2.7-code:cloud"
+DB_PATH = "chroma_db"
+FAQ_PATH = "nimbus_faq.json"
+
+st.set_page_config(page_title="Nimbus Support Assistant", layout="wide")
+st.title("Nimbus Cloud Solutions Support Assistant")
+st.caption("Toggle RAG on and off to see how retrieved context improves answers.")
+
+
+@st.cache_resource
+def load_collection():
+    client = chromadb.PersistentClient(
+        path=DB_PATH,
+        settings=Settings(anonymized_telemetry=False),
+    )
+    return client.get_or_create_collection(name="nimbus_faq")
+
+
+def embed(texts):
+    response = ollama.embed(model=EMBED_MODEL, input=texts)
+    return response["embeddings"]
+
+
+def build_index():
+    collection = load_collection()
+    if collection.count() > 0:
+        return collection
+
+    with open(FAQ_PATH, "r", encoding="utf-8") as f:
+        faq = json.load(f)
+
+    documents = []
+    for item in faq:
+        text = f"Question: {item['question']}\nAnswer: {item['answer']}"
+        documents.append({
+            "id": item["question"],
+            "text": text,
+            "metadata": {"category": item.get("category", "general")},
+        })
+
+    batch_size = 20
+    for i in range(0, len(documents), batch_size):
+        batch = documents[i : i + batch_size]
+        collection.add(
+            ids=[d["id"] for d in batch],
+            documents=[d["text"] for d in batch],
+            embeddings=embed([d["text"] for d in batch]),
+            metadatas=[d["metadata"] for d in batch],
+        )
+    return collection
+
+
+def cosine_similarity(a, b):
+    return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+
+
+def retrieve(question, k=5):
+    collection = load_collection()
+    query_embedding = embed([question])[0]
+    results = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=k,
+        include=["documents", "distances", "metadatas"],
+    )
+    return results["documents"][0], results["metadatas"][0]
+
+
+def answer_plain(question):
+    response = ollama.generate(model=LLM_MODEL, prompt=question)
+    return response["response"]
+
+
+def answer_rag(question):
+    docs, metas = retrieve(question, k=5)
+    context = "\n\n".join(docs)
+    prompt = f"""You are a helpful Nimbus Cloud Solutions support assistant.
+Use ONLY the following context to answer the user's question.
+If the context does not contain enough information, say you don't know.
+
+Context:
+{context}
+
+User question: {question}
+
+Answer:"""
+    response = ollama.generate(model=LLM_MODEL, prompt=prompt)
+    return response["response"], docs, metas
+
+
+build_index()
+
+question = st.text_input("Ask a question about Nimbus:", "How do I reset my password?")
+use_rag = st.toggle("Use RAG", value=True)
+
+if st.button("Answer"):
+    if use_rag:
+        answer, docs, metas = answer_rag(question)
+        st.success(answer)
+        with st.expander("Retrieved context"):
+            for i, doc in enumerate(docs, 1):
+                st.write(f"**Chunk {i}** ({metas[i - 1].get('category', 'general')})")
+                st.write(doc)
+    else:
+        answer = answer_plain(question)
+        st.info(answer)
+        st.write("_No context retrieved. The model answered from its training data only._")</code></pre>
+       
+        <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--ai)]/10 border border-[var(--ai)]/30">
+         <svg class="w-4 h-4 text-[var(--ai)]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+         </svg>
+         <p class="text-sm font-medium text-[var(--ai)]">
+          Save as <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">app.py</code> and run: <code class="px-1 py-0.5 rounded bg-[var(--card)] border border-[var(--ai)]/30">uv run app.py</code>
+         </p>
+        </div></div>
+      </div>
+      <div class="card rounded-2xl p-6 mb-8">
+        <h3 class="text-xl font-semibold mb-3">
+         Phase 6: Run the capstone with uv
+        </h3>
+        <p class="text-[var(--muted)] mb-4">
+         Use <code class="bg-[var(--panel)] px-1 rounded">uv run</code> to launch Streamlit so the correct environment is always used, even if you forget to activate the virtual environment.
+        </p>
+        <div class="code-block mb-4">
+         <button aria-label="Copy code" class="copy-btn" onclick="copyCode(this)">Copy</button>
+         <pre><code class="language-bash">uv run streamlit run app.py</code></pre>
+        </div>
+        <p class="text-[var(--muted)]">
+         Try questions like "What plans does Nimbus offer?" with RAG on and off. The difference shows why retrieval matters.
+        </p>
+       </div>
+     </section>
+
+     <section class="scroll-mt-24" id="quiz">
+      <h2 class="text-3xl sm:text-4xl font-extrabold mb-6">
+       Knowledge Check
+      </h2>
+      <form class="space-y-6" id="quiz-form">
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         1. What is the primary purpose of RAG?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">To retrain the base model on new data</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">To retrieve relevant documents and ground answers in them</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q1" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">To compress a model so it runs faster</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q1" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">To encrypt prompts before sending them to the model</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         2. Which model in this tutorial is used to create embeddings?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">kimi-k2.7-code:cloud</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">GPT-4o</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q2" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">nomic-embed-text</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q2" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Claude 3.5 Sonnet</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         3. What does ChromaDB store for each chunk?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Text, embedding vector, and metadata</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Only the raw PDF file</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q3" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Only the prompt template</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q3" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">The trained model weights</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="d">
+        <p class="font-semibold mb-3">
+         4. Why is chunk overlap useful?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">It reduces the number of chunks</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">It makes embeddings smaller</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q4" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">It removes punctuation from text</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q4" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">It preserves context across chunk boundaries</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         5. In the prompt template, what instruction reduces hallucinations?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Answer as creatively as possible</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">Use ONLY the provided context and say you don't know if it is missing</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q5" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Ignore the context and use general knowledge</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q5" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Add emojis to every answer</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="a">
+        <p class="font-semibold mb-3">
+         6. What is the role of a reranker in RAG?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">To reorder retrieved chunks by relevance to the specific query</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">To train the base model faster</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q6" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">To convert images into text</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q6" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">To delete old documents automatically</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="c">
+        <p class="font-semibold mb-3">
+         7. Which tool is used as the user interface in the capstone?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">Django</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">FastAPI</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q7" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">Streamlit</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q7" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">Flask</span>
+        </label>
+       </div>
+       <div class="quiz-item card rounded-2xl p-5 border border-[var(--border)]" data-correct="b">
+        <p class="font-semibold mb-3">
+         8. What is a key advantage of RAG over fine-tuning for updating facts?
+        </p>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="a"/>
+         <span class="text-[var(--muted)]">RAG requires retraining the model</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="b"/>
+         <span class="text-[var(--muted)]">RAG lets you add or replace documents without changing model weights</span>
+        </label>
+        <label class="flex items-start gap-2 mb-2">
+         <input class="mt-1" name="q8" type="radio" value="c"/>
+         <span class="text-[var(--muted)]">RAG always produces shorter answers</span>
+        </label>
+        <label class="flex items-start gap-2">
+         <input class="mt-1" name="q8" type="radio" value="d"/>
+         <span class="text-[var(--muted)]">RAG only works with cloud APIs</span>
+        </label>
+       </div>
+       <button class="px-6 py-3 rounded-xl bg-[var(--brand-light)] text-white font-semibold hover:opacity-90 transition" type="submit">
+        Check Answers
+       </button>
+       <div class="hidden mt-4 p-4 rounded-xl bg-[var(--panel)] border border-[var(--border)]" id="quiz-result">
+       </div>
+      </form>
+     </section>
+
+     <footer class="border-t border-[var(--border)] pt-8 text-center text-sm text-[var(--muted)]">
+      <p class="mb-2">
+       Open directly in any browser. No build step required.
+      </p>
+     </footer>
+    </div>
+   </main>
+  </div>
+  <script>
+   const html = document.documentElement;
+   const moon = document.getElementById('moon');
+   const sun = document.getElementById('sun');
+   function applyTheme(theme) {
+     html.classList.remove('light', 'dark');
+     html.classList.add(theme);
+     const lightLink = document.getElementById('hljs-light');
+     const darkLink = document.getElementById('hljs-dark');
+     if (theme === 'dark') {
+       moon.classList.add('hidden');
+       sun.classList.remove('hidden');
+       if (lightLink) lightLink.disabled = true;
+       if (darkLink) darkLink.disabled = false;
+     } else {
+       moon.classList.remove('hidden');
+       sun.classList.add('hidden');
+       if (lightLink) lightLink.disabled = false;
+       if (darkLink) darkLink.disabled = true;
+     }
+     localStorage.setItem('tutorials-theme', theme);
+   }
+   document.getElementById('theme-toggle').addEventListener('click', () => {
+     applyTheme(html.classList.contains('dark') ? 'light' : 'dark');
+   });
+   const saved = localStorage.getItem('tutorials-theme');
+   applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+   function toggleSidebar() {
+     const sidebar = document.getElementById('sidebar');
+     const overlay = document.getElementById('menu-overlay');
+     const isOpen = sidebar.classList.toggle('-translate-x-0');
+     sidebar.classList.toggle('-translate-x-full', !isOpen);
+     overlay.classList.toggle('hidden', !isOpen);
+   }
+   document.getElementById('sidebar').classList.add('-translate-x-full', 'lg:translate-x-0');
+
+   function setStatus(status) {
+     localStorage.setItem('tutorial-ai-rag-retrieval-status', status);
+     updateButtons();
+   }
+   function updateButtons() {
+     const status = localStorage.getItem('tutorial-ai-rag-retrieval-status') || 'not-started';
+     document.getElementById('btn-start').textContent = status === 'in-progress' ? 'In Progress' : 'Start';
+     document.getElementById('btn-complete').textContent = status === 'completed' ? 'Completed' : 'Mark Complete';
+   }
+   document.getElementById('btn-start').addEventListener('click', () => setStatus('in-progress'));
+   document.getElementById('btn-complete').addEventListener('click', () => setStatus('completed'));
+   document.getElementById('btn-reset').addEventListener('click', () => {
+     localStorage.removeItem('tutorial-ai-rag-retrieval-status');
+     updateButtons();
+   });
+   updateButtons();
+
+   document.querySelectorAll('.copy-btn').forEach((btn) => {
+     btn.addEventListener('click', async () => {
+       const code = btn.nextElementSibling.querySelector('code').textContent;
+       await navigator.clipboard.writeText(code);
+       const original = btn.textContent;
+       btn.textContent = 'Copied!';
+       setTimeout(() => btn.textContent = original, 1500);
+     });
+   });
+
+   document.getElementById('quiz-form').addEventListener('submit', (e) => {
+     e.preventDefault();
+     let correct = 0;
+     const total = document.querySelectorAll('.quiz-item').length;
+     document.querySelectorAll('.quiz-item').forEach((item) => {
+       const answer = item.querySelector('input:checked')?.value;
+       const right = item.dataset.correct;
+       item.classList.remove('border-[var(--success)]', 'border-[var(--warn)]');
+       if (answer === right) {
+         correct++;
+         item.classList.add('border-[var(--success)]');
+       } else {
+         item.classList.add('border-[var(--warn)]');
+       }
+     });
+     const result = document.getElementById('quiz-result');
+     result.classList.remove('hidden');
+     result.innerHTML = `<strong>${correct}/${total}</strong> correct. ${correct === total ? 'Excellent work!' : 'Review the highlighted questions and try again.'}`;
+     if (correct === total) {
+       setStatus('completed');
+     }
+   });
+
+   const tocLinks = document.querySelectorAll('.toc-link');
+   const sections = Array.from(tocLinks).map((a) => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+   const observer = new IntersectionObserver((entries) => {
+     entries.forEach((entry) => {
+       if (entry.isIntersecting) {
+         const id = entry.target.id;
+         tocLinks.forEach((link) => {
+           link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+         });
+       }
+     });
+   }, { rootMargin: '-20% 0px -60% 0px' });
+   sections.forEach((s) => observer.observe(s));
+
+   hljs.highlightAll();
+  </script>
+ </body>
+</html>

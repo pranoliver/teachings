@@ -1,0 +1,402 @@
+[
+  {
+    "question": "How do I create a Nimbus account?",
+    "answer": "Visit the Nimbus sign-up page, enter your work email, and verify your inbox. After verification you can create your first workspace."
+  },
+  {
+    "question": "What is a Nimbus workspace?",
+    "answer": "A workspace is a container for your projects, datasets, models, and team members. Billing and permissions are managed at the workspace level."
+  },
+  {
+    "question": "How many workspaces can I create?",
+    "answer": "Free plans can create one workspace. Pro and Enterprise plans can create unlimited workspaces."
+  },
+  {
+    "question": "How do I invite team members?",
+    "answer": "Go to Workspace Settings → Members → Invite. Enter their email and choose a role: Viewer, Editor, or Admin."
+  },
+  {
+    "question": "What roles are available in Nimbus?",
+    "answer": "Viewer (read-only), Editor (can create and edit), Admin (can manage settings and billing), and Owner (full control)."
+  },
+  {
+    "question": "How do I reset my password?",
+    "answer": "Click 'Forgot password' on the login page and follow the email instructions. Enterprise accounts can enforce SSO password resets."
+  },
+  {
+    "question": "Does Nimbus support SSO?",
+    "answer": "Yes. Enterprise plans support SAML 2.0 and OIDC providers such as Okta, Google Workspace, Microsoft Entra ID, and OneLogin."
+  },
+  {
+    "question": "Can I enforce MFA for my workspace?",
+    "answer": "Yes. Workspace admins can require TOTP-based multi-factor authentication for all members in Security settings."
+  },
+  {
+    "question": "How do I delete my account?",
+    "answer": "Owners can request account deletion from Workspace Settings → Danger Zone. Data is purged within 30 days after a 7-day grace period."
+  },
+  {
+    "question": "How do I change my workspace name?",
+    "answer": "Navigate to Workspace Settings → General. Only Admins and Owners can change the workspace name and slug."
+  },
+  {
+    "question": "What browsers are supported?",
+    "answer": "Nimbus supports the latest versions of Chrome, Firefox, Safari, and Edge. Internet Explorer is not supported."
+  },
+  {
+    "question": "Is there a mobile app?",
+    "answer": "Nimbus provides a read-only mobile web dashboard. A native iOS and Android app is on the 2026 roadmap."
+  },
+  {
+    "question": "How do I contact support?",
+    "answer": "Use the in-app chat, email support@nimbuscloud.example, or open a ticket from the Help Center. Enterprise customers have a dedicated CSM."
+  },
+  {
+    "question": "What is the Nimbus status page URL?",
+    "answer": "The status page is https://status.nimbuscloud.example. It covers API, dashboard, and model serving availability."
+  },
+  {
+    "question": "How do I update my billing email?",
+    "answer": "Go to Workspace Settings → Billing and update the billing contact. You must be an Admin or Owner."
+  },
+  {
+    "question": "Can I merge two workspaces?",
+    "answer": "Workspace merging is not currently self-service. Contact support for a migration plan."
+  },
+  {
+    "question": "How do I export my workspace activity log?",
+    "answer": "Admins and Owners can export audit logs from Security → Audit Log as CSV or JSON."
+  },
+  {
+    "question": "What is the Nimbus Terms of Service link?",
+    "answer": "You can find the Terms of Service at https://nimbuscloud.example/terms and the Privacy Policy at https://nimbuscloud.example/privacy."
+  },
+  {
+    "question": "How do I enable dark mode?",
+    "answer": "Click your profile icon → Preferences → Theme and select Light, Dark, or System."
+  },
+  {
+    "question": "Where can I find release notes?",
+    "answer": "Release notes are published at https://nimbuscloud.example/changelog and summarized in the in-app Notifications panel."
+  },
+  {
+    "question": "What plans does Nimbus offer?",
+    "answer": "Nimbus offers Free, Pro ($49/user/month), Team ($99/user/month), and Enterprise (custom pricing) plans."
+  },
+  {
+    "question": "What is included in the Free plan?",
+    "answer": "Free includes 1 workspace, 3 projects, 1,000 API calls/month, and community support."
+  },
+  {
+    "question": "How do I upgrade my plan?",
+    "answer": "Go to Workspace Settings → Billing → Change Plan. Changes take effect immediately; you are billed prorated difference."
+  },
+  {
+    "question": "Does Nimbus offer annual billing?",
+    "answer": "Yes. Annual billing offers a 17% discount compared to monthly billing."
+  },
+  {
+    "question": "What payment methods are accepted?",
+    "answer": "We accept Visa, Mastercard, American Express, and bank transfers for Enterprise plans."
+  },
+  {
+    "question": "How do I cancel my subscription?",
+    "answer": "Owners can cancel from Workspace Settings → Billing. You retain access until the end of the current billing period."
+  },
+  {
+    "question": "Will I lose data if I downgrade?",
+    "answer": "You will not lose existing data, but you may be unable to create new resources that exceed the new plan limits."
+  },
+  {
+    "question": "How are API calls counted?",
+    "answer": "An API call is counted each time you send a request to a Nimbus inference, embedding, or training endpoint."
+  },
+  {
+    "question": "Is there a usage dashboard?",
+    "answer": "Yes. The Usage page shows API calls, storage, training hours, and compute costs by project and date range."
+  },
+  {
+    "question": "What happens if I exceed my API limit?",
+    "answer": "Free accounts receive a 429 rate-limit response. Paid plans can enable auto-scaling or purchase overage packs."
+  },
+  {
+    "question": "Are there discounts for nonprofits?",
+    "answer": "Yes. Verified nonprofits and educational institutions receive 50% off Pro and Team plans."
+  },
+  {
+    "question": "How do I get an invoice?",
+    "answer": "Invoices are emailed to the billing contact and available for download in Billing → Invoices."
+  },
+  {
+    "question": "Can I set a spending cap?",
+    "answer": "Yes. Team and Enterprise plans can configure monthly spending alerts and hard caps in Billing → Budgets."
+  },
+  {
+    "question": "Is there a free trial for Enterprise?",
+    "answer": "Yes. Enterprise evaluations include a 30-day trial and a proof-of-concept with a Nimbus solutions engineer."
+  },
+  {
+    "question": "How do I change my currency?",
+    "answer": "Billing currency is set based on your registered country and can be updated by contacting support."
+  },
+  {
+    "question": "Where can I find API documentation?",
+    "answer": "API docs are hosted at https://docs.nimbuscloud.example/api and include OpenAPI specifications."
+  },
+  {
+    "question": "How do I generate an API key?",
+    "answer": "Go to Workspace Settings → API Keys → Create Key. Assign scopes and set an expiration date."
+  },
+  {
+    "question": "How do I rotate an API key?",
+    "answer": "Create a new key, update your applications, then revoke the old key. Nimbus supports key expiration reminders."
+  },
+  {
+    "question": "What SDKs are available?",
+    "answer": "Nimbus provides official SDKs for Python, JavaScript/TypeScript, Go, and Ruby."
+  },
+  {
+    "question": "How do I install the Python SDK?",
+    "answer": "Run 'pip install nimbus-cloud' in your virtual environment. Requires Python 3.9 or newer."
+  },
+  {
+    "question": "Does Nimbus support webhooks?",
+    "answer": "Yes. You can configure webhooks for model training completion, deployment events, and billing alerts."
+  },
+  {
+    "question": "What is the API rate limit?",
+    "answer": "Rate limits depend on your plan: Free 10/min, Pro 300/min, Team 1,000/min, Enterprise custom."
+  },
+  {
+    "question": "How do I authenticate API requests?",
+    "answer": "Include your API key in the Authorization header as 'Bearer YOUR_API_KEY'."
+  },
+  {
+    "question": "Does Nimbus have a REST API?",
+    "answer": "Yes. Nimbus exposes a JSON REST API for all major features including datasets, models, deployments, and jobs."
+  },
+  {
+    "question": "Can I use Nimbus with LangChain?",
+    "answer": "Yes. The Nimbus provider is integrated with LangChain and LlamaIndex through community packages."
+  },
+  {
+    "question": "How do I upload a dataset via API?",
+    "answer": "Use POST /v1/datasets with a multipart/form-data request containing your CSV or Parquet file."
+  },
+  {
+    "question": "What model formats are supported for import?",
+    "answer": "Nimbus supports ONNX, safetensors, GGUF, and PyTorch checkpoint formats."
+  },
+  {
+    "question": "How do I deploy a model via API?",
+    "answer": "Call POST /v1/deployments with the model ID, desired instance type, and autoscaling policy."
+  },
+  {
+    "question": "Is there a CLI tool?",
+    "answer": "Yes. Install with 'pip install nimbus-cli'. It supports login, project sync, and deployment management."
+  },
+  {
+    "question": "How do I check API health?",
+    "answer": "Send a GET request to https://api.nimbuscloud.example/v1/health. A 200 response indicates the API is available."
+  },
+  {
+    "question": "Does Nimbus support streaming responses?",
+    "answer": "Yes. Set 'stream: true' in chat completion requests to receive Server-Sent Events."
+  },
+  {
+    "question": "How do I list my deployments?",
+    "answer": "Use GET /v1/deployments. You can filter by status, model, and region using query parameters."
+  },
+  {
+    "question": "What regions are available?",
+    "answer": "Nimbus serves models in us-east-1, eu-west-1, and ap-southeast-1. Enterprise can add private regions."
+  },
+  {
+    "question": "How do I delete a dataset?",
+    "answer": "Send DELETE /v1/datasets/{dataset_id}. Deletion is permanent and removes all associated embeddings."
+  },
+  {
+    "question": "Can I schedule batch inference jobs?",
+    "answer": "Yes. Use POST /v1/batch-jobs with an input file and output destination. You will be notified on completion."
+  },
+  {
+    "question": "Is data encrypted at rest?",
+    "answer": "Yes. All customer data is encrypted at rest using AES-256. Encryption keys are managed in a hardware security module."
+  },
+  {
+    "question": "Is data encrypted in transit?",
+    "answer": "Yes. All traffic uses TLS 1.2 or higher. API endpoints require TLS 1.3 where supported."
+  },
+  {
+    "question": "Does Nimbus offer SOC 2 compliance?",
+    "answer": "Yes. Nimbus maintains SOC 2 Type II certification and publishes an annual report on request."
+  },
+  {
+    "question": "Is Nimbus GDPR compliant?",
+    "answer": "Yes. Nimbus acts as a data processor under GDPR and provides a Data Processing Addendum."
+  },
+  {
+    "question": "Does Nimbus sign BAA for HIPAA?",
+    "answer": "Yes. Enterprise customers can sign a Business Associate Agreement for HIPAA-eligible workloads."
+  },
+  {
+    "question": "Where is my data stored?",
+    "answer": "Data is stored in the region selected at workspace creation. You can configure data residency rules."
+  },
+  {
+    "question": "Can I request data deletion?",
+    "answer": "Yes. Owners can request deletion from Workspace Settings. Enterprise accounts can set automated retention policies."
+  },
+  {
+    "question": "How are API keys stored?",
+    "answer": "API keys are hashed and never returned in full after creation. Only the key prefix is displayed for identification."
+  },
+  {
+    "question": "Does Nimbus log access to models?",
+    "answer": "Yes. Audit logs capture every model invocation, deployment change, and authentication event."
+  },
+  {
+    "question": "Can I use a VPC or private endpoint?",
+    "answer": "Enterprise customers can deploy private endpoints and VPC peering connections."
+  },
+  {
+    "question": "How do I report a security issue?",
+    "answer": "Email security@nimbuscloud.example with details. We operate a responsible disclosure program."
+  },
+  {
+    "question": "Is Nimbus ISO 27001 certified?",
+    "answer": "Yes. Nimbus is ISO 27001:2022 certified and undergoes annual surveillance audits."
+  },
+  {
+    "question": "Can I restrict data egress?",
+    "answer": "Yes. Enterprise plans can configure egress controls and approved destination allowlists."
+  },
+  {
+    "question": "Does Nimbus train on customer data?",
+    "answer": "No. Nimbus does not use customer data to train foundation models unless you explicitly opt in."
+  },
+  {
+    "question": "How do I enable audit logging?",
+    "answer": "Audit logging is enabled by default for all workspaces and retained for one year on paid plans."
+  },
+  {
+    "question": "What models can I deploy on Nimbus?",
+    "answer": "You can deploy Nimbus-hosted models, your own fine-tuned models, and selected open-source models from the Model Hub."
+  },
+  {
+    "question": "How do I start a training job?",
+    "answer": "Upload your dataset, choose a base model, and click Start Training in the Models section or call POST /v1/training-jobs."
+  },
+  {
+    "question": "What is the difference between fine-tuning and RAG?",
+    "answer": "Fine-tuning changes model behavior by updating weights. RAG retrieves relevant documents to ground answers without changing the model."
+  },
+  {
+    "question": "Can I use my own Docker image for training?",
+    "answer": "Yes. Enterprise plans support custom training containers with specified entrypoints."
+  },
+  {
+    "question": "How long does fine-tuning take?",
+    "answer": "Duration depends on dataset size and base model. Small LoRA jobs often finish in minutes; full fine-tuning may take hours."
+  },
+  {
+    "question": "What is LoRA?",
+    "answer": "LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning method that updates small adapter layers instead of the entire model."
+  },
+  {
+    "question": "How do I evaluate a fine-tuned model?",
+    "answer": "Use a held-out validation set and compute perplexity, BLEU, or task-specific metrics. Nimbus also provides human review queues."
+  },
+  {
+    "question": "Can I quantize a model?",
+    "answer": "Yes. Nimbus supports INT8 and GPTQ quantization for deployment to reduce latency and cost."
+  },
+  {
+    "question": "How do I deploy a model to production?",
+    "answer": "After training or import, click Deploy, choose an instance type, and set autoscaling rules."
+  },
+  {
+    "question": "What is model serving auto-scaling?",
+    "answer": "Auto-scaling adjusts the number of inference replicas based on request volume and latency targets."
+  },
+  {
+    "question": "How do I version models?",
+    "answer": "Every trained or imported model gets a version ID. You can pin deployments to specific versions."
+  },
+  {
+    "question": "Can I run A/B tests between model versions?",
+    "answer": "Yes. Deployments support traffic splitting across model versions for A/B testing and canary releases."
+  },
+  {
+    "question": "How do I monitor model performance?",
+    "answer": "The Observability dashboard tracks latency, throughput, error rate, and drift over time."
+  },
+  {
+    "question": "What is prompt engineering in Nimbus?",
+    "answer": "Prompt engineering is the practice of designing input prompts to maximize output quality without changing model weights."
+  },
+  {
+    "question": "Can I add a system prompt?",
+    "answer": "Yes. System prompts can be configured per deployment in the Model Settings panel or via API."
+  },
+  {
+    "question": "My API key is not working. What should I check?",
+    "answer": "Verify the key is active, has the required scope, has not expired, and is passed as 'Bearer YOUR_API_KEY'."
+  },
+  {
+    "question": "I am getting a 429 error. What does it mean?",
+    "answer": "429 means you have exceeded your rate limit. Wait or upgrade your plan for higher limits."
+  },
+  {
+    "question": "Why is my training job failing?",
+    "answer": "Common causes include malformed JSONL, mismatched message roles, insufficient training examples, or invalid base model ID."
+  },
+  {
+    "question": "My model responses are too slow. How do I improve latency?",
+    "answer": "Use a smaller model, enable quantization, deploy in a region closer to your users, or enable caching."
+  },
+  {
+    "question": "How do I debug a RAG pipeline?",
+    "answer": "Inspect retrieved chunks, verify embeddings, check chunk size and overlap, and test queries against the raw documents."
+  },
+  {
+    "question": "Why are my generated answers hallucinating?",
+    "answer": "Hallucinations can occur when context is missing or irrelevant. Use RAG, lower temperature, and stronger system prompts."
+  },
+  {
+    "question": "What temperature should I use?",
+    "answer": "Use low temperature (0.1-0.3) for factual tasks and higher (0.7-0.9) for creative generation."
+  },
+  {
+    "question": "How do I handle long context windows?",
+    "answer": "Split documents into chunks, retrieve the most relevant chunks, and consider models with larger context limits."
+  },
+  {
+    "question": "My dataset upload failed. What formats are supported?",
+    "answer": "Supported formats are CSV, Parquet, JSONL, and TXT. Files must be UTF-8 encoded."
+  },
+  {
+    "question": "How do I improve retrieval accuracy?",
+    "answer": "Use high-quality embeddings, add metadata filters, apply reranking, and tune chunk size and overlap."
+  },
+  {
+    "question": "Can I cache embeddings?",
+    "answer": "Yes. Chroma and other vector stores persist embeddings locally. Nimbus also caches embedding API responses."
+  },
+  {
+    "question": "What is chunk overlap and why use it?",
+    "answer": "Chunk overlap is the number of shared tokens between consecutive chunks. It preserves context across chunk boundaries."
+  },
+  {
+    "question": "How do I test prompts before deploying?",
+    "answer": "Use the Playground in the dashboard or the /v1/completions preview endpoint."
+  },
+  {
+    "question": "Where can I find example notebooks?",
+    "answer": "Example notebooks are available at https://github.com/nimbuscloud/examples and inside the Docs → Tutorials section."
+  },
+  {
+    "question": "How do I get started with the quickest possible project?",
+    "answer": "Create a workspace, upload a CSV dataset, choose a model, and run a batch job or build a Streamlit app using the Python SDK."
+  }
+]
